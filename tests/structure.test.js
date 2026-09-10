@@ -18,16 +18,17 @@ for (const file of htmlFiles) {
         assert(fs.existsSync(path.join(root, url)), file + ': missing reference ' + url);
     }
 }
-for (const file of ['index.html', 'skin-analysis.html']) {
-    const html = read(file);
-    assert.match(html, /<meta name="viewport" content="width=device-width, initial-scale=1">/);
-    assert.match(html, /src\/styles\/site\.css\?v=20260911-1/);
-}
+assert.match(read('index.html'), /<meta name="viewport" content="width=device-width, initial-scale=1\.0, maximum-scale=1\.0, user-scalable=no">/);
+assert.match(read('index.html'), /src\/styles\/site\.css\?v=20260911-2/);
+assert.match(read('skin-analysis.html'), /<meta name="viewport" content="width=device-width, initial-scale=1">/);
 const stylesheet = read('src/styles/site.css');
 assert.match(stylesheet, /-webkit-text-size-adjust:100%/);
 assert.match(stylesheet, /text-size-adjust:100%/);
 assert.match(stylesheet, /html\{[^}]*font-size:16px/);
 assert.match(stylesheet, /html\{width:100%;overflow-x:clip/);
+assert.match(stylesheet, /\.hero-slide-inner\{width:min\(100%,1280px\)/);
+assert.doesNotMatch(stylesheet, /\.hero-slide-copy h1,\.hero-slide-copy h2\{[^\n]*vw/);
+assert.match(read('src/components/home/hero-carousel.html'), /class="hero-slide-inner"/);
 const storefront = read('src/js/catalog/storefront.js');
 assert.match(storefront, /const carouselRotationMs = 5500/);
 assert.match(storefront, /Math\.floor\(Date\.now\(\) \/ carouselRotationMs\) % slides\.length/);
