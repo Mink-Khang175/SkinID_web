@@ -18,6 +18,15 @@ for (const file of htmlFiles) {
         assert(fs.existsSync(path.join(root, url)), file + ': missing reference ' + url);
     }
 }
+for (const file of ['index.html', 'skin-analysis.html']) {
+    const html = read(file);
+    assert.match(html, /<meta name="viewport" content="width=device-width, initial-scale=1">/);
+    assert.match(html, /src\/styles\/site\.css\?v=20260911-1/);
+}
+const stylesheet = read('src/styles/site.css');
+assert.match(stylesheet, /-webkit-text-size-adjust:100%/);
+assert.match(stylesheet, /text-size-adjust:100%/);
+assert.match(stylesheet, /html\{font-size:16px/);
 const bootstrap = read('src/js/app/bootstrap.js');
 const scripts = [...bootstrap.matchAll(/'(src\/[^']+\.js)'/g)].map(m => m[1]);
 assert(scripts.indexOf('src/data/products.js') < scripts.indexOf('src/js/analysis/skin-analysis.js'));
