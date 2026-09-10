@@ -148,6 +148,7 @@
         if (!carousel) return;
         const slides = $$('.hero-slide', carousel);
         const dots = $$('[data-carousel-dot]', carousel);
+        const carouselRotationMs = 5500;
         let activeIndex = 0;
         let timer = null;
 
@@ -167,11 +168,23 @@
                 dot.setAttribute('aria-selected', String(isActive));
             });
         };
-        const stop = () => { if (timer) window.clearInterval(timer); timer = null; };
+        const stop = () => {
+            if (timer !== null) window.clearTimeout(timer);
+            timer = null;
+        };
+
+        // Every tab uses the same clock boundary. This prevents two browsers
+        // from drifting to different hero banners simply because they opened
+        // the page at different times.
+        const syncedSlideIndex = () => Math.floor(Date.now() / carouselRotationMs) % slides.length;
         const start = () => {
             stop();
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-            timer = window.setInterval(() => showSlide(activeIndex + 1), 5500);
+            if (document.hidden || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            const delayToNextBoundary = carouselRotationMs - (Date.now() % carouselRotationMs) + 16;
+            timer = window.setTimeout(() => {
+                showSlide(syncedSlideIndex());
+                start();
+            }, delayToNextBoundary);
         };
 
         $('[data-carousel-prev]', carousel)?.addEventListener('click', () => { showSlide(activeIndex - 1); start(); });
@@ -181,7 +194,14 @@
         carousel.addEventListener('mouseleave', start);
         carousel.addEventListener('focusin', stop);
         carousel.addEventListener('focusout', start);
-        document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                stop();
+                return;
+            }
+            showSlide(syncedSlideIndex());
+            start();
+        });
         $$('[data-hero-brand]', carousel).forEach((button) => button.addEventListener('click', () => applyCatalogState({ brand: button.dataset.heroBrand })));
         showSlide(0);
         start();

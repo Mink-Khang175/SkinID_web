@@ -26,7 +26,12 @@ for (const file of ['index.html', 'skin-analysis.html']) {
 const stylesheet = read('src/styles/site.css');
 assert.match(stylesheet, /-webkit-text-size-adjust:100%/);
 assert.match(stylesheet, /text-size-adjust:100%/);
-assert.match(stylesheet, /html\{font-size:16px/);
+assert.match(stylesheet, /html\{[^}]*font-size:16px/);
+assert.match(stylesheet, /html\{width:100%;overflow-x:clip/);
+const storefront = read('src/js/catalog/storefront.js');
+assert.match(storefront, /const carouselRotationMs = 5500/);
+assert.match(storefront, /Math\.floor\(Date\.now\(\) \/ carouselRotationMs\) % slides\.length/);
+assert.doesNotMatch(storefront, /setInterval\(\(\) => showSlide\(activeIndex \+ 1\), 5500\)/);
 const bootstrap = read('src/js/app/bootstrap.js');
 const scripts = [...bootstrap.matchAll(/'(src\/[^']+\.js)'/g)].map(m => m[1]);
 assert(scripts.indexOf('src/data/products.js') < scripts.indexOf('src/js/analysis/skin-analysis.js'));
