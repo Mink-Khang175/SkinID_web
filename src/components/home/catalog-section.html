@@ -1,0 +1,50 @@
+<section id="catalog" class="section catalog-section">
+  <div class="container">
+    <div class="section-heading catalog-heading">
+      <div>
+        <span class="section-kicker">SẢN PHẨM NỔI BẬT</span>
+        <h2>Dược mỹ phẩm & chăm sóc cá nhân</h2>
+        <p>Chọn theo thương hiệu, danh mục hoặc tìm nhanh theo tên và hoạt chất.</p>
+      </div>
+    </div>
+
+    <div class="shop-toolbar">
+      <div class="filter-line filter-line--brand">
+        <span class="filter-label">Thương hiệu:</span>
+        <div id="brand-filters" class="filter-row" aria-label="Lọc theo thương hiệu">
+          <button class="filter-btn active" type="button" data-brand="all">Tất cả</button>
+          <button class="filter-btn" type="button" data-brand="rilastil">Rilastil</button>
+          <button class="filter-btn" type="button" data-brand="twon">TWON</button>
+          <button class="filter-btn" type="button" data-brand="dvah">D'VAH</button>
+        </div>
+        <label class="search-wrap">
+          <i data-feather="search"></i>
+          <input id="product-search" type="search" placeholder="Tìm sản phẩm, hoạt chất…" aria-label="Tìm sản phẩm">
+        </label>
+      </div>
+
+      <div class="filter-line">
+        <span class="filter-label">Danh mục:</span>
+        <div id="step-filters" class="step-row" aria-label="Lọc theo danh mục">
+          <button class="step-filter-btn active" type="button" data-step="all">Tất cả</button>
+          <button class="step-filter-btn" type="button" data-step="cleanser">Làm sạch</button>
+          <button class="step-filter-btn" type="button" data-step="toner">Cân bằng</button>
+          <button class="step-filter-btn" type="button" data-step="treatment">Đặc trị</button>
+          <button class="step-filter-btn" type="button" data-step="moisturizer">Dưỡng ẩm</button>
+          <button class="step-filter-btn" type="button" data-step="sunscreen">Chống nắng</button>
+          <button class="step-filter-btn" type="button" data-step="special">Cơ thể & nước hoa</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="catalog-meta">
+      <div id="filter-result-count">Đang tải sản phẩm…</div>
+      <select id="catalog-sort" aria-label="Sắp xếp sản phẩm">
+        <option value="featured">Sắp xếp: Nổi bật</option>
+        <option value="price-asc">Giá thấp đến cao</option>
+        <option value="price-desc">Giá cao đến thấp</option>
+      </select>
+    </div>
+    <div id="product-grid" aria-live="polite"></div>
+  </div>
+</section>

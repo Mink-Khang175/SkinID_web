@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Soi da AI 3 góc — SkinID.vn</title>
+  <meta name="description" content="Chụp hoặc tải ba ảnh khuôn mặt để nhận báo cáo tình trạng da và routine chăm sóc tham khảo từ SkinID.vn.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind=window.tailwind||{};tailwind.config={theme:{extend:{colors:{brandPink:'#E06D81',brand:{primary:'#E06D81',accent:'#FF6B8B',blush:'#FFF2F4',petal:'#FFD6DE','soft-bg':'#FFFAFB',dark:'#2D1F23',light:'#fff8f9'}}}}};</script>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <link rel="stylesheet" href="src/styles/site.css?v=20260910-1">
+</head>
+<body class="scan-page-body">
+  <div class="offer-bar">Miễn phí giao hàng cho đơn từ 500.000₫ <span>·</span> Đổi trả trong 7 ngày <span>·</span> Hotline 0924.093.461</div>
+  <div data-component-src="src/components/layout/header.html"></div>
+
+  <main class="scan-page-main">
+    <section class="scan-page-welcome" id="scan-start">
+      <div class="container scan-page-welcome__grid">
+        <div class="scan-page-welcome__copy">
+          <a class="scan-page-back" href="index.html"><i data-feather="arrow-left"></i> Quay lại mua sắm</a>
+          <span class="section-kicker">TIỆN ÍCH HỖ TRỢ CHỌN SẢN PHẨM</span>
+          <h1>Soi da theo ba góc chụp</h1>
+          <p>Chụp chính diện và hai góc nghiêng để nhận báo cáo tình trạng da cùng routine tham khảo. Bạn cũng có thể tải ảnh có sẵn nếu thiết bị không cấp quyền camera.</p>
+          <div class="scan-page-actions">
+            <button class="btn btn--primary" type="button" onclick="openPrivacyModal()"><i data-feather="camera"></i> Bắt đầu soi da</button>
+            <a class="btn btn--outline" href="index.html#catalog">Xem sản phẩm</a>
+          </div>
+          <small>Kết quả mang tính tham khảo và không thay thế chẩn đoán của bác sĩ da liễu.</small>
+        </div>
+        <div class="scan-page-guide" aria-label="Quy trình soi da">
+          <span><b>01</b><strong>Chính diện</strong><em>Giữ mặt thẳng, đủ sáng</em></span>
+          <span><b>02</b><strong>Nghiêng trái 45°</strong><em>Giữ khuôn mặt trong khung</em></span>
+          <span><b>03</b><strong>Nghiêng phải 45°</strong><em>Hoàn tất rồi tạo báo cáo</em></span>
+        </div>
+      </div>
+    </section>
+    <div data-component-src="src/components/dialogs/legacy-modals.html"></div>
+  </main>
+
+  <div data-component-src="src/components/layout/footer.html"></div>
+  <div data-component-src="src/components/layout/mobile-nav.html"></div>
+  <div data-component-src="src/components/dialogs/storefront-modals.html"></div>
+  <div data-component-src="src/components/dialogs/product-detail-modal.html"></div>
+  <script src="src/js/app/bootstrap.js"></script>
+</body>
+</html>

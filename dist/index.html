@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SkinID.vn — Phân tích da AI & Dược mỹ phẩm Chính Hãng</title>
+  <meta name="description" content="Nền tảng phân tích da AI và mua dược mỹ phẩm Rilastil, chăm sóc cơ thể TWON và nước hoa D'VAH chính hãng tại SkinID.vn.">
+  <meta name="keywords" content="soi da AI, phân tích da AI, dược mỹ phẩm, Rilastil, TWON, DVAH, phác đồ chăm sóc da, skincare routine">
+  <meta name="author" content="SkinID.vn">
+  <link rel="canonical" href="https://skinid.vn/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://skinid.vn/">
+  <meta property="og:title" content="SkinID.vn — Phân tích da AI & Dược mỹ phẩm Chính Hãng">
+  <meta property="og:description" content="Trải nghiệm công nghệ phân tích da AI 3 góc chuyên sâu từ SkinID. Cá nhân hóa phác đồ chăm sóc da chuẩn y khoa dành riêng cho bạn.">
+  <meta property="og:image" content="https://skinid.vn/public/images/banners/hero-scan-ai.jpg">
+  <meta property="og:site_name" content="SkinID.vn">
+  <meta property="og:locale" content="vi_VN">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SkinID.vn — Phân tích da AI & Dược mỹ phẩm">
+  <meta name="twitter:description" content="Phân tích da AI 3 góc độ thời gian thực & phác đồ dược mỹ phẩm cá nhân hóa.">
+  <meta name="twitter:image" content="https://skinid.vn/public/images/banners/hero-scan-ai.jpg">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HealthAndBeautyBusiness",
+    "name": "SkinID.vn - Phân tích da AI & Dược mỹ phẩm",
+    "url": "https://skinid.vn",
+    "logo": "https://skinid.vn/public/images/logo.png",
+    "image": "https://skinid.vn/public/images/banners/hero-scan-ai.jpg",
+    "description": "Nền tảng phân tích da AI và dược mỹ phẩm chính hãng tại Việt Nam.",
+    "telephone": "+84924093461",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "71 Trạng Trình, Phường 9",
+      "addressLocality": "TP. Đà Lạt",
+      "addressRegion": "Lâm Đồng",
+      "addressCountry": "VN"
+    },
+    "priceRange": "$$",
+    "sameAs": ["https://zalo.me/0924093461"]
+  }
+  </script>
+
+  <!-- Analytics & Tracking -->
+  <script>
+    window.trackSkinIDEvent = function(eventName, eventParams = {}) {
+      console.log(`[Analytics Event] ${eventName}:`, eventParams);
+      if (typeof gtag === 'function') gtag('event', eventName, eventParams);
+      if (typeof fbq === 'function') fbq('trackCustom', eventName, eventParams);
+    };
+  </script>
+
+  <!-- Fonts & Framework -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind=window.tailwind||{};tailwind.config={theme:{extend:{colors:{brandPink:'#E06D81',brand:{primary:'#E06D81',accent:'#FF6B8B',blush:'#FFF2F4',petal:'#FFD6DE','soft-bg':'#FFFAFB',dark:'#2D1F23',light:'#fff8f9'}}}}};</script>
+  <script src="https://unpkg.com/feather-icons"></script>
+
+  <!-- MediaPipe & Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <link rel="stylesheet" href="src/styles/site.css?v=20260910-1">
+</head>
+<body>
+
+  <!-- ============================================ -->
+  <!-- OFFER BAR                                     -->
+  <!-- ============================================ -->
+  <div class="offer-bar">Miễn phí giao hàng cho đơn từ 500.000₫ <span>·</span> Đổi trả trong 7 ngày <span>·</span> Hotline 0924.093.461</div>
+
+  <!-- ============================================ -->
+  <!-- HEADER                                        -->
+  <!-- ============================================ -->
+  <header class="site-header" data-component-src="src/components/layout/header.html">
+    <div class="container header-main">
+      <a class="brand" href="#top" aria-label="SkinID.vn — Trang chủ">
+        <img src="public/images/logo.png" alt="">
+        <span><b>SkinID</b><em>.vn</em></span>
+      </a>
+      <label class="header-search">
+        <i data-feather="search"></i>
+        <input type="search" placeholder="Bạn đang tìm sản phẩm gì?" aria-label="Tìm kiếm nhanh" oninput="document.getElementById('product-search').value=this.value;currentSearchQuery=this.value;renderCatalog()">
+      </label>
+      <div class="header-actions">
+        <a class="support-link" href="https://zalo.me/0924093461" target="_blank" rel="noopener">
+          <i data-feather="message-circle"></i>
+          <span>Tư vấn<br><b>0924.093.461</b></span>
+        </a>
+        <a class="icon-btn header-account" href="profile.html" aria-label="Tài khoản"><i data-feather="user"></i></a>
+        <button class="icon-btn cart-button" type="button" onclick="cartManager.toggleCartUI()" aria-label="Mở giỏ hàng">
+          <i data-feather="shopping-bag"></i>
+          <span id="cart-badge" class="opacity-0">0</span>
+        </button>
+        <button class="icon-btn mobile-menu-btn" type="button" onclick="toggleMobileMenu()" aria-label="Mở menu"><i data-feather="menu"></i></button>
+      </div>
+    </div>
+    <div class="nav-line"><div class="container nav-inner">
+      <nav class="desktop-nav" aria-label="Điều hướng chính">
+        <a href="#catalog">Tất cả sản phẩm</a>
+        <a href="#catalog" data-nav-step="cleanser">Làm sạch</a>
+        <a href="#catalog" data-nav-step="treatment">Tinh chất & đặc trị</a>
+        <a href="#catalog" data-nav-step="moisturizer">Dưỡng ẩm</a>
+        <a href="#catalog" data-nav-step="sunscreen">Chống nắng</a>
+        <a href="#brands">Thương hiệu</a>
+      </nav>
+      <a class="skin-tool-link" href="skin-analysis.html"><i data-feather="camera"></i> Soi da AI</a>
+    </div></div>
+    <nav id="mobile-menu" class="mobile-menu hidden" aria-label="Điều hướng di động">
+      <a href="#catalog" onclick="toggleMobileMenu(false)">Tất cả sản phẩm</a>
+      <a href="#categories" onclick="toggleMobileMenu(false)">Danh mục</a>
+      <a href="#brands" onclick="toggleMobileMenu(false)">Thương hiệu</a>
+      <a href="skin-analysis.html" onclick="toggleMobileMenu(false)">Soi da AI</a>
+    </nav>
+  </header>
+
+  <!-- ============================================ -->
+  <!-- MAIN CONTENT                                  -->
+  <!-- ============================================ -->
+  <main id="top">
+
+    <!-- ① HERO CAROUSEL -->
+    <section class="hero-carousel-section" data-component-src="src/components/home/hero-carousel.html"><div id="hero-carousel" class="hero-carousel" aria-roledescription="carousel" aria-label="Ưu đãi và tiện ích nổi bật">
+
+      <!-- Slide 1: Rilastil Brand Story -->
+      <article class="hero-slide hero-slide--products is-active" data-slide="0">
+        <div class="hero-slide-copy">
+          <span class="hero-label">RILASTIL · DƯỢC MỸ PHẨM TỪ Ý</span>
+          <h1>Chăm da đúng cách.<br>Mua sắm dễ dàng.</h1>
+          <p>Sản phẩm rõ nguồn gốc, thông tin đầy đủ và phân loại dễ tìm theo từng nhu cầu.</p>
+          <div class="hero-actions">
+            <a class="btn btn--primary" href="#catalog">Mua sắm ngay</a>
+            <a class="btn btn--outline" href="#categories">Xem danh mục</a>
+          </div>
+        </div>
+        <div class="slide-product-stage">
+          <div class="stage-copy"><b>Routine được yêu thích</b><span>Giảm đến 16%</span></div>
+          <img class="stage-product stage-product--a" src="public/images/products/rilastil/rilastil-kem-chong-nang-cap-am-water-touch-rilastil-sun-system-water-touch-moisturizing-fluid-spf-50-50ml.png" alt="Kem chống nắng Rilastil">
+          <img class="stage-product stage-product--b" src="public/images/products/rilastil/rilastil-serum-tai-tao-va-chong-lao-hoa-30ml-rilastil-multirepair-retinol-tech.avif" alt="Serum Rilastil">
+          <img class="stage-product stage-product--c" src="public/images/products/rilastil/rilastil-kem-duong-am-giup-can-bang-vi-sinh-ho-tro-phuc-hoi-da-mun-rilastil-acnestil-h-biome-cream.png" alt="Kem dưỡng Rilastil">
+        </div>
+      </article>
+
+      <!-- Slide 2: Soi da AI -->
+      <article class="hero-slide hero-slide--scan" data-slide="1">
+        <div class="hero-slide-copy">
+          <span class="hero-label">TIỆN ÍCH SOI DA AI</span>
+          <h2>Hiểu làn da trước khi chọn sản phẩm.</h2>
+          <p>Chụp ảnh khuôn mặt theo hướng dẫn để tham khảo tình trạng da và tìm nhanh nhóm sản phẩm phù hợp.</p>
+          <div class="hero-actions">
+            <a class="btn btn--dark" href="skin-analysis.html"><i data-feather="camera"></i> Bắt đầu soi da</a>
+            <button class="btn btn--glass" type="button" onclick="openConsultation()">Tư vấn nhanh</button>
+          </div>
+          <small>Kết quả mang tính tham khảo, không thay thế chẩn đoán y khoa.</small>
+        </div>
+        <div class="scan-banner-media"><img src="public/images/banners/hero-scan-ai.jpg" alt="Minh họa tính năng soi da AI SkinID"></div>
+      </article>
+
+      <!-- Slide 3: TWON & D'VAH -->
+      <article class="hero-slide hero-slide--body" data-slide="2">
+        <div class="hero-slide-copy">
+          <span class="hero-label">TWON & D'VAH</span>
+          <h2>Chăm sóc cơ thể.<br>Hoàn thiện hương thơm.</h2>
+          <p>Khám phá sản phẩm body care và nước hoa nhỏ gọn cho trải nghiệm cá nhân mỗi ngày.</p>
+          <div class="hero-actions">
+            <button class="btn btn--primary" type="button" data-hero-brand="TWON">Mua TWON</button>
+            <button class="btn btn--outline" type="button" data-hero-brand="DVAH">Khám phá D'VAH</button>
+          </div>
+        </div>
+        <div class="body-product-stage">
+          <img src="public/images/products/twon/twon-body-lotion.png" alt="Dưỡng thể TWON">
+          <img src="public/images/products/twon/twon-sua-tam.png" alt="Sữa tắm TWON">
+          <img src="public/images/products/dvah/dvah-rakta.png" alt="Nước hoa D'VAH Rakta">
+          <img src="public/images/products/dvah/dvah-kamal.png" alt="Nước hoa D'VAH Kamal">
+        </div>
+      </article>
+
+      <!-- Carousel Controls -->
+      <button class="carousel-arrow carousel-arrow--prev" type="button" data-carousel-prev aria-label="Banner trước"><i data-feather="chevron-left"></i></button>
+      <button class="carousel-arrow carousel-arrow--next" type="button" data-carousel-next aria-label="Banner tiếp theo"><i data-feather="chevron-right"></i></button>
+      <div class="carousel-dots" role="tablist" aria-label="Chọn banner">
+        <button class="is-active" type="button" data-carousel-dot="0" aria-label="Banner 1"></button>
+        <button type="button" data-carousel-dot="1" aria-label="Banner 2"></button>
+        <button type="button" data-carousel-dot="2" aria-label="Banner 3"></button>
+      </div>
+    </div></section>
+
+    <!-- ② BRAND BAR (Logo strip — ngay sau hero để xác lập uy tín) -->
+    <section id="brand-bar" class="trust-strip" aria-label="Thương hiệu đồng hành">
+      <div class="container">
+        <div class="trust-grid" style="grid-template-columns: repeat(3, 1fr);">
+          <div>
+            <span style="font-size:1.3rem;font-weight:800;letter-spacing:.08em;color:var(--ink);">RILASTIL</span>
+            <span><b>Dược mỹ phẩm từ Ý</b><small>46 sản phẩm</small></span>
+          </div>
+          <div>
+            <img src="public/images/brands/twon.png" alt="TWON" style="height:28px;width:auto;object-fit:contain;">
+            <span><b>Chăm sóc cơ thể</b><small>3 sản phẩm</small></span>
+          </div>
+          <div>
+            <img src="public/images/brands/dvah.png" alt="D'VAH" style="height:28px;width:auto;object-fit:contain;">
+            <span><b>Nước hoa cá nhân</b><small>5 sản phẩm</small></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ③ CATEGORIES (Bước skincare — visual merchandising) -->
+    <section id="categories" class="section section--compact" data-component-src="src/components/home/category-section.html">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <span class="section-kicker">MUA SẮM NHANH</span>
+            <h2>Chọn theo danh mục</h2>
+            <p>Tìm đúng nhóm sản phẩm chỉ với một lần chọn.</p>
+          </div>
+          <a href="#catalog">Xem tất cả <i data-feather="arrow-right"></i></a>
+        </div>
+        <div class="category-grid">
+          <button type="button" class="category-item category-item--wide" data-step="cleanser">
+            <span class="category-art"><img src="public/images/products/rilastil/rilastil-sua-rua-mat-duong-am-rilastil-aqua-face-cleanser-50ml.avif" alt=""></span>
+            <span class="category-copy"><small>01</small><b>Làm sạch</b><em>Sữa rửa mặt & Tẩy trang</em></span>
+            <i data-feather="arrow-up-right"></i>
+          </button>
+          <button type="button" class="category-item" data-step="toner">
+            <span class="category-art"><img src="public/images/products/rilastil/rilastil-nuoc-hoa-hong-danh-cho-moi-loai-da-200ml-rilastil-daily-care-rebalancing-soothing-toner-200ml.avif" alt=""></span>
+            <span class="category-copy"><small>02</small><b>Cân bằng</b><em>Toner & Lotion</em></span>
+            <i data-feather="arrow-up-right"></i>
+          </button>
+          <button type="button" class="category-item" data-step="treatment">
+            <span class="category-art"><img src="public/images/products/rilastil/rilastil-serum-tai-tao-va-chong-lao-hoa-30ml-rilastil-multirepair-retinol-tech.avif" alt=""></span>
+            <span class="category-copy"><small>03</small><b>Đặc trị</b><em>Serum & Tinh chất</em></span>
+            <i data-feather="arrow-up-right"></i>
+          </button>
+          <button type="button" class="category-item" data-step="moisturizer">
+            <span class="category-art"><img src="public/images/products/rilastil/rilastil-kem-duong-am-giup-can-bang-vi-sinh-ho-tro-phuc-hoi-da-mun-rilastil-acnestil-h-biome-cream.png" alt=""></span>
+            <span class="category-copy"><small>04</small><b>Dưỡng ẩm</b><em>Kem dưỡng & Mặt nạ</em></span>
+            <i data-feather="arrow-up-right"></i>
+          </button>
+          <button type="button" class="category-item" data-step="sunscreen">
+            <span class="category-art"><img src="public/images/products/rilastil/rilastil-kem-chong-nang-cap-am-water-touch-rilastil-sun-system-water-touch-moisturizing-fluid-spf-50-50ml.png" alt=""></span>
+            <span class="category-copy"><small>05</small><b>Chống nắng</b><em>SPF 50+ bảo vệ</em></span>
+            <i data-feather="arrow-up-right"></i>
+          </button>
+          <button type="button" class="category-item category-item--wide category-item--body" data-step="special">
+            <span class="category-art"><img src="public/images/products/twon/twon-body-lotion.png" alt=""></span>
+            <span class="category-copy"><small>06</small><b>Cơ thể & nước hoa</b><em>Body care & Fragrance</em></span>
+            <i data-feather="arrow-up-right"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ PRODUCT CATALOG -->
+    <section id="catalog" class="section catalog-section" data-component-src="src/components/home/catalog-section.html">
+      <div class="container">
+        <div class="section-heading catalog-heading">
+          <div>
+            <span class="section-kicker">SẢN PHẨM NỔI BẬT</span>
+            <h2>Dược mỹ phẩm & chăm sóc cá nhân</h2>
+            <p>Chọn theo thương hiệu, danh mục hoặc tìm nhanh theo tên và hoạt chất.</p>
+          </div>
+        </div>
+        <div class="shop-toolbar">
+          <div class="filter-line filter-line--brand">
+            <span class="filter-label">Thương hiệu:</span>
+            <div id="brand-filters" class="filter-row" aria-label="Lọc theo thương hiệu">
+              <button class="filter-btn active" type="button" data-brand="all">Tất cả</button>
+              <button class="filter-btn" type="button" data-brand="rilastil">Rilastil</button>
+              <button class="filter-btn" type="button" data-brand="twon">TWON</button>
+              <button class="filter-btn" type="button" data-brand="dvah">D'VAH</button>
+            </div>
+            <label class="search-wrap">
+              <i data-feather="search"></i>
+              <input id="product-search" type="search" placeholder="Tìm sản phẩm, hoạt chất…" aria-label="Tìm sản phẩm">
+            </label>
+          </div>
+          <div class="filter-line">
+            <span class="filter-label">Danh mục:</span>
+            <div id="step-filters" class="step-row" aria-label="Lọc theo danh mục">
+              <button class="step-filter-btn active" type="button" data-step="all">Tất cả</button>
+              <button class="step-filter-btn" type="button" data-step="cleanser">Làm sạch</button>
+              <button class="step-filter-btn" type="button" data-step="toner">Cân bằng</button>
+              <button class="step-filter-btn" type="button" data-step="treatment">Đặc trị</button>
+              <button class="step-filter-btn" type="button" data-step="moisturizer">Dưỡng ẩm</button>
+              <button class="step-filter-btn" type="button" data-step="sunscreen">Chống nắng</button>
+              <button class="step-filter-btn" type="button" data-step="special">Cơ thể & nước hoa</button>
+            </div>
+          </div>
+        </div>
+        <div class="catalog-meta">
+          <div id="filter-result-count">Đang tải sản phẩm…</div>
+          <select id="catalog-sort" aria-label="Sắp xếp sản phẩm">
+            <option value="featured">Sắp xếp: Nổi bật</option>
+            <option value="price-asc">Giá thấp đến cao</option>
+            <option value="price-desc">Giá cao đến thấp</option>
+          </select>
+        </div>
+        <div id="product-grid" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- ⑤ BRAND SPOTLIGHT -->
+    <section id="brands" class="section brand-shop" data-component-src="src/components/home/brand-section.html">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <span class="section-kicker">THƯƠNG HIỆU CHÍNH HÃNG</span>
+            <h2>Khám phá thương hiệu</h2>
+            <p>Mỗi thương hiệu là một nhóm nhu cầu riêng, dễ xem và dễ so sánh.</p>
+          </div>
+        </div>
+        <div class="brand-cards">
+          <button class="brand-card brand-card--rilastil" type="button" data-brand="Rilastil">
+            <span class="brand-card-media">
+              <img src="public/images/products/rilastil/rilastil-serum-tai-tao-va-chong-lao-hoa-30ml-rilastil-multirepair-retinol-tech.avif" alt="Tinh chất chăm sóc da Rilastil" loading="lazy">
+            </span>
+            <span class="brand-card-copy">
+              <small>DƯỢC MỸ PHẨM TỪ Ý</small>
+              <strong>RILASTIL</strong>
+              <p>Giải pháp chăm sóc da chuyên sâu, từ làm sạch đến chống nắng.</p>
+              <b>Xem 46 sản phẩm <i data-feather="arrow-right"></i></b>
+            </span>
+          </button>
+          <button class="brand-card brand-card--twon" type="button" data-brand="TWON">
+            <span class="brand-card-media">
+              <img src="public/images/products/twon/twon-body-lotion.png" alt="Kem dưỡng thể TWON" loading="lazy">
+            </span>
+            <span class="brand-card-copy">
+              <small>CHĂM SÓC CƠ THỂ</small>
+              <strong>TWON</strong>
+              <p>Chăm sóc cơ thể mềm mịn cùng trải nghiệm hương thơm dễ chịu.</p>
+              <b>Xem 3 sản phẩm <i data-feather="arrow-right"></i></b>
+            </span>
+          </button>
+          <button class="brand-card brand-card--dvah" type="button" data-brand="DVAH">
+            <span class="brand-card-media">
+              <img src="public/images/products/dvah/dvah-kamal.png" alt="Nước hoa D'VAH Kamal" loading="lazy">
+            </span>
+            <span class="brand-card-copy">
+              <small>NƯỚC HOA CÁ NHÂN</small>
+              <strong>D'VAH</strong>
+              <p>Nước hoa nhỏ gọn, dễ mang theo và dễ chọn theo cá tính.</p>
+              <b>Xem 5 sản phẩm <i data-feather="arrow-right"></i></b>
+            </span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ HELP / TƯ VẤN -->
+    <section class="section help-shop" data-component-src="src/components/home/help-section.html">
+      <div class="container help-grid">
+        <div>
+          <span class="section-kicker">TIỆN ÍCH HỖ TRỢ</span>
+          <h2>Chưa chắc sản phẩm nào phù hợp?</h2>
+          <p>Trả lời nhanh về nhu cầu da để lọc nhóm sản phẩm tham khảo. Đây là tiện ích hỗ trợ mua sắm, không thay thế tư vấn y khoa.</p>
+          <button class="btn btn--primary" type="button" onclick="openConsultation()">Tư vấn chọn sản phẩm</button>
+        </div>
+        <div class="help-options">
+          <button class="concern-card" type="button" data-concern="mụn" data-step="treatment">
+            <i data-feather="circle"></i>
+            <span><b>Da dầu & mụn</b><small>Sản phẩm làm sạch và đặc trị</small></span>
+          </button>
+          <button class="concern-card" type="button" data-concern="ẩm" data-step="moisturizer">
+            <i data-feather="droplet"></i>
+            <span><b>Da khô, thiếu ẩm</b><small>Cấp ẩm và phục hồi</small></span>
+          </button>
+          <button class="concern-card" type="button" data-concern="nhạy cảm" data-step="moisturizer">
+            <i data-feather="feather"></i>
+            <span><b>Da nhạy cảm</b><small>Công thức dịu nhẹ</small></span>
+          </button>
+          <button class="concern-card" type="button" data-concern="sắc tố" data-step="treatment">
+            <i data-feather="sun"></i>
+            <span><b>Thâm nám & sắc tố</b><small>Đều màu và bảo vệ da</small></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ TRUST STRIP (Cam kết — đặt gần footer, đúng thời điểm khách cân nhắc mua) -->
+    <section class="trust-strip" aria-label="Cam kết mua hàng">
+      <div class="container trust-grid">
+        <div><i data-feather="shield"></i><span><b>Hàng chính hãng</b><small>Nguồn gốc minh bạch</small></span></div>
+        <div><i data-feather="truck"></i><span><b>Giao hàng toàn quốc</b><small>Miễn phí từ 500.000₫</small></span></div>
+        <div><i data-feather="refresh-cw"></i><span><b>Đổi trả trong 7 ngày</b><small>Với lỗi từ nhà sản xuất</small></span></div>
+        <div><i data-feather="headphones"></i><span><b>Hỗ trợ tận tâm</b><small>08:00–21:00 mỗi ngày</small></span></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================ -->
+  <!-- FOOTER                                        -->
+  <!-- ============================================ -->
+  <footer class="site-footer" data-component-src="src/components/layout/footer.html">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a class="brand footer-brand" href="#top"><img src="public/images/logo.png" alt=""><span><b>SkinID</b><em>.vn</em></span></a>
+          <p>Dược mỹ phẩm và sản phẩm chăm sóc cá nhân chính hãng, thông tin rõ ràng, dễ lựa chọn.</p>
+        </div>
+        <div>
+          <h3>Mua sắm</h3>
+          <a href="#catalog">Tất cả sản phẩm</a>
+          <a href="#categories">Danh mục</a>
+          <a href="#brands">Thương hiệu</a>
+          <button type="button" onclick="openConsultation()">Tư vấn sản phẩm</button>
+        </div>
+        <div>
+          <h3>Hỗ trợ</h3>
+          <button type="button" onclick="openPolicy('shipping')">Giao hàng & đổi trả</button>
+          <button type="button" onclick="openPolicy('privacy')">Bảo mật dữ liệu</button>
+          <button type="button" onclick="openPolicy('terms')">Điều khoản sử dụng</button>
+          <a href="https://zalo.me/0924093461">Liên hệ Zalo</a>
+        </div>
+        <div>
+          <h3>CÔNG TY TNHH FIELDMAN</h3>
+          <span>MST: 0319200638</span>
+          <span>35 đường số 3, Phường Tân Mỹ, TP. Hồ Chí Minh</span>
+          <a href="tel:+84924093461">0924.093.461</a>
+          <span>08:00–21:00 · Thứ 2–Chủ nhật</span>
+        </div>
+      </div>
+      <div class="footer-bottom">© 2026 SkinID.vn. Sản phẩm chăm sóc da không phải là thuốc và không có tác dụng thay thế thuốc chữa bệnh.</div>
+    </div>
+  </footer>
+
+  <!-- ============================================ -->
+  <!-- MOBILE BOTTOM NAV                             -->
+  <!-- ============================================ -->
+  <nav class="mobile-nav" aria-label="Điều hướng nhanh" data-component-src="src/components/layout/mobile-nav.html">
+    <a href="#top"><i data-feather="home"></i><span>Trang chủ</span></a>
+    <a href="#catalog"><i data-feather="grid"></i><span>Sản phẩm</span></a>
+    <a href="skin-analysis.html"><i data-feather="camera"></i><span>Soi da</span></a>
+    <button type="button" onclick="cartManager.toggleCartUI()"><i data-feather="shopping-bag"></i><span>Giỏ hàng</span><b id="mobile-cart-badge" class="opacity-0">0</b></button>
+  </nav>
+
+  <!-- ============================================ -->
+  <!-- MODALS                                        -->
+  <!-- ============================================ -->
+
+  <!-- Consultation Modal -->
+  <div id="consultation-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="consult-title"><div class="modal-panel"><button class="modal-close" type="button" onclick="closeConsultation()" aria-label="Đóng"><i data-feather="x"></i></button><div class="modal-content"><span class="modal-kicker">HỖ TRỢ CHỌN SẢN PHẨM</span><h2 id="consult-title">Bạn đang quan tâm điều gì nhất?</h2><p>Chọn một nhu cầu để lọc nhanh nhóm sản phẩm tham khảo.</p><div class="consult-grid"><button class="consult-option" type="button" data-consult="treatment" data-label="Da dầu & mụn"><strong>Da dầu & mụn</strong><span>Dầu thừa, bít tắc, sau mụn</span></button><button class="consult-option" type="button" data-consult="moisturizer" data-label="Khô & thiếu ẩm"><strong>Khô & thiếu ẩm</strong><span>Căng rát, bong tróc, thiếu nước</span></button><button class="consult-option" type="button" data-consult="sunscreen" data-label="Sắc tố & lão hóa"><strong>Sắc tố & lão hóa</strong><span>Không đều màu, nếp nhăn</span></button></div><div id="consultation-result" class="recommendation hidden"></div><div class="consent-box"><i data-feather="info"></i><span>Gợi ý chỉ mang tính tham khảo. Với tình trạng viêm hoặc kích ứng kéo dài, hãy gặp bác sĩ da liễu.</span></div><button id="consultation-cta" class="btn btn--primary btn--full" type="button" disabled>Chọn một nhu cầu để tiếp tục</button></div></div></div>
+
+  <!-- Policy Modal -->
+  <div id="policy-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="policy-title"><div class="modal-panel"><button class="modal-close" type="button" onclick="closePolicy()" aria-label="Đóng"><i data-feather="x"></i></button><div id="policy-content" class="modal-content"></div></div></div>
+
+  <!-- Product Detail Modal -->
+  <div data-component-src="src/components/dialogs/product-detail-modal.html" id="product-detail-modal" class="hidden opacity-0" onclick="if(event.target === this) closeProductDetailModal()"><div id="product-detail-modal-content" class="scale-95 opacity-0"><div class="pmodal-scroll"><button class="modal-close" type="button" onclick="closeProductDetailModal()" aria-label="Đóng"><i data-feather="x"></i></button><div class="pmodal-head"><div class="pmodal-image"><img id="pmodal-img" src="" alt=""></div><div><span id="pmodal-line" class="modal-kicker"></span><h2 id="pmodal-title"></h2><div class="pmodal-price"><span id="pmodal-price"></span> <span id="pmodal-original-price" class="hidden"></span></div><p id="pmodal-uses"></p><div class="spec"><h4>Dung tích</h4><p id="pmodal-volume"></p><h4>Hướng dẫn sử dụng</h4><p id="pmodal-usage"></p></div></div></div><div class="spec"><h4>Thành phần nổi bật</h4><div id="pmodal-key-actives"></div></div><section class="spec"><h4>Danh sách thành phần đầy đủ</h4><p id="pmodal-full-ingredients"></p></section><div class="spec"><h4>Thông tin sản phẩm</h4><p id="pmodal-certification-text"></p></div></div><div class="pmodal-actions"><button class="btn btn--outline" type="button" onclick="closeProductDetailModal()">Tiếp tục xem</button><button id="pmodal-add-cart-btn" class="btn btn--primary" type="button"><i data-feather="shopping-bag"></i> Thêm vào giỏ</button></div></div></div>
+
+  <!-- Privacy Consent Modal (for AI scan flow) -->
+  <div id="privacy-modal" class="fixed inset-0 z-[60] bg-black/60 hidden flex-col items-center justify-center transition-opacity duration-300 opacity-0 px-4">
+    <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl transform scale-95 transition-transform duration-300" id="privacy-modal-content">
+      <div class="border-b border-gray-100 px-6 py-5 flex items-center justify-between">
+        <h3 class="text-xl font-semibold text-gray-800">Thỏa thuận Bảo mật & Quyền riêng tư</h3>
+        <button onclick="closePrivacyModal()" class="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"><i data-feather="x" class="w-5 h-5"></i></button>
+      </div>
+      <div class="p-6">
+        <div class="bg-brand-petal/30 p-4 rounded-xl mb-6 border border-brand-petal/50">
+          <p class="text-gray-700 text-sm leading-relaxed mb-4">Để AI có thể phân tích chính xác tình trạng da, SkinID cần truy cập Camera trên thiết bị của bạn. Chúng tôi cam kết:</p>
+          <ul class="text-sm text-gray-700 space-y-3 mb-0">
+            <li class="flex items-start gap-3"><div class="bg-brand-primary/10 p-1.5 rounded-full mt-0.5"><i data-feather="shield" class="w-4 h-4 text-brand-primary flex-shrink-0"></i></div><span class="pt-1">Hình ảnh được phân tích theo thời gian thực và <strong>không lưu trữ</strong> trên bất kỳ máy chủ nào.</span></li>
+            <li class="flex items-start gap-3"><div class="bg-brand-primary/10 p-1.5 rounded-full mt-0.5"><i data-feather="lock" class="w-4 h-4 text-brand-primary flex-shrink-0"></i></div><span class="pt-1">Dữ liệu khuôn mặt chỉ dùng cho cá nhân hóa phác đồ chăm sóc da.</span></li>
+          </ul>
+        </div>
+        <label class="flex items-start gap-3 cursor-pointer group">
+          <div class="relative flex items-center justify-center w-5 h-5 mt-0.5">
+            <input type="checkbox" id="privacy-consent-checkbox" class="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded focus:ring-2 focus:ring-brand-primary/20 checked:border-brand-primary checked:bg-brand-primary transition-all cursor-pointer" onchange="togglePrivacyButton()">
+            <i data-feather="check" class="absolute w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity"></i>
+          </div>
+          <span class="text-sm text-gray-600 group-hover:text-gray-800 transition-colors select-none font-medium">Tôi đã đọc, hiểu và đồng ý với Chính sách bảo mật của SkinID.</span>
+        </label>
+      </div>
+      <div class="border-t border-gray-100 px-6 py-5 flex justify-end gap-3 bg-gray-50/50 rounded-b-2xl">
+        <button onclick="closePrivacyModal()" class="px-5 py-2.5 rounded-xl font-medium text-gray-600 hover:bg-gray-200 bg-gray-100 transition-colors">Hủy bỏ</button>
+        <button id="btn-privacy-continue" disabled onclick="requestCameraPermissionAndProceed()" class="px-6 py-2.5 rounded-xl font-semibold text-white bg-gray-300 cursor-not-allowed transition-all flex items-center gap-2"><i data-feather="camera" class="w-4 h-4"></i> Cấp quyền Camera</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Skin Scan Modal (fullscreen) -->
+  <div id="ai-modal" class="fixed inset-0 z-50 bg-white hidden flex-col transition-opacity duration-300 opacity-0 overflow-y-auto">
+    <div class="sticky top-0 bg-white z-20 border-b border-gray-100 px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-2"><i data-feather="cpu" class="text-brand-primary w-5 h-5"></i><h3 class="font-bold text-lg">Chuyên Gia AI Phân Tích Da</h3></div>
+      <button onclick="closeScanModal()" class="p-2 bg-gray-100 rounded-full text-gray-600 hover:bg-gray-200 transition-colors"><i data-feather="x" class="w-5 h-5"></i></button>
+    </div>
+    <div class="flex-grow flex flex-col max-w-4xl mx-auto w-full p-4 lg:p-8" id="modal-content-area">
+      <!-- CAPTURE FLOW -->
+      <div id="capture-flow" class="flex-grow flex flex-col">
+        <div class="flex items-center justify-between mb-8 max-w-md mx-auto w-full relative">
+          <div class="absolute top-1/2 left-0 w-full h-0.5 bg-gray-200 -z-10 -translate-y-1/2"></div>
+          <div class="flex flex-col items-center gap-2" id="step-1-indicator"><div class="w-8 h-8 rounded-full bg-brand-primary text-white flex items-center justify-center font-bold text-sm shadow-md transition-colors border-4 border-white">1</div><span class="text-xs font-semibold text-brand-primary">Chính diện</span></div>
+          <div class="flex flex-col items-center gap-2" id="step-2-indicator"><div class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold text-sm transition-colors border-4 border-white">2</div><span class="text-xs font-medium text-gray-500">Trái 45°</span></div>
+          <div class="flex flex-col items-center gap-2" id="step-3-indicator"><div class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold text-sm transition-colors border-4 border-white">3</div><span class="text-xs font-medium text-gray-500">Phải 45°</span></div>
+        </div>
+        <div id="setup-form" class="bg-brand-soft-bg p-6 rounded-2xl mb-8 border border-brand-petal">
+          <h4 class="font-semibold text-lg mb-4">Thông tin cơ bản</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div><label class="block text-sm font-medium text-gray-700 mb-2">Bạn cảm thấy da mình thuộc loại nào?</label><select id="user-skin-type" class="w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"><option value="Chưa rõ">Chưa rõ / Để AI đánh giá</option><option value="Da dầu">Da dầu</option><option value="Da khô">Da khô</option><option value="Da hỗn hợp">Da hỗn hợp</option><option value="Da nhạy cảm">Da nhạy cảm</option></select></div>
+            <div><label class="block text-sm font-medium text-gray-700 mb-2">Mức chi phí mong muốn</label><div class="flex gap-2"><button type="button" class="budget-btn flex-1 py-2 px-2 border rounded-lg text-sm font-medium border-brand-primary bg-brand-blush text-brand-primary transition-colors" data-budget="Essential">Cơ bản</button><button type="button" class="budget-btn flex-1 py-2 px-2 border rounded-lg text-sm font-medium border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors" data-budget="Select">Tiêu chuẩn</button><button type="button" class="budget-btn flex-1 py-2 px-2 border rounded-lg text-sm font-medium border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors" data-budget="Signature">Nâng cao</button></div></div>
+          </div>
+        </div>
+        <div class="relative w-full max-w-md mx-auto bg-black rounded-3xl overflow-hidden aspect-[3/4] shadow-2xl mb-6 flex-grow flex items-center justify-center">
+          <video id="webcam" class="w-full h-full object-cover transform scale-x-[-1]" autoplay playsinline muted></video>
+          <div class="absolute top-20 left-0 w-full flex flex-col items-center gap-2 z-30 px-4" id="ai-realtime-status">
+            <div id="ai-msg-angle" class="bg-red-500/90 backdrop-blur-md text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg transition-opacity duration-300 opacity-0">Góc mặt chưa thẳng</div>
+            <div id="ai-msg-light" class="bg-orange-500/90 backdrop-blur-md text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg transition-opacity duration-300 opacity-0">Ánh sáng không đều</div>
+            <div id="ai-msg-expr" class="bg-purple-500/90 backdrop-blur-md text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg transition-opacity duration-300 opacity-0">Khuôn mặt chưa thả lỏng</div>
+            <div id="ai-msg-blur" class="bg-blue-500/90 backdrop-blur-md text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg transition-opacity duration-300 opacity-0">Camera bị mờ/rung</div>
+            <div id="ai-msg-perfect" class="bg-green-500/90 backdrop-blur-md text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg transition-opacity duration-300 opacity-0 flex items-center gap-2"><i data-feather="check-circle" class="w-4 h-4"></i> Giữ yên để chụp...</div>
+          </div>
+          <canvas id="ai-overlay" class="absolute inset-0 w-full h-full object-cover z-20 pointer-events-none transform scale-x-[-1]"></canvas>
+          <div class="absolute top-8 left-0 w-full text-center z-20 px-4"><div class="bg-black/50 backdrop-blur-sm text-white px-4 py-2 rounded-full inline-block text-sm font-medium" id="instruction-text">Chụp ảnh chính diện khuôn mặt</div></div>
+          <div id="camera-loading" class="absolute inset-0 flex flex-col items-center justify-center bg-gray-900 text-white z-30"><i data-feather="loader" class="w-8 h-8 animate-spin mb-4 text-brand-primary"></i><p>Đang kết nối Camera...</p></div>
+        </div>
+        <div class="flex flex-col items-center justify-center gap-6">
+          <div class="scan-capture-actions"><button id="capture-btn" onclick="captureFrame()" class="w-16 h-16 rounded-full bg-white border-4 border-brand-primary shadow-[0_0_0_4px_rgba(255,255,255,1)] flex items-center justify-center active:scale-95 transition-transform" aria-label="Chụp ảnh"><div class="w-12 h-12 rounded-full bg-brand-primary"></div></button><button type="button" onclick="openScanFilePicker()" class="scan-upload-button"><i data-feather="upload" class="w-4 h-4"></i> Tải ảnh lên</button></div>
+          <div class="flex gap-4 h-20" id="thumbnails-container"><div class="w-16 h-16 rounded-lg bg-gray-100 border-2 border-dashed border-gray-300 overflow-hidden" id="thumb-1"></div><div class="w-16 h-16 rounded-lg bg-gray-100 border-2 border-dashed border-gray-300 overflow-hidden" id="thumb-2"></div><div class="w-16 h-16 rounded-lg bg-gray-100 border-2 border-dashed border-gray-300 overflow-hidden" id="thumb-3"></div></div>
+          <div id="analyze-action" class="hidden w-full max-w-md mt-2"><button id="start-analysis-btn" onclick="startAnalysis()" class="w-full bg-brand-dark text-white py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:bg-black transition-colors shadow-lg"><i data-feather="cpu" class="w-5 h-5"></i>Bắt đầu phân tích AI</button></div>
+        </div>
+      </div>
+      <!-- ANALYZING FLOW -->
+      <div id="analyzing-flow" class="hidden flex-grow flex flex-col items-center justify-center py-10 px-4">
+        <div class="relative w-36 h-36 mb-6">
+          <div class="absolute inset-0 rounded-full border-4 border-brand-petal/40"></div>
+          <div class="absolute inset-0 rounded-full border-4 border-brand-primary border-t-transparent animate-spin" style="animation-duration: 1.2s;"></div>
+          <div class="absolute inset-2 rounded-full border-2 border-purple-300/30 border-b-transparent animate-spin" style="animation-duration: 2s; animation-direction: reverse;"></div>
+          <div class="absolute inset-0 flex items-center justify-center"><div id="scan-icon-container" class="text-brand-primary transition-all duration-500"><i data-feather="search" class="w-12 h-12 animate-pulse"></i></div></div>
+          <div class="absolute inset-0 rounded-full bg-brand-primary/10 animate-ping" style="animation-duration: 2s;"></div>
+        </div>
+        <h3 id="scan-step-title" class="text-xl font-bold mb-1 text-brand-dark text-center">🔍 Đang nhận diện khuôn mặt...</h3>
+        <p id="scan-step-desc" class="text-gray-400 text-sm text-center max-w-xs mb-6">Xác định vùng da từ 3 góc chụp</p>
+        <div class="w-full max-w-sm mb-6"><div class="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden shadow-inner"><div id="analysis-progress" class="h-full w-0 rounded-full transition-all duration-700 ease-out" style="background: linear-gradient(90deg, #e87a90, #a855f7, #10b981);"></div></div><div class="flex justify-between mt-2 text-[10px] font-semibold text-gray-400 uppercase tracking-wider"><span>Nhận diện</span><span>Phân tích</span><span>Báo cáo</span></div></div>
+        <div class="w-full max-w-sm space-y-2.5 mb-6" id="scan-steps-list">
+          <div class="scan-step flex items-center gap-3 p-2.5 rounded-xl border border-gray-100 bg-white/80" data-step="1"><div class="scan-step-icon w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 flex-shrink-0"><i data-feather="eye" class="w-3.5 h-3.5"></i></div><span class="scan-step-text text-sm font-medium text-gray-400">Nhận diện khuôn mặt từ 3 góc độ</span></div>
+          <div class="scan-step flex items-center gap-3 p-2.5 rounded-xl border border-gray-100 bg-white/80" data-step="2"><div class="scan-step-icon w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 flex-shrink-0"><i data-feather="layers" class="w-3.5 h-3.5"></i></div><span class="scan-step-text text-sm font-medium text-gray-400">Phân tích cấu trúc biểu bì & hạ bì</span></div>
+          <div class="scan-step flex items-center gap-3 p-2.5 rounded-xl border border-gray-100 bg-white/80" data-step="3"><div class="scan-step-icon w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 flex-shrink-0"><i data-feather="droplet" class="w-3.5 h-3.5"></i></div><span class="scan-step-text text-sm font-medium text-gray-400">Đo lường độ ẩm, dầu & sắc tố melanin</span></div>
+          <div class="scan-step flex items-center gap-3 p-2.5 rounded-xl border border-gray-100 bg-white/80" data-step="4"><div class="scan-step-icon w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 flex-shrink-0"><i data-feather="bar-chart-2" class="w-3.5 h-3.5"></i></div><span class="scan-step-text text-sm font-medium text-gray-400">Tổng hợp 12 chỉ số cấu trúc da</span></div>
+          <div class="scan-step flex items-center gap-3 p-2.5 rounded-xl border border-gray-100 bg-white/80" data-step="5"><div class="scan-step-icon w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 flex-shrink-0"><i data-feather="file-text" class="w-3.5 h-3.5"></i></div><span class="scan-step-text text-sm font-medium text-gray-400">Tạo báo cáo cá nhân hóa</span></div>
+        </div>
+        <div class="flex gap-3 items-center" id="scan-thumbnails">
+          <div class="w-16 h-16 rounded-xl overflow-hidden border-2 border-brand-petal/50 relative bg-gray-100" id="scan-thumb-1"><div class="scan-line absolute inset-0 pointer-events-none"></div></div>
+          <div class="w-16 h-16 rounded-xl overflow-hidden border-2 border-brand-petal/50 relative bg-gray-100" id="scan-thumb-2"><div class="scan-line absolute inset-0 pointer-events-none"></div></div>
+          <div class="w-16 h-16 rounded-xl overflow-hidden border-2 border-brand-petal/50 relative bg-gray-100" id="scan-thumb-3"><div class="scan-line absolute inset-0 pointer-events-none"></div></div>
+        </div>
+        <p class="hidden" id="analysis-status"></p>
+      </div>
+      <!-- RESULTS FLOW — injected by skin-ai.js -->
+      <div id="results-flow" class="hidden flex-col gap-8 pb-10 w-full max-w-4xl mx-auto"></div>
+    </div>
+  </div>
+
+  <!-- Auth Modal -->
+  <div id="auth-modal" class="fixed inset-0 z-[999] bg-black/75 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 hidden opacity-0 transition-all duration-300">
+    <div id="auth-modal-content" class="bg-white/95 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl transform scale-95 transition-all duration-300 relative border border-white/40 backdrop-blur-2xl max-h-[90vh] overflow-y-auto">
+      <button onclick="window.authManager.closeAuthModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-700 p-2 rounded-full hover:bg-gray-100/80 transition-colors z-10"><i data-feather="x" class="w-5 h-5"></i></button>
+      <div class="text-center mb-6">
+        <div class="w-14 h-14 bg-gradient-to-tr from-brand-primary to-brand-accent rounded-2xl flex items-center justify-center mx-auto mb-3 text-white shadow-lg shadow-brand-primary/30"><i data-feather="user-check" class="w-7 h-7"></i></div>
+        <h3 class="text-2xl font-black text-brand-dark tracking-tight" id="auth-tab-title">Chào Mừng Đến SkinID</h3>
+        <p class="text-xs text-gray-500 font-medium mt-1">Đăng nhập để lưu lịch sử soi da & nhận phác đồ cá nhân hóa</p>
+        <div id="auth-modal-notice" class="text-xs font-bold text-rose-600 bg-rose-50 border border-rose-100 p-3 rounded-xl mt-3 hidden text-left flex items-center gap-2"><i data-feather="alert-circle" class="w-4 h-4 flex-shrink-0"></i><span id="auth-notice-text"></span></div>
+      </div>
+      <button onclick="window.authManager.triggerGoogleSignIn()" class="w-full bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 py-3 px-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-3 shadow-sm hover:shadow transition-all mb-4 group">
+        <svg class="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.28-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        <span>Tiếp tục với Google Xác Thực</span>
+      </button>
+      <div class="relative flex py-2 items-center mb-4"><div class="flex-grow border-t border-gray-200"></div><span class="flex-shrink mx-3 text-[11px] font-bold text-gray-400 uppercase tracking-widest">Hoặc tài khoản Email</span><div class="flex-grow border-t border-gray-200"></div></div>
+      <div class="flex bg-gray-100 p-1.5 rounded-2xl mb-5 border border-gray-200/60">
+        <button id="auth-tab-login" onclick="toggleAuthForm('login')" class="w-1/2 py-2 text-xs font-extrabold rounded-xl bg-white text-gray-900 shadow-sm transition-all">Đăng nhập</button>
+        <button id="auth-tab-register" onclick="toggleAuthForm('register')" class="w-1/2 py-2 text-xs font-extrabold rounded-xl text-gray-500 hover:text-gray-900 transition-all">Đăng ký mới</button>
+      </div>
+      <form id="form-login" onsubmit="handleLoginSubmit(event)" class="space-y-4">
+        <div><label class="block text-xs font-bold text-gray-700 mb-1">Email đăng nhập</label><div class="relative"><input type="email" id="login-email" required placeholder="nhapemail@gmail.com" class="w-full bg-gray-50 border border-gray-200 rounded-2xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:bg-white transition-all"><i data-feather="mail" class="w-4 h-4 text-gray-400 absolute left-3.5 top-3.5"></i></div></div>
+        <div><div class="flex justify-between items-center mb-1"><label class="block text-xs font-bold text-gray-700">Mật khẩu</label><button type="button" onclick="toggleAuthForm('forgot')" class="text-xs font-bold text-brand-primary hover:underline">Quên mật khẩu?</button></div><div class="relative"><input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-gray-50 border border-gray-200 rounded-2xl pl-10 pr-11 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:bg-white transition-all"><i data-feather="lock" class="w-4 h-4 text-gray-400 absolute left-3.5 top-3.5"></i><button type="button" onclick="togglePasswordVisibility('login-password', this)" class="absolute right-3.5 top-3.5 text-gray-400 hover:text-gray-600 transition-colors"><i data-feather="eye" class="w-4 h-4"></i></button></div></div>
+        <div class="flex items-center"><label class="flex items-center gap-2 cursor-pointer select-none"><input type="checkbox" id="login-remember" checked class="w-4 h-4 rounded text-brand-primary focus:ring-brand-primary border-gray-300"><span class="text-xs text-gray-600 font-semibold">Ghi nhớ đăng nhập</span></label></div>
+        <button type="submit" class="w-full bg-gradient-to-r from-brand-primary to-brand-dark hover:opacity-95 text-white py-3.5 rounded-2xl font-bold text-sm shadow-lg shadow-brand-primary/30 transition-all flex items-center justify-center gap-2"><i data-feather="log-in" class="w-4 h-4"></i> Đăng nhập ngay</button>
+      </form>
+      <form id="form-register" onsubmit="handleRegisterSubmit(event)" class="space-y-3.5 hidden">
+        <div><label class="block text-xs font-bold text-gray-700 mb-1">Họ và tên *</label><div class="relative"><input type="text" id="reg-name" required placeholder="Nguyễn Văn A" class="w-full bg-gray-50 border border-gray-200 rounded-2xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:bg-white transition-all"><i data-feather="user" class="w-4 h-4 text-gray-400 absolute left-3.5 top-3"></i></div></div>
+        <div><label class="block text-xs font-bold text-gray-700 mb-1">Email *</label><div class="relative"><input type="email" id="reg-email" required placeholder="email@gmail.com" class="w-full bg-gray-50 border border-gray-200 rounded-2xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:bg-white transition-all"><i data-feather="mail" class="w-4 h-4 text-gray-400 absolute left-3.5 top-3"></i></div></div>
+        <div><label class="block text-xs font-bold text-gray-700 mb-1">Số điện thoại</label><div class="relative"><input type="tel" id="reg-phone" placeholder="0901234567" class="w-full bg-gray-50 border border-gray-200 rounded-2xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:bg-white transition-all"><i data-feather="phone" class="w-4 h-4 text-gray-400 absolute left-3.5 top-3"></i></div></div>
+        <div><label class="block text-xs font-bold text-gray-700 mb-1">Tạo mật khẩu *</label><div class="relative"><input type="password" id="reg-password" required oninput="handlePasswordStrengthInput(this.value)" placeholder="Tối thiểu 6 ký tự" class="w-full bg-gray-50 border border-gray-200 rounded-2xl pl-10 pr-11 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:bg-white transition-all"><i data-feather="lock" class="w-4 h-4 text-gray-400 absolute left-3.5 top-3"></i><button type="button" onclick="togglePasswordVisibility('reg-password', this)" class="absolute right-3.5 top-3 text-gray-400 hover:text-gray-600 transition-colors"><i data-feather="eye" class="w-4 h-4"></i></button></div><div class="mt-1.5 flex items-center gap-2"><div class="h-1.5 flex-grow bg-gray-200 rounded-full overflow-hidden"><div id="reg-strength-bar" class="h-full w-0 bg-gray-300 transition-all duration-300"></div></div><span id="reg-strength-label" class="text-[10px] font-bold text-gray-400 min-w-[60px] text-right">Chưa nhập</span></div></div>
+        <div><label class="block text-xs font-bold text-gray-700 mb-1">Xác nhận mật khẩu *</label><div class="relative"><input type="password" id="reg-confirm-password" required oninput="handleConfirmPasswordInput()" placeholder="Nhập lại mật khẩu" class="w-full bg-gray-50 border border-gray-200 rounded-2xl pl-10 pr-11 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:bg-white transition-all"><i data-feather="check-circle" class="w-4 h-4 text-gray-400 absolute left-3.5 top-3"></i><button type="button" onclick="togglePasswordVisibility('reg-confirm-password', this)" class="absolute right-3.5 top-3 text-gray-400 hover:text-gray-600 transition-colors"><i data-feather="eye" class="w-4 h-4"></i></button></div><p id="reg-confirm-msg" class="text-[10px] font-bold mt-1 hidden"></p></div>
+        <div class="pt-1"><label class="flex items-start gap-2 cursor-pointer select-none"><input type="checkbox" id="reg-terms" required checked class="w-4 h-4 mt-0.5 rounded text-brand-primary focus:ring-brand-primary border-gray-300"><span class="text-[11px] text-gray-500 leading-tight">Tôi đồng ý với <a href="#" class="text-brand-primary font-bold hover:underline">Điều khoản</a> và <a href="#" class="text-brand-primary font-bold hover:underline">Chính sách bảo mật</a> SkinID.</span></label></div>
+        <button type="submit" class="w-full bg-gradient-to-r from-brand-primary to-brand-dark hover:opacity-95 text-white py-3.5 rounded-2xl font-bold text-sm shadow-lg shadow-brand-primary/30 transition-all mt-2 flex items-center justify-center gap-2"><i data-feather="user-plus" class="w-4 h-4"></i> Tạo tài khoản & Bắt đầu</button>
+      </form>
+      <form id="form-forgot" onsubmit="handleForgotSubmit(event)" class="space-y-4 hidden">
+        <div class="bg-blue-50 border border-blue-100 p-3 rounded-2xl text-xs text-blue-800"><p class="font-bold mb-1">Cần khôi phục mật khẩu?</p><p>Nhập email đăng ký. Hệ thống sẽ cấp mật khẩu tạm ngay.</p></div>
+        <div><label class="block text-xs font-bold text-gray-700 mb-1">Email tài khoản</label><div class="relative"><input type="email" id="forgot-email" required placeholder="nhapemail@gmail.com" class="w-full bg-gray-50 border border-gray-200 rounded-2xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:bg-white transition-all"><i data-feather="mail" class="w-4 h-4 text-gray-400 absolute left-3.5 top-3.5"></i></div></div>
+        <button type="submit" class="w-full bg-brand-primary hover:bg-brand-dark text-white py-3.5 rounded-2xl font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2"><i data-feather="send" class="w-4 h-4"></i> Gửi Yêu Cầu Khôi Phục</button>
+        <div class="text-center pt-2"><button type="button" onclick="toggleAuthForm('login')" class="text-xs font-bold text-gray-500 hover:text-gray-800 underline">Quay lại Đăng nhập</button></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- History Modal -->
+  <div id="history-modal" class="fixed inset-0 z-[999] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+    <div id="history-modal-content" class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl transform scale-95 transition-transform duration-300 relative border border-gray-100 max-h-[85vh] flex flex-col">
+      <button onclick="window.authManager.closeHistoryModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-100 transition-colors"><i data-feather="x" class="w-5 h-5"></i></button>
+      <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100"><div class="w-10 h-10 bg-brand-blush rounded-xl flex items-center justify-center text-brand-primary shadow-sm"><i data-feather="activity" class="w-5 h-5"></i></div><div><h3 class="text-lg font-black text-brand-dark">Lịch Sử Phân Tích Da</h3><p class="text-xs text-gray-500 font-medium">Theo dõi sự cải thiện qua từng lần quét</p></div></div>
+      <div id="history-list-container" class="overflow-y-auto space-y-3 pr-1 flex-grow"></div>
+    </div>
+  </div>
+
+  <!-- Legal Modal -->
+  <div id="legal-modal" class="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+    <div id="legal-modal-content" class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl transform scale-95 transition-transform duration-300 relative border border-gray-100 max-h-[85vh] flex flex-col">
+      <button onclick="closeLegalModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-100 transition-colors"><i data-feather="x" class="w-5 h-5"></i></button>
+      <div class="flex items-center gap-3 mb-4 pb-3 border-b border-gray-100"><div class="w-10 h-10 bg-brand-blush rounded-xl flex items-center justify-center text-brand-primary shadow-sm"><i data-feather="file-text" class="w-5 h-5"></i></div><div><h3 class="text-lg font-black text-brand-dark" id="legal-modal-title">Chính Sách Pháp Lý</h3><p class="text-xs text-gray-500 font-medium">Quy định tại SkinID.vn (Công ty TNHH FieldMan)</p></div></div>
+      <div id="legal-modal-body" class="overflow-y-auto space-y-4 text-xs sm:text-sm text-gray-700 leading-relaxed pr-2 flex-grow"></div>
+      <div class="pt-4 border-t border-gray-100 flex justify-end"><button onclick="closeLegalModal()" class="px-6 py-2 bg-brand-dark text-white rounded-xl text-xs font-bold shadow">Đã hiểu & Đóng</button></div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- SCRIPTS                                       -->
+  <!-- ============================================ -->
+  <script src="src/js/app/bootstrap.js"></script>
+  <script>
+    function openLegalModal(type) {
+      const modal = document.getElementById('legal-modal');
+      const titleEl = document.getElementById('legal-modal-title');
+      const bodyEl = document.getElementById('legal-modal-body');
+      if (!modal || !titleEl || !bodyEl) return;
+      const policies = {
+        'privacy': { title: 'Chính Sách Bảo Mật & Dữ Liệu Sinh Trắc Học', content: '<div class="space-y-3"><p class="font-bold text-gray-900">1. Mục đích thu thập:</p><p>SkinID.vn chỉ thu thập hình ảnh khuôn mặt để AI phân tích tình trạng da thời gian thực.</p><p class="font-bold text-gray-900">2. Cam kết bảo mật:</p><ul class="list-disc pl-5 space-y-1"><li>Hình ảnh được mã hóa qua SSL/TLS.</li><li>SkinID <strong>không chia sẻ, bán</strong> dữ liệu sinh trắc học cho bên thứ ba.</li></ul><p class="font-bold text-gray-900">3. Quyền của người dùng:</p><p>Bạn có toàn quyền truy cập, chỉnh sửa hoặc <strong>yêu cầu xóa</strong> dữ liệu cá nhân bất kỳ lúc nào qua email <strong>contact@skinid.vn</strong>.</p></div>' },
+        'terms': { title: 'Điều Khoản Sử Dụng', content: '<div class="space-y-3"><p class="font-bold text-gray-900">1. Quyền sở hữu trí tuệ:</p><p>Thuật toán AI, nhãn hiệu SkinID/TWON/D\'VAH thuộc CÔNG TY TNHH FIELDMAN (MST: 0319200638).</p><p class="font-bold text-gray-900">2. Khuyến cáo y tế:</p><p class="bg-rose-50 text-rose-800 p-3 rounded-xl border border-rose-100 font-medium">⚠️ Kết quả AI chỉ mang tính tư vấn, không thay thế chẩn đoán y khoa.</p></div>' },
+        'shipping': { title: 'Vận Chuyển & Thanh Toán', content: '<div class="space-y-3"><p class="font-bold text-gray-900">1. Vận chuyển:</p><p>Giao toàn quốc 1-4 ngày (GHTK, GHN, Viettel Post).</p><p class="font-bold text-gray-900">2. Cước phí:</p><p>Miễn phí đơn từ 500.000đ. Đơn dưới: 30.000đ.</p><p class="font-bold text-gray-900">3. Thanh toán:</p><ul class="list-disc pl-5 space-y-1"><li>COD</li><li>Chuyển khoản ngân hàng</li></ul></div>' },
+        'return': { title: 'Đổi Trả & Hoàn Tiền (7 ngày)', content: '<div class="space-y-3"><p class="font-bold text-gray-900">Điều kiện:</p><ul class="list-disc pl-5 space-y-1"><li>Lỗi sản xuất/vận chuyển</li><li>Giao sai sản phẩm</li><li>Kích ứng có xác nhận y tế</li></ul><p class="font-bold text-gray-900">Hoàn tiền:</p><p>100% qua chuyển khoản trong 24h.</p></div>' }
+      };
+      const target = policies[type] || policies['privacy'];
+      titleEl.innerText = target.title;
+      bodyEl.innerHTML = target.content;
+      modal.classList.remove('hidden');
+      setTimeout(() => { modal.classList.remove('opacity-0'); document.getElementById('legal-modal-content').classList.remove('scale-95'); }, 10);
+    }
+    function closeLegalModal() { const m = document.getElementById('legal-modal'); if (!m) return; document.getElementById('legal-modal-content').classList.add('scale-95'); m.classList.add('opacity-0'); setTimeout(() => m.classList.add('hidden'), 300); }
+    function togglePasswordVisibility(id, btn) { const i = document.getElementById(id); if (!i) return; const ic = btn.querySelector('i'); if (i.type === 'password') { i.type = 'text'; if (ic) ic.setAttribute('data-feather','eye-off'); } else { i.type = 'password'; if (ic) ic.setAttribute('data-feather','eye'); } if (window.feather) feather.replace(); }
+    function handlePasswordStrengthInput(v) { if (!window.authManager) return; const r = window.authManager.checkPasswordStrength(v); const b = document.getElementById('reg-strength-bar'), l = document.getElementById('reg-strength-label'); if (b&&l) { b.className=`h-full ${r.color} transition-all duration-300`; b.style.width=r.width; l.className=`text-[10px] font-bold ${r.textClass} min-w-[60px] text-right`; l.innerText=r.label; } handleConfirmPasswordInput(); }
+    function handleConfirmPasswordInput() { const p=document.getElementById('reg-password')?.value||'', c=document.getElementById('reg-confirm-password')?.value||'', m=document.getElementById('reg-confirm-msg'); if(!m) return; if(!c){m.classList.add('hidden');return;} m.classList.remove('hidden'); if(p===c){m.className='text-[10px] font-bold text-emerald-600 mt-1';m.innerHTML='✓ Khớp';} else {m.className='text-[10px] font-bold text-rose-500 mt-1';m.innerHTML='✗ Không khớp';} }
+    function toggleAuthForm(mode) { const fL=document.getElementById('form-login'),fR=document.getElementById('form-register'),fF=document.getElementById('form-forgot'),tL=document.getElementById('auth-tab-login'),tR=document.getElementById('auth-tab-register'),ti=document.getElementById('auth-tab-title'); if(fL)fL.classList.add('hidden');if(fR)fR.classList.add('hidden');if(fF)fF.classList.add('hidden'); if(mode==='login'){if(fL)fL.classList.remove('hidden');if(ti)ti.innerText='Chào Mừng Đến SkinID';if(tL){tL.classList.add('bg-white','text-gray-900','shadow-sm');tL.classList.remove('text-gray-500');}if(tR){tR.classList.remove('bg-white','text-gray-900','shadow-sm');tR.classList.add('text-gray-500');}} else if(mode==='register'){if(fR)fR.classList.remove('hidden');if(ti)ti.innerText='Tạo Tài Khoản SkinID';if(tR){tR.classList.add('bg-white','text-gray-900','shadow-sm');tR.classList.remove('text-gray-500');}if(tL){tL.classList.remove('bg-white','text-gray-900','shadow-sm');tL.classList.add('text-gray-500');}} else if(mode==='forgot'){if(fF)fF.classList.remove('hidden');if(ti)ti.innerText='Khôi Phục Mật Khẩu';} if(window.feather)feather.replace(); }
+    function handleLoginSubmit(e) { e.preventDefault(); const r=window.authManager.login(document.getElementById('login-email').value,document.getElementById('login-password').value,document.getElementById('login-remember')?.checked??true); if(r.success){window.authManager.closeAuthModal();if(typeof showToast==='function')showToast(`Xin chào ${r.user.name}!`);} else alert(r.message); }
+    function handleRegisterSubmit(e) { e.preventDefault(); const r=window.authManager.register(document.getElementById('reg-name').value,document.getElementById('reg-email').value,document.getElementById('reg-phone').value,document.getElementById('reg-password').value,document.getElementById('reg-confirm-password').value,true); if(r.success){window.authManager.closeAuthModal();if(typeof showToast==='function')showToast(`Chào mừng ${r.user.name}!`);} else alert(r.message); }
+    function handleForgotSubmit(e) { e.preventDefault(); const em=document.getElementById('forgot-email').value,r=window.authManager?window.authManager.resetPassword(em):{success:false,message:'Lỗi'}; if(r.success){alert(`✅ Mật khẩu tạm: ${r.tempPassword}`);toggleAuthForm('login');document.getElementById('login-email').value=em;} else alert(r.message); }
+    feather.replace();
+  </script>
+</body>
+</html>
