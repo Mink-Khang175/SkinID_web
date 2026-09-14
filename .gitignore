@@ -1,4 +1,10 @@
 node_modules/
+dist/
+.netlify/
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+ui-debug.log*
 *.zip
 mingit/
 .env
@@ -6,3 +12,4 @@ mingit/
 .env.*
 !.env.example
 *.local.js
+*-firebase-adminsdk-*.json

@@ -10,7 +10,7 @@ for (const page of ['index.html', 'skin-analysis.html']) {
   assert(html.indexOf('cdn.tailwindcss.com') < html.indexOf('tailwind.config'));
   assert(html.includes('data-component-src="src/components/dialogs/product-detail-modal.html"'));
 }
-const legacy = read('src/components/dialogs/legacy-modals.html');
+const legacy = read('src/components/dialogs/analysis-modals.html');
 assert(!legacy.includes(String.raw`</div>\n`));
 assert(!legacy.includes('id="product-detail-modal"'));
 assert(source.includes('grid.appendChild(createProductCard(p))'));

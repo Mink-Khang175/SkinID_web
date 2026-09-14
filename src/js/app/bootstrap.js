@@ -1,8 +1,10 @@
 (function () {
   const applicationScripts = [
     'src/js/app/runtime-config.js',
+    'src/js/app/firebase-init.js',
     'src/data/products.js',
-    'src/js/account/auth.js',
+    'src/js/catalog/catalog-loader.js',
+    'src/js/account/auth-firebase.js',
     'src/js/services/email.js',
     'src/js/catalog/product-card.js',
     'src/js/catalog/product-filters.js',
@@ -42,7 +44,11 @@
     } catch (error) {
       console.warn('[SkinID components] Dùng HTML dự phòng:', error);
     }
-    for (const src of applicationScripts) await loadScript(src);
+    for (const src of applicationScripts) {
+      await loadScript(src);
+      if (src.endsWith('/catalog-loader.js')) await window.SKINID_CATALOG_READY;
+      if (src.endsWith('/auth.js') && window.SKINID_AUTH_READY) await window.SKINID_AUTH_READY;
+    }
     document.documentElement.classList.add('components-ready');
     document.dispatchEvent(new CustomEvent('skinid:ready'));
   }

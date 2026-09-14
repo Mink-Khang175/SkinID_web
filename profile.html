@@ -75,7 +75,7 @@
                 <a href="index.html" class="hidden sm:flex items-center gap-2 bg-gradient-to-r from-brand-primary to-brand-accent text-white px-5 py-2.5 rounded-full font-bold text-xs shadow-md shadow-brand-primary/25 hover:shadow-lg transition-all">
                     <i data-feather="camera" class="w-4 h-4"></i> Soi Da AI Ngay
                 </a>
-                <button onclick="window.authManager.logout(); window.location.href='index.html';" class="p-2.5 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-full transition-colors" title="Đăng xuất">
+                <button onclick="window.authManager.logout().then(()=>window.location.href='index.html')" class="p-2.5 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-full transition-colors" title="Đăng xuất">
                     <i data-feather="log-out" class="w-5 h-5"></i>
                 </button>
             </div>
@@ -262,7 +262,7 @@
                         <h2 class="text-lg font-black text-gray-900">Biểu Đồ Tiến Trình Sức Khỏe Làn Da</h2>
                         <p class="text-xs text-gray-500">Theo dõi sự thay đổi điểm số theo thời gian để đánh giá hiệu quả phác đồ</p>
                     </div>
-                    <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">AI ground-truth</span>
+                    <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">Kết quả tham khảo</span>
                 </div>
                 
                 <div class="h-64 sm:h-72 w-full">
@@ -323,7 +323,7 @@
             <div class="bg-white rounded-3xl p-6 sm:p-8 border border-gray-200 shadow-sm">
                 <div class="pb-4 mb-6 border-b border-gray-100">
                     <h2 class="text-lg font-black text-gray-900">Quyền Riêng Tư Dữ Liệu (Nghị định 13/2023/NĐ-CP)</h2>
-                    <p class="text-xs text-gray-500">Bạn có toàn quyền kiểm soát, tải về hoặc xóa bỏ dữ liệu khuôn mặt và bệnh án da liễu</p>
+                    <p class="text-xs text-gray-500">Bạn có thể tải về hoặc xóa hồ sơ và lịch sử phân tích da của tài khoản</p>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -346,27 +346,13 @@
                             </div>
                             <p class="text-xs text-rose-900/70 mb-4">Xóa sạch toàn bộ lịch sử soi da, hình ảnh khuôn mặt và thông tin lưu trữ trên hệ thống SkinID.</p>
                         </div>
-                        <button onclick="window.authManager.clearAllUserHistory(); setTimeout(()=>renderDashboard(), 500);" class="py-2.5 px-4 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition-colors self-start shadow-sm">
+                        <button onclick="window.authManager.clearAllUserHistory().then(()=>renderDashboard())" class="py-2.5 px-4 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition-colors self-start shadow-sm">
                             Xóa Toàn Bộ Dữ Liệu
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- 3.3 Cấu hình Quản trị viên (Google OAuth Client ID) -->
-            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-gray-200 shadow-sm">
-                <div class="pb-4 mb-4 border-b border-gray-100">
-                    <h2 class="text-lg font-black text-gray-900">Cấu Hình Quản Trị Viên (Google OAuth Client ID)</h2>
-                    <p class="text-xs text-gray-500">Tùy chỉnh mã Google Client ID từ Google Cloud Console cho tên miền skinid.vn</p>
-                </div>
-                
-                <div class="flex flex-col sm:flex-row gap-3 max-w-xl">
-                    <input type="text" id="admin-google-client-id" placeholder="apps.googleusercontent.com" class="flex-grow bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-brand-primary">
-                    <button onclick="saveAdminClientId()" class="px-6 py-3 bg-brand-primary text-white rounded-2xl font-bold text-xs hover:bg-brand-dark transition-colors shadow-sm">
-                        Lưu Cấu Hình
-                    </button>
-                </div>
-            </div>
         </div>
 
     </main>
@@ -374,12 +360,14 @@
     <!-- FOOTER -->
     <footer class="bg-white border-t border-brand-petal/40 py-8 text-center text-xs text-gray-400">
         <div class="container mx-auto px-4">
-            <p>© 2026 SkinID.vn - Nền tảng AI Phân Tích & Chăm Sóc Da Chuẩn Y Khoa. Bản quyền thuộc về CÔNG TY TNHH FIELDMAN.</p>
+            <p>© 2026 SkinID.vn - Nền tảng hỗ trợ phân tích và chăm sóc da. Bản quyền thuộc về CÔNG TY TNHH FIELDMAN.</p>
         </div>
     </footer>
 
     <!-- SCRIPTS -->
-    <script src="src/js/account/auth.js"></script>
+    <script src="src/js/app/runtime-config.js"></script>
+    <script src="src/js/app/firebase-init.js"></script>
+    <script src="src/js/account/auth-firebase.js"></script>
     <script>
         let progressChartInstance = null;
 
@@ -446,11 +434,6 @@
             document.getElementById('prof-address').value = user.address || '';
             document.getElementById('prof-skintype').value = user.skinTypeBaseline || 'Chưa xác định';
             document.getElementById('prof-main-concern').value = user.mainConcern || 'Lỗ chân lông to & Sợi bã nhờn';
-
-            // Fill Admin Client ID
-            const currentClientId = window.authManager.getGoogleClientId();
-            const adminInput = document.getElementById('admin-google-client-id');
-            if (adminInput) adminInput.value = currentClientId;
 
             // Render Timeline
             renderTimeline(history);
@@ -591,7 +574,7 @@
         }
 
         // Handle Profile Save
-        function handleSaveProfile(e) {
+        async function handleSaveProfile(e) {
             e.preventDefault();
             const updated = {
                 name: document.getElementById('prof-name').value.trim(),
@@ -603,7 +586,7 @@
                 mainConcern: document.getElementById('prof-main-concern').value
             };
 
-            const res = window.authManager.updateUserProfile(updated);
+            const res = await window.authManager.updateUserProfile(updated);
             if (res.success) {
                 alert("✅ Hồ sơ cá nhân đã được lưu thành công!");
                 renderDashboard();
@@ -613,7 +596,7 @@
         }
 
         // Handle Password Change
-        function handleChangePassword(e) {
+        async function handleChangePassword(e) {
             e.preventDefault();
             const curr = document.getElementById('pass-current').value;
             const newP = document.getElementById('pass-new').value;
@@ -624,7 +607,7 @@
                 return;
             }
 
-            const res = window.authManager.changePassword(curr, newP);
+            const res = await window.authManager.changePassword(curr, newP);
             if (res.success) {
                 alert("✅ Mật khẩu đã được thay đổi thành công!");
                 document.getElementById('form-change-password').reset();
@@ -633,14 +616,8 @@
             }
         }
 
-        // Save Admin Google Client ID
-        function saveAdminClientId() {
-            const val = document.getElementById('admin-google-client-id').value;
-            window.authManager.setGoogleClientId(val);
-            alert("✅ Đã lưu Google OAuth Client ID thành công!");
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            await window.SKINID_AUTH_READY;
             renderDashboard();
         });
     </script>

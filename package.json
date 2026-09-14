@@ -3,7 +3,19 @@
   "private": true,
   "scripts": {
     "build": "node scripts/build-static.mjs",
+    "dev": "npx netlify dev",
     "test": "node --test tests/*.test.js",
-    "audit:catalog": "node scripts/audit-catalog.js"
+    "test:functions": "npm --prefix functions test",
+    "test:all": "npm test && npm run test:functions && npm run build",
+    "audit:catalog": "node scripts/audit-catalog.js",
+    "firestore:import-products": "node scripts/import-products-to-firestore.mjs",
+    "firebase:deploy": "firebase deploy --only functions,firestore"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^10.0.10"
+  },
+  "devDependencies": {
+    "@opentelemetry/api": "^1.9.1",
+    "firebase-admin": "^14.4.0"
   }
 }

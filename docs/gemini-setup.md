@@ -1,57 +1,41 @@
-# Gemini: kết quả kiểm tra và cách nối an toàn
+# Gemini backend
 
-## Phát hiện ngày 10/09/2026
+## Kiến trúc đang dùng
 
-- Trong js/skin-ai.js của nhánh main GitHub được kiểm tra có biểu thức GEMINI_API_KEY
-  không rỗng sử dụng atob (Base64).
-- Không in, lưu hoặc đưa giá trị đó vào frontend. Chưa gọi Google bằng khóa này,
-  chưa xác minh khóa còn hoạt động, quyền sở hữu, quota hoặc billing.
-- Kiểm tra tĩnh giá trị sau một lần giải mã không thấy chuỗi khớp mẫu khóa Google
-  thông dụng; vì vậy cấu hình không rỗng không phải bằng chứng có khóa Gemini dùng được.
-- Bản local hiện giữ GEMINI_API_KEY trống. Không có analysisEndpoint mặc định.
-- Không thể tuyên bố soi da đã nối Gemini thành công.
+Frontend không chứa hoặc gọi trực tiếp bằng Gemini API key. Luồng phân tích là:
 
-Google khuyến cáo không đưa API key vào mã client và dùng backend proxy để bảo vệ khóa.
-Khóa từng xuất hiện trong repository public nên được thu hồi và thay mới bởi người quản trị.
-[Google: Using Gemini API keys](https://ai.google.dev/gemini-api/docs/api-key)
+1. Người dùng đăng nhập bằng Firebase Authentication.
+2. Frontend lấy Firebase ID token và gọi Netlify Function `analyze-skin`.
+3. Function xác minh chữ ký token bằng chứng thư công khai của Google, kiểm tra ba ảnh JPEG base64 và giới hạn dung lượng.
+4. Netlify Blobs giới hạn tối đa 10 lần phân tích cho mỗi tài khoản mỗi ngày.
+5. Function đọc `GEMINI_API_KEY` từ biến môi trường Netlify và gọi Gemini 2.5 Flash.
+6. Frontend lưu báo cáo đã chuẩn hóa vào `users/{uid}/skinReports` trong Firestore.
 
-## Cần đội backend thực hiện
+Mã backend đang chạy nằm tại `netlify/functions/analyze-skin.mjs`; mã gọi client nằm tại `src/js/analysis/skin-analysis.js`. Thư mục `functions/` giữ phương án Firebase Functions để dùng sau nếu project nâng cấp gói Blaze.
 
-1. Kiểm tra và thu hồi khóa đã công khai trong Google AI Studio/Cloud; kiểm tra usage/billing.
-2. Tạo khóa mới giới hạn phù hợp, lưu trong secret manager/biến môi trường SERVER.
-3. Cung cấp endpoint HTTPS phân tích ảnh, có xác thực, giới hạn dung lượng/tần suất,
-   timeout và chính sách lưu/xóa ảnh. Không ghi base64 ảnh hoặc API key vào log.
-4. Server giữ prompt, lựa chọn model và kiểm tra schema JSON trả về từ Gemini.
-5. Trả về schema tương thích hàm renderResults trong src/js/analysis/skin-analysis.js.
-6. Kiểm thử ảnh không có mặt, ảnh lỗi, lỗi quota, timeout, CORS và quyền truy cập.
+## Cấu hình khóa
 
-Tên endpoint dưới đây chỉ là đề xuất, chưa có dịch vụ thực:
+Tạo một khóa mới tại Google AI Studio và đặt nó trực tiếp trong Netlify với scope `Functions`, context `Production`, tên:
 
-```http
-POST /api/skin-analysis
-Content-Type: application/json
-
-{
-  "images": ["<base64 chính diện>", "<base64 trái>", "<base64 phải>"],
-  "skinType": "<giá trị biểu mẫu hiện tại>"
-}
+```dotenv
+GEMINI_API_KEY=...
 ```
 
-Frontend hiện chấp nhận { "analysis": ... } hoặc object kết quả trực tiếp.
-Adapter hiện mới kiểm tra cơ bản skinTypeSummary/isNotFace; backend cần thống nhất
-schema đầy đủ theo renderResults và validate chặt hơn trước khi dùng production.
-Sau khi server có sẵn, đặt analysisEndpoint trong src/js/app/runtime-config.js
-thành URL được duyệt. File này PUBLIC, chỉ đặt URL, không đặt API key.
+Có thể dùng `functions/.env` khi kiểm thử local. Các file `.env` đã được gitignore. Không đặt key trong `src/`, `public/`, HTML hoặc `runtime-config.js`, và không dùng lại khóa từng xuất hiện trong terminal/log.
 
-Luồng hiện tại gửi POST JSON; nếu endpoint khác origin hoặc dùng cookie, cần thống nhất
-CORS/credentials/CSRF với backend trước khi đấu nối. Chưa triển khai phần này.
+Backend Netlify không cần service-account JSON. Token đăng nhập được xác minh bằng khóa công khai của Firebase, vì vậy không phải duy trì thêm private key dài hạn trên Netlify.
 
-## Giới hạn của bản hiện tại — không được nhầm với AI thật
+## Deploy
 
-createLocalSkinAnalysis tạo số liệu từ dữ liệu đầu vào bằng phép tính xác định.
-Nó KHÔNG đo tình trạng da từ ảnh. Khi thiếu cấu hình hoặc endpoint lỗi, mã hiện tại
-có thể dùng kết quả này thay thế. Lần sắp xếp thư mục giữ nguyên hành vi cũ theo yêu cầu.
-Trước production cần tắt fallback mô phỏng, hiển thị lỗi có nút thử lại; nếu cần demo,
-gắn nhãn demo rõ ràng và không lưu/gửi nó như báo cáo phân tích thật.
+```sh
+npx netlify deploy --prod --build
+```
 
-Không thu hồi khóa, chỉnh GitHub, triển khai server hoặc gửi ảnh người dùng trong lần làm này.
+Endpoint production là `https://skinid-api.netlify.app/.netlify/functions/analyze-skin` và đã được khai báo trong `src/js/app/runtime-config.js`.
+
+## Giới hạn
+
+- Tối đa 3 ảnh, 4 MB mỗi ảnh và 10 MB tổng cộng.
+- Tối đa 10 lần phân tích mỗi tài khoản mỗi ngày.
+- Ảnh được chuyển tới Gemini để xử lý nhưng ứng dụng không chủ động lưu ảnh vào Firestore, Netlify Blobs hoặc Cloud Storage.
+- Kết quả chỉ mang tính tham khảo và không thay thế chẩn đoán y khoa.

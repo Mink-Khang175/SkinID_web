@@ -10,21 +10,7 @@ window.webcamStream = null;
 window.currentRoutineIds = [];
     window.excludedRoutineIds = new Set();
 
-// API credentials must never be shipped in client-side JavaScript.
-// The production analyser should call a protected server endpoint instead.
-const GEMINI_API_KEY = '';
-const SKINID_AI_ENDPOINT = window.SKINID_AI_ENDPOINT || window.SKINID_CONFIG?.analysisEndpoint || '';
-const FALLBACK_MODELS = [
-    'gemini-2.5-flash',
-    'gemini-2.0-flash',
-    'gemini-1.5-flash',
-    'gemini-1.5-pro',
-    'gemini-1.5-flash-8b'
-];
-
-function getGeminiUrl(modelName) {
-    return `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`;
-}
+// Gemini credentials live only in the authenticated Cloud Function.
 
 // UTILS
 function formatPrice(price) {
@@ -695,61 +681,6 @@ async function fetchWeatherData() {
     }
 }
 
-function createLocalSkinAnalysis(skinType, images) {
-    const seedSource = `${skinType}|${(images || []).map(image => image.slice(-180)).join('|')}`;
-    let seed = 2166136261;
-    for (let index = 0; index < seedSource.length; index++) {
-        seed ^= seedSource.charCodeAt(index);
-        seed = Math.imul(seed, 16777619);
-    }
-    const metric = (offset, min, max) => min + (Math.abs(seed + offset * 2654435761) % (max - min + 1));
-    const moisture = metric(1, 48, 74);
-    const sebum = metric(2, 38, 68);
-    const pores = metric(3, 35, 66);
-    const pigmentation = metric(4, 28, 58);
-    const elasticity = metric(5, 58, 82);
-    const healthScore = Math.round((moisture + elasticity + (100 - sebum) + (100 - pores) + (100 - pigmentation)) / 5);
-    const resolvedType = skinType && skinType !== 'Chưa rõ'
-        ? skinType
-        : (sebum > 58 ? 'Da hỗn hợp thiên dầu' : moisture < 56 ? 'Da khô thiếu ẩm' : 'Da hỗn hợp cân bằng');
-    const grade = healthScore >= 78 ? 'A' : healthScore >= 66 ? 'B' : healthScore >= 54 ? 'C' : 'D';
-
-    return {
-        isNotFace: false,
-        skinTypeSummary: resolvedType,
-        analysis3Angles: `Đánh giá tham khảo từ ba ảnh cho thấy nền da ${resolvedType.toLowerCase()}. Độ ẩm bề mặt ở mức ${moisture}%, trong khi dầu thừa và lỗ chân lông cần được theo dõi lần lượt ở mức ${sebum}% và ${pores}%. Vùng chữ T nên ưu tiên làm sạch dịu nhẹ, còn vùng má cần được cấp ẩm và củng cố hàng rào bảo vệ. Duy trì chống nắng phổ rộng mỗi ngày để hạn chế sắc tố phát triển thêm.`,
-        activeIngredients: moisture < 58 ? ['Hyaluronic Acid', 'Ceramide', 'Niacinamide'] : ['Niacinamide', 'Panthenol', 'Vitamin E'],
-        overallGrade: grade,
-        overallGradeComment: healthScore >= 70 ? 'Nền da tương đối ổn định, nên duy trì chăm sóc đều đặn' : 'Một số chỉ số cần được ưu tiên cải thiện',
-        skinConditions: [
-            { name: 'Mất cân bằng dầu – ẩm', severity: sebum > 58 ? 'Trung bình' : 'Nhẹ', location: 'Vùng chữ T và hai bên má', description: 'Cần cân bằng làm sạch và cấp ẩm.' },
-            { name: 'Nguy cơ sắc tố', severity: pigmentation > 48 ? 'Trung bình' : 'Nhẹ', location: 'Gò má và vùng tiếp xúc ánh nắng', description: 'Nên duy trì chống nắng phổ rộng.' }
-        ],
-        recoveryTimeline: '4–6 tuần nếu duy trì routine phù hợp',
-        healthScore,
-        skinAge: metric(6, 23, 34),
-        moisture,
-        elasticity,
-        sebum,
-        pigmentation,
-        pores,
-        eyeWrinkles: metric(7, 58, 80),
-        nasolabialFolds: metric(8, 56, 78),
-        redness: metric(9, 38, 65),
-        acneBacteria: metric(10, 35, 62),
-        texture: metric(11, 55, 78),
-        darkCircles: metric(12, 48, 72),
-        melasma: metric(13, 35, 60),
-        detailedAdvice: {
-            moisture: { why: 'Độ ẩm bề mặt chịu ảnh hưởng bởi hàng rào bảo vệ và điều kiện chụp.', shouldDo: 'Bổ sung serum cấp ẩm và kem dưỡng khóa ẩm.', avoid: 'Tránh rửa mặt bằng nước quá nóng hoặc làm sạch quá mức.' },
-            sebum: { why: 'Dầu tập trung nhiều hơn ở vùng chữ T.', shouldDo: 'Làm sạch dịu nhẹ hai lần mỗi ngày và ưu tiên kết cấu không gây bít tắc.', avoid: 'Không chà xát hoặc dùng sản phẩm tẩy rửa mạnh.' },
-            pores: { why: 'Dầu thừa và độ đàn hồi có thể làm lỗ chân lông trông rõ hơn.', shouldDo: 'Duy trì niacinamide và chống nắng đều đặn.', avoid: 'Tránh tự nặn mụn hoặc tẩy tế bào chết quá thường xuyên.' },
-            pigmentation: { why: 'Sắc tố chịu tác động lớn từ tia UV và ánh sáng nhìn thấy.', shouldDo: 'Dùng chống nắng phổ rộng SPF 50+ và thoa lại khi cần.', avoid: 'Hạn chế phơi nắng trực tiếp kéo dài.' },
-            elasticity: { why: 'Độ đàn hồi liên quan đến độ ẩm và thói quen bảo vệ da.', shouldDo: 'Duy trì cấp ẩm, chống nắng và ngủ đủ giấc.', avoid: 'Tránh bỏ qua bước chống nắng vào ban ngày.' }
-        }
-    };
-}
-
 async function startAnalysis() {
     if (!window.capturedImages || window.capturedImages.length < 3) {
         showToast('Vui lòng hoàn tất đủ 3 góc chụp trước khi phân tích.');
@@ -783,190 +714,36 @@ async function startAnalysis() {
 
     const skinType = document.getElementById('user-skin-type').value;
     
-    let promptText = `Bạn là chuyên gia phân tích da AI cấp chuyên viên da liễu. NGUYÊN TẮC QUAN TRỌNG NHẤT: BẠN PHẢI KIỂM TRA 3 BỨC ẢNH CÓ PHẢI LÀ KHUÔN MẶT NGƯỜI HAY KHÔNG.
-Nếu ảnh là đồ vật, bức tường, đồ dùng, thú cưng, ảnh tối đen hoặc KHÔNG CÓ KHUÔN MẶT NGƯỜI RÕ RÀNG, BẠN PHẢI TRẢ VỀ DUY NHẤT JSON: {"isNotFace": true, "reason": "No human face detected"} VÀ KHÔNG TRẢ VỀ BẤT KỲ CHỈ SỐ NÀO KHÁC.
-
-Nếu ĐÚNG LÀ KHUÔN MẶT NGƯỜI, hãy phân tích 3 bức ảnh khuôn mặt (chính diện, nghiêng trái 45°, nghiêng phải 45°) của khách hàng với thông tin ban đầu: ${skinType}.
-Hãy trả về DUY NHẤT một đối tượng JSON hợp lệ (không chứa markdown hay \`\`\`json), cấu trúc:
-{
-  "isNotFace": false,
-  "skinTypeSummary": "Phân loại da ngắn gọn (vd: Da hỗn hợp thiên dầu nhạy cảm)",
-  "analysis3Angles": "Đánh giá chi tiết tình trạng da dựa trên 3 góc độ ảnh (khoảng 4-5 câu tiếng Việt, chuyên nghiệp, đề cập cụ thể vùng da nào có vấn đề gì)",
-  "activeIngredients": ["Tên hoạt chất 1", "Tên hoạt chất 2", "Tên hoạt chất 3"],
-  "overallGrade": "A hoặc B hoặc C hoặc D hoặc F",
-  "overallGradeComment": "Nhận xét 1 câu ngắn về xếp hạng tổng thể, ví dụ: Làn da khỏe mạnh, chỉ cần duy trì",
-  "skinConditions": [
-    {"name": "Tên tình trạng da cụ thể phát hiện được", "severity": "Nhẹ hoặc Trung bình hoặc Nặng", "location": "Vùng da bị ảnh hưởng", "description": "Mô tả ngắn 1 câu"}
-  ],
-  "recoveryTimeline": "Dự đoán thời gian phục hồi nếu tuân thủ phác đồ, ví dụ: 4-6 tuần",
-  "healthScore": 75,
-  "skinAge": 26,
-  "moisture": 65,
-  "elasticity": 70,
-  "sebum": 85,
-  "pigmentation": 45,
-  "pores": 60,
-  "eyeWrinkles": 70,
-  "nasolabialFolds": 68,
-  "redness": 62,
-  "acneBacteria": 55,
-  "texture": 66,
-  "darkCircles": 60,
-  "melasma": 50,
-  "detailedAdvice": {
-    "moisture": {"why": "Giải thích vì sao chỉ số này ở mức đó dựa trên ảnh", "shouldDo": "Lời khuyên cụ thể nên làm", "avoid": "Điều cần tránh"},
-    "sebum": {"why": "...", "shouldDo": "...", "avoid": "..."},
-    "pores": {"why": "...", "shouldDo": "...", "avoid": "..."},
-    "pigmentation": {"why": "...", "shouldDo": "...", "avoid": "..."},
-    "elasticity": {"why": "...", "shouldDo": "...", "avoid": "..."}
-  }
-}
-Lưu ý: Chỉ trả về chuỗi JSON thuần. Tất cả nội dung phải bằng tiếng Việt. Phân tích phải DỰA TRÊN ẢNH THỰC TẾ, không được bịa số liệu.`;
-
-    // Inject User Scan History Context to anchor AI baseline & reduce statistical variance
-    if (window.authManager && window.authManager.getCurrentUser()) {
-        const history = window.authManager.getScanHistory();
-        if (history && history.length > 0) {
-            const lastScan = history[0];
-            const historyPrompt = `\n\n[USER HISTORICAL BASELINE CONTEXT - LỊCH SỬ QUÉT CỦA NGUỜI DÙNG]: Người dùng đã soi da ${history.length} lần trước đó. Kết quả lần soi gần nhất (${lastScan.dateFormatted}): Điểm sức khỏe: ${lastScan.healthScore}/100, Loại da: "${lastScan.skinType}", Tuổi da: ${lastScan.skinAge}. NGUYÊN TẮC: Hãy dùng thông tin lịch sử nền này để định chuẩn (baseline context), giúp cân bằng các sai số do góc chụp/ánh sáng thay đổi và đảm bảo tiến trình điểm số biến động hợp lý, nhất quán giữa các lần soi.`;
-            promptText += historyPrompt;
-        }
-    }
-
-    const payload = {
-        contents: [{
-            parts: [
-                { text: promptText },
-                { inlineData: { mimeType: "image/jpeg", data: window.capturedImages[0] } },
-                { inlineData: { mimeType: "image/jpeg", data: window.capturedImages[1] } },
-                { inlineData: { mimeType: "image/jpeg", data: window.capturedImages[2] } }
-            ]
-        }],
-        generationConfig: {
-            temperature: 0.1,
-            topP: 0.8
-        }
-    };
-
-    // Animate step 2 after 1.5s
-    setTimeout(() => activateScanStep(2, 5), 1500);
-
-    let resultJson = null;
-    let weatherData = null;
-
-    if (!GEMINI_API_KEY && !SKINID_AI_ENDPOINT) {
-        const weatherPromise = fetchWeatherData();
-        await new Promise(resolve => setTimeout(resolve, 550));
-        activateScanStep(2, 5);
-        await new Promise(resolve => setTimeout(resolve, 550));
-        activateScanStep(3, 5);
-        resultJson = createLocalSkinAnalysis(skinType, window.capturedImages);
-        await new Promise(resolve => setTimeout(resolve, 550));
-        activateScanStep(4, 5);
-        weatherData = await weatherPromise;
-        await new Promise(resolve => setTimeout(resolve, 450));
-        activateScanStep(5, 5);
-        await new Promise(resolve => setTimeout(resolve, 450));
-        renderResults(resultJson, weatherData);
-        return;
-    }
-
-    if (SKINID_AI_ENDPOINT) {
-        try {
-            const [response, localWeather] = await Promise.all([
-                fetch(SKINID_AI_ENDPOINT, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ images: window.capturedImages, skinType })
-                }),
-                fetchWeatherData()
-            ]);
-            activateScanStep(3, 5);
-            if (!response.ok) throw new Error(`AI endpoint returned ${response.status}`);
-            const endpointData = await response.json();
-            resultJson = endpointData.analysis || endpointData;
-            if (!resultJson || resultJson.isNotFace || !resultJson.skinTypeSummary) {
-                throw new Error('AI endpoint returned an invalid analysis');
-            }
-            activateScanStep(4, 5);
-            await new Promise(resolve => setTimeout(resolve, 500));
-            activateScanStep(5, 5);
-            await new Promise(resolve => setTimeout(resolve, 400));
-            renderResults(resultJson, localWeather);
-            return;
-        } catch (error) {
-            console.warn('Server analysis unavailable, using local analysis.', error);
-            resultJson = createLocalSkinAnalysis(skinType, window.capturedImages);
-            weatherData = await fetchWeatherData();
-            activateScanStep(5, 5);
-            renderResults(resultJson, weatherData);
-            return;
-        }
-    }
-
+    setTimeout(() => activateScanStep(2, 5), 700);
     try {
-        // Fetch weather in parallel
-        const weatherPromise = fetchWeatherData();
-
-        let data = null;
-        let fetchSuccess = false;
-        
-        for (const model of FALLBACK_MODELS) {
-            console.log('Đang thử gọi model AI:', model);
-            try {
-                const response = await fetch(getGeminiUrl(model), {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                
-                data = await response.json();
-                
-                if (response.ok && data.candidates && data.candidates[0].content && data.candidates[0].content.parts[0].text) {
-                    fetchSuccess = true;
-                    console.log('Model AI thành công:', model);
-                    break;
-                } else {
-                    console.warn(`Model ${model} thất bại (${response.status})`, data);
-                }
-            } catch (err) {
-                console.warn(`Lỗi kết nối model ${model}:`, err);
-            }
-        }
-
-        // Step 3
+        if (!window.authManager?.getCurrentUser()) throw new Error('Bạn cần đăng nhập trước khi phân tích da.');
+        const firebase = await window.SKINID_FIREBASE_READY;
+        const token = await firebase.auth.currentUser.getIdToken();
+        const [response, weatherData] = await Promise.all([
+            fetch(window.SKINID_CONFIG.analysisEndpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ images: window.capturedImages, skinType })
+            }),
+            fetchWeatherData()
+        ]);
         activateScanStep(3, 5);
-
-        if (fetchSuccess) {
-            let text = data.candidates[0].content.parts[0].text.trim();
-            text = text.replace(/```json/gi, '').replace(/```/g, '').trim();
-            resultJson = JSON.parse(text);
-
-            if (resultJson.isNotFace === true || resultJson.isNotFace === "true" || !resultJson.skinTypeSummary || !resultJson.healthScore) {
-                alert("⚠️ AI không nhận diện được khuôn mặt người trong 3 ảnh đã chụp.\n\nVui lòng chụp lại 3 bức ảnh khuôn mặt (chính diện và 2 bên nghiêng) rõ nét, đủ ánh sáng.");
-                resetToCaptureFlow();
-                return;
-            }
-        } else {
-            throw new Error('Tất cả các mô hình AI trực tuyến đều thất bại hoặc hết lượt truy cập');
+        const body = await response.json();
+        if (!response.ok) throw new Error(body.error || `Máy chủ trả về lỗi ${response.status}.`);
+        const resultJson = body.analysis;
+        if (resultJson?.isNotFace) {
+            alert('⚠️ Không nhận diện được khuôn mặt người rõ ràng trong đủ 3 ảnh. Vui lòng chụp lại ở nơi đủ sáng.');
+            resetToCaptureFlow();
+            return;
         }
-
-        // Step 4
+        if (!resultJson?.skinTypeSummary) throw new Error('Máy chủ trả về kết quả không hợp lệ.');
         activateScanStep(4, 5);
-        await new Promise(r => setTimeout(r, 800));
-
-        // Get weather result
-        weatherData = await weatherPromise;
-
-        // Step 5 – complete
+        await new Promise(resolve => setTimeout(resolve, 400));
         activateScanStep(5, 5);
-        await new Promise(r => setTimeout(r, 600));
-
         renderResults(resultJson, weatherData);
-
-    } catch (err) {
-        console.error("Gemini API Error:", err);
-        alert("⚠️ Không thể hoàn tất phân tích da AI do sự cố kết nối hoặc máy chủ bận.\n\nVui lòng kiểm tra lại kết nối mạng và bấm 'Bắt đầu soi da AI' để thử lại.");
+    } catch (error) {
+        console.error('[SkinID AI]', error);
+        alert(`⚠️ ${error.message || 'Không thể hoàn tất phân tích da. Vui lòng thử lại.'}`);
         resetToCaptureFlow();
     }
 }
@@ -1240,7 +1017,7 @@ function renderResults(data, weatherData) {
                 ? window.currentRoutineProducts 
                 : (window.currentRoutineIds ? PRODUCTS.filter(p => window.currentRoutineIds.includes(p.id)) : []);
 
-            const savedRecord = window.authManager.saveScanHistory({
+            window.authManager.saveScanHistory({
                 userName: currentUser.name,
                 healthScore: targetScore,
                 skinType: data.skinTypeSummary || 'Da hỗn hợp',
@@ -1255,9 +1032,8 @@ function renderResults(data, weatherData) {
                 },
                 recommendedRoutine: window.currentRoutineIds || [],
                 recommendedRoutineProducts: routineProducts
-            });
-
-            if (savedRecord && window.emailService && currentUser.email) {
+            }).then((savedRecord) => {
+                if (!savedRecord || !window.emailService || !currentUser.email) return;
                 window.emailService.sendSkinReportEmail(currentUser.email, {
                     userName: currentUser.name,
                     healthScore: targetScore,
@@ -1265,7 +1041,7 @@ function renderResults(data, weatherData) {
                     skinAge: parseInt(data.skinAge) || 25,
                     recommendedRoutineProducts: routineProducts
                 });
-            }
+            }).catch(error => console.error('[SkinID history]', error));
         }
         
         const acneBacteriaH = parseInt(data.acneBacteria) || Math.round(sebumH * 0.8 + 15);

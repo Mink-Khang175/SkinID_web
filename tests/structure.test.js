@@ -8,7 +8,7 @@ function walk(dir) {
     return fs.readdirSync(path.join(root, dir), { withFileTypes: true })
         .flatMap(entry => entry.isDirectory() ? walk(dir + '/' + entry.name) : [dir + '/' + entry.name]);
 }
-const htmlFiles = ['index.html', 'skin-analysis.html', 'profile.html', 'preview_verification.html',
+const htmlFiles = ['index.html', 'skin-analysis.html', 'profile.html',
     ...walk('src/components').filter(f => f.endsWith('.html'))];
 for (const file of htmlFiles) {
     for (const match of read(file).matchAll(/(?:src|href|data-component-src)="([^"]*)"/g)) {
@@ -35,16 +35,27 @@ assert.match(storefront, /Math\.floor\(Date\.now\(\) \/ carouselRotationMs\) % s
 assert.doesNotMatch(storefront, /setInterval\(\(\) => showSlide\(activeIndex \+ 1\), 5500\)/);
 const bootstrap = read('src/js/app/bootstrap.js');
 const scripts = [...bootstrap.matchAll(/'(src\/[^']+\.js)'/g)].map(m => m[1]);
+assert(scripts.indexOf('src/js/app/runtime-config.js') < scripts.indexOf('src/js/app/firebase-init.js'));
+assert(scripts.indexOf('src/js/app/firebase-init.js') < scripts.indexOf('src/js/account/auth-firebase.js'));
+assert(scripts.indexOf('src/data/products.js') < scripts.indexOf('src/js/catalog/catalog-loader.js'));
 assert(scripts.indexOf('src/data/products.js') < scripts.indexOf('src/js/analysis/skin-analysis.js'));
 assert(scripts.indexOf('src/js/catalog/product-filters.js') < scripts.indexOf('src/js/analysis/skin-analysis.js'));
 for (const file of scripts) {
     assert(fs.existsSync(path.join(root, file)), file);
     new vm.Script(read(file), { filename: file });
 }
-const products = JSON.parse(read('src/data/products.js').match(/const PRODUCTS = (\[[\s\S]*?\]);/)[1]);
+const products = JSON.parse(read('src/data/products.js').match(/window\.LOCAL_PRODUCTS = (\[[\s\S]*?\]);/)[1]);
 assert.equal(products.length, 54);
 assert(!read('src/js/analysis/skin-analysis.js').includes('const PRODUCTS ='));
 const app = read('src/js/analysis/skin-analysis.js');
-assert(/const GEMINI_API_KEY = '';/.test(app));
 assert(!/AIza[\w-]{30,}/.test(app));
+assert(!app.includes('generativelanguage.googleapis.com'));
+assert(!app.includes('createLocalSkinAnalysis'));
+assert.match(app, /fetch\(window\.SKINID_CONFIG\.analysisEndpoint/);
+const runtimeConfig = read('src/js/app/runtime-config.js');
+assert.match(runtimeConfig, /projectId: 'skinid-df273'/);
+assert.match(runtimeConfig, /measurementId: 'G-425CLMQ7YP'/);
+assert.match(runtimeConfig, /isLocalSkinId[\s\S]*'\/api\/skin-analysis'[\s\S]*'https:\/\/skinid-api\.netlify\.app\/\.netlify\/functions\/analyze-skin'/);
+assert(!runtimeConfig.includes('geminiApiKey'));
+assert.match(read('profile.html'), /src\/js\/app\/firebase-init\.js/);
 console.log('PASS: page/component references, script dependency order, syntax, catalog extraction and no embedded Gemini credential.');

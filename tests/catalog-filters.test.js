@@ -3,7 +3,7 @@ const path = require('node:path');
 const assert = require('node:assert/strict');
 const { filterProducts, getProductCategories, normalizeProductBrand } = require('../src/js/catalog/product-filters');
 const source = fs.readFileSync(path.join(__dirname, '../src/data/products.js'), 'utf8');
-const products = JSON.parse(source.match(/const PRODUCTS = (\[[\s\S]*?\]);/)[1]);
+const products = JSON.parse(source.match(/window\.LOCAL_PRODUCTS = (\[[\s\S]*?\]);/)[1]);
 const ids = results => results.map(p => p.id);
 assert.equal(new Set(ids(products)).size, products.length);
 assert.equal(filterProducts(products).length, 54);

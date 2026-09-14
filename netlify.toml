@@ -2,6 +2,10 @@
   command = "npm run build"
   publish = "dist"
 
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
 [context.production]
   branch = "main"
 
@@ -15,4 +19,8 @@
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
-    Access-Control-Allow-Origin = "*"
+
+[[redirects]]
+  from = "/api/skin-analysis"
+  to = "/.netlify/functions/analyze-skin"
+  status = 200

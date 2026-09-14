@@ -1,5 +1,5 @@
 // Local catalog fixture. Replace via a backend adapter only after API contract approval.
-const PRODUCTS = [
+window.LOCAL_PRODUCTS = [
     {
         "id": "rilastil-2109",
         "brand": "Rilastil",
@@ -2134,7 +2134,7 @@ const PRODUCTS = [
 ];
 
 // Product assets are organized by brand for a predictable UI-only folder structure.
-PRODUCTS.forEach((product) => {
+window.LOCAL_PRODUCTS.forEach((product) => {
     if (!product.image || !product.image.startsWith('/images/products/')) return;
     const relativeName = product.image.replace('/images/products/', '');
     if (relativeName.includes('/')) return;
