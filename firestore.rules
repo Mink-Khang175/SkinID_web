@@ -4,21 +4,59 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /products/{productId} {
       allow read: if true;
-      allow write: if false;
+      allow write: if request.auth != null && request.auth.token.admin == true;
     }
 
     match /users/{userId} {
-      allow read, create, update: if request.auth != null && request.auth.uid == userId;
-      allow delete: if false;
+      allow read: if request.auth != null && (request.auth.uid == userId || request.auth.token.admin == true);
+      allow create: if request.auth != null && request.auth.uid == userId && !request.resource.data.keys().hasAny(['role']);
+      allow update: if request.auth != null && (
+        request.auth.token.admin == true ||
+        (request.auth.uid == userId && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']))
+      );
+      allow delete: if request.auth != null && request.auth.token.admin == true;
 
       match /skinReports/{reportId} {
         allow read, create, delete: if request.auth != null && request.auth.uid == userId;
         allow update: if false;
       }
 
+      match /commerce/{documentId} {
+        allow read, create, update, delete: if request.auth != null && request.auth.uid == userId;
+      }
+
+      match /addresses/{addressId} {
+        allow read, create, update, delete: if request.auth != null && request.auth.uid == userId;
+      }
+
+      match /wishlist/{productId} {
+        allow read, create, update, delete: if request.auth != null && request.auth.uid == userId;
+      }
+
+      match /activities/{activityId} {
+        allow read: if request.auth != null && request.auth.uid == userId;
+        allow write: if false;
+      }
+
       match /private/{documentId} {
         allow read, write: if false;
       }
+    }
+
+    match /orders/{orderId} {
+      // Orders are created by the createOrder callable function so totals and
+      // product prices are always recalculated on the trusted server.
+      allow create: if false;
+      allow read: if request.auth != null
+        && (resource.data.userId == request.auth.uid || request.auth.token.admin == true);
+      allow update: if request.auth != null && (
+        request.auth.token.admin == true ||
+        (resource.data.userId == request.auth.uid
+          && resource.data.status in ['pending', 'confirmed']
+          && request.resource.data.status == 'cancelled'
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt']))
+      );
+      allow delete: if request.auth != null && request.auth.token.admin == true;
     }
 
     match /{document=**} {

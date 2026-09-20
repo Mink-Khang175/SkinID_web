@@ -1,28 +1,98 @@
+function compactActiveLabel(value) {
+        const text = String(value || '').split(':')[0].replace(/\([^)]*\)/g, ' ').replace(/\s+/g, ' ').trim();
+        const normalized = text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase();
+        if (!normalized || normalized.startsWith('KHONG SU DUNG')) return '';
+        const curatedLabels = [
+            ['HOA SEN', 'Hoa sen'], ['HUONG PHAN', 'Hương phấn'], ['HOA TRANG', 'Hoa trắng'],
+            ['TRAI CAY', 'Trái cây'], ['GO TRAM', 'Gỗ trầm'], ['GO GU', 'Hương gỗ'],
+            ['THAO MOC', 'Thảo mộc'], ['VANI', 'Vani'], ['TINH DAU', 'Tinh dầu'],
+            ['VITAMIN E', 'Vitamin E'], ['CERAMIDE', 'Ceramide'], ['GLYCERIN', 'Glycerin'],
+            ['PANTHENOL', 'Panthenol'], ['NIACINAMIDE', 'Niacinamide'],
+            ['HYALURONIC', 'Hyaluronic acid'], ['SALICYLIC', 'Salicylic acid'], ['SODIUM DNA', 'Sodium DNA']
+        ];
+        const match = curatedLabels.find(([keyword]) => normalized.includes(keyword));
+        if (match) return match[1];
+        const compact = text.split(' ').filter(word => word && word !== '&').slice(0, 3).join(' ').toLocaleLowerCase('vi-VN');
+        return compact.replace(/^\p{Ll}/u, character => character.toLocaleUpperCase('vi-VN'));
+}
+
+function productDisplayName(product) {
+        const name = String(product.name || '')
+            .replace(/\s*\d+(?:[.,]\d+)?\s*(?:ml|gr|kg|g|l)\b/gi, '')
+            .replace(/\s+([–—-])\s+/g, ' $1 ')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+        let displayName = name.toLocaleLowerCase('vi-VN');
+
+        displayName = displayName.replace(/^\p{Ll}/u, character => character.toLocaleUpperCase('vi-VN'));
+        displayName = displayName.replace(/([–—-]\s*)\p{Ll}/gu, segment => segment.toLocaleUpperCase('vi-VN'));
+
+        const preferredCasing = [
+            [/(^|\s)d'vah(?=\s|$)/giu, "$1D'VAH"],
+            [/\brilastil\b/giu, 'Rilastil'], [/\btwon\b/giu, 'TWON'],
+            [/\bkamal\b/giu, 'Kamal'], [/\bmalini\b/giu, 'Malini'],
+            [/\brakta\b/giu, 'Rakta'], [/\bsarika\b/giu, 'Sarika'], [/\btanmaya\b/giu, 'Tanmaya'],
+            [/\bspf\b/giu, 'SPF'], [/\bdna\b/giu, 'DNA'], [/\bpb\b/giu, 'PB']
+        ];
+        preferredCasing.forEach(([pattern, replacement]) => {
+            displayName = displayName.replace(pattern, replacement);
+        });
+        return displayName;
+}
+
+function productBenefit(product) {
+        const brand = String(product.brand || '').toLocaleLowerCase('vi-VN');
+        const step = String(product.stepType || '').toLocaleLowerCase('vi-VN');
+        if (brand.includes("d'vah") || brand.includes('dvah')) return 'Hương thơm tinh tế · Tiện mang theo mỗi ngày';
+        if (brand.includes('twon')) return 'Nuôi dưỡng cơ thể · Mềm mịn và lưu hương';
+        const benefits = {
+            cleanser: 'Làm sạch dịu nhẹ · Duy trì hàng rào ẩm',
+            toner: 'Cân bằng da · Chuẩn bị cho bước dưỡng',
+            balance: 'Cân bằng da · Làm dịu và cấp ẩm',
+            treatment: 'Chăm sóc chuyên sâu · Cải thiện dấu hiệu da',
+            special: 'Tác động chuyên biệt · Hỗ trợ phục hồi da',
+            moisturizer: 'Cấp ẩm sâu · Củng cố hàng rào bảo vệ',
+            sunscreen: 'Bảo vệ phổ rộng · Hạn chế tác động tia UV',
+            body: 'Nuôi dưỡng cơ thể · Da mềm mại hơn'
+        };
+        return benefits[step] || 'Chăm sóc da hằng ngày · Công thức chuyên biệt';
+}
+
+function productSocialProof(product) {
+        const rating = Number(product.rating);
+        const reviews = Number(product.reviewCount);
+        const sold = Number(product.soldCount);
+        if (!Number.isFinite(rating) || rating <= 0) return '';
+        const soldText = sold > 0 ? ` · Đã bán ${sold >= 1000 ? `${(sold / 1000).toFixed(sold % 1000 === 0 ? 0 : 1)}k` : sold}` : '';
+        return `<div class="product-card__social" aria-label="Đánh giá ${rating.toFixed(1)} trên 5">
+            <span class="product-card__star">★</span> ${rating.toFixed(1)}${reviews > 0 ? ` (${reviews})` : ''}${soldText}
+        </div>`;
+}
+
 // Shared catalog card; horizontal mode adds routine-specific selection controls.
 function createProductCard(p, options = {}) {
-        const imgSrc = (p.image.startsWith('http') || p.image.startsWith('data:')) ? p.image : `public${p.image}`;
+        const imgSrc = (p.image.startsWith('http') || p.image.startsWith('data:'))
+            ? p.image
+            : (window.SKINID_ASSET_URL ? window.SKINID_ASSET_URL(p.image) : p.image);
         
-        let tierColor = 'product-badge--neutral';
-        if (p.tier === 'Essential') tierColor = 'product-badge--essential';
-        if (p.tier === 'Select') tierColor = 'product-badge--select';
-        if (p.tier === 'Signature') tierColor = 'product-badge--signature';
-
         // Badges for main actives
         let activesBadges = '';
         if (p.mainActives && p.mainActives.length > 0) {
-            activesBadges = p.mainActives.slice(0, 2).map(act => `<span>${act}</span>`).join('');
+            activesBadges = p.mainActives.slice(0, 2).map(compactActiveLabel).filter(Boolean).join(' · ');
         }
+        const medicalLine = [p.line, activesBadges].filter(Boolean).join(' · ');
+        const benefit = productBenefit(p);
+        const socialProof = productSocialProof(p);
 
         // Promotion / Tag Badge
         let promoBadge = '';
         if (p.originalPrice && p.originalPrice > p.price) {
             const discount = Math.round((1 - p.price / p.originalPrice) * 100);
             promoBadge = `<span class="product-badge product-badge--sale">Giảm ${discount}%</span>`;
-        } else if (p.tier === 'Signature') {
-            promoBadge = `<span class="product-badge product-badge--popular">Bán chạy</span>`;
-        } else if (p.tier === 'Select') {
-            promoBadge = `<span class="product-badge product-badge--recommended">Khuyên dùng</span>`;
         }
+
+        const displayName = productDisplayName(p);
 
         const card = document.createElement('div');
         card.className = 'product-card bg-white rounded-2xl flex flex-col h-full relative group overflow-hidden cursor-pointer';
@@ -33,10 +103,9 @@ function createProductCard(p, options = {}) {
 
         card.innerHTML = `
             <div class="product-badges">
-                <span class="product-badge product-badge--line">${p.line || p.brand}</span>
-                <span class="product-badge ${tierColor}">${p.tier}</span>
                 ${promoBadge}
             </div>
+            ${p.tier ? `<span class="product-badge product-badge--tier">${p.tier}</span>` : ''}
             
             <div class="product-card__media">
                 <img src="${imgSrc}" alt="${p.name}" loading="lazy"
@@ -45,20 +114,24 @@ function createProductCard(p, options = {}) {
             </div>
             
             <div class="product-card__content">
-                <div class="product-card__actives">${activesBadges}</div>
+                <div class="product-card__actives">${medicalLine}</div>
                 <div class="flex-grow">
-                    <h4 class="product-card__name">${p.name}</h4>
+                    <div class="product-card__title-row">
+                        <h4 class="product-card__name">${displayName}</h4>
+                    </div>
+                    <p class="product-card__benefit">${benefit}</p>
+                    ${socialProof}
                 </div>
                 <div class="product-card__footer">
                     <div class="product-card__price-row">
                         <div class="product-card__prices">
                             <span class="product-card__price">${formatPrice(p.price)}</span>
                             ${p.originalPrice && p.originalPrice > p.price ? `<span class="product-card__original-price">${formatPrice(p.originalPrice)}</span>` : ''}
+                            ${p.volume ? `<span class="product-card__volume">${p.volume}</span>` : ''}
                         </div>
-                        <span class="product-card__volume">${p.volume || ''}</span>
                     </div>
-                    <button onclick="cartManager.addItem('${p.id}'); showToast('Đã thêm sản phẩm vào giỏ hàng!');" class="product-card__cart-button">
-                        <i data-feather="shopping-bag" class="w-4 h-4"></i> Thêm vào giỏ
+                    <button onclick="cartManager.addItem('${p.id}'); showToast('Đã thêm sản phẩm vào giỏ hàng!');" class="product-card__cart-button" aria-label="Thêm ${displayName} vào giỏ" title="Thêm vào giỏ">
+                        <i data-feather="shopping-bag"></i><span>Thêm vào giỏ</span>
                     </button>
                 </div>
             </div>
@@ -67,13 +140,14 @@ function createProductCard(p, options = {}) {
         const detailLink = document.createElement('button');
         detailLink.type = 'button';
         detailLink.className = 'product-card__title-link';
-        detailLink.textContent = p.name;
+        detailLink.textContent = displayName;
         detailLink.onclick = () => openProductDetailModal(p.id);
         card.querySelector('.product-card__name').replaceChildren(detailLink);
 
         if (options.variant === 'horizontal') {
             card.classList.add('product-card--horizontal');
             card.querySelector('.product-badges').remove();
+            card.querySelector('.product-badge--tier')?.remove();
             card.querySelector('.product-card__cart-button').remove();
             const content = card.querySelector('.product-card__content');
             const step = document.createElement('div');

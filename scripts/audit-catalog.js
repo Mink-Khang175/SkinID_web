@@ -4,7 +4,11 @@ const path = require('node:path');
 const { getProductCategories } = require('../src/js/catalog/product-filters');
 const revision = '8fa91f4878ac8bf73d39063ea03955527e28d29f';
 const root = path.join(__dirname, '..');
-const parse = source => JSON.parse(source.match(/const PRODUCTS = (\[[\s\S]*?\]);/)[1]);
+const parse = source => {
+    const match = source.match(/(?:const PRODUCTS|window\.LOCAL_PRODUCTS) = (\[[\s\S]*?\]);/);
+    if (!match) throw new Error('Không tìm thấy mảng dữ liệu sản phẩm trong nguồn catalog.');
+    return JSON.parse(match[1]);
+};
 async function audit() {
     const local = parse(fs.readFileSync(path.join(root, 'src/data/products.js'), 'utf8'));
     const response = await fetch('https://raw.githubusercontent.com/danhhuynh-stack/skinid-web/' + revision + '/js/skin-ai.js');
@@ -20,7 +24,7 @@ async function audit() {
     const missingImages = local.filter(p => {
         if (/^https?:|^data:/.test(p.image)) return false;
         const name = path.basename(p.image);
-        return !fs.existsSync(path.join(root, 'public/images/products', p.brandSlug, name));
+        return !fs.existsSync(path.join(root, 'src/assets/images/products', p.brandSlug, name));
     }).map(p => p.id);
     console.log(JSON.stringify({
         revision, localCount: local.length, upstreamCount: remote.length,

@@ -101,6 +101,8 @@ function renderCatalog() {
 
 window.filterByBrand = function(brand, el) {
     currentBrandFilter = brand;
+    const brandSelect = document.getElementById('brand-filter-select');
+    if (brandSelect) brandSelect.value = brand;
     const brandBtns = document.querySelectorAll('#brand-filters .filter-btn');
     brandBtns.forEach(b => b.classList.remove('active'));
     if (el) {
@@ -114,6 +116,8 @@ window.filterByBrand = function(brand, el) {
 
 window.filterByStep = function(step, el) {
     currentStepFilter = step;
+    const stepSelect = document.getElementById('step-filter-select');
+    if (stepSelect) stepSelect.value = step;
     const stepBtns = document.querySelectorAll('#step-filters .step-filter-btn');
     stepBtns.forEach(b => b.classList.remove('active'));
     if (el) {
@@ -127,6 +131,12 @@ window.filterByStep = function(step, el) {
 
 function initCatalog() {
     renderCatalog();
+
+    const brandSelect = document.getElementById('brand-filter-select');
+    brandSelect?.addEventListener('change', () => filterByBrand(brandSelect.value));
+
+    const stepSelect = document.getElementById('step-filter-select');
+    stepSelect?.addEventListener('change', () => filterByStep(stepSelect.value));
     
     // Setup brand filters
     const brandBtns = document.querySelectorAll('#brand-filters .filter-btn');
@@ -166,7 +176,9 @@ window.openProductDetailModal = function(productId) {
     let modal = document.getElementById('product-detail-modal');
     if (!modal) return;
 
-    const imgSrc = (p.image.startsWith('http') || p.image.startsWith('data:')) ? p.image : `public${p.image}`;
+    const imgSrc = (p.image.startsWith('http') || p.image.startsWith('data:'))
+        ? p.image
+        : (window.SKINID_ASSET_URL ? window.SKINID_ASSET_URL(p.image) : p.image);
     
     // Fill data
     document.getElementById('pmodal-line').innerText = p.line || p.brand || 'CHĂM SÓC DA';
@@ -256,7 +268,7 @@ window.openProductDetailModal = function(productId) {
         }
         if (typeof feather !== 'undefined') feather.replace();
     }, 10);
-    document.body.style.overflow = 'hidden';
+    window.SkinIDScrollLock?.lock('product-detail');
 };
 
 window.closeProductDetailModal = function() {
@@ -273,7 +285,7 @@ window.closeProductDetailModal = function() {
         modal.classList.add('hidden');
         modal.classList.remove('flex');
     }, 300);
-    document.body.style.overflow = 'auto';
+    window.SkinIDScrollLock?.unlock('product-detail');
 };
 
 // SMART AI INGREDIENT & CONCERN MATCHING
@@ -414,7 +426,7 @@ function openScanModal() {
     }, 10);
     
     const isDedicatedPage = document.body.classList.contains('scan-page-body');
-    document.body.style.overflow = isDedicatedPage ? 'auto' : 'hidden';
+    if (!isDedicatedPage) window.SkinIDScrollLock?.lock('skin-analysis');
     
     document.getElementById('capture-flow').classList.remove('hidden');
     document.getElementById('capture-flow').classList.add('flex');
@@ -448,7 +460,7 @@ function openScanModal() {
 function closeScanModal() {
     stopWebcam();
     if (document.body.classList.contains('scan-page-body')) {
-        window.location.href = 'index.html';
+        window.location.href = '/';
         return;
     }
     const modal = document.getElementById('ai-modal');
@@ -459,7 +471,7 @@ function closeScanModal() {
         modal.classList.remove('flex');
         modal.classList.add('hidden');
     }, 300);
-    document.body.style.overflow = 'auto';
+    window.SkinIDScrollLock?.unlock('skin-analysis');
 }
 
 function initScanSetup() {
@@ -717,20 +729,16 @@ async function startAnalysis() {
     setTimeout(() => activateScanStep(2, 5), 700);
     try {
         if (!window.authManager?.getCurrentUser()) throw new Error('Bạn cần đăng nhập trước khi phân tích da.');
-        const firebase = await window.SKINID_FIREBASE_READY;
-        const token = await firebase.auth.currentUser.getIdToken();
+        await window.SKINID_FIREBASE_READY;
         const [response, weatherData] = await Promise.all([
-            fetch(window.SKINID_CONFIG.analysisEndpoint, {
+            window.authManager.apiRequest('/analyze-skin', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({ images: window.capturedImages, skinType })
             }),
             fetchWeatherData()
         ]);
         activateScanStep(3, 5);
-        const body = await response.json();
-        if (!response.ok) throw new Error(body.error || `Máy chủ trả về lỗi ${response.status}.`);
-        const resultJson = body.analysis;
+        const resultJson = response?.analysis;
         if (resultJson?.isNotFace) {
             alert('⚠️ Không nhận diện được khuôn mặt người rõ ràng trong đủ 3 ảnh. Vui lòng chụp lại ở nơi đủ sáng.');
             resetToCaptureFlow();
@@ -743,7 +751,10 @@ async function startAnalysis() {
         renderResults(resultJson, weatherData);
     } catch (error) {
         console.error('[SkinID AI]', error);
-        alert(`⚠️ ${error.message || 'Không thể hoàn tất phân tích da. Vui lòng thử lại.'}`);
+        const message = window.authManager?.errorMessage?.(error)
+            || error.message
+            || 'Không thể hoàn tất phân tích da. Vui lòng thử lại.';
+        alert(`⚠️ ${message}`);
         resetToCaptureFlow();
     }
 }

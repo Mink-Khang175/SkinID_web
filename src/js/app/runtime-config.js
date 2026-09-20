@@ -1,12 +1,8 @@
 /* Public Firebase web configuration. Never add Gemini keys, service-account JSON,
  * sales-system API tokens or other server credentials here.
  */
-const isLocalSkinId = ['localhost', '127.0.0.1'].includes(window.location.hostname);
-
 window.SKINID_CONFIG = Object.freeze({
-    analysisEndpoint: isLocalSkinId
-        ? '/api/skin-analysis'
-        : 'https://skinid-api.netlify.app/.netlify/functions/analyze-skin',
+    apiBaseUrl: '/api',
     firebase: Object.freeze({
         apiKey: 'AIzaSyBMnJ7Z1NYjARTXSdUNL9UWs8wodU6ddiE',
         authDomain: 'skinid-df273.firebaseapp.com',

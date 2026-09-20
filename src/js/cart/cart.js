@@ -1,27 +1,44 @@
 class ShoppingCart {
     constructor() {
         this.items = []; // Array of { productId, quantity }
-        this.loadCart();
+        this.lastUserId = null;
+        this.saveQueue = Promise.resolve();
         this.initDOM();
+        this.loadCart();
+        document.addEventListener('skinid:auth-changed', () => this.loadCart({ mergeGuest: true }));
     }
 
-    loadCart() {
-        const stored = localStorage.getItem('skinid_cart');
-        if (stored) {
-            try {
-                this.items = JSON.parse(stored);
-            } catch (e) {
-                console.error("Failed to parse cart", e);
-                this.items = [];
-            }
+    async loadCart({ mergeGuest = false } = {}) {
+        const user = window.authManager?.getCurrentUser?.();
+        if (!user) {
+            if (this.lastUserId) this.items = [];
+            this.lastUserId = null;
+            this.updateBadge();
+            this.renderCartUI();
+            return this.items;
         }
+        const guestItems = mergeGuest && !this.lastUserId ? this.items : [];
+        const remoteItems = window.authManager?.getCart?.() || [];
+        const merged = new Map(remoteItems.map(item => [item.productId, { ...item }]));
+        guestItems.forEach(item => {
+            const existing = merged.get(item.productId);
+            merged.set(item.productId, { productId: item.productId, quantity: Math.min(20, (existing?.quantity || 0) + item.quantity) });
+        });
+        this.items = [...merged.values()];
+        this.lastUserId = user.uid;
         this.updateBadge();
+        this.renderCartUI();
+        if (guestItems.length) await window.authManager.saveCart(this.items);
+        return this.items;
     }
 
     saveCart() {
-        localStorage.setItem('skinid_cart', JSON.stringify(this.items));
         this.updateBadge();
         this.renderCartUI();
+        if (!window.authManager?.getCurrentUser?.()) return Promise.resolve({ success: true, guest: true });
+        const snapshot = this.items.map(item => ({ ...item }));
+        this.saveQueue = this.saveQueue.then(() => window.authManager.saveCart(snapshot));
+        return this.saveQueue;
     }
 
     addItem(productId, quantity = 1) {
@@ -63,7 +80,7 @@ class ShoppingCart {
 
     clearCart() {
         this.items = [];
-        this.saveCart();
+        return this.saveCart();
     }
 
     getTotalItems() {
@@ -85,14 +102,16 @@ class ShoppingCart {
         }
     }
 
-    toggleCartUI() {
+    toggleCartUI(force) {
         const overlay = document.getElementById('cart-overlay');
         const panel = document.getElementById('cart-panel');
         if (!overlay || !panel) return;
 
-        if (overlay.classList.contains('hidden')) {
+        const shouldOpen = typeof force === 'boolean' ? force : overlay.classList.contains('hidden');
+        if (shouldOpen) {
             // Open
             overlay.classList.remove('hidden');
+            window.SkinIDScrollLock?.lock('cart');
             setTimeout(() => {
                 overlay.classList.remove('opacity-0');
                 panel.classList.remove('translate-x-full');
@@ -102,6 +121,7 @@ class ShoppingCart {
             // Close
             overlay.classList.add('opacity-0');
             panel.classList.add('translate-x-full');
+            window.SkinIDScrollLock?.unlock('cart');
             setTimeout(() => {
                 overlay.classList.add('hidden');
             }, 300);
@@ -149,7 +169,7 @@ class ShoppingCart {
             html += `
                 <div class="flex gap-3 p-4 border-b border-gray-50 bg-white">
                     <div class="cart-item-image flex items-center justify-center">
-                        <img src="public${product.image}" alt="${product.name}" loading="lazy" onerror="this.style.visibility='hidden';this.parentElement.setAttribute('aria-label','Ảnh sản phẩm ${product.brand}')">
+                        <img src="${product.image.startsWith('http') || product.image.startsWith('data:') ? product.image : (window.SKINID_ASSET_URL ? window.SKINID_ASSET_URL(product.image) : product.image)}" alt="${product.name}" loading="lazy" onerror="this.style.visibility='hidden';this.parentElement.setAttribute('aria-label','Ảnh sản phẩm ${product.brand}')">
                     </div>
                     <div class="flex-grow flex flex-col justify-between">
                         <div class="flex justify-between items-start gap-2">
@@ -216,6 +236,86 @@ class ShoppingCart {
         // this.clearCart();
     }
 
+    async openCheckout() {
+        if (!this.items.length) return;
+        const user = window.authManager?.getCurrentUser?.();
+        if (!user) {
+            this.toggleCartUI();
+            window.authManager?.openAuthModal?.('Vui lòng đăng nhập để đặt hàng và theo dõi đơn.');
+            return;
+        }
+        const modal = document.getElementById('checkout-modal');
+        if (!modal) return;
+        document.getElementById('checkout-name').value = user.name || '';
+        document.getElementById('checkout-phone').value = user.phone || '';
+        const savedAddress = user.shippingAddress || {};
+        document.getElementById('checkout-address-line').value = savedAddress.line1 || (!user.shippingAddress ? user.address || '' : '');
+        document.getElementById('checkout-error').classList.add('hidden');
+        document.getElementById('checkout-error').textContent = '';
+        await window.VietnamAddress?.bindForm?.({
+            provinceId: 'checkout-province',
+            wardId: 'checkout-ward',
+            selectedProvinceCode: savedAddress.provinceCode,
+            selectedWardCode: savedAddress.wardCode
+        });
+        const subtotal = this.items.reduce((sum, item) => {
+            const product = this.getProductDetails(item.productId);
+            return sum + (product ? product.price * item.quantity : 0);
+        }, 0);
+        document.getElementById('checkout-total').textContent = formatPrice(subtotal);
+        modal.classList.remove('hidden');
+        window.SkinIDScrollLock?.lock('checkout');
+        this.toggleCartUI(false);
+    }
+
+    closeCheckout() {
+        document.getElementById('checkout-modal')?.classList.add('hidden');
+        window.SkinIDScrollLock?.unlock('checkout');
+    }
+
+    async submitCheckout(event) {
+        event.preventDefault();
+        const button = document.getElementById('checkout-submit');
+        const errorBox = document.getElementById('checkout-error');
+        const shippingAddress = window.VietnamAddress?.readForm?.({
+            provinceId: 'checkout-province', wardId: 'checkout-ward', line1Id: 'checkout-address-line'
+        });
+        if (!shippingAddress?.provinceCode || !shippingAddress?.wardCode || !shippingAddress?.line1) {
+            errorBox.textContent = 'Vui lòng chọn tỉnh/thành, phường/xã và nhập địa chỉ chi tiết.';
+            errorBox.classList.remove('hidden');
+            return;
+        }
+        errorBox.classList.add('hidden');
+        button.disabled = true;
+        button.textContent = 'Đang tạo đơn…';
+        const items = this.items.map(item => {
+            const product = this.getProductDetails(item.productId);
+            return product ? { productId: product.id, name: product.name, image: product.image, price: product.price, quantity: item.quantity, lineTotal: product.price * item.quantity } : null;
+        }).filter(Boolean);
+        const subtotal = items.reduce((sum, item) => sum + item.lineTotal, 0);
+        const result = await window.authManager.createOrder({
+            customer: {
+                name: document.getElementById('checkout-name').value,
+                phone: document.getElementById('checkout-phone').value,
+                shippingAddress
+            },
+            note: document.getElementById('checkout-note').value,
+            paymentMethod: document.querySelector('input[name="payment-method"]:checked')?.value || 'cod',
+            items, subtotal, shippingFee: 0, total: subtotal
+        });
+        if (!result.success) {
+            button.disabled = false;
+            button.textContent = 'Xác nhận đặt hàng';
+            errorBox.textContent = result.message;
+            errorBox.classList.remove('hidden');
+            return;
+        }
+        await this.clearCart();
+        this.closeCheckout();
+        if (typeof showToast === 'function') showToast(`Đặt hàng thành công · #${result.orderId.slice(0, 8).toUpperCase()}`);
+        window.location.href = '/profile?tab=orders';
+    }
+
     initDOM() {
         // Create Cart Overlay and Panel if not exists
         if (!document.getElementById('cart-overlay')) {
@@ -234,7 +334,7 @@ class ShoppingCart {
                                 </div>
                                 <h3 class="text-lg font-bold text-gray-900">Giỏ hàng</h3>
                             </div>
-                            <button onclick="cartManager.toggleCartUI()" class="p-2 text-gray-400 hover:text-gray-800 bg-gray-50 rounded-full transition-colors">
+                            <button onclick="cartManager.toggleCartUI()" class="p-2 text-gray-400 hover:text-gray-800 bg-gray-50 rounded-full transition-colors" type="button" aria-label="Đóng giỏ hàng">
                                 <i data-feather="x" class="w-5 h-5"></i>
                             </button>
                         </div>
@@ -250,13 +350,31 @@ class ShoppingCart {
                                 <span class="text-gray-500 font-medium">Tạm tính</span>
                                 <span id="cart-subtotal" class="text-xl font-bold text-brand-primary">0đ</span>
                             </div>
-                            <button onclick="cartManager.checkoutZalo()" class="cart-checkout-button" type="button">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" class="w-5 h-5 object-contain" alt="Zalo">
-                                Thanh toán qua Zalo
+                            <button onclick="cartManager.openCheckout()" class="cart-checkout-button" type="button">
+                                <i data-feather="credit-card" class="w-5 h-5"></i>
+                                Tiến hành thanh toán
                             </button>
-                            <p class="text-[11px] text-gray-400 text-center mt-3">*Bạn sẽ được chuyển hướng tới Zalo OA của chuyên gia để xác nhận và thanh toán.</p>
+                            <p class="text-[11px] text-gray-400 text-center mt-3">Đơn hàng được lưu trên tài khoản để bạn theo dõi trạng thái.</p>
                         </div>
                     </div>
+                </div>
+                <div id="checkout-modal" class="fixed inset-0 z-[10000] hidden bg-gray-950/60 backdrop-blur-sm p-4 overflow-y-auto">
+                    <form onsubmit="cartManager.submitCheckout(event)" class="checkout-panel mx-auto my-8 max-w-xl rounded-3xl bg-white p-6 shadow-2xl">
+                        <div class="flex items-center justify-between mb-5"><div><p class="text-xs font-bold text-brand-primary">CHECKOUT</p><h2 class="text-2xl font-black">Thông tin nhận hàng</h2></div><button type="button" onclick="cartManager.closeCheckout()" class="p-2 rounded-full bg-gray-100" aria-label="Đóng thanh toán"><i data-feather="x"></i></button></div>
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <label class="checkout-field"><span>Họ và tên *</span><input id="checkout-name" required></label>
+                            <label class="checkout-field"><span>Số điện thoại *</span><input id="checkout-phone" type="tel" required></label>
+                            <label class="checkout-field"><span>Tỉnh / Thành phố *</span><select id="checkout-province" required><option value="">Chọn tỉnh/thành</option></select></label>
+                            <label class="checkout-field"><span>Phường / Xã *</span><select id="checkout-ward" required disabled><option value="">Chọn tỉnh/thành trước</option></select></label>
+                            <label class="checkout-field sm:col-span-2"><span>Địa chỉ chi tiết *</span><input id="checkout-address-line" required autocomplete="street-address" placeholder="Số nhà, tên đường, tòa nhà…"></label>
+                            <p class="checkout-address-note sm:col-span-2"><i data-feather="cloud"></i> Địa chỉ này sẽ được lưu vào hồ sơ Firestore để tự động điền cho lần mua sau.</p>
+                            <label class="checkout-field sm:col-span-2"><span>Ghi chú</span><textarea id="checkout-note" rows="2"></textarea></label>
+                        </div>
+                        <div id="checkout-error" class="checkout-message checkout-message--error hidden" role="alert"></div>
+                        <fieldset class="mt-5"><legend class="text-sm font-bold mb-2">Phương thức thanh toán</legend><label class="payment-option"><input type="radio" name="payment-method" value="cod" checked> Thanh toán khi nhận hàng (COD)</label><label class="payment-option"><input type="radio" name="payment-method" value="bank_transfer"> Chuyển khoản ngân hàng (CSKH xác nhận)</label></fieldset>
+                        <div class="flex items-center justify-between mt-6 pt-5 border-t"><span class="font-semibold text-gray-500">Tổng thanh toán</span><strong id="checkout-total" class="text-xl text-brand-primary">0đ</strong></div>
+                        <button id="checkout-submit" type="submit" class="btn btn--primary btn--full mt-4">Xác nhận đặt hàng</button>
+                    </form>
                 </div>
             `;
             document.body.insertAdjacentHTML('beforeend', cartHTML);

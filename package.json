@@ -2,20 +2,33 @@
   "name": "skinid-storefront",
   "private": true,
   "scripts": {
-    "build": "node scripts/build-static.mjs",
-    "dev": "npx netlify dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "dev": "vite",
+    "dev:cloudflare": "npm run build && wrangler dev",
+    "deploy": "npm run test:all && wrangler deploy",
     "test": "node --test tests/*.test.js",
-    "test:functions": "npm --prefix functions test",
-    "test:all": "npm test && npm run test:functions && npm run build",
+    "test:all": "npm test && npm run build",
     "audit:catalog": "node scripts/audit-catalog.js",
     "firestore:import-products": "node scripts/import-products-to-firestore.mjs",
-    "firebase:deploy": "firebase deploy --only functions,firestore"
+    "firebase:set-admin": "node scripts/set-admin-claim.mjs",
+    "firestore:deploy-rules": "npx firebase-tools@15.30.2 deploy --project skinid-df273 --only firestore --non-interactive"
   },
   "dependencies": {
-    "@netlify/blobs": "^10.0.10"
+    "jose": "^6.1.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
   },
   "devDependencies": {
-    "@opentelemetry/api": "^1.9.1",
-    "firebase-admin": "^14.4.0"
+    "@tailwindcss/vite": "^4.3.3",
+    "@vitejs/plugin-react": "^6.1.1",
+    "firebase-admin": "^14.4.0",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.0",
+    "vite-plugin-static-copy": "^4.1.1",
+    "wrangler": "^4.42.0"
+  },
+  "overrides": {
+    "uuid": "^11.1.1"
   }
 }

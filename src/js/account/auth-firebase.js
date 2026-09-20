@@ -3,6 +3,8 @@ class AuthManager {
     constructor() {
         this.currentUser = null;
         this.history = [];
+        this.orders = [];
+        this.cart = [];
         this.firebase = null;
         this.ready = this.init();
         window.SKINID_AUTH_READY = this.ready;
@@ -18,9 +20,13 @@ class AuthManager {
                     if (firebaseUser) {
                         await this.loadUser(firebaseUser);
                         await this.loadHistory();
+                        await this.loadOrders();
+                        await this.loadCart();
                     } else {
                         this.currentUser = null;
                         this.history = [];
+                        this.orders = [];
+                        this.cart = [];
                     }
                     this.updateHeaderUI();
                     document.dispatchEvent(new CustomEvent('skinid:auth-changed', { detail: this.currentUser }));
@@ -47,7 +53,16 @@ class AuthManager {
             provider
         };
         if (!snapshot.exists()) await setDoc(reference, { ...defaults, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
-        this.currentUser = { id: firebaseUser.uid, uid: firebaseUser.uid, ...defaults, ...(snapshot.data() || {}) };
+        const profile = snapshot.data() || {};
+        this.currentUser = {
+            id: firebaseUser.uid,
+            uid: firebaseUser.uid,
+            ...defaults,
+            ...profile,
+            picture: String(profile.picture || '').startsWith('data:image/')
+                ? profile.picture
+                : (firebaseUser.photoURL || profile.picture || null)
+        };
         return this.currentUser;
     }
 
@@ -59,8 +74,115 @@ class AuthManager {
         return this.history;
     }
 
+    async loadOrders() {
+        if (!this.currentUser) return [];
+        try {
+            const { collection, getDocs, query, where } = this.firebase.sdk.firestore;
+            const result = await getDocs(query(collection(this.firebase.db, 'orders'), where('userId', '==', this.currentUser.uid)));
+            this.orders = result.docs
+                .map(snapshot => ({ id: snapshot.id, ...snapshot.data() }))
+                .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+        } catch (error) {
+            console.warn('[SkinID Orders] Chưa thể tải đơn hàng:', error.message);
+            this.orders = [];
+        }
+        return this.orders;
+    }
+
     getCurrentUser() { return this.currentUser; }
     getScanHistory() { return this.history; }
+    getOrders() { return this.orders; }
+    getCart() { return this.cart.map(item => ({ ...item })); }
+
+    async apiRequest(path, options = {}) {
+        const firebaseUser = this.firebase.auth.currentUser;
+        if (!firebaseUser) throw Object.assign(new Error('Vui lòng đăng nhập trước khi tiếp tục.'), { code: 'unauthenticated' });
+        const token = await firebaseUser.getIdToken();
+        const baseUrl = String(window.SKINID_CONFIG?.apiBaseUrl || '/api').replace(/\/$/, '');
+        const response = await fetch(`${baseUrl}${path}`, {
+            ...options,
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                ...(options.headers || {})
+            }
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) throw Object.assign(new Error(payload.message || 'Không thể hoàn tất yêu cầu.'), { code: payload.code || `http_${response.status}` });
+        return payload;
+    }
+
+    async loadCart() {
+        if (!this.currentUser) return [];
+        try {
+            const { doc, getDoc } = this.firebase.sdk.firestore;
+            const snapshot = await getDoc(doc(this.firebase.db, 'users', this.currentUser.uid, 'commerce', 'cart'));
+            const items = snapshot.data()?.items;
+            this.cart = Array.isArray(items)
+                ? items.filter(item => typeof item?.productId === 'string' && Number.isInteger(item?.quantity) && item.quantity > 0)
+                : [];
+        } catch (error) {
+            console.warn('[SkinID Cart] Chưa thể tải giỏ hàng:', error.message);
+            this.cart = [];
+        }
+        return this.getCart();
+    }
+
+    async saveCart(items) {
+        if (!this.currentUser) return { success: false, message: 'Giỏ hàng khách chỉ được giữ trong phiên hiện tại.' };
+        try {
+            const sanitized = (Array.isArray(items) ? items : [])
+                .filter(item => typeof item?.productId === 'string' && Number.isInteger(item?.quantity) && item.quantity > 0)
+                .slice(0, 50)
+                .map(item => ({ productId: item.productId.slice(0, 160), quantity: Math.min(item.quantity, 20) }));
+            const { doc, serverTimestamp, setDoc } = this.firebase.sdk.firestore;
+            await setDoc(doc(this.firebase.db, 'users', this.currentUser.uid, 'commerce', 'cart'), {
+                items: sanitized,
+                updatedAt: serverTimestamp()
+            }, { merge: true });
+            this.cart = sanitized;
+            return { success: true };
+        } catch (error) {
+            console.error('[SkinID Cart] Không thể lưu giỏ hàng:', error);
+            return { success: false, message: this.errorMessage(error) };
+        }
+    }
+
+    async createOrder(payload) {
+        if (!this.currentUser) return { success: false, message: 'Vui lòng đăng nhập trước khi đặt hàng.' };
+        try {
+            if (!payload.customer?.name?.trim() || !payload.customer?.phone?.trim() || !payload.customer?.shippingAddress?.line1?.trim()
+                || !payload.customer?.shippingAddress?.provinceCode || !payload.customer?.shippingAddress?.wardCode || !payload.items?.length) {
+                return { success: false, message: 'Vui lòng nhập đủ thông tin nhận hàng.' };
+            }
+            const response = await this.apiRequest('/orders', {
+                method: 'POST',
+                body: JSON.stringify({
+                    customer: payload.customer,
+                    note: payload.note,
+                    paymentMethod: payload.paymentMethod,
+                    items: payload.items.map(item => ({ productId: item.productId, quantity: item.quantity }))
+                })
+            });
+            await this.loadOrders();
+            await this.loadUser(this.firebase.auth.currentUser);
+            this.cart = [];
+            return { success: true, orderId: response.orderId, total: response.total };
+        } catch (error) {
+            console.error('[SkinID Checkout] Không thể tạo đơn hàng:', { code: error?.code, message: error?.message });
+            return { success: false, message: this.errorMessage(error) };
+        }
+    }
+
+    async cancelOrder(orderId) {
+        const order = this.orders.find(item => item.id === orderId);
+        if (!order || !['pending', 'confirmed'].includes(order.status)) return { success: false, message: 'Đơn hàng không thể hủy.' };
+        try {
+            await this.apiRequest(`/orders/${encodeURIComponent(orderId)}`, { method: 'PATCH', body: '{}' });
+            order.status = 'cancelled';
+            return { success: true };
+        } catch (error) { return { success: false, message: this.errorMessage(error) }; }
+    }
 
     async register(name, email, phone, password, confirmPassword, remember = true) {
         if (!name || name.trim().length < 2) return { success: false, message: 'Vui lòng nhập họ tên hợp lệ.' };
@@ -71,6 +193,10 @@ class AuthManager {
             await sdk.setPersistence(this.firebase.auth, remember ? sdk.browserLocalPersistence : sdk.browserSessionPersistence);
             const credential = await sdk.createUserWithEmailAndPassword(this.firebase.auth, email.trim(), password);
             await sdk.updateProfile(credential.user, { displayName: name.trim() });
+            const { doc, serverTimestamp, setDoc } = this.firebase.sdk.firestore;
+            await setDoc(doc(this.firebase.db, 'users', credential.user.uid), {
+                name: name.trim(), email: email.trim(), phone: phone.trim(), provider: 'password', updatedAt: serverTimestamp()
+            }, { merge: true });
             await this.loadUser(credential.user, { name: name.trim(), phone: phone.trim() });
             this.updateHeaderUI();
             return { success: true, user: this.currentUser };
@@ -84,6 +210,8 @@ class AuthManager {
             const credential = await sdk.signInWithEmailAndPassword(this.firebase.auth, email.trim(), password);
             await this.loadUser(credential.user);
             await this.loadHistory();
+            await this.loadOrders();
+            await this.loadCart();
             this.updateHeaderUI();
             return { success: true, user: this.currentUser };
         } catch (error) { return { success: false, message: this.errorMessage(error) }; }
@@ -97,6 +225,8 @@ class AuthManager {
             const credential = await sdk.signInWithPopup(this.firebase.auth, provider);
             await this.loadUser(credential.user);
             await this.loadHistory();
+            await this.loadOrders();
+            await this.loadCart();
             this.closeAuthModal();
             this.updateHeaderUI();
         } catch (error) { alert(this.errorMessage(error)); }
@@ -113,6 +243,8 @@ class AuthManager {
         await this.firebase.sdk.auth.signOut(this.firebase.auth);
         this.currentUser = null;
         this.history = [];
+        this.orders = [];
+        this.cart = [];
         this.updateHeaderUI();
     }
 
@@ -123,12 +255,34 @@ class AuthManager {
             const safe = {
                 name: String(updatedData.name || '').trim(), phone: String(updatedData.phone || '').trim(),
                 birthday: String(updatedData.birthday || ''), gender: String(updatedData.gender || ''),
-                address: String(updatedData.address || '').trim(), skinTypeBaseline: String(updatedData.skinTypeBaseline || ''),
+                address: String(updatedData.shippingAddress?.fullAddress || updatedData.address || '').trim(),
+                shippingAddress: updatedData.shippingAddress && {
+                    line1: String(updatedData.shippingAddress.line1 || '').trim(),
+                    wardCode: Number(updatedData.shippingAddress.wardCode || 0),
+                    wardName: String(updatedData.shippingAddress.wardName || '').trim(),
+                    provinceCode: Number(updatedData.shippingAddress.provinceCode || 0),
+                    provinceName: String(updatedData.shippingAddress.provinceName || '').trim(),
+                    fullAddress: String(updatedData.shippingAddress.fullAddress || '').trim()
+                },
+                skinTypeBaseline: String(updatedData.skinTypeBaseline || ''),
                 mainConcern: String(updatedData.mainConcern || ''), updatedAt: serverTimestamp()
             };
             await updateDoc(doc(this.firebase.db, 'users', this.currentUser.uid), safe);
             if (safe.name && safe.name !== this.firebase.auth.currentUser.displayName) await this.firebase.sdk.auth.updateProfile(this.firebase.auth.currentUser, { displayName: safe.name });
             Object.assign(this.currentUser, safe);
+            return { success: true, user: this.currentUser };
+        } catch (error) { return { success: false, message: this.errorMessage(error) }; }
+    }
+
+    async updateProfilePicture(picture) {
+        if (!this.currentUser) return { success: false, message: 'Chưa đăng nhập.' };
+        if (!/^data:image\/(jpeg|png|webp);base64,/.test(picture) || picture.length > 300000) {
+            return { success: false, message: 'Ảnh đại diện không hợp lệ hoặc có dung lượng quá lớn.' };
+        }
+        try {
+            const { doc, serverTimestamp, updateDoc } = this.firebase.sdk.firestore;
+            await updateDoc(doc(this.firebase.db, 'users', this.currentUser.uid), { picture, updatedAt: serverTimestamp() });
+            this.currentUser.picture = picture;
             return { success: true, user: this.currentUser };
         } catch (error) { return { success: false, message: this.errorMessage(error) }; }
     }
@@ -194,7 +348,28 @@ class AuthManager {
             'auth/email-already-in-use': 'Email này đã được đăng ký.', 'auth/invalid-email': 'Email không hợp lệ.',
             'auth/invalid-credential': 'Email hoặc mật khẩu không chính xác.', 'auth/weak-password': 'Mật khẩu chưa đủ mạnh.',
             'auth/popup-closed-by-user': 'Cửa sổ đăng nhập Google đã bị đóng.', 'auth/too-many-requests': 'Có quá nhiều lần thử. Vui lòng thử lại sau.'
-        })[error?.code] || error?.message || 'Không thể hoàn tất yêu cầu.';
+            , 'auth/operation-not-allowed': 'Phương thức đăng nhập này chưa được bật trong Firebase Console.'
+            , 'auth/unauthorized-domain': 'Tên miền hiện tại chưa được cho phép trong Firebase Authentication.'
+            , 'functions/unauthenticated': 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.'
+            , 'functions/permission-denied': 'Bạn không có quyền thực hiện thao tác này.'
+            , 'functions/failed-precondition': error?.message || 'Dữ liệu không còn hợp lệ. Vui lòng tải lại trang.'
+            , 'functions/invalid-argument': error?.message || 'Thông tin gửi lên không hợp lệ.'
+            , 'functions/unavailable': 'Dịch vụ đặt hàng đang tạm gián đoạn. Vui lòng thử lại.'
+            , 'functions/not-found': 'Backend đặt hàng chưa được triển khai trên Firebase. Vui lòng liên hệ quản trị viên.'
+            , 'functions/internal': 'Hệ thống chưa thể tạo đơn hàng lúc này. Vui lòng thử lại sau ít phút.'
+            , 'unauthenticated': 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.'
+            , 'invalid_token': 'Phiên đăng nhập không hợp lệ hoặc đã hết hạn.'
+            , 'server_not_configured': 'Backend chưa được cấu hình đầy đủ trên Cloudflare.'
+            , 'product_unavailable': error?.message || 'Một sản phẩm trong giỏ không còn kinh doanh.'
+            , 'invalid_product_price': error?.message || 'Giá sản phẩm đang được cập nhật. Vui lòng thử lại.'
+            , 'invalid_address': error?.message || 'Vui lòng chọn đầy đủ địa chỉ giao hàng.'
+            , 'daily_limit': 'Bạn đã hết lượt phân tích da hôm nay.'
+            , 'gemini_not_configured': 'Backend chưa được cấu hình Gemini API key.'
+            , 'gemini_unavailable': 'Dịch vụ phân tích đang bận, vui lòng thử lại.'
+            , 'internal': 'Hệ thống chưa thể tạo đơn hàng lúc này. Vui lòng thử lại sau ít phút.'
+        })[error?.code] || (/internal(?:\s*\[\d+\])?/i.test(error?.message || '')
+            ? 'Hệ thống chưa thể hoàn tất yêu cầu lúc này. Vui lòng thử lại sau ít phút.'
+            : error?.message || 'Không thể hoàn tất yêu cầu.');
     }
 
     escapeHtml(value) { return String(value ?? '').replace(/[&<>'"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[c]); }
@@ -215,12 +390,13 @@ class AuthManager {
         const modal = document.getElementById('auth-modal'); if (!modal) return;
         const notice = document.getElementById('auth-modal-notice'), text = document.getElementById('auth-notice-text');
         if (notice) notice.classList.toggle('hidden', !message); if (text) text.textContent = message;
+        window.SkinIDScrollLock?.lock('auth');
         modal.classList.remove('hidden'); setTimeout(() => { modal.classList.remove('opacity-0'); document.getElementById('auth-modal-content')?.classList.remove('scale-95'); }, 10);
     }
 
-    closeAuthModal() { const modal = document.getElementById('auth-modal'); if (!modal) return; modal.classList.add('opacity-0'); setTimeout(() => modal.classList.add('hidden'), 300); }
-    openHistoryModal() { if (!this.currentUser) return this.openAuthModal('Vui lòng đăng nhập để xem lịch sử soi da.'); const modal = document.getElementById('history-modal'); if (!modal) return; this.renderHistoryContent(); modal.classList.remove('hidden'); setTimeout(() => modal.classList.remove('opacity-0'), 10); }
-    closeHistoryModal() { const modal = document.getElementById('history-modal'); if (!modal) return; modal.classList.add('opacity-0'); setTimeout(() => modal.classList.add('hidden'), 300); }
+    closeAuthModal() { const modal = document.getElementById('auth-modal'); if (!modal) return; modal.classList.add('opacity-0'); window.SkinIDScrollLock?.unlock('auth'); setTimeout(() => modal.classList.add('hidden'), 300); }
+    openHistoryModal() { if (!this.currentUser) return this.openAuthModal('Vui lòng đăng nhập để xem lịch sử soi da.'); const modal = document.getElementById('history-modal'); if (!modal) return; this.renderHistoryContent(); window.SkinIDScrollLock?.lock('history'); modal.classList.remove('hidden'); setTimeout(() => modal.classList.remove('opacity-0'), 10); }
+    closeHistoryModal() { const modal = document.getElementById('history-modal'); if (!modal) return; modal.classList.add('opacity-0'); window.SkinIDScrollLock?.unlock('history'); setTimeout(() => modal.classList.add('hidden'), 300); }
 
     renderHistoryContent() {
         const container = document.getElementById('history-list-container'); if (!container) return;
@@ -228,8 +404,8 @@ class AuthManager {
         container.innerHTML = `<div class="flex justify-end mb-3"><button onclick="window.authManager.clearAllUserHistory()" class="text-xs font-bold text-rose-600 underline">Xóa toàn bộ dữ liệu</button></div>` + this.history.map((item, index) => `<div class="bg-white border rounded-2xl p-4 mb-3"><div class="flex justify-between mb-2"><strong class="text-xs">Lần #${this.history.length - index}</strong><span class="text-xs text-gray-500">${this.escapeHtml(item.dateFormatted)}</span></div><div class="grid grid-cols-3 gap-2 text-xs"><span>Điểm: <b>${Number(item.healthScore)}</b></span><span>${this.escapeHtml(item.skinType)}</span><span>${Number(item.skinAge)} tuổi</span></div></div>`).join('');
     }
 
-    exportUserDataJSON() { if (!this.currentUser) return; const blob = new Blob([JSON.stringify({ profile: this.currentUser, scanHistory: this.history, exportedAt: new Date().toISOString() }, null, 2)], { type: 'application/json' }); const url = URL.createObjectURL(blob), anchor = document.createElement('a'); anchor.href = url; anchor.download = 'skinid-profile.json'; anchor.click(); URL.revokeObjectURL(url); }
-    openProfileModal() { window.location.href = 'profile.html'; }
+    exportUserDataJSON() { if (!this.currentUser) return; const blob = new Blob([JSON.stringify({ profile: this.currentUser, scanHistory: this.history, orders: this.orders, exportedAt: new Date().toISOString() }, null, 2)], { type: 'application/json' }); const url = URL.createObjectURL(blob), anchor = document.createElement('a'); anchor.href = url; anchor.download = 'skinid-profile.json'; anchor.click(); URL.revokeObjectURL(url); }
+    openProfileModal() { window.location.href = '/profile'; }
 }
 
 window.togglePasswordVisibility = window.togglePasswordVisibility || function (id, button) {

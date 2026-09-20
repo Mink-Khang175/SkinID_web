@@ -10,7 +10,7 @@
         if (!product || !product.image) return '';
         return product.image.startsWith('http') || product.image.startsWith('data:')
             ? product.image
-            : `public${product.image}`;
+            : (window.SKINID_ASSET_URL ? window.SKINID_ASSET_URL(product.image) : product.image);
     }
 
     function conciseName(name) {
@@ -85,10 +85,14 @@
         const brandButton = chooseFilterButton('#brand-filters .filter-btn', 'brand', String(brand).toLowerCase());
         const stepButton = chooseFilterButton('#step-filters .step-filter-btn', 'step', step);
         const searchInput = $('#product-search');
+        const brandSelect = $('#brand-filter-select');
+        const stepSelect = $('#step-filter-select');
 
         if (typeof filterByBrand === 'function') filterByBrand(brand, brandButton);
         if (typeof filterByStep === 'function') filterByStep(step, stepButton);
         if (searchInput) searchInput.value = query;
+        if (brandSelect) brandSelect.value = String(brand).toLowerCase();
+        if (stepSelect) stepSelect.value = step;
         if (typeof currentSearchQuery !== 'undefined') currentSearchQuery = query;
         if (typeof renderCatalog === 'function') renderCatalog();
         scrollToCatalog();
@@ -148,6 +152,7 @@
         if (!carousel) return;
         const slides = $$('.hero-slide', carousel);
         const dots = $$('[data-carousel-dot]', carousel);
+        const brandTabs = $$('[data-brand-tab]');
         const carouselRotationMs = 5500;
         let activeIndex = 0;
         let timer = null;
@@ -166,6 +171,11 @@
                 const isActive = dotIndex === activeIndex;
                 dot.classList.toggle('is-active', isActive);
                 dot.setAttribute('aria-selected', String(isActive));
+            });
+            brandTabs.forEach((tab) => {
+                const isActive = Number(tab.dataset.activeSlide) === activeIndex;
+                tab.classList.toggle('is-active', isActive);
+                tab.setAttribute('aria-pressed', String(isActive));
             });
         };
         const stop = () => {
@@ -190,6 +200,7 @@
         $('[data-carousel-prev]', carousel)?.addEventListener('click', () => { showSlide(activeIndex - 1); start(); });
         $('[data-carousel-next]', carousel)?.addEventListener('click', () => { showSlide(activeIndex + 1); start(); });
         dots.forEach((dot) => dot.addEventListener('click', () => { showSlide(Number(dot.dataset.carouselDot)); start(); }));
+        brandTabs.forEach((tab) => tab.addEventListener('click', () => { showSlide(Number(tab.dataset.activeSlide)); start(); }));
         carousel.addEventListener('mouseenter', stop);
         carousel.addEventListener('mouseleave', start);
         carousel.addEventListener('focusin', stop);
@@ -220,10 +231,11 @@
             searchInput.value = value;
             if (typeof currentSearchQuery !== 'undefined') currentSearchQuery = value;
             if (typeof renderCatalog === 'function') renderCatalog();
+            if (submit) scrollToCatalog();
             return;
         }
         if (submit && value.trim()) {
-            window.location.href = `index.html?search=${encodeURIComponent(value.trim())}#catalog`;
+            window.location.href = `/?search=${encodeURIComponent(value.trim())}#catalog`;
         }
     };
 
@@ -231,13 +243,13 @@
 
     window.openConsultation = function () {
         $('#consultation-modal')?.classList.add('is-open');
-        document.body.classList.add('no-scroll');
+        window.SkinIDScrollLock?.lock('consultation');
         setTimeout(() => $('.consult-option')?.focus(), 20);
     };
 
     window.closeConsultation = function () {
         $('#consultation-modal')?.classList.remove('is-open');
-        document.body.classList.remove('no-scroll');
+        window.SkinIDScrollLock?.unlock('consultation');
     };
 
     function setupConsultation() {
@@ -295,12 +307,12 @@
         const content = $('#policy-content');
         if (content) content.innerHTML = `<span class="modal-kicker">${policy.eyebrow}</span><h2 id="policy-title">${policy.title}</h2>${policy.body}`;
         $('#policy-modal')?.classList.add('is-open');
-        document.body.classList.add('no-scroll');
+        window.SkinIDScrollLock?.lock('policy');
     };
 
     window.closePolicy = function () {
         $('#policy-modal')?.classList.remove('is-open');
-        document.body.classList.remove('no-scroll');
+        window.SkinIDScrollLock?.unlock('policy');
     };
 
     function setupModalDismissal() {
@@ -308,7 +320,7 @@
             modal.addEventListener('click', (event) => {
                 if (event.target !== modal) return;
                 modal.classList.remove('is-open');
-                document.body.classList.remove('no-scroll');
+                window.SkinIDScrollLock?.unlock(modal.id === 'policy-modal' ? 'policy' : 'consultation');
             });
         });
         document.addEventListener('keydown', (event) => {
@@ -330,6 +342,9 @@
         if (incomingSearch && $('#product-search')) {
             window.handleHeaderSearch(incomingSearch, false);
             $('.header-search input')?.setAttribute('value', incomingSearch);
+        }
+        if (new URLSearchParams(window.location.search).get('auth') === '1') {
+            window.authManager?.openAuthModal?.('Đăng nhập hoặc tạo tài khoản để tiếp tục.');
         }
         if (window.feather) feather.replace();
     }

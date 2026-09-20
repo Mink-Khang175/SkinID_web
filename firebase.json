@@ -1,16 +1,4 @@
 {
-  "functions": {
-    "source": "functions"
-  },
-  "auth": {
-    "providers": {
-      "emailPassword": true,
-      "googleSignIn": {
-        "oAuthBrandDisplayName": "SkinID",
-        "supportEmail": "hominhkhang01072005@gmail.com"
-      }
-    }
-  },
   "firestore": {
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"

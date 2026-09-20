@@ -2139,7 +2139,8 @@ window.LOCAL_PRODUCTS.forEach((product) => {
     const relativeName = product.image.replace('/images/products/', '');
     if (relativeName.includes('/')) return;
     const folder = product.brandSlug || (product.brand || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-    product.image = `/images/products/${folder}/${relativeName}`;
+    const assetPath = `/images/products/${folder}/${relativeName}`;
+    product.image = window.SKINID_ASSET_URL?.(assetPath) || assetPath;
 });
 
 
