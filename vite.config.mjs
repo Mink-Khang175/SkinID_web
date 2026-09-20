@@ -19,9 +19,10 @@ export default defineConfig({
       targets: [
         { src: 'src/js', dest: '.' },
         { src: 'src/data', dest: '.' },
-        { src: 'src/assets/images', dest: '.' },
-        { src: 'src/assets/images/banners/hero-scan-ai.jpg', dest: '.', rename: 'og-image.jpg' },
-        { src: 'src/assets/images/logo.png', dest: '.', rename: 'logo.png' }
+        // The app uses root-relative URLs such as /images/products/..., so keep
+        // the deployed asset directory aligned with those URLs.
+        { src: 'src/assets/images/**/*', dest: 'images', rename: { stripBase: 3 } },
+        { src: 'src/assets/images/banners/hero-scan-ai.jpg', dest: '.', rename: { stripBase: 4, name: 'og-image.jpg' } },
       ]
     })
   ],

@@ -509,54 +509,33 @@ export default function SkincareRoutine() {
     {/* ========================================== */}
     {/* AUTH MODAL ULTRA PRO (Real Google Sign-In, Password Strength, Confirm Password, Remember Me) */}
     <div id="auth-modal" className="fixed inset-0 z-[999] bg-black/75 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 hidden opacity-0 transition-all duration-300">
-        <div id="auth-modal-content" className="bg-white/95 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl transform scale-95 transition-all duration-300 relative border border-white/40 backdrop-blur-2xl max-h-[90vh] overflow-y-auto">
+        <div id="auth-modal-content" className="bg-white/95 rounded-3xl max-w-md w-full p-5 sm:p-7 shadow-2xl transform scale-95 transition-all duration-300 relative border border-white/40 backdrop-blur-2xl max-h-[calc(100dvh-24px)] overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {/* Close Button */}
             <button onClick={(event) => window.authManager?.closeAuthModal?.()} className="absolute top-5 right-5 text-gray-400 hover:text-gray-700 p-2 rounded-full hover:bg-gray-100/80 transition-colors z-10">
                 <i data-feather="x" className="w-5 h-5"></i>
             </button>
 
             {/* Header Brand */}
-            <div className="text-center mb-6">
-                <div className="w-14 h-14 bg-gradient-to-tr from-brand-primary to-brand-accent rounded-2xl flex items-center justify-center mx-auto mb-3 text-white shadow-lg shadow-brand-primary/30 transform hover:scale-105 transition-transform">
+            <div className="text-center mb-4">
+                <div className="w-12 h-12 bg-gradient-to-tr from-brand-primary to-brand-accent rounded-2xl flex items-center justify-center mx-auto mb-2 text-white shadow-lg shadow-brand-primary/30 transform hover:scale-105 transition-transform">
                     <i data-feather="user-check" className="w-7 h-7"></i>
                 </div>
                 <h3 className="text-2xl font-black text-brand-dark tracking-tight" id="auth-tab-title">Chào Mừng Đến SkinID</h3>
-                <p className="text-xs text-gray-500 font-medium mt-1">Đăng nhập để lưu lịch sử soi da & nhận phác đồ cá nhân hóa</p>
+                <p className="text-xs text-gray-600 font-medium mt-1">Đăng nhập để lưu lịch sử soi da & nhận phác đồ cá nhân hóa</p>
                 <div id="auth-modal-notice" className="text-xs font-bold text-rose-600 bg-rose-50 border border-rose-100 p-3 rounded-xl mt-3 hidden text-left flex items-center gap-2">
                     <i data-feather="alert-circle" className="w-4 h-4 flex-shrink-0"></i>
                     <span id="auth-notice-text"></span>
                 </div>
             </div>
 
-            {/* GOOGLE SIGN-IN BUTTON & CONTAINER (REAL GOOGLE AUTHENTICATION) */}
-
-
-            <button onClick={(event) => window.authManager?.triggerGoogleSignIn?.()} className="w-full bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 py-3 px-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-3 shadow-sm hover:shadow transition-all mb-4 group">
-                {/* Google Multicolored SVG Logo */}
-                <svg className="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform" viewBox="0 0 48 48">
-                    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-                    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-                    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.28-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-                    <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-                </svg>
-                <span>Tiếp tục với Google Xác Thực</span>
-            </button>
-
-            {/* Divider */}
-            <div className="relative flex py-2 items-center mb-4">
-                <div className="flex-grow border-t border-gray-200"></div>
-                <span className="flex-shrink mx-3 text-[11px] font-bold text-gray-400 uppercase tracking-widest">Hoặc tài khoản Email</span>
-                <div className="flex-grow border-t border-gray-200"></div>
-            </div>
-
             {/* Tab Switcher */}
-            <div className="flex bg-gray-100 p-1.5 rounded-2xl mb-5 border border-gray-200/60">
+            <div className="flex bg-gray-100 p-1 rounded-2xl mb-4 border border-gray-200/60">
                 <button id="auth-tab-login" onClick={(event) => window?.toggleAuthForm?.('login')} className="w-1/2 py-2 text-xs font-extrabold rounded-xl bg-white text-gray-900 shadow-sm transition-all">Đăng nhập</button>
                 <button id="auth-tab-register" onClick={(event) => window?.toggleAuthForm?.('register')} className="w-1/2 py-2 text-xs font-extrabold rounded-xl text-gray-500 hover:text-gray-900 transition-all">Đăng ký mới</button>
             </div>
 
             {/* 1. LOGIN FORM */}
-            <form id="form-login" onSubmit={(event) => window?.handleLoginSubmit?.(event)} className="space-y-4">
+            <form id="form-login" onSubmit={(event) => window?.handleLoginSubmit?.(event)} className="space-y-3">
                 <div>
                     <label className="block text-xs font-bold text-gray-700 mb-1">Email đăng nhập</label>
                     <div className="relative">
@@ -585,10 +564,26 @@ export default function SkincareRoutine() {
                     </label>
                 </div>
 
-                <button type="submit" className="w-full bg-gradient-to-r from-brand-primary to-brand-dark hover:opacity-95 text-white py-3.5 rounded-2xl font-bold text-sm shadow-lg shadow-brand-primary/30 transition-all flex items-center justify-center gap-2">
+                <button type="submit" className="w-full bg-brand-primary hover:bg-brand-dark text-white py-3 rounded-2xl font-bold text-sm shadow-lg shadow-brand-primary/30 transition-all flex items-center justify-center gap-2">
                     <i data-feather="log-in" className="w-4 h-4"></i> Đăng nhập ngay
                 </button>
             </form>
+
+            {/* Google sign-in is intentionally last so the email flow remains easy to scan. */}
+            <div className="relative flex py-3 items-center">
+                <div className="flex-grow border-t border-gray-200"></div>
+                <span className="flex-shrink mx-3 text-[11px] font-bold text-gray-400 uppercase tracking-widest">Hoặc</span>
+                <div className="flex-grow border-t border-gray-200"></div>
+            </div>
+            <button onClick={(event) => window.authManager?.triggerGoogleSignIn?.()} className="w-full bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 py-3 px-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-3 shadow-sm hover:shadow transition-all group">
+                <svg className="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform" viewBox="0 0 48 48" aria-hidden="true">
+                    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.28-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                    <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                </svg>
+                <span>Tiếp tục với Google</span>
+            </button>
 
             {/* 2. REGISTER FORM */}
             <form id="form-register" onSubmit={(event) => window?.handleRegisterSubmit?.(event)} className="space-y-3.5 hidden">

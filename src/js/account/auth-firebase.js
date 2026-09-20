@@ -220,6 +220,9 @@ class AuthManager {
     async triggerGoogleSignIn() {
         try {
             const sdk = this.firebase.sdk.auth;
+            // Keep Google sessions across refreshes/tabs, matching the checked
+            // "remember me" behavior of the email flow.
+            await sdk.setPersistence(this.firebase.auth, sdk.browserLocalPersistence);
             const provider = new sdk.GoogleAuthProvider();
             provider.setCustomParameters({ prompt: 'select_account' });
             const credential = await sdk.signInWithPopup(this.firebase.auth, provider);
