@@ -109,7 +109,7 @@ function createProductCard(p, options = {}) {
             
             <div class="product-card__media">
                 <img src="${imgSrc}" alt="${p.name}" loading="lazy"
-                     class="w-full h-full object-contain mix-blend-multiply transition-transform duration-300 ease-in-out group-hover:scale-105"
+                     class="w-full h-full object-contain mix-blend-multiply transition-transform duration-300 ease-in-out"
                      onerror="this.outerHTML='<div class=\\\'w-full h-full missing-image-placeholder text-center px-4 flex items-center justify-center text-xs text-gray-400 font-semibold\\\'>${p.brand}</div>'">
             </div>
             

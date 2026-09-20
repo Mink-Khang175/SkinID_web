@@ -8,8 +8,10 @@ import {
   listDocuments,
   runQuery
 } from './firestore.js';
+import { SERVER_CATALOG } from './catalog.generated.js';
 
 const jwksByProject = new Map();
+const bundledProducts = new Map(SERVER_CATALOG.map(product => [product.id, product]));
 
 class ApiError extends Error {
   constructor(status, code, message) {
@@ -21,7 +23,7 @@ class ApiError extends Error {
 
 function requiredEnv(env) {
   for (const key of ['FIREBASE_PROJECT_ID', 'FIREBASE_CLIENT_EMAIL', 'FIREBASE_PRIVATE_KEY']) {
-    if (!env[key]) throw new ApiError(503, 'server_not_configured', `Backend thiếu biến ${key}.`);
+    if (!env[key]) throw new ApiError(503, 'server_not_configured', 'Hệ thống đặt hàng đang được bảo trì. Vui lòng thử lại sau ít phút.');
   }
 }
 
@@ -113,9 +115,13 @@ async function createOrder(request, env, user) {
     quantities.set(productId, total);
   }
 
-  const products = await Promise.all([...quantities.keys()].map(id => getDocument(env, `products/${id}`)));
+  const productIds = [...quantities.keys()];
+  const products = await Promise.all(productIds.map(async id => {
+    const remoteProduct = await getDocument(env, `products/${id}`);
+    return remoteProduct || bundledProducts.get(id) || null;
+  }));
   const items = products.map((product, index) => {
-    const productId = [...quantities.keys()][index];
+    const productId = productIds[index];
     if (!product) throw new ApiError(409, 'product_unavailable', `Sản phẩm ${productId} không còn tồn tại.`);
     const price = Number(product.price);
     if (!Number.isFinite(price) || price < 0) throw new ApiError(409, 'invalid_product_price', `Giá sản phẩm ${productId} không hợp lệ.`);
@@ -133,12 +139,32 @@ async function createOrder(request, env, user) {
 
   const shippingAddress = validateAddress(payload.customer?.shippingAddress);
   const customerName = text(payload.customer?.name, 'họ tên', 120);
-  const customerPhone = text(payload.customer?.phone, 'số điện thoại', 30);
+  const customerPhone = text(payload.customer?.phone, 'số điện thoại', 30).replace(/[\s.-]/g, '');
+  if (!/^(?:\+84|0)(?:3|5|7|8|9)\d{8}$/.test(customerPhone)) {
+    throw new ApiError(400, 'invalid_phone', 'Số điện thoại Việt Nam chưa đúng định dạng.');
+  }
   const subtotal = items.reduce((sum, item) => sum + item.lineTotal, 0);
   const shippingFee = subtotal >= 500000 ? 0 : 30000;
   const now = new Date();
-  const orderId = crypto.randomUUID().replaceAll('-', '');
-  const paymentMethod = ['cod', 'bank_transfer'].includes(payload.paymentMethod) ? payload.paymentMethod : 'cod';
+  const idempotencyKey = String(request.headers.get('idempotency-key') || '').trim();
+  let orderId = crypto.randomUUID().replaceAll('-', '');
+  if (idempotencyKey) {
+    if (!/^[A-Za-z0-9_-]{16,100}$/.test(idempotencyKey)) throw new ApiError(400, 'invalid_idempotency_key', 'Mã xác nhận đơn hàng không hợp lệ.');
+    const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(`${user.sub}:${idempotencyKey}`));
+    orderId = [...new Uint8Array(digest)].map(value => value.toString(16).padStart(2, '0')).join('').slice(0, 32);
+    const existingOrder = await getDocument(env, `orders/${orderId}`);
+    if (existingOrder?.userId === user.sub) {
+      return json(request, env, {
+        success: true,
+        duplicate: true,
+        orderId,
+        subtotal: existingOrder.subtotal,
+        shippingFee: existingOrder.shippingFee,
+        total: existingOrder.total
+      });
+    }
+  }
+  const paymentMethod = payload.paymentMethod === 'bank_transfer' ? 'bank_transfer' : 'cod';
   const order = {
     userId: user.sub,
     customer: {
@@ -290,7 +316,12 @@ export default {
       return env.ASSETS.fetch(request);
     } catch (error) {
       console.error('[SkinID Worker]', { code: error.code, message: error.message });
-      return json(request, env, { success: false, code: error.code || 'internal', message: error.message || 'Không thể hoàn tất yêu cầu.' }, error.status || 500);
+      const isExpected = error instanceof ApiError;
+      return json(request, env, {
+        success: false,
+        code: isExpected ? error.code : 'internal',
+        message: isExpected ? error.message : 'Hệ thống đang bận. Vui lòng thử lại sau ít phút.'
+      }, isExpected ? error.status : 500);
     }
   }
 };

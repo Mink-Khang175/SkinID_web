@@ -2,6 +2,8 @@
   "name": "skinid-storefront",
   "private": true,
   "scripts": {
+    "generate:server-catalog": "node scripts/generate-server-catalog.mjs",
+    "prebuild": "npm run generate:server-catalog",
     "build": "vite build",
     "preview": "vite preview",
     "dev": "vite",

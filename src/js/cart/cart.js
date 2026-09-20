@@ -252,6 +252,7 @@ class ShoppingCart {
         document.getElementById('checkout-address-line').value = savedAddress.line1 || (!user.shippingAddress ? user.address || '' : '');
         document.getElementById('checkout-error').classList.add('hidden');
         document.getElementById('checkout-error').textContent = '';
+        this.checkoutAttemptId = crypto.randomUUID();
         await window.VietnamAddress?.bindForm?.({
             provinceId: 'checkout-province',
             wardId: 'checkout-ward',
@@ -262,7 +263,10 @@ class ShoppingCart {
             const product = this.getProductDetails(item.productId);
             return sum + (product ? product.price * item.quantity : 0);
         }, 0);
-        document.getElementById('checkout-total').textContent = formatPrice(subtotal);
+        const shippingFee = subtotal >= 500000 ? 0 : 30000;
+        document.getElementById('checkout-subtotal').textContent = formatPrice(subtotal);
+        document.getElementById('checkout-shipping').textContent = shippingFee ? formatPrice(shippingFee) : 'Miễn phí';
+        document.getElementById('checkout-total').textContent = formatPrice(subtotal + shippingFee);
         modal.classList.remove('hidden');
         window.SkinIDScrollLock?.lock('checkout');
         this.toggleCartUI(false);
@@ -277,11 +281,23 @@ class ShoppingCart {
         event.preventDefault();
         const button = document.getElementById('checkout-submit');
         const errorBox = document.getElementById('checkout-error');
+        const name = document.getElementById('checkout-name').value.trim();
+        const phone = document.getElementById('checkout-phone').value.replace(/[\s.-]/g, '');
         const shippingAddress = window.VietnamAddress?.readForm?.({
             provinceId: 'checkout-province', wardId: 'checkout-ward', line1Id: 'checkout-address-line'
         });
         if (!shippingAddress?.provinceCode || !shippingAddress?.wardCode || !shippingAddress?.line1) {
             errorBox.textContent = 'Vui lòng chọn tỉnh/thành, phường/xã và nhập địa chỉ chi tiết.';
+            errorBox.classList.remove('hidden');
+            return;
+        }
+        if (name.length < 2) {
+            errorBox.textContent = 'Vui lòng nhập họ và tên người nhận.';
+            errorBox.classList.remove('hidden');
+            return;
+        }
+        if (!/^(?:\+84|0)(?:3|5|7|8|9)\d{8}$/.test(phone)) {
+            errorBox.textContent = 'Số điện thoại Việt Nam chưa đúng định dạng.';
             errorBox.classList.remove('hidden');
             return;
         }
@@ -293,27 +309,32 @@ class ShoppingCart {
             return product ? { productId: product.id, name: product.name, image: product.image, price: product.price, quantity: item.quantity, lineTotal: product.price * item.quantity } : null;
         }).filter(Boolean);
         const subtotal = items.reduce((sum, item) => sum + item.lineTotal, 0);
-        const result = await window.authManager.createOrder({
-            customer: {
-                name: document.getElementById('checkout-name').value,
-                phone: document.getElementById('checkout-phone').value,
-                shippingAddress
-            },
-            note: document.getElementById('checkout-note').value,
-            paymentMethod: document.querySelector('input[name="payment-method"]:checked')?.value || 'cod',
-            items, subtotal, shippingFee: 0, total: subtotal
-        });
-        if (!result.success) {
+        try {
+            const result = await window.authManager.createOrder({
+                idempotencyKey: this.checkoutAttemptId || crypto.randomUUID(),
+                customer: { name, phone, shippingAddress },
+                note: document.getElementById('checkout-note').value,
+                paymentMethod: document.querySelector('input[name="payment-method"]:checked')?.value || 'cod',
+                items, subtotal
+            });
+            if (!result.success) {
+                errorBox.textContent = result.message;
+                errorBox.classList.remove('hidden');
+                return;
+            }
+            await this.clearCart();
+            this.closeCheckout();
+            const shortId = result.orderId.slice(0, 8).toUpperCase();
+            if (typeof showToast === 'function') showToast(`Đặt hàng thành công · #${shortId}`);
+            window.location.href = `/profile?tab=orders&placed=${encodeURIComponent(shortId)}`;
+        } catch (error) {
+            console.error('[SkinID Checkout] Unexpected checkout error:', error);
+            errorBox.textContent = 'Đã xảy ra lỗi kết nối. Vui lòng thử lại; hệ thống sẽ không tạo đơn trùng.';
+            errorBox.classList.remove('hidden');
+        } finally {
             button.disabled = false;
             button.textContent = 'Xác nhận đặt hàng';
-            errorBox.textContent = result.message;
-            errorBox.classList.remove('hidden');
-            return;
         }
-        await this.clearCart();
-        this.closeCheckout();
-        if (typeof showToast === 'function') showToast(`Đặt hàng thành công · #${result.orderId.slice(0, 8).toUpperCase()}`);
-        window.location.href = '/profile?tab=orders';
     }
 
     initDOM() {
@@ -360,19 +381,19 @@ class ShoppingCart {
                 </div>
                 <div id="checkout-modal" class="fixed inset-0 z-[10000] hidden bg-gray-950/60 backdrop-blur-sm p-4 overflow-y-auto">
                     <form onsubmit="cartManager.submitCheckout(event)" class="checkout-panel mx-auto my-8 max-w-xl rounded-3xl bg-white p-6 shadow-2xl">
-                        <div class="flex items-center justify-between mb-5"><div><p class="text-xs font-bold text-brand-primary">CHECKOUT</p><h2 class="text-2xl font-black">Thông tin nhận hàng</h2></div><button type="button" onclick="cartManager.closeCheckout()" class="p-2 rounded-full bg-gray-100" aria-label="Đóng thanh toán"><i data-feather="x"></i></button></div>
+                        <div class="checkout-heading flex items-center justify-between mb-5"><div><p class="text-xs font-bold text-brand-primary">THANH TOÁN AN TOÀN</p><h2 class="text-2xl font-black">Thông tin nhận hàng</h2><p>Kiểm tra thông tin trước khi xác nhận đơn.</p></div><button type="button" onclick="cartManager.closeCheckout()" class="p-2 rounded-full bg-gray-100" aria-label="Đóng thanh toán"><i data-feather="x"></i></button></div>
                         <div class="grid gap-4 sm:grid-cols-2">
                             <label class="checkout-field"><span>Họ và tên *</span><input id="checkout-name" required></label>
                             <label class="checkout-field"><span>Số điện thoại *</span><input id="checkout-phone" type="tel" required></label>
                             <label class="checkout-field"><span>Tỉnh / Thành phố *</span><select id="checkout-province" required><option value="">Chọn tỉnh/thành</option></select></label>
                             <label class="checkout-field"><span>Phường / Xã *</span><select id="checkout-ward" required disabled><option value="">Chọn tỉnh/thành trước</option></select></label>
                             <label class="checkout-field sm:col-span-2"><span>Địa chỉ chi tiết *</span><input id="checkout-address-line" required autocomplete="street-address" placeholder="Số nhà, tên đường, tòa nhà…"></label>
-                            <p class="checkout-address-note sm:col-span-2"><i data-feather="cloud"></i> Địa chỉ này sẽ được lưu vào hồ sơ Firestore để tự động điền cho lần mua sau.</p>
+                            <p class="checkout-address-note sm:col-span-2"><i data-feather="shield"></i> Địa chỉ được lưu an toàn trong tài khoản để tự động điền cho lần mua sau.</p>
                             <label class="checkout-field sm:col-span-2"><span>Ghi chú</span><textarea id="checkout-note" rows="2"></textarea></label>
                         </div>
                         <div id="checkout-error" class="checkout-message checkout-message--error hidden" role="alert"></div>
-                        <fieldset class="mt-5"><legend class="text-sm font-bold mb-2">Phương thức thanh toán</legend><label class="payment-option"><input type="radio" name="payment-method" value="cod" checked> Thanh toán khi nhận hàng (COD)</label><label class="payment-option"><input type="radio" name="payment-method" value="bank_transfer"> Chuyển khoản ngân hàng (CSKH xác nhận)</label></fieldset>
-                        <div class="flex items-center justify-between mt-6 pt-5 border-t"><span class="font-semibold text-gray-500">Tổng thanh toán</span><strong id="checkout-total" class="text-xl text-brand-primary">0đ</strong></div>
+                        <fieldset class="mt-5"><legend class="text-sm font-bold mb-2">Phương thức thanh toán</legend><label class="payment-option"><input type="radio" name="payment-method" value="cod" checked><span><b>Thanh toán khi nhận hàng (COD)</b><small>Chỉ thanh toán sau khi nhận và kiểm tra kiện hàng.</small></span></label></fieldset>
+                        <div class="checkout-summary"><div><span>Tạm tính</span><b id="checkout-subtotal">0đ</b></div><div><span>Phí giao hàng</span><b id="checkout-shipping">0đ</b></div><div class="checkout-summary__total"><span>Tổng thanh toán</span><strong id="checkout-total">0đ</strong></div></div>
                         <button id="checkout-submit" type="submit" class="btn btn--primary btn--full mt-4">Xác nhận đặt hàng</button>
                     </form>
                 </div>

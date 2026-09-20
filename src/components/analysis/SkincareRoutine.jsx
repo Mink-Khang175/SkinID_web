@@ -509,7 +509,20 @@ export default function SkincareRoutine() {
     {/* ========================================== */}
     {/* AUTH MODAL ULTRA PRO (Real Google Sign-In, Password Strength, Confirm Password, Remember Me) */}
     <div id="auth-modal" className="fixed inset-0 z-[999] bg-black/75 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 hidden opacity-0 transition-all duration-300">
-        <div id="auth-modal-content" className="bg-white/95 rounded-3xl max-w-md w-full p-5 sm:p-7 shadow-2xl transform scale-95 transition-all duration-300 relative border border-white/40 backdrop-blur-2xl max-h-[calc(100dvh-24px)] overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div id="auth-modal-content" className="auth-shell transform scale-95 transition-all duration-300">
+            <aside className="auth-story" aria-hidden="true">
+                <span className="auth-story__eyebrow">SKINID MEMBERSHIP</span>
+                <h2>Một tài khoản.<br />Trọn hành trình làn da.</h2>
+                <p>Lưu hồ sơ da, đồng bộ giỏ hàng và theo dõi đơn mua trong một không gian riêng tư.</p>
+                <ul>
+                    <li><i data-feather="star"></i> Phác đồ cá nhân hóa</li>
+                    <li><i data-feather="shopping-bag"></i> Theo dõi đơn hàng</li>
+                    <li><i data-feather="shield"></i> Dữ liệu được bảo vệ</li>
+                </ul>
+                <span className="auth-story__orb auth-story__orb--one"></span>
+                <span className="auth-story__orb auth-story__orb--two"></span>
+            </aside>
+            <section className="auth-form-pane">
             {/* Close Button */}
             <button onClick={(event) => window.authManager?.closeAuthModal?.()} className="absolute top-5 right-5 text-gray-400 hover:text-gray-700 p-2 rounded-full hover:bg-gray-100/80 transition-colors z-10">
                 <i data-feather="x" className="w-5 h-5"></i>
@@ -653,7 +666,7 @@ export default function SkincareRoutine() {
             <form id="form-forgot" onSubmit={(event) => window?.handleForgotSubmit?.(event)} className="space-y-4 hidden">
                 <div className="bg-blue-50 border border-blue-100 p-3 rounded-2xl text-xs text-blue-800">
                     <p className="font-bold mb-1">Cần khôi phục mật khẩu?</p>
-                    <p>Nhập địa chỉ email đăng ký. Firebase sẽ gửi đường dẫn đặt lại mật khẩu an toàn.</p>
+                    <p>Nhập địa chỉ email đăng ký. Chúng tôi sẽ gửi đường dẫn đặt lại mật khẩu an toàn.</p>
                 </div>
                 <div>
                     <label className="block text-xs font-bold text-gray-700 mb-1">Email tài khoản</label>
@@ -673,6 +686,7 @@ export default function SkincareRoutine() {
                     </button>
                 </div>
             </form>
+            </section>
         </div>
     </div>
 

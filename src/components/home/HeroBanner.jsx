@@ -8,7 +8,7 @@ export default function HeroBanner() {
           <div className="hero-slide-inner">
             <div className="hero-slide-copy">
               <span className="hero-label">RILASTIL · DƯỢC MỸ PHẨM TỪ Ý</span>
-              <h1 className="leading-[1.05]">Chăm da đúng cách.<br />Mua sắm dễ dàng.</h1>
+              <h1 className="leading-[1.05]">Chăm da đúng cách.<br />Mua sắm dễ dàng</h1>
               <p>Sản phẩm rõ nguồn gốc, thông tin đầy đủ và phân loại dễ tìm theo từng nhu cầu.</p>
               <div className="hero-actions">
                 <a className="btn btn--primary" href="#catalog">Mua sắm ngay</a>
@@ -29,10 +29,10 @@ export default function HeroBanner() {
           <div className="hero-slide-inner">
             <div className="hero-slide-copy">
               <span className="hero-label">TIỆN ÍCH SOI DA AI</span>
-              <h2 className="leading-[1.05]">Hiểu làn da trước khi chọn sản phẩm.</h2>
+              <h2 className="leading-[1.05]">Hiểu làn da trước khi chọn sản phẩm</h2>
               <p>Chụp ảnh khuôn mặt theo hướng dẫn để tham khảo tình trạng da và tìm nhanh nhóm sản phẩm phù hợp.</p>
               <div className="hero-actions">
-                <a className="btn btn--dark" href="/skin-analysis"><i data-feather="camera"></i> Bắt đầu soi da</a>
+                <a className="btn btn--ai-primary" href="/skin-analysis"><i data-feather="camera"></i> Bắt đầu soi da</a>
                 <button className="btn btn--secondary" type="button" onClick={() => window?.openConsultation?.()}>Tư vấn nhanh</button>
               </div>
               <small>Kết quả mang tính tham khảo, không thay thế chẩn đoán y khoa.</small>
@@ -45,7 +45,7 @@ export default function HeroBanner() {
           <div className="hero-slide-inner">
             <div className="hero-slide-copy">
               <span className="hero-label">TWON · BODY RITUAL</span>
-              <h2 className="leading-[1.05]">Chăm sóc cơ thể.<br />Nâng niu mỗi ngày.</h2>
+              <h2 className="leading-[1.05]">Chăm sóc cơ thể.<br />Nâng niu mỗi ngày</h2>
               <p>Routine dưỡng thể mềm mịn và lưu hương nhẹ nhàng cho trải nghiệm chăm sóc trọn vẹn.</p>
               <div className="hero-actions">
                 <button className="btn btn--primary" type="button" data-hero-brand="TWON">Mua TWON</button>
@@ -54,13 +54,12 @@ export default function HeroBanner() {
             <div className="body-product-stage">
               <div className="editorial-orbit editorial-orbit--large" aria-hidden="true"></div>
               <div className="editorial-orbit editorial-orbit--small" aria-hidden="true"></div>
-              <div className="editorial-card editorial-card--body">
-                <small>BODY RITUAL</small>
-                <div className="editorial-products">
-                  <img src={assetUrl('/images/products/twon/twon-body-lotion.png')} alt="Dưỡng thể TWON" />
-                  <img src={assetUrl('/images/products/twon/twon-sua-tam.png')} alt="Sữa tắm TWON" />
-                  <img src={assetUrl('/images/products/twon/twon-kem-u-trang.png')} alt="Kem ủ trắng TWON" />
-                </div>
+              <div className="body-stage-copy"><small>BODY RITUAL</small><b>Chăm sóc dịu dàng mỗi ngày</b></div>
+              <div className="body-stage-podium" aria-hidden="true"><span></span><span></span><span></span></div>
+              <div className="editorial-products">
+                <img src={assetUrl('/images/products/twon/twon-body-lotion.png')} alt="Dưỡng thể TWON" />
+                <img src={assetUrl('/images/products/twon/twon-sua-tam.png')} alt="Sữa tắm TWON" />
+                <img src={assetUrl('/images/products/twon/twon-kem-u-trang.png')} alt="Kem ủ trắng TWON" />
               </div>
             </div>
           </div>
@@ -70,7 +69,7 @@ export default function HeroBanner() {
           <div className="hero-slide-inner">
             <div className="hero-slide-copy">
               <span className="hero-label">D'VAH · SIGNATURE SCENT</span>
-              <h2 className="leading-[1.05]">Chạm vào hương.<br />Lưu lại dấu ấn.</h2>
+              <h2 className="leading-[1.05]">Chạm vào hương.<br />Lưu lại dấu ấn</h2>
               <p>Năm cá tính hương thơm nhỏ gọn, dễ mang theo và đủ khác biệt để kể câu chuyện riêng.</p>
               <div className="hero-actions">
                 <button className="btn btn--primary" type="button" data-hero-brand="DVAH">Khám phá D'VAH</button>

@@ -285,7 +285,7 @@ export default function ProfilePage() {
             <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-200 shadow-sm">
                 <div className="pb-4 mb-5 border-b border-gray-100">
                     <h2 className="text-lg font-black text-gray-900">Đơn Hàng Của Tôi</h2>
-                    <p className="text-xs text-gray-500">Theo dõi trạng thái đặt hàng và thanh toán được lưu trên Firestore.</p>
+                    <p className="text-xs text-gray-500">Theo dõi trạng thái xác nhận, giao hàng và thanh toán của mọi đơn mua.</p>
                 </div>
                 <div id="profile-orders-container" className="space-y-4"></div>
             </div>
@@ -329,8 +329,8 @@ export default function ProfilePage() {
             {/* 3.2 Quyền Riêng Tư & Dữ Liệu Cá Nhân (NĐ 13/2023) */}
             <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-200 shadow-sm">
                 <div className="pb-4 mb-6 border-b border-gray-100">
-                    <h2 className="text-lg font-black text-gray-900">Quyền Riêng Tư Dữ Liệu (Nghị định 13/2023/NĐ-CP)</h2>
-                    <p className="text-xs text-gray-500">Bạn có thể tải về hoặc xóa hồ sơ và lịch sử phân tích da của tài khoản</p>
+                    <h2 className="text-lg font-black text-gray-900">Quyền riêng tư & dữ liệu</h2>
+                    <p className="text-xs text-gray-500">Bạn có thể tải bản sao dữ liệu hoặc xóa lịch sử soi da khỏi tài khoản.</p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -349,12 +349,12 @@ export default function ProfilePage() {
                     <div className="p-5 rounded-2xl bg-rose-50/50 border border-rose-100 flex flex-col justify-between">
                         <div>
                             <div className="flex items-center gap-2 text-rose-800 font-bold text-sm mb-1">
-                                <i data-feather="trash-2" className="w-4 h-4 text-rose-600"></i> Xóa Vĩnh Viễn Dữ Liệu
+                                <i data-feather="trash-2" className="w-4 h-4 text-rose-600"></i> Xóa lịch sử soi da
                             </div>
-                            <p className="text-xs text-rose-900/70 mb-4">Xóa sạch toàn bộ lịch sử soi da, hình ảnh khuôn mặt và thông tin lưu trữ trên hệ thống SkinID.</p>
+                            <p className="text-xs text-rose-900/70 mb-4">Xóa vĩnh viễn các báo cáo soi da đã lưu. Hồ sơ, giỏ hàng và đơn mua vẫn được giữ nguyên.</p>
                         </div>
                         <button onClick={() => window.authManager?.clearAllUserHistory?.().then(() => window.renderProfileDashboard?.())} className="profile-btn profile-btn--danger self-start">
-                            Xóa Toàn Bộ Dữ Liệu
+                            Xóa lịch sử soi da
                         </button>
                     </div>
                 </div>

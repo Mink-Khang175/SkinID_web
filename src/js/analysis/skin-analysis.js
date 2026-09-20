@@ -103,6 +103,7 @@ window.filterByBrand = function(brand, el) {
     currentBrandFilter = brand;
     const brandSelect = document.getElementById('brand-filter-select');
     if (brandSelect) brandSelect.value = brand;
+    window.syncCatalogDropdown?.(brandSelect);
     const brandBtns = document.querySelectorAll('#brand-filters .filter-btn');
     brandBtns.forEach(b => b.classList.remove('active'));
     if (el) {
@@ -116,8 +117,10 @@ window.filterByBrand = function(brand, el) {
 
 window.filterByStep = function(step, el) {
     currentStepFilter = step;
+    window.syncPrimaryNavigation?.(step);
     const stepSelect = document.getElementById('step-filter-select');
     if (stepSelect) stepSelect.value = step;
+    window.syncCatalogDropdown?.(stepSelect);
     const stepBtns = document.querySelectorAll('#step-filters .step-filter-btn');
     stepBtns.forEach(b => b.classList.remove('active'));
     if (el) {

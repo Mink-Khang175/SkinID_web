@@ -73,7 +73,16 @@
     }
 
     function scrollToCatalog() {
-        $('#catalog')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        ($('#featured-products') || $('#catalog'))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function syncPrimaryNavigation(step = 'all') {
+        $$('.desktop-nav [data-nav-step]').forEach((link) => {
+            const isActive = link.dataset.navStep === step;
+            link.classList.toggle('is-active', isActive);
+            if (isActive) link.setAttribute('aria-current', 'true');
+            else link.removeAttribute('aria-current');
+        });
     }
 
     function chooseFilterButton(selector, dataName, value) {
@@ -93,9 +102,76 @@
         if (searchInput) searchInput.value = query;
         if (brandSelect) brandSelect.value = String(brand).toLowerCase();
         if (stepSelect) stepSelect.value = step;
+        window.syncCatalogDropdown?.(brandSelect);
+        window.syncCatalogDropdown?.(stepSelect);
+        syncPrimaryNavigation(step);
         if (typeof currentSearchQuery !== 'undefined') currentSearchQuery = query;
         if (typeof renderCatalog === 'function') renderCatalog();
         scrollToCatalog();
+    }
+
+    function setupCatalogDropdowns() {
+        const dropdowns = $$('[data-catalog-dropdown]');
+        const closeAll = (except = null) => dropdowns.forEach((dropdown) => {
+            if (dropdown === except) return;
+            dropdown.querySelector('.catalog-dropdown__panel')?.setAttribute('hidden', '');
+            dropdown.querySelector('.catalog-dropdown__trigger')?.setAttribute('aria-expanded', 'false');
+        });
+        const sync = (input) => {
+            if (!input) return;
+            const dropdown = input.closest('[data-catalog-dropdown]');
+            if (!dropdown) return;
+            const options = $$('[data-dropdown-value]', dropdown);
+            const selected = options.find((option) => option.dataset.dropdownValue === input.value) || options[0];
+            dropdown.querySelector('[data-dropdown-label]').textContent = selected?.textContent?.replace('✓', '').trim() || '';
+            options.forEach((option) => {
+                const isActive = option === selected;
+                option.classList.toggle('is-active', isActive);
+                option.setAttribute('aria-selected', String(isActive));
+            });
+        };
+        window.syncCatalogDropdown = sync;
+        dropdowns.forEach((dropdown) => {
+            const input = $('input[type="hidden"]', dropdown);
+            const trigger = $('.catalog-dropdown__trigger', dropdown);
+            const panel = $('.catalog-dropdown__panel', dropdown);
+            const options = $$('[data-dropdown-value]', dropdown);
+            const open = () => {
+                closeAll(dropdown);
+                panel.hidden = false;
+                trigger.setAttribute('aria-expanded', 'true');
+            };
+            const close = () => {
+                panel.hidden = true;
+                trigger.setAttribute('aria-expanded', 'false');
+            };
+            trigger.addEventListener('click', () => panel.hidden ? open() : close());
+            trigger.addEventListener('keydown', (event) => {
+                if (!['ArrowDown', 'ArrowUp'].includes(event.key)) return;
+                event.preventDefault();
+                open();
+                (options.find((option) => option.classList.contains('is-active')) || options[0])?.focus();
+            });
+            panel.addEventListener('keydown', (event) => {
+                const current = options.indexOf(document.activeElement);
+                if (event.key === 'Escape') { close(); trigger.focus(); return; }
+                if (!['ArrowDown', 'ArrowUp'].includes(event.key)) return;
+                event.preventDefault();
+                const direction = event.key === 'ArrowDown' ? 1 : -1;
+                options[(current + direction + options.length) % options.length]?.focus();
+            });
+            options.forEach((option) => option.addEventListener('click', () => {
+                input.value = option.dataset.dropdownValue;
+                sync(input);
+                input.dispatchEvent(new Event('change', { bubbles: true }));
+                close();
+                trigger.focus();
+            }));
+            sync(input);
+        });
+        document.addEventListener('click', (event) => {
+            if (!event.target.closest('[data-catalog-dropdown]')) closeAll();
+        });
     }
 
     function setupMerchandisingLinks() {
@@ -332,8 +408,10 @@
     }
 
     function init() {
+        window.syncPrimaryNavigation = syncPrimaryNavigation;
         renderFeatured();
         setupMerchandisingLinks();
+        setupCatalogDropdowns();
         setupSort();
         setupCarousel();
         setupConsultation();

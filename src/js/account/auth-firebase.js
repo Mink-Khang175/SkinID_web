@@ -99,14 +99,27 @@ class AuthManager {
         if (!firebaseUser) throw Object.assign(new Error('Vui lòng đăng nhập trước khi tiếp tục.'), { code: 'unauthenticated' });
         const token = await firebaseUser.getIdToken();
         const baseUrl = String(window.SKINID_CONFIG?.apiBaseUrl || '/api').replace(/\/$/, '');
-        const response = await fetch(`${baseUrl}${path}`, {
-            ...options,
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-                ...(options.headers || {})
-            }
-        });
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 20000);
+        let response;
+        try {
+            response = await fetch(`${baseUrl}${path}`, {
+                ...options,
+                signal: controller.signal,
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    ...(options.headers || {})
+                }
+            });
+        } catch (error) {
+            const code = error?.name === 'AbortError' ? 'request_timeout' : 'network_error';
+            throw Object.assign(new Error(code === 'request_timeout'
+                ? 'Kết nối quá thời gian. Vui lòng thử lại.'
+                : 'Không thể kết nối hệ thống. Vui lòng kiểm tra mạng và thử lại.'), { code });
+        } finally {
+            clearTimeout(timeout);
+        }
         const payload = await response.json().catch(() => ({}));
         if (!response.ok) throw Object.assign(new Error(payload.message || 'Không thể hoàn tất yêu cầu.'), { code: payload.code || `http_${response.status}` });
         return payload;
@@ -157,6 +170,7 @@ class AuthManager {
             }
             const response = await this.apiRequest('/orders', {
                 method: 'POST',
+                headers: { 'Idempotency-Key': payload.idempotencyKey },
                 body: JSON.stringify({
                     customer: payload.customer,
                     note: payload.note,
@@ -186,6 +200,7 @@ class AuthManager {
 
     async register(name, email, phone, password, confirmPassword, remember = true) {
         if (!name || name.trim().length < 2) return { success: false, message: 'Vui lòng nhập họ tên hợp lệ.' };
+        if (phone?.trim() && !/^(?:\+84|0)(?:3|5|7|8|9)\d{8}$/.test(phone.replace(/[\s.-]/g, ''))) return { success: false, message: 'Số điện thoại Việt Nam chưa đúng định dạng.' };
         if (password !== confirmPassword) return { success: false, message: 'Mật khẩu xác nhận không khớp.' };
         if (!password || password.length < 6) return { success: false, message: 'Mật khẩu phải có tối thiểu 6 ký tự.' };
         try {
@@ -253,10 +268,12 @@ class AuthManager {
 
     async updateUserProfile(updatedData) {
         if (!this.currentUser) return { success: false, message: 'Chưa đăng nhập.' };
+        const normalizedPhone = String(updatedData.phone || '').replace(/[\s.-]/g, '');
+        if (normalizedPhone && !/^(?:\+84|0)(?:3|5|7|8|9)\d{8}$/.test(normalizedPhone)) return { success: false, message: 'Số điện thoại Việt Nam chưa đúng định dạng.' };
         try {
             const { doc, serverTimestamp, updateDoc } = this.firebase.sdk.firestore;
             const safe = {
-                name: String(updatedData.name || '').trim(), phone: String(updatedData.phone || '').trim(),
+                name: String(updatedData.name || '').trim(), phone: normalizedPhone,
                 birthday: String(updatedData.birthday || ''), gender: String(updatedData.gender || ''),
                 address: String(updatedData.shippingAddress?.fullAddress || updatedData.address || '').trim(),
                 shippingAddress: updatedData.shippingAddress && {
@@ -351,23 +368,26 @@ class AuthManager {
             'auth/email-already-in-use': 'Email này đã được đăng ký.', 'auth/invalid-email': 'Email không hợp lệ.',
             'auth/invalid-credential': 'Email hoặc mật khẩu không chính xác.', 'auth/weak-password': 'Mật khẩu chưa đủ mạnh.',
             'auth/popup-closed-by-user': 'Cửa sổ đăng nhập Google đã bị đóng.', 'auth/too-many-requests': 'Có quá nhiều lần thử. Vui lòng thử lại sau.'
-            , 'auth/operation-not-allowed': 'Phương thức đăng nhập này chưa được bật trong Firebase Console.'
-            , 'auth/unauthorized-domain': 'Tên miền hiện tại chưa được cho phép trong Firebase Authentication.'
+            , 'auth/operation-not-allowed': 'Phương thức đăng nhập này đang tạm ngưng. Vui lòng chọn cách khác.'
+            , 'auth/unauthorized-domain': 'Đăng nhập chưa được hỗ trợ trên địa chỉ website này.'
             , 'functions/unauthenticated': 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.'
             , 'functions/permission-denied': 'Bạn không có quyền thực hiện thao tác này.'
             , 'functions/failed-precondition': error?.message || 'Dữ liệu không còn hợp lệ. Vui lòng tải lại trang.'
             , 'functions/invalid-argument': error?.message || 'Thông tin gửi lên không hợp lệ.'
             , 'functions/unavailable': 'Dịch vụ đặt hàng đang tạm gián đoạn. Vui lòng thử lại.'
-            , 'functions/not-found': 'Backend đặt hàng chưa được triển khai trên Firebase. Vui lòng liên hệ quản trị viên.'
+            , 'functions/not-found': 'Hệ thống đặt hàng chưa sẵn sàng. Vui lòng liên hệ SkinID.'
             , 'functions/internal': 'Hệ thống chưa thể tạo đơn hàng lúc này. Vui lòng thử lại sau ít phút.'
             , 'unauthenticated': 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.'
             , 'invalid_token': 'Phiên đăng nhập không hợp lệ hoặc đã hết hạn.'
-            , 'server_not_configured': 'Backend chưa được cấu hình đầy đủ trên Cloudflare.'
+            , 'server_not_configured': 'Hệ thống đặt hàng đang được bảo trì. Vui lòng thử lại sau ít phút.'
+            , 'request_timeout': 'Kết nối quá thời gian. Vui lòng thử lại.'
+            , 'network_error': 'Không thể kết nối hệ thống. Vui lòng kiểm tra mạng và thử lại.'
             , 'product_unavailable': error?.message || 'Một sản phẩm trong giỏ không còn kinh doanh.'
             , 'invalid_product_price': error?.message || 'Giá sản phẩm đang được cập nhật. Vui lòng thử lại.'
             , 'invalid_address': error?.message || 'Vui lòng chọn đầy đủ địa chỉ giao hàng.'
+            , 'invalid_phone': 'Số điện thoại Việt Nam chưa đúng định dạng.'
             , 'daily_limit': 'Bạn đã hết lượt phân tích da hôm nay.'
-            , 'gemini_not_configured': 'Backend chưa được cấu hình Gemini API key.'
+            , 'gemini_not_configured': 'Tính năng soi da đang được bảo trì. Vui lòng thử lại sau.'
             , 'gemini_unavailable': 'Dịch vụ phân tích đang bận, vui lòng thử lại.'
             , 'internal': 'Hệ thống chưa thể tạo đơn hàng lúc này. Vui lòng thử lại sau ít phút.'
         })[error?.code] || (/internal(?:\s*\[\d+\])?/i.test(error?.message || '')

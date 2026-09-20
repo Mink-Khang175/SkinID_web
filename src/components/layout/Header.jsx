@@ -46,7 +46,7 @@ export default function Header() {
       <div className="nav-line">
         <div className="container nav-inner">
           <nav className="desktop-nav" aria-label="Điều hướng chính">
-            <a className={isHomePage ? 'is-active' : ''} href="/#catalog" aria-current={isHomePage ? 'page' : undefined}>Tất cả sản phẩm</a>
+            <a className={isHomePage ? 'is-active' : ''} href="/#featured-products" data-nav-step="all" aria-current={isHomePage ? 'page' : undefined}>Tất cả sản phẩm</a>
             <a href="/#catalog" data-nav-step="cleanser">Làm sạch</a>
             <a href="/#catalog" data-nav-step="treatment">Tinh chất & đặc trị</a>
             <a href="/#catalog" data-nav-step="moisturizer">Dưỡng ẩm</a>
@@ -60,7 +60,7 @@ export default function Header() {
       </div>
 
       <nav id="mobile-menu" className="mobile-menu hidden" aria-label="Điều hướng di động">
-        <a href="/#catalog" onClick={() => window?.toggleMobileMenu?.(false)}>Tất cả sản phẩm</a>
+        <a href="/#featured-products" data-nav-step="all" onClick={() => window?.toggleMobileMenu?.(false)}>Tất cả sản phẩm</a>
         <a href="/#categories" onClick={() => window?.toggleMobileMenu?.(false)}>Danh mục</a>
         <a href="/#brands" onClick={() => window?.toggleMobileMenu?.(false)}>Thương hiệu</a>
         <a href="/skin-analysis" onClick={() => window?.toggleMobileMenu?.(false)}>Soi da AI</a>

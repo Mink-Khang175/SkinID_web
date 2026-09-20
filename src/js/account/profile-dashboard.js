@@ -128,6 +128,12 @@ function renderProfileAvatar(user) {
                 window.switchProfileTab(tabParam);
             }
 
+            const placedOrder = urlParams.get('placed');
+            if (placedOrder) {
+                document.getElementById('profile-orders-container')?.insertAdjacentHTML('afterbegin', `<div class="order-success-banner" role="status"><i data-feather="check-circle"></i><div><strong>Đặt hàng thành công</strong><p>Mã đơn #${window.authManager.escapeHtml(placedOrder)} đã được tiếp nhận. SkinID sẽ sớm xác nhận với bạn.</p></div></div>`);
+                window.history.replaceState({}, '', '/profile?tab=orders');
+            }
+
             if (window.feather) feather.replace();
         }
 

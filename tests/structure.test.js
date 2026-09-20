@@ -54,6 +54,8 @@ const reactApp = read('src/pages/HomePage.jsx');
 for (const component of ['Header', 'HeroBanner', 'CategorySection', 'ProductList', 'BrandShowcase', 'SkincareRoutine', 'Footer']) {
     assert.match(reactApp, new RegExp(`<${component} \\/>`), `App must render ${component}`);
 }
+assert(reactApp.indexOf('<ProductList />') < reactApp.indexOf('<HelpSection />'));
+assert(reactApp.indexOf('<HelpSection />') < reactApp.indexOf('<BrandShowcase />'));
 const analysisApp = read('src/pages/SkinAnalysisPage.jsx');
 for (const component of ['Header', 'SkincareRoutine', 'Footer', 'MobileNav', 'StorefrontModals', 'ProductDetailModal']) {
     assert.match(analysisApp, new RegExp(`<${component} \/>`), `SkinAnalysisPage must render ${component}`);

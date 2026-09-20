@@ -9,6 +9,11 @@ const workflow = fs.readFileSync(path.join(root, '.github/workflows/cloudflare-d
 
 assert.match(worker, /jwtVerify\(token, jwks/);
 assert.match(worker, /getDocument\(env, `products\/\$\{id\}`\)/);
+assert.match(worker, /bundledProducts\.get\(id\)/);
+assert.match(worker, /idempotency-key/);
+assert.match(worker, /crypto\.subtle\.digest\('SHA-256'/);
+assert.match(worker, /error instanceof ApiError/);
+assert.match(worker, /Hệ thống đang bận/);
 assert.match(worker, /source: 'cloudflare-worker'/);
 assert.match(worker, /currentDocument: precondition/);
 assert.match(worker, /users\/\$\{user\.sub\}\/addresses\/default/);

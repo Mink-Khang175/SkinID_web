@@ -31,8 +31,8 @@ export default function HomePage() {
         <BrandBar />
         <CategorySection />
         <ProductList />
-        <BrandShowcase />
         <HelpSection />
+        <BrandShowcase />
         <TrustBenefits />
       </main>
       <Footer />
