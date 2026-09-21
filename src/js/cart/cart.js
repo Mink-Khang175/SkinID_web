@@ -241,7 +241,7 @@ class ShoppingCart {
         const user = window.authManager?.getCurrentUser?.();
         if (!user) {
             this.toggleCartUI();
-            window.authManager?.openAuthModal?.('Vui lòng đăng nhập để đặt hàng và theo dõi đơn.');
+            window.authManager?.openAuthModal?.('Bạn đăng nhập để SkinID lưu đơn hàng và tích điểm thành viên nhé ✨');
             return;
         }
         const modal = document.getElementById('checkout-modal');

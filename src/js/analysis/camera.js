@@ -203,7 +203,13 @@ function onFaceMeshResults(results) {
             if (!inBox) {
                 uiMsgAngle.innerText = "Vui lòng đưa mặt vào giữa khung";
             } else {
-                uiMsgAngle.innerText = "Góc mặt chưa thẳng";
+                if (window.currentCaptureStep === 1) {
+                    uiMsgAngle.innerText = "Góc mặt chưa thẳng";
+                } else if (window.currentCaptureStep === 2) {
+                    uiMsgAngle.innerText = "Vui lòng nghiêng trái 45°";
+                } else {
+                    uiMsgAngle.innerText = "Vui lòng nghiêng phải 45°";
+                }
             }
             uiMsgAngle.classList.remove('opacity-0');
             uiMsgAngle.classList.add('opacity-100');
@@ -256,14 +262,18 @@ function onFaceMeshResults(results) {
             return;
         }
         
-        // ALL PERFECT!
-        if (!autoCaptureTimeout) {
-            hideAllMsgs();
+        // ALL PERFECT - Chỉ thông báo đã chuẩn, để người dùng tự bấm chụp (tránh chụp tự động liên hoàn)
+        hideAllMsgs();
+        if (uiMsgPerfect) {
+            const stepTitles = ["Chính diện chuẩn!", "Góc trái chuẩn!", "Góc phải chuẩn!"];
+            const currentTitle = stepTitles[(window.currentCaptureStep || 1) - 1] || "Góc mặt chuẩn!";
+            uiMsgPerfect.innerHTML = `<i data-feather="check-circle" class="w-4 h-4"></i> ${currentTitle} Hãy bấm nút chụp`;
             uiMsgPerfect.classList.remove('opacity-0');
             uiMsgPerfect.classList.add('opacity-100');
-            drawBrackets('#E87A90');
-            startAutoCapture();
+            if (window.feather) feather.replace();
         }
+        drawBrackets('#E87A90');
+        cancelAutoCapture();
 
     } else {
         hideAllMsgs();
@@ -272,13 +282,8 @@ function onFaceMeshResults(results) {
 }
 
 function startAutoCapture() {
-    if (!autoCaptureTimeout) {
-        if (window.feather) feather.replace();
-        autoCaptureTimeout = setTimeout(() => {
-            captureFrameAndPreProcess();
-            autoCaptureTimeout = null;
-        }, 800);
-    }
+    // Vô hiệu hóa tự động chụp để người dùng chủ động bấm chụp từng góc, tránh tự fill liên tiếp
+    cancelAutoCapture();
 }
 
 function cancelAutoCapture() {
@@ -288,11 +293,19 @@ function cancelAutoCapture() {
     }
 }
 
+let isCapturingFrame = false;
+
 window.captureFrame = function() {
     captureFrameAndPreProcess();
 };
+window.captureFrameAndPreProcess = captureFrameAndPreProcess;
 
 function captureFrameAndPreProcess() {
+    if (isCapturingFrame) return;
+    isCapturingFrame = true;
+    setTimeout(() => { isCapturingFrame = false; }, 800);
+    cancelAutoCapture();
+
     const video = document.getElementById('webcam');
     if (!video || !video.videoWidth) {
         if (typeof window.openScanFilePicker === 'function') {
@@ -365,43 +378,56 @@ function captureFrameAndPreProcess() {
         sy = Math.max(0, Math.min(sy, canvas.height - cropSize));
     }
     
+    const maxOutputDim = 800;
+    const finalSize = Math.min(cropSize, maxOutputDim);
     const croppedCanvas = document.createElement('canvas');
-    croppedCanvas.width = cropSize;
-    croppedCanvas.height = cropSize;
+    croppedCanvas.width = finalSize;
+    croppedCanvas.height = finalSize;
     const cCtx = croppedCanvas.getContext('2d');
-    
-    cCtx.drawImage(canvas, sx, sy, cropSize, cropSize, 0, 0, cropSize, cropSize);
+    cCtx.imageSmoothingEnabled = true;
+    cCtx.imageSmoothingQuality = 'high';
+    cCtx.drawImage(canvas, sx, sy, cropSize, cropSize, 0, 0, finalSize, finalSize);
     
     cCtx.fillStyle = 'rgba(255, 235, 220, 0.05)'; 
-    cCtx.fillRect(0, 0, cropSize, cropSize);
+    cCtx.fillRect(0, 0, finalSize, finalSize);
     
-    const dataUrl = croppedCanvas.toDataURL('image/jpeg', 0.9);
+    const dataUrl = croppedCanvas.toDataURL('image/jpeg', 0.82);
     const base64Data = dataUrl.split(',')[1];
     
-    if(!window.capturedImages) window.capturedImages = [];
-    window.capturedImages.push(base64Data);
-    
-    const thumb = document.getElementById('thumb-'+window.currentCaptureStep);
-    if(thumb) thumb.innerHTML = `<img src="${dataUrl}" class="w-full h-full object-cover">`;
-    
-    window.currentCaptureStep++;
-    
-    if (window.currentCaptureStep > 3) {
-        document.getElementById('capture-btn').classList.add('hidden');
-        document.getElementById('analyze-action').classList.remove('hidden');
-        stopWebcam();
-        document.getElementById('instruction-text').innerText = "Đã chụp đủ 3 góc độ";
+    if (typeof window.saveCapturedImage === 'function') {
+        window.saveCapturedImage(base64Data);
     } else {
-        const texts = ["Chụp ảnh chính diện khuôn mặt", "Nghiêng trái 45 độ", "Nghiêng phải 45 độ"];
-        document.getElementById('instruction-text').innerText = texts[window.currentCaptureStep-1];
+        if(!window.capturedImages) window.capturedImages = [];
+        window.capturedImages.push(base64Data);
         
-        aiActive = false;
-        setTimeout(() => { 
-            aiActive = true; 
-        }, 1500); 
+        const thumb = document.getElementById('thumb-'+window.currentCaptureStep);
+        if(thumb) thumb.innerHTML = `<img src="${dataUrl}" class="w-full h-full object-cover">`;
+        
+        window.currentCaptureStep++;
+        
+        if (window.currentCaptureStep > 3) {
+            document.getElementById('capture-btn')?.classList.add('hidden');
+            document.getElementById('analyze-action')?.classList.remove('hidden');
+            if (typeof window.stopWebcam === 'function') {
+                window.stopWebcam();
+            } else if (typeof stopWebcam === 'function') {
+                stopWebcam();
+            }
+            const inst = document.getElementById('instruction-text');
+            if (inst) inst.innerText = "Đã chụp đủ 3 góc độ! Hãy nhấn nút Phân tích da.";
+        } else {
+            const texts = ["Chụp ảnh chính diện khuôn mặt", "Nghiêng trái 45 độ", "Nghiêng phải 45 độ"];
+            const inst = document.getElementById('instruction-text');
+            if (inst) inst.innerText = texts[window.currentCaptureStep-1];
+        }
+        
+        if (typeof window.updateStepUI === 'function') {
+            window.updateStepUI();
+        }
     }
-    
-    if (typeof window.updateStepUI === 'function') {
-        window.updateStepUI();
-    }
+
+    aiActive = false;
+    setTimeout(() => { 
+        aiActive = true; 
+    }, 1000);
 }

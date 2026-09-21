@@ -76,7 +76,7 @@ for (const file of scripts) {
     new vm.Script(read(file), { filename: file });
 }
 const products = JSON.parse(read('src/data/products.js').match(/window\.LOCAL_PRODUCTS = (\[[\s\S]*?\]);/)[1]);
-assert.equal(products.length, 54);
+assert.equal(products.length, 55);
 assert(!read('src/js/analysis/skin-analysis.js').includes('const PRODUCTS ='));
 const app = read('src/js/analysis/skin-analysis.js');
 assert(!/AIza[\w-]{30,}/.test(app));

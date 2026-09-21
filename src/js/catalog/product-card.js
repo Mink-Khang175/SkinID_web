@@ -74,7 +74,7 @@ function productSocialProof(product) {
 function createProductCard(p, options = {}) {
         const imgSrc = (p.image.startsWith('http') || p.image.startsWith('data:'))
             ? p.image
-            : (window.SKINID_ASSET_URL ? window.SKINID_ASSET_URL(p.image) : p.image);
+            : (window.SKINID_ASSET_URL ? window.SKINID_ASSET_URL(p.image, p.brandSlug) : p.image);
         
         // Badges for main actives
         let activesBadges = '';
@@ -110,7 +110,7 @@ function createProductCard(p, options = {}) {
             <div class="product-card__media">
                 <img src="${imgSrc}" alt="${p.name}" loading="lazy"
                      class="w-full h-full object-contain mix-blend-multiply transition-transform duration-300 ease-in-out"
-                     onerror="this.outerHTML='<div class=\\\'w-full h-full missing-image-placeholder text-center px-4 flex items-center justify-center text-xs text-gray-400 font-semibold\\\'>${p.brand}</div>'">
+                     onerror="if(this.dataset.fallback!=='true'&&'${p.originalImageUrl||''}'){this.dataset.fallback='true';this.src='${p.originalImageUrl}';}else{this.outerHTML='<div class=\\\'w-full h-full missing-image-placeholder text-center px-4 flex items-center justify-center text-xs text-gray-400 font-semibold\\\'>${p.brand}</div>';}">
             </div>
             
             <div class="product-card__content">

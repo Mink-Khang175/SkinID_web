@@ -181,7 +181,7 @@ window.openProductDetailModal = function(productId) {
 
     const imgSrc = (p.image.startsWith('http') || p.image.startsWith('data:'))
         ? p.image
-        : (window.SKINID_ASSET_URL ? window.SKINID_ASSET_URL(p.image) : p.image);
+        : (window.SKINID_ASSET_URL ? window.SKINID_ASSET_URL(p.image, p.brandSlug) : p.image);
     
     // Fill data
     document.getElementById('pmodal-line').innerText = p.line || p.brand || 'CHĂM SÓC DA';
@@ -194,6 +194,58 @@ window.openProductDetailModal = function(productId) {
         origPriceEl.classList.remove('hidden');
     } else {
         origPriceEl.classList.add('hidden');
+    }
+
+    // License Document Link (TEMPLATE FOR NOTIFICATION OF COSMETIC PRODUCT)
+    const licenseBadge = document.getElementById('pmodal-license-badge');
+    const licenseContainer = document.getElementById('pmodal-license-container');
+    
+    if (p.licenseUrl) {
+        if (licenseBadge) {
+            licenseBadge.innerHTML = `
+                <a href="${p.licenseUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 hover:border-rose-300 transition-all shadow-xs group" title="Mở Phiếu tiếp nhận công bố mỹ phẩm (Bản scan lưu trữ)">
+                    <i data-feather="file-text" class="w-3.5 h-3.5 text-rose-600 flex-shrink-0"></i>
+                    <span class="truncate">TEMPLATE FOR NOTIFICATION OF COSMETIC PRODUCT</span>
+                    <i data-feather="external-link" class="w-3 h-3 text-rose-400 group-hover:text-rose-600 flex-shrink-0 transition-colors"></i>
+                </a>
+            `;
+            licenseBadge.classList.remove('hidden');
+        }
+        if (licenseContainer) {
+            licenseContainer.innerHTML = `
+                <div class="mt-3 p-3.5 rounded-xl bg-gradient-to-r from-rose-50/70 via-white to-slate-50 border border-rose-200/80 flex items-center justify-between gap-3 shadow-xs">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 border border-rose-200/60 flex items-center justify-center flex-shrink-0 shadow-xs">
+                            <i data-feather="file-check" class="w-5 h-5 text-rose-600"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[11px] font-black text-rose-600 uppercase tracking-wider">Hồ Sơ Pháp Lý</span>
+                                <span class="text-[10px] bg-rose-100 text-rose-800 font-bold px-1.5 py-0.5 rounded">Bộ Y Tế</span>
+                            </div>
+                            <div class="text-xs font-bold text-gray-800 tracking-tight uppercase truncate mt-0.5">
+                                TEMPLATE FOR NOTIFICATION OF COSMETIC PRODUCT
+                            </div>
+                            <div class="text-[11px] text-gray-500 truncate">
+                                Phiếu công bố sản phẩm mỹ phẩm chính ngạch (VN_CPP License)
+                            </div>
+                        </div>
+                    </div>
+                    <a href="${p.licenseUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-sm hover:shadow transition-all flex-shrink-0">
+                        <span>Xem hồ sơ</span>
+                        <i data-feather="arrow-up-right" class="w-3.5 h-3.5"></i>
+                    </a>
+                </div>
+            `;
+        }
+    } else {
+        if (licenseBadge) {
+            licenseBadge.innerHTML = '';
+            licenseBadge.classList.add('hidden');
+        }
+        if (licenseContainer) {
+            licenseContainer.innerHTML = '';
+        }
     }
 
     document.getElementById('pmodal-volume').innerText = p.volume || 'Tiêu chuẩn';
@@ -236,6 +288,8 @@ window.openProductDetailModal = function(productId) {
             certEl.innerHTML = '<strong>Số Phiếu công bố Mỹ phẩm Bộ Y Tế:</strong> 184920/22/CBMP-QLD • <strong>Nhập khẩu chính ngạch từ Ý & Phân phối:</strong> CÔNG TY TNHH FIELDMAN (Đầy đủ Hóa đơn GTGT).';
         }
     }
+
+    if (window.feather) window.feather.replace();
 
     // Image
     const imgEl = document.getElementById('pmodal-img');
@@ -333,7 +387,7 @@ function matchProductForStep(stepType, targetConcerns, activeIngredients, budget
 // PRIVACY MODAL FLOW
 function openPrivacyModal() {
     if (window.authManager && !window.authManager.getCurrentUser()) {
-        window.authManager.openAuthModal('Vui lòng đăng nhập hoặc tạo tài khoản để thực hiện Soi Da AI & lưu phác đồ cá nhân!');
+        window.authManager.openAuthModal('Đăng nhập để bắt đầu Soi Da AI và lưu phác đồ riêng của bạn nhé ✨');
         return;
     }
     const modal = document.getElementById('privacy-modal');
@@ -343,8 +397,19 @@ function openPrivacyModal() {
     
     // Reset state
     const checkbox = document.getElementById('privacy-consent-checkbox');
-    if (checkbox) checkbox.checked = false;
+    if (checkbox) {
+        checkbox.checked = false;
+        checkbox.onchange = togglePrivacyButton;
+    }
     togglePrivacyButton();
+
+    const btn = document.getElementById('btn-privacy-continue');
+    if (btn) {
+        btn.onclick = function(e) {
+            if (e) e.preventDefault();
+            requestCameraPermissionAndProceed();
+        };
+    }
 
     setTimeout(() => {
         modal.classList.remove('opacity-0');
@@ -380,40 +445,52 @@ function togglePrivacyButton() {
     
     btn.classList.add('scan-primary-button');
     btn.disabled = !checkbox?.checked;
+    if (checkbox?.checked) {
+        if (btn.classList?.remove) btn.classList.remove('bg-gray-300', 'cursor-not-allowed');
+        if (btn.classList?.add) btn.classList.add('bg-brand-primary', 'hover:bg-brand-dark', 'cursor-pointer');
+    } else {
+        if (btn.classList?.remove) btn.classList.remove('bg-brand-primary', 'hover:bg-brand-dark', 'cursor-pointer');
+        if (btn.classList?.add) btn.classList.add('bg-gray-300', 'cursor-not-allowed');
+    }
 }
 
+let isRequestingCamera = false;
+
 async function requestCameraPermissionAndProceed() {
+    const checkbox = document.getElementById('privacy-consent-checkbox');
+    if (!checkbox || !checkbox.checked) return;
+    if (isRequestingCamera) return;
+    isRequestingCamera = true;
+
+    const btn = document.getElementById('btn-privacy-continue');
+    if (btn) {
+        btn.innerHTML = '<i data-feather="loader" class="w-4 h-4 animate-spin"></i> Đang mở giao diện...';
+        if (window.feather) feather.replace();
+    }
+
     try {
-        const btn = document.getElementById('btn-privacy-continue');
-        if (btn) {
-            btn.innerHTML = '<i data-feather="loader" class="w-4 h-4 animate-spin"></i> Đang mở giao diện...';
-            if (window.feather) feather.replace();
+        if (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                stream.getTracks().forEach(track => track.stop());
+            } catch (e) {
+                console.warn("Camera access not available or denied, file upload is supported.", e);
+            }
         }
-
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            stream.getTracks().forEach(track => track.stop());
-        } catch (e) {
-            console.warn("Camera access not available or denied, file upload is supported.");
-        }
-
-        closePrivacyModal();
-        
-        setTimeout(() => {
-            openScanModal();
-        }, 300);
-
     } catch (err) {
         console.error("Camera permission error:", err);
-        closePrivacyModal();
-        openScanModal();
     } finally {
-        const btn = document.getElementById('btn-privacy-continue');
-        if (btn) {
-            btn.innerHTML = '<i data-feather="camera" class="w-4 h-4"></i> Cấp quyền Camera';
-            togglePrivacyButton();
-            if (window.feather) feather.replace();
-        }
+        closePrivacyModal();
+        setTimeout(() => {
+            openScanModal();
+            isRequestingCamera = false;
+            const b = document.getElementById('btn-privacy-continue');
+            if (b) {
+                b.innerHTML = '<i data-feather="camera" class="w-4 h-4"></i> Cấp quyền Camera';
+                togglePrivacyButton();
+                if (window.feather) feather.replace();
+            }
+        }, 300);
     }
 }
 
@@ -454,14 +531,22 @@ function openScanModal() {
     if (actBtn) actBtn.classList.add('hidden');
     
     updateStepUI();
-    startWebcam();
+    if (typeof window.startWebcam === 'function') {
+        window.startWebcam();
+    } else {
+        startWebcam();
+    }
     if (isDedicatedPage) {
         setTimeout(() => modal.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
     }
 }
 
 function closeScanModal() {
-    stopWebcam();
+    if (typeof window.stopWebcam === 'function') {
+        window.stopWebcam();
+    } else {
+        stopWebcam();
+    }
     if (document.body.classList.contains('scan-page-body')) {
         window.location.href = '/';
         return;
@@ -477,7 +562,26 @@ function closeScanModal() {
     window.SkinIDScrollLock?.unlock('skin-analysis');
 }
 
+window.openPrivacyModal = openPrivacyModal;
+window.closePrivacyModal = closePrivacyModal;
+window.togglePrivacyButton = togglePrivacyButton;
+window.requestCameraPermissionAndProceed = requestCameraPermissionAndProceed;
+window.openScanModal = openScanModal;
+window.closeScanModal = closeScanModal;
+
 function initScanSetup() {
+    const consentCheckbox = document.getElementById('privacy-consent-checkbox');
+    if (consentCheckbox) {
+        consentCheckbox.addEventListener('change', togglePrivacyButton);
+    }
+    const privacyBtn = document.getElementById('btn-privacy-continue');
+    if (privacyBtn) {
+        privacyBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            requestCameraPermissionAndProceed();
+        });
+    }
+
     const budgetBtns = document.querySelectorAll('.budget-btn');
     if (budgetBtns) {
         budgetBtns.forEach(btn => {
@@ -495,8 +599,16 @@ function initScanSetup() {
 
     const capBtn = document.getElementById('capture-btn');
     if (capBtn) {
-        capBtn.onclick = function() {
-            if (typeof captureFrame === 'function') captureFrame();
+        capBtn.onclick = function(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            if (typeof window.captureFrame === 'function') {
+                window.captureFrame();
+            } else if (typeof captureFrame === 'function') {
+                captureFrame();
+            }
         };
     }
 
@@ -562,15 +674,40 @@ function stopWebcam() {
     }
 }
 
+let isCapturing = false;
+
 function captureFrame() {
+    if (isCapturing) return;
+    isCapturing = true;
+    setTimeout(() => { isCapturing = false; }, 800);
+
+    if (typeof window.captureFrameAndPreProcess === 'function') {
+        window.captureFrameAndPreProcess();
+        return;
+    }
+
     const video = document.getElementById('webcam') || document.getElementById('webcam-video');
     const canvas = document.createElement('canvas');
     if (video && video.videoWidth > 0) {
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
+        const maxDim = 800;
+        let w = video.videoWidth;
+        let h = video.videoHeight;
+        if (w > maxDim || h > maxDim) {
+            if (w > h) {
+                h = Math.round((h * maxDim) / w);
+                w = maxDim;
+            } else {
+                w = Math.round((w * maxDim) / h);
+                h = maxDim;
+            }
+        }
+        canvas.width = w;
+        canvas.height = h;
         const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(video, 0, 0, w, h);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
         saveCapturedImage(dataUrl.split(',')[1]);
     } else {
         let fileInput = document.getElementById('file-upload-input');
@@ -587,6 +724,10 @@ function captureFrame() {
     }
 }
 
+window.startWebcam = startWebcam;
+window.stopWebcam = stopWebcam;
+window.captureFrame = captureFrame;
+
 window.openScanFilePicker = function() {
     let fileInput = document.getElementById('file-upload-input');
     if (!fileInput) {
@@ -602,19 +743,59 @@ window.openScanFilePicker = function() {
     fileInput.click();
 };
 
-function handleFileUpload(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const base64Data = e.target.result.split(',')[1];
-        saveCapturedImage(base64Data);
-        event.target.value = '';
-    };
-    reader.readAsDataURL(file);
+function compressImageFile(file, maxDimension = 800, quality = 0.82) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                let w = img.naturalWidth || img.width;
+                let h = img.naturalHeight || img.height;
+                if (w > maxDimension || h > maxDimension) {
+                    if (w > h) {
+                        h = Math.round((h * maxDimension) / w);
+                        w = maxDimension;
+                    } else {
+                        w = Math.round((w * maxDimension) / h);
+                        h = maxDimension;
+                    }
+                }
+                const canvas = document.createElement('canvas');
+                canvas.width = w;
+                canvas.height = h;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, w, h);
+                resolve(canvas.toDataURL('image/jpeg', quality).split(',')[1]);
+            };
+            img.onerror = () => reject(new Error('Không thể đọc file ảnh này.'));
+            img.src = e.target.result;
+        };
+        reader.onerror = () => reject(new Error('Lỗi khi đọc file ảnh.'));
+        reader.readAsDataURL(file);
+    });
 }
 
+async function handleFileUpload(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    try {
+        const base64Data = await compressImageFile(file, 1280, 0.85);
+        saveCapturedImage(base64Data);
+    } catch (err) {
+        console.error('[SkinID Upload]', err);
+        showToast(err.message || 'Không thể tải ảnh này.');
+    } finally {
+        event.target.value = '';
+    }
+}
+
+let isSavingCapturedImage = false;
+
 function saveCapturedImage(base64Image) {
+    if (isSavingCapturedImage) return;
+    isSavingCapturedImage = true;
+    setTimeout(() => { isSavingCapturedImage = false; }, 800);
+
     if (!window.capturedImages) window.capturedImages = [];
     window.capturedImages.push(base64Image);
     
@@ -625,13 +806,21 @@ function saveCapturedImage(base64Image) {
     
     window.currentCaptureStep++;
     if (window.currentCaptureStep > 3) {
-        document.getElementById('capture-btn').classList.add('hidden');
-        document.getElementById('analyze-action').classList.remove('hidden');
-        document.getElementById('instruction-text').innerText = 'Đã hoàn tất 3 góc chụp! Hãy nhấn nút Phân tích da.';
+        document.getElementById('capture-btn')?.classList.add('hidden');
+        document.getElementById('analyze-action')?.classList.remove('hidden');
+        const inst = document.getElementById('instruction-text');
+        if (inst) inst.innerText = 'Đã hoàn tất 3 góc chụp! Hãy nhấn nút Phân tích da.';
+        if (typeof window.stopWebcam === 'function') {
+            window.stopWebcam();
+        } else if (typeof stopWebcam === 'function') {
+            stopWebcam();
+        }
     } else {
         updateStepUI();
     }
 }
+
+window.saveCapturedImage = saveCapturedImage;
 
 // Helper string hash for deterministic Report ID
 function stringHash(str) {
@@ -696,6 +885,36 @@ async function fetchWeatherData() {
     }
 }
 
+function showAnalysisError(message, isNotFace = false) {
+    const errorCard = document.getElementById('analysis-error-card');
+    const errorMsgEl = document.getElementById('analysis-error-message');
+    const retryBtn = document.getElementById('analysis-retry-btn');
+    const recaptureBtn = document.getElementById('analysis-recapture-btn');
+
+    if (errorMsgEl) errorMsgEl.textContent = message;
+    if (errorCard) {
+        errorCard.classList.remove('hidden');
+        if (window.feather) feather.replace();
+    }
+    if (retryBtn) {
+        if (isNotFace) {
+            retryBtn.classList.add('hidden');
+        } else {
+            retryBtn.classList.remove('hidden');
+            retryBtn.onclick = () => {
+                if (errorCard) errorCard.classList.add('hidden');
+                startAnalysis();
+            };
+        }
+    }
+    if (recaptureBtn) {
+        recaptureBtn.onclick = () => {
+            if (errorCard) errorCard.classList.add('hidden');
+            resetToCaptureFlow();
+        };
+    }
+}
+
 async function startAnalysis() {
     if (!window.capturedImages || window.capturedImages.length < 3) {
         showToast('Vui lòng hoàn tất đủ 3 góc chụp trước khi phân tích.');
@@ -709,11 +928,16 @@ async function startAnalysis() {
     document.getElementById('analyzing-flow').classList.remove('hidden');
     document.getElementById('analyzing-flow').classList.add('flex');
 
+    const errorCard = document.getElementById('analysis-error-card');
+    if (errorCard) errorCard.classList.add('hidden');
+
     // Show scan thumbnails with captured images
     if (window.capturedImages) {
         for (let i = 0; i < Math.min(3, window.capturedImages.length); i++) {
             const thumb = document.getElementById('scan-thumb-' + (i + 1));
             if (thumb) {
+                const existingImg = thumb.querySelector('img');
+                if (existingImg) existingImg.remove();
                 const img = document.createElement('img');
                 img.src = 'data:image/jpeg;base64,' + window.capturedImages[i];
                 img.className = 'w-full h-full object-cover';
@@ -724,45 +948,52 @@ async function startAnalysis() {
 
     if (window.feather) feather.replace();
 
-    // Animate step 1
+    // Smooth step progression timers
+    const stepTimers = [];
     activateScanStep(1, 5);
+    stepTimers.push(setTimeout(() => activateScanStep(2, 5), 1500));
+    stepTimers.push(setTimeout(() => activateScanStep(3, 5), 4500));
+    stepTimers.push(setTimeout(() => activateScanStep(4, 5), 8500));
 
-    const skinType = document.getElementById('user-skin-type').value;
+    const skinType = document.getElementById('user-skin-type')?.value || 'Da hỗn hợp';
     
-    setTimeout(() => activateScanStep(2, 5), 700);
     try {
         if (!window.authManager?.getCurrentUser()) throw new Error('Bạn cần đăng nhập trước khi phân tích da.');
         await window.SKINID_FIREBASE_READY;
         const [response, weatherData] = await Promise.all([
             window.authManager.apiRequest('/analyze-skin', {
                 method: 'POST',
-                body: JSON.stringify({ images: window.capturedImages, skinType })
+                body: JSON.stringify({ images: window.capturedImages, skinType }),
+                timeoutMs: 60000
             }),
             fetchWeatherData()
         ]);
-        activateScanStep(3, 5);
+        stepTimers.forEach(clearTimeout);
+
         const resultJson = response?.analysis;
         if (resultJson?.isNotFace) {
-            alert('⚠️ Không nhận diện được khuôn mặt người rõ ràng trong đủ 3 ảnh. Vui lòng chụp lại ở nơi đủ sáng.');
-            resetToCaptureFlow();
+            showAnalysisError('Không nhận diện được khuôn mặt người rõ ràng trong đủ 3 ảnh. Vui lòng chụp lại ở nơi đủ sáng.', true);
             return;
         }
         if (!resultJson?.skinTypeSummary) throw new Error('Máy chủ trả về kết quả không hợp lệ.');
-        activateScanStep(4, 5);
-        await new Promise(resolve => setTimeout(resolve, 400));
         activateScanStep(5, 5);
+        await new Promise(resolve => setTimeout(resolve, 400));
         renderResults(resultJson, weatherData);
     } catch (error) {
+        stepTimers.forEach(clearTimeout);
         console.error('[SkinID AI]', error);
         const message = window.authManager?.errorMessage?.(error)
             || error.message
             || 'Không thể hoàn tất phân tích da. Vui lòng thử lại.';
-        alert(`⚠️ ${message}`);
-        resetToCaptureFlow();
+        showAnalysisError(message, false);
     }
 }
 
+window.startAnalysis = startAnalysis;
+
 function resetToCaptureFlow() {
+    const errorCard = document.getElementById('analysis-error-card');
+    if (errorCard) errorCard.classList.add('hidden');
     document.getElementById('analyzing-flow').classList.add('hidden');
     document.getElementById('analyzing-flow').classList.remove('flex');
     document.getElementById('capture-flow').classList.remove('hidden');
@@ -1037,12 +1268,23 @@ function renderResults(data, weatherData) {
                 skinType: data.skinTypeSummary || 'Da hỗn hợp',
                 skinAge: parseInt(data.skinAge) || 25,
                 primaryConcerns: data.activeIngredients || [],
+                overallGrade: data.overallGrade || 'B',
+                overallGradeComment: data.overallGradeComment || 'Làn da ở mức ổn định',
+                analysis3Angles: data.analysis3Angles || '',
+                fullAnalysis: data,
                 metrics: {
                     moisture: data.moisture,
                     sebum: data.sebum,
                     pores: data.pores,
                     pigmentation: data.pigmentation,
-                    elasticity: data.elasticity
+                    elasticity: data.elasticity,
+                    melasma: data.melasma,
+                    eyeWrinkles: data.eyeWrinkles,
+                    nasolabialFolds: data.nasolabialFolds,
+                    redness: data.redness,
+                    acneBacteria: data.acneBacteria,
+                    texture: data.texture,
+                    darkCircles: data.darkCircles
                 },
                 recommendedRoutine: window.currentRoutineIds || [],
                 recommendedRoutineProducts: routineProducts

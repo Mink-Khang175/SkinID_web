@@ -36,8 +36,14 @@ export default function ProfilePage() {
                 <a href="/skin-analysis" className="profile-btn profile-btn--primary hidden sm:flex">
                     <i data-feather="camera" className="w-4 h-4"></i> Soi Da AI Ngay
                 </a>
-                <button onClick={() => window.authManager?.logout?.().then(() => { window.location.href = '/'; })} className="p-2.5 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-full transition-colors" title="Đăng xuất">
-                    <i data-feather="log-out" className="w-5 h-5"></i>
+                <button 
+                    type="button" 
+                    onClick={() => window.handleProfileLogout?.()} 
+                    className="px-3.5 py-2 text-gray-600 hover:text-rose-600 hover:bg-rose-50 rounded-xl border border-gray-200 hover:border-rose-200 text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm cursor-pointer" 
+                    title="Đăng xuất tài khoản"
+                >
+                    <i data-feather="log-out" className="w-4 h-4 text-rose-500"></i>
+                    <span>Đăng xuất</span>
                 </button>
             </div>
         </div>
@@ -58,8 +64,8 @@ export default function ProfilePage() {
                     <div className="profile-avatar-shell">
                     <div id="banner-avatar-container" className="relative">
                         {/* Injected via JS */}
-                        <div className="profile-avatar profile-avatar--fallback">
-                            U
+                        <div className="profile-avatar profile-avatar--fallback bg-rose-100 text-brand-primary font-black">
+                            <i data-feather="user" className="w-8 h-8 opacity-70"></i>
                         </div>
                     </div>
                     <input id="profile-avatar-input" type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={(event) => window.handleProfileAvatarUpload?.(event)} />
@@ -69,29 +75,34 @@ export default function ProfilePage() {
                     </div>
 
                     <div>
-                        <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-1.5">
-                            <h1 id="banner-user-name" className="text-xl sm:text-2xl font-black tracking-tight">Khách Hàng</h1>
-                            <span id="banner-provider-badge" className="profile-provider-badge">
+                        <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-1.5 min-h-[32px]">
+                            <h1 id="banner-user-name" className="text-xl sm:text-2xl font-black tracking-tight">
+                                <span className="inline-block animate-pulse bg-rose-100/70 rounded-lg h-7 w-36"></span>
+                            </h1>
+                            <span id="banner-provider-badge" className="profile-provider-badge hidden">
                                 <i data-feather="check-circle" className="w-3 h-3"></i> Thành viên
                             </span>
                         </div>
-                        <p id="banner-user-email" className="text-xs sm:text-sm text-gray-500 mb-3">email@skinid.vn</p>
+                        <p id="banner-user-email" className="text-xs sm:text-sm text-gray-500 mb-3 min-h-[20px] flex items-center justify-center sm:justify-start">
+                            <span className="inline-block animate-pulse bg-gray-200/70 rounded-md h-4 w-44"></span>
+                        </p>
 
                         <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 text-xs text-gray-500 font-medium">
                             <span className="profile-meta-pill">
-                                <i data-feather="calendar" className="w-3.5 h-3.5 text-brand-primary"></i> Tham gia: <strong id="banner-join-date" className="text-gray-800">2026</strong>
+                                <i data-feather="calendar" className="w-3.5 h-3.5 text-brand-primary"></i> Tham gia: <strong id="banner-join-date" className="text-gray-800">SkinID</strong>
                             </span>
                             <span className="profile-meta-pill">
-                                <i data-feather="activity" className="w-3.5 h-3.5 text-brand-primary"></i> Đã soi da: <strong id="banner-scan-count" className="text-brand-primary">0 lần</strong>
+                                <i data-feather="activity" className="w-3.5 h-3.5 text-brand-primary"></i> Đã soi da: <strong id="banner-scan-count" className="text-brand-primary">--</strong>
                             </span>
                         </div>
                     </div>
                 </div>
 
                 {/* Quick CTA Right */}
-                <div className="flex flex-col gap-2 w-full sm:w-auto">
-                    <a href="/skin-analysis" className="profile-btn profile-btn--primary w-full sm:w-auto">
-                        <i data-feather="play" className="w-4 h-4"></i> Soi Da AI Mới
+                <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full sm:w-auto">
+                    <a href="/skin-analysis" className="profile-btn profile-btn--primary w-full sm:w-auto justify-center">
+                        <i data-feather="play" className="w-4 h-4"></i>
+                        <span>Soi Da AI Mới</span>
                     </a>
                 </div>
             </div>
@@ -360,9 +371,148 @@ export default function ProfilePage() {
                 </div>
             </div>
 
+            {/* 3.3 Quản lý phiên đăng nhập */}
+            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-200 shadow-sm">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 className="text-lg font-black text-gray-900">Phiên Đăng Nhập</h2>
+                        <p className="text-xs text-gray-500">Đăng xuất tài khoản khỏi trình duyệt này để bảo mật thông tin cá nhân.</p>
+                    </div>
+                    <button 
+                        type="button" 
+                        onClick={() => window.handleProfileLogout?.()} 
+                        className="px-5 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 self-start sm:self-auto cursor-pointer"
+                    >
+                        <i data-feather="log-out" className="w-4 h-4"></i>
+                        <span>Đăng xuất tài khoản</span>
+                    </button>
+                </div>
+            </div>
+
         </div>
 
     </main>
+
+    {/* SCAN DETAIL MODAL (Chi Tiết Phiên Soi Da) */}
+    <div id="scan-detail-modal" className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[9999] hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-3 sm:p-6 overflow-y-auto" onClick={(e) => { if (e.target.id === 'scan-detail-modal') window.closeScanDetailModal?.(); }}>
+        <div className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[92vh] overflow-y-auto flex flex-col border border-gray-100 my-auto animate-fade-in">
+            {/* Modal Header */}
+            <div className="sticky top-0 bg-white/95 backdrop-blur-md px-6 py-4 border-b border-gray-100 flex items-center justify-between z-20">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-2xl bg-brand-blush text-brand-primary flex items-center justify-center font-bold">
+                        <i data-feather="file-text" className="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 className="font-black text-gray-900 text-base sm:text-lg" id="modal-scan-title">Chi Tiết Phiên Soi Da</h3>
+                        <p className="text-xs text-gray-400" id="modal-scan-date">Thời gian: --/--/----</p>
+                    </div>
+                </div>
+                <button onClick={() => window.closeScanDetailModal?.()} className="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-700 transition-colors" aria-label="Đóng">
+                    <i data-feather="x" className="w-5 h-5"></i>
+                </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="modal-body p-6 pt-6 space-y-6 flex-grow">
+                {/* Score & Skin Profile Card */}
+                <div className="bg-gradient-to-br from-brand-blush/80 via-white to-brand-blush/30 border border-brand-petal shadow-sm rounded-3xl p-6 flex flex-col sm:flex-row items-center gap-6">
+                    <div className="relative w-32 h-32 flex-shrink-0">
+                        <div id="modal-score-glow" className="absolute inset-0 rounded-full transition-all duration-1000"></div>
+                        <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                            <path className="text-gray-100" strokeWidth="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path id="modal-score-ring" className="transition-all duration-1000 ease-out" strokeDasharray="0, 100" strokeWidth="3" strokeLinecap="round" stroke="#10b981" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        </svg>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center">
+                            <span id="modal-health-score" className="text-3xl font-black text-brand-dark">0</span>
+                            <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider">Điểm Da</span>
+                        </div>
+                    </div>
+
+                    <div className="flex-1 text-center sm:text-left space-y-2">
+                        <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                            <h4 id="modal-skin-type" className="text-xl font-black text-gray-900">Da đang phân tích</h4>
+                            <span id="modal-skin-age" className="px-3 py-1 rounded-full text-xs font-bold bg-brand-primary/10 text-brand-primary border border-brand-primary/20">Tuổi da AI: --</span>
+                        </div>
+                        <div id="modal-overall-grade" className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold bg-teal-50 text-teal-700 border border-teal-200">
+                            <span id="modal-grade-letter" className="font-black text-sm">B</span>
+                            <span id="modal-grade-comment">Làn da ở mức ổn định</span>
+                        </div>
+                        <p id="modal-assessment-text" className="text-xs text-gray-600 leading-relaxed pt-1">
+                            {/* Injected by JS */}
+                        </p>
+                    </div>
+                </div>
+
+                {/* Radar Chart (12 Chỉ Số Đa Tầng - Kế thừa từ kết quả Soi Da AI) */}
+                <div className="bg-white rounded-2xl border border-gray-200 p-5 sm:p-6 shadow-sm">
+                    <div className="flex flex-col md:flex-row items-center gap-6">
+                        <div className="w-full md:w-1/2 relative h-[280px] flex items-center justify-center">
+                            <canvas id="profileRadarChart" className="w-full h-full max-w-[320px] max-h-[280px] mx-auto"></canvas>
+                        </div>
+                        <div className="w-full md:w-1/2 space-y-3">
+                            <h4 className="font-bold text-gray-900 text-base flex items-center gap-2">
+                                <i data-feather="activity" className="w-4 h-4 text-brand-primary"></i>
+                                Cấu Trúc Đa Tầng Của Làn Da
+                            </h4>
+                            <p className="text-xs text-gray-500 leading-relaxed">
+                                Biểu đồ mạng nhện phân tích 12 thông số cấu trúc biểu bì, sắc tố và độ săn chắc. Vùng co thắt vào tâm cảnh báo các vấn đề tiềm ẩn cần tập trung can thiệp.
+                            </p>
+                            <div id="modal-radar-insights" className="space-y-2 pt-1">
+                                {/* Injected by JS */}
+                            </div>
+                            <div id="modal-radar-tags" className="flex flex-wrap gap-1.5 pt-1">
+                                {/* Injected by JS */}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Chi tiết 12 chỉ số cấu trúc đa tầng */}
+                    <div className="mt-6 pt-5 border-t border-gray-100">
+                        <h5 className="font-bold text-xs sm:text-sm text-gray-800 mb-3 flex items-center gap-1.5">
+                            <i data-feather="bar-chart-2" className="w-4 h-4 text-brand-primary"></i>
+                            Chi Tiết 12 Chỉ Số Cấu Trúc Đa Tầng
+                        </h5>
+                        <div id="modal-detailed-metrics-grid" className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+                            {/* Injected by JS */}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Core 5 Metrics Breakdown Accordion */}
+                <div className="bg-white rounded-2xl border border-gray-200 p-5 sm:p-6 shadow-sm">
+                    <h4 className="font-bold text-gray-900 text-base mb-4 flex items-center gap-2">
+                        <i data-feather="layers" className="w-4 h-4 text-brand-primary"></i>
+                        Đánh Giá Chi Tiết 5 Chỉ Số Cốt Lõi
+                    </h4>
+                    <div id="modal-metrics-container" className="space-y-3">
+                        {/* Injected by JS */}
+                    </div>
+                </div>
+
+                {/* Recommended Skincare Routine */}
+                <div className="bg-white rounded-2xl border border-gray-200 p-5 sm:p-6 shadow-sm">
+                    <h4 className="font-bold text-gray-900 text-base mb-4 flex items-center gap-2">
+                        <i data-feather="check-circle" className="w-4 h-4 text-brand-primary"></i>
+                        Phác Đồ & Sản Phẩm Gợi Ý Cho Phiên Này
+                    </h4>
+                    <div id="modal-routine-products">
+                        {/* Injected by JS */}
+                    </div>
+                </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="sticky bottom-0 bg-white/95 backdrop-blur-md px-6 py-4 border-t border-gray-100 flex items-center justify-between z-20">
+                <a href="/skin-analysis" className="btn-soi-lai px-4 py-2.5 text-xs font-semibold rounded-xl flex items-center gap-2 cursor-pointer shadow-sm">
+                    <i data-feather="camera" className="w-3.5 h-3.5"></i>
+                    <span>Soi Da Lại</span>
+                </a>
+                <button onClick={() => window.closeScanDetailModal?.()} className="px-5 py-2.5 border border-gray-200 hover:border-gray-300 hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-xl transition-all shadow-sm cursor-pointer">
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
 
     {/* FOOTER */}
     <footer className="bg-white border-t border-brand-petal/40 py-8 text-center text-xs text-gray-400">

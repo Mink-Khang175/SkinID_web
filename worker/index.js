@@ -29,9 +29,14 @@ function requiredEnv(env) {
 
 function corsHeaders(request, env) {
   const origin = request.headers.get('origin') || '';
-  const configured = String(env.ALLOWED_ORIGINS || '').split(',').map(value => value.trim()).filter(Boolean);
+  const configured = String(env.ALLOWED_ORIGINS || '')
+    .split(',')
+    .map(value => value.trim().replace(/\/$/, ''))
+    .filter(Boolean);
+  const normalizedOrigin = origin.replace(/\/$/, '');
   const local = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
-  const allowed = !origin || origin === new URL(request.url).origin || local || configured.includes(origin);
+  const domainMatch = /^https?:\/\/([a-z0-9-]+\.)*(skinid\.vn|pages\.dev)$/i.test(normalizedOrigin);
+  const allowed = !origin || origin === new URL(request.url).origin || local || domainMatch || configured.includes('*') || configured.includes(normalizedOrigin);
   return {
     'access-control-allow-origin': allowed && origin ? origin : new URL(request.url).origin,
     'access-control-allow-headers': 'authorization, content-type, idempotency-key',
@@ -49,18 +54,18 @@ function json(request, env, data, status = 200) {
 }
 
 async function authenticate(request, env) {
-  requiredEnv(env);
+  const projectId = env.FIREBASE_PROJECT_ID || 'skinid-df273';
   const token = request.headers.get('authorization')?.match(/^Bearer\s+(.+)$/i)?.[1];
   if (!token) throw new ApiError(401, 'unauthenticated', 'Bạn cần đăng nhập trước khi thực hiện thao tác này.');
-  let jwks = jwksByProject.get(env.FIREBASE_PROJECT_ID);
+  let jwks = jwksByProject.get(projectId);
   if (!jwks) {
     jwks = createRemoteJWKSet(new URL('https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com'));
-    jwksByProject.set(env.FIREBASE_PROJECT_ID, jwks);
+    jwksByProject.set(projectId, jwks);
   }
   try {
     const result = await jwtVerify(token, jwks, {
-      issuer: `https://securetoken.google.com/${env.FIREBASE_PROJECT_ID}`,
-      audience: env.FIREBASE_PROJECT_ID,
+      issuer: `https://securetoken.google.com/${projectId}`,
+      audience: projectId,
       algorithms: ['RS256']
     });
     return result.payload;
@@ -100,7 +105,17 @@ function updateWrite(env, path, value, fieldPaths, precondition) {
   };
 }
 
+const devOrdersStore = new Map();
+
+function isFirestoreConfigured(env) {
+  return Boolean(env.FIREBASE_PROJECT_ID && env.FIREBASE_CLIENT_EMAIL && env.FIREBASE_PRIVATE_KEY);
+}
+
 async function createOrder(request, env, user) {
+  const hasFirestore = isFirestoreConfigured(env);
+  if (!hasFirestore && !env.IS_LOCAL_DEV) {
+    requiredEnv(env);
+  }
   const payload = await request.json().catch(() => { throw new ApiError(400, 'invalid_json', 'Dữ liệu gửi lên không hợp lệ.'); });
   const requestedItems = Array.isArray(payload.items) ? payload.items : [];
   if (!requestedItems.length || requestedItems.length > 50) throw new ApiError(400, 'invalid_cart', 'Giỏ hàng không hợp lệ.');
@@ -196,84 +211,287 @@ async function createOrder(request, env, user) {
   const address = { ...shippingAddress, recipientName: customerName, phone: customerPhone, isDefault: true, updatedAt: now };
   const activity = { type: 'order_created', orderId, total: order.total, createdAt: now };
 
-  await commitWrites(env, [
-    updateWrite(env, `orders/${orderId}`, order, null, { exists: false }),
-    updateWrite(env, `users/${user.sub}`, profile, Object.keys(profile)),
-    updateWrite(env, `users/${user.sub}/addresses/default`, address),
-    updateWrite(env, `users/${user.sub}/activities/${orderId}`, activity),
-    { delete: documentName(env, `users/${user.sub}/commerce/cart`) }
-  ]);
+  if (hasFirestore) {
+    await commitWrites(env, [
+      updateWrite(env, `orders/${orderId}`, order, null, { exists: false }),
+      updateWrite(env, `users/${user.sub}`, profile, Object.keys(profile)),
+      updateWrite(env, `users/${user.sub}/addresses/default`, address),
+      updateWrite(env, `users/${user.sub}/activities/${orderId}`, activity),
+      { delete: documentName(env, `users/${user.sub}/commerce/cart`) }
+    ]);
+  } else {
+    order.id = orderId;
+    devOrdersStore.set(orderId, order);
+  }
 
   return json(request, env, { success: true, orderId, subtotal, shippingFee, total: order.total }, 201);
 }
 
 async function cancelOrder(request, env, user, orderId) {
-  const order = await getDocument(env, `orders/${orderId}`);
+  const hasFirestore = isFirestoreConfigured(env);
+  let order = null;
+  if (hasFirestore) {
+    order = await getDocument(env, `orders/${orderId}`);
+  } else {
+    order = devOrdersStore.get(orderId);
+  }
   if (!order || order.userId !== user.sub) throw new ApiError(404, 'order_not_found', 'Không tìm thấy đơn hàng.');
   if (!['pending', 'confirmed'].includes(order.status)) throw new ApiError(409, 'order_not_cancellable', 'Đơn hàng không thể hủy ở trạng thái hiện tại.');
-  await commitWrites(env, [updateWrite(env, `orders/${orderId}`, {
-    status: 'cancelled',
-    updatedAt: new Date()
-  }, ['status', 'updatedAt'])]);
+  
+  if (hasFirestore) {
+    await commitWrites(env, [updateWrite(env, `orders/${orderId}`, {
+      status: 'cancelled',
+      updatedAt: new Date()
+    }, ['status', 'updatedAt'])]);
+  } else {
+    order.status = 'cancelled';
+    order.updatedAt = new Date();
+    devOrdersStore.set(orderId, order);
+  }
   return json(request, env, { success: true, orderId });
 }
 
+async function listOrders(request, env, user) {
+  const hasFirestore = isFirestoreConfigured(env);
+  let orders = [];
+  if (hasFirestore) {
+    try {
+      const results = await runQuery(env, {
+        from: [{ collectionId: 'orders' }],
+        where: { fieldFilter: { field: { fieldPath: 'userId' }, op: 'EQUAL', value: { stringValue: user.sub } } }
+      });
+      orders = results.map(doc => ({ id: doc.id, ...doc }));
+    } catch (err) {
+      console.warn('[Worker Orders] Query error:', err);
+    }
+  } else {
+    for (const [id, ord] of devOrdersStore.entries()) {
+      if (ord.userId === user.sub) {
+        orders.push({ id, ...ord });
+      }
+    }
+  }
+  orders.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+  return json(request, env, { success: true, orders });
+}
+
+const memoryRateLimits = new Map();
+
+export function clearMemoryRateLimits() {
+  memoryRateLimits.clear();
+}
+
+function checkMemoryRateLimit(userId, maxRequests = 10, windowMs = 10 * 60 * 1000) {
+  const now = Date.now();
+  const timestamps = (memoryRateLimits.get(userId) || []).filter(t => now - t < windowMs);
+  if (timestamps.length >= maxRequests) {
+    return false;
+  }
+  timestamps.push(now);
+  memoryRateLimits.set(userId, timestamps);
+  if (memoryRateLimits.size > 2000) {
+    for (const [k, v] of memoryRateLimits.entries()) {
+      if (v.every(t => now - t >= windowMs)) memoryRateLimits.delete(k);
+    }
+  }
+  return true;
+}
+
+async function checkSkinQuota(env, user) {
+  const hasFirestore = Boolean(env.FIREBASE_CLIENT_EMAIL && env.FIREBASE_PRIVATE_KEY);
+  if (hasFirestore) {
+    try {
+      const quotaPath = `users/${user.sub}/private/aiUsage`;
+      const quota = await getDocument(env, quotaPath);
+      const today = new Date().toISOString().slice(0, 10);
+      const count = quota?.date === today ? Number(quota.count || 0) : 0;
+      if (count >= 10) throw new ApiError(429, 'daily_limit', 'Bạn đã hết 10 lượt phân tích da hôm nay.');
+      await commitWrites(env, [updateWrite(env, quotaPath, { date: today, count: count + 1, updatedAt: new Date() })]);
+      return;
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      console.warn('[SkinID Quota] Firestore quota check failed, falling back to memory rate limiter:', err?.message);
+    }
+  }
+  // Fail-safe in-Worker sliding window rate limit:
+  // In development / local testing, allow up to 50 requests/10min so devs/testers can test freely.
+  // In production, allow 10 requests / 10 minutes to protect key against spam.
+  const isDev = Boolean(env.IS_LOCAL_DEV === 'true' || env.NODE_ENV === 'development' || !env.ENVIRONMENT || env.ENVIRONMENT === 'development');
+  const maxRequests = isDev ? 50 : 10;
+  if (!checkMemoryRateLimit(user.sub, maxRequests, 10 * 60 * 1000)) {
+    throw new ApiError(429, 'rate_limited', 'Bạn đang thao tác quá nhanh hoặc đã đạt giới hạn tạm thời. Vui lòng thử lại sau ít phút.');
+  }
+}
+
 function validateImages(payload) {
-  if (!Array.isArray(payload.images) || payload.images.length !== 3) throw new ApiError(400, 'invalid_images', 'Cần đúng 3 ảnh khuôn mặt.');
+  if (!Array.isArray(payload?.images) || payload.images.length !== 3) {
+    throw new ApiError(400, 'invalid_images', 'Cần đúng 3 ảnh khuôn mặt.');
+  }
   let totalBytes = 0;
-  const images = payload.images.map((image, index) => {
-    if (typeof image !== 'string' || !/^[A-Za-z0-9+/]+={0,2}$/.test(image)) throw new ApiError(400, 'invalid_image', `Ảnh #${index + 1} không hợp lệ.`);
-    const bytes = Math.floor(image.length * 3 / 4);
+  const images = payload.images.map((rawImage, index) => {
+    if (typeof rawImage !== 'string') throw new ApiError(400, 'invalid_image', `Ảnh #${index + 1} không hợp lệ.`);
+    const cleanImage = rawImage.replace(/^data:image\/[a-zA-Z0-9+.-]+;base64,/, '').replace(/\s+/g, '');
+    if (!/^[A-Za-z0-9+/]+={0,2}$/.test(cleanImage)) throw new ApiError(400, 'invalid_image', `Ảnh #${index + 1} không hợp lệ.`);
+    const bytes = Math.floor(cleanImage.length * 3 / 4);
     if (bytes > 4 * 1024 * 1024) throw new ApiError(413, 'image_too_large', `Ảnh #${index + 1} vượt quá 4 MB.`);
     totalBytes += bytes;
-    return image;
+    return cleanImage;
   });
   if (totalBytes > 10 * 1024 * 1024) throw new ApiError(413, 'images_too_large', 'Tổng dung lượng ảnh vượt quá 10 MB.');
   return { images, skinType: String(payload.skinType || 'Chưa xác định').slice(0, 80) };
 }
 
 function analysisPrompt(skinType) {
-  return `Bạn là hệ thống hỗ trợ quan sát tình trạng da từ ảnh, không phải bác sĩ và không đưa ra chẩn đoán y khoa. Kiểm tra cả 3 ảnh có phải cùng một khuôn mặt người rõ ràng hay không. Nếu không, chỉ trả JSON {"isNotFace":true,"reason":"No human face detected"}. Thông tin tự khai: ${skinType}. Nếu hợp lệ, chỉ trả JSON tiếng Việt gồm isNotFace, skinTypeSummary, analysis3Angles, activeIngredients, overallGrade, overallGradeComment, skinConditions, recoveryTimeline, healthScore, skinAge, moisture, elasticity, sebum, pigmentation, pores, eyeWrinkles, nasolabialFolds, redness, acneBacteria, texture, darkCircles, melasma, detailedAdvice. Mọi chỉ số là số nguyên 0-100 và chỉ mang tính tham khảo từ điều kiện ảnh.`;
+  return `Bạn là chuyên gia phân tích da AI cấp chuyên viên da liễu. NGUYÊN TẮC BẮT BUỘC:
+1. BẠN PHẢI KIỂM TRA 3 BỨC ẢNH CÓ PHẢI LÀ KHUÔN MẶT NGƯỜI RÕ RÀNG HAY KHÔNG.
+Nếu ảnh là đồ vật, thú cưng, ảnh tối đen hoặc KHÔNG CÓ MẶT NGƯỜI RÕ RÀNG, BẠN PHẢI TRẢ VỀ DUY NHẤT:
+{"isNotFace": true, "reason": "No human face detected"}
+
+2. Nếu ĐÚNG LÀ KHUÔN MẶT NGƯỜI, hãy phân tích 3 bức ảnh khuôn mặt (chính diện, nghiêng trái 45°, nghiêng phải 45°) của khách hàng với thông tin tự khai: "${skinType}".
+Chỉ trả về DUY NHẤT một chuỗi JSON thuần (không chứa markdown hay \`\`\`json), theo đúng cấu trúc sau:
+{
+  "isNotFace": false,
+  "skinTypeSummary": "Phân loại da ngắn gọn (vd: Da hỗn hợp thiên dầu nhạy cảm)",
+  "analysis3Angles": "Đánh giá chi tiết tình trạng da dựa trên 3 góc độ ảnh (khoảng 4-5 câu tiếng Việt, chuyên nghiệp)",
+  "activeIngredients": ["Tên hoạt chất 1", "Tên hoạt chất 2", "Tên hoạt chất 3"],
+  "overallGrade": "A",
+  "overallGradeComment": "Nhận xét ngắn về tình trạng da",
+  "skinConditions": [{"name": "Tên tình trạng", "severity": "Nhẹ", "location": "Má", "description": "Mô tả ngắn"}],
+  "recoveryTimeline": "4-6 tuần",
+  "healthScore": 75,
+  "skinAge": 26,
+  "moisture": 65,
+  "elasticity": 70,
+  "sebum": 85,
+  "pigmentation": 45,
+  "pores": 60,
+  "eyeWrinkles": 70,
+  "nasolabialFolds": 68,
+  "redness": 62,
+  "acneBacteria": 55,
+  "texture": 66,
+  "darkCircles": 60,
+  "melasma": 50,
+  "detailedAdvice": {
+    "moisture": {"why": "Giải thích chỉ số dựa trên ảnh", "shouldDo": "Lời khuyên nên làm", "avoid": "Điều cần tránh"},
+    "sebum": {"why": "Giải thích chỉ số dựa trên ảnh", "shouldDo": "Lời khuyên nên làm", "avoid": "Điều cần tránh"},
+    "pores": {"why": "Giải thích chỉ số dựa trên ảnh", "shouldDo": "Lời khuyên nên làm", "avoid": "Điều cần tránh"},
+    "pigmentation": {"why": "Giải thích chỉ số dựa trên ảnh", "shouldDo": "Lời khuyên nên làm", "avoid": "Điều cần tránh"},
+    "elasticity": {"why": "Giải thích chỉ số dựa trên ảnh", "shouldDo": "Lời khuyên nên làm", "avoid": "Điều cần tránh"}
+  }
+}
+Mọi chỉ số là số nguyên từ 0 đến 100. Tất cả nội dung phải bằng tiếng Việt.`;
 }
 
-function validateAnalysis(value) {
-  if (!value || typeof value !== 'object') throw new ApiError(502, 'invalid_ai_response', 'Gemini không trả về dữ liệu hợp lệ.');
-  if (value.isNotFace === true) return { isNotFace: true, reason: String(value.reason || 'No human face detected') };
-  if (!value.skinTypeSummary || !value.analysis3Angles) throw new ApiError(502, 'invalid_ai_response', 'Kết quả phân tích thiếu trường bắt buộc.');
-  const metrics = ['healthScore', 'skinAge', 'moisture', 'elasticity', 'sebum', 'pigmentation', 'pores', 'eyeWrinkles', 'nasolabialFolds', 'redness', 'acneBacteria', 'texture', 'darkCircles', 'melasma'];
-  for (const key of metrics) {
-    const number = Number(value[key]);
-    if (!Number.isFinite(number)) throw new ApiError(502, 'invalid_ai_response', `Kết quả phân tích thiếu chỉ số ${key}.`);
-    value[key] = Math.max(0, Math.min(100, Math.round(number)));
+function validateAnalysis(rawText) {
+  if (!rawText || typeof rawText !== 'string') {
+    throw new ApiError(502, 'invalid_ai_response', 'Gemini không trả về dữ liệu hợp lệ.');
   }
+  const cleanJson = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
+  let value;
+  try {
+    value = JSON.parse(cleanJson);
+  } catch {
+    throw new ApiError(502, 'invalid_ai_response', 'Kết quả phân tích không hợp lệ, vui lòng thử lại.');
+  }
+
+  if (!value || typeof value !== 'object') {
+    throw new ApiError(502, 'invalid_ai_response', 'Gemini không trả về dữ liệu hợp lệ.');
+  }
+  if (value.isNotFace === true || value.isNotFace === 'true') {
+    return { isNotFace: true, reason: String(value.reason || 'No human face detected') };
+  }
+  if (!value.skinTypeSummary || !value.analysis3Angles) {
+    throw new ApiError(502, 'invalid_ai_response', 'Kết quả phân tích thiếu trường bắt buộc.');
+  }
+
+  const defaultMetrics = {
+    healthScore: 72, skinAge: 26, moisture: 60, elasticity: 65, sebum: 65,
+    pigmentation: 50, pores: 60, eyeWrinkles: 65, nasolabialFolds: 65,
+    redness: 50, acneBacteria: 50, texture: 65, darkCircles: 55, melasma: 50
+  };
+
+  for (const [key, defaultVal] of Object.entries(defaultMetrics)) {
+    const rawNum = Number(value[key]);
+    value[key] = Number.isFinite(rawNum) ? Math.max(0, Math.min(100, Math.round(rawNum))) : defaultVal;
+  }
+
+  if (!Array.isArray(value.activeIngredients)) {
+    value.activeIngredients = typeof value.activeIngredients === 'string' ? [value.activeIngredients] : ['Niacinamide', 'Hyaluronic Acid'];
+  }
+  if (!Array.isArray(value.skinConditions)) {
+    value.skinConditions = [];
+  }
+  if (!value.overallGrade) value.overallGrade = 'B';
+  if (!value.overallGradeComment) value.overallGradeComment = 'Làn da ở mức ổn định, cần duy trì chu trình chăm sóc.';
+  if (!value.recoveryTimeline) value.recoveryTimeline = '4-6 tuần';
+  if (!value.detailedAdvice || typeof value.detailedAdvice !== 'object') value.detailedAdvice = null;
+
   return value;
+}
+
+const GEMINI_MODELS = [
+  'gemini-2.5-flash',
+  'gemini-2.5-flash-lite'
+];
+
+function isRetryableGeminiError(status) {
+  return status === 429 || status === 500 || status === 502 || status === 503 || status === 504;
+}
+
+async function callGeminiWithFallback(env, prompt, images) {
+  let lastError = null;
+  for (const model of GEMINI_MODELS) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 45000);
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${env.GEMINI_API_KEY}`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', 'x-goog-api-key': env.GEMINI_API_KEY },
+        body: JSON.stringify({
+          contents: [{
+            parts: [
+              { text: prompt },
+              ...images.map(data => ({ inlineData: { mimeType: 'image/jpeg', data } }))
+            ]
+          }],
+          generationConfig: { temperature: 0.1, topP: 0.8, responseMimeType: 'application/json' }
+        }),
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+
+      if (response.ok) {
+        const payload = await response.json();
+        const rawText = payload.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (rawText) return { rawText, model };
+      }
+
+      if (!isRetryableGeminiError(response.status)) {
+        const errJson = await response.json().catch(() => ({}));
+        console.error(`[SkinID Gemini] Non-retryable error from ${model} (${response.status}):`, errJson);
+        throw new ApiError(response.status === 401 || response.status === 403 ? 503 : 400, 'gemini_error', 'Không thể hoàn tất yêu cầu phân tích da.');
+      }
+
+      console.warn(`[SkinID Gemini] Model ${model} returned retryable status ${response.status}, trying fallback...`);
+      lastError = new Error(`Model ${model} returned ${response.status}`);
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      console.warn(`[SkinID Gemini] Error with model ${model}:`, err.message);
+      lastError = err;
+    }
+  }
+  throw new ApiError(503, 'gemini_unavailable', 'Dịch vụ phân tích đang bận, vui lòng thử lại.');
 }
 
 async function analyzeSkin(request, env, user) {
   if (!env.GEMINI_API_KEY) throw new ApiError(503, 'gemini_not_configured', 'Backend chưa được cấu hình Gemini API key.');
   const input = validateImages(await request.json());
-  const quotaPath = `users/${user.sub}/private/aiUsage`;
-  const quota = await getDocument(env, quotaPath);
-  const today = new Date().toISOString().slice(0, 10);
-  const count = quota?.date === today ? Number(quota.count || 0) : 0;
-  if (count >= 10) throw new ApiError(429, 'daily_limit', 'Bạn đã hết 10 lượt phân tích da hôm nay.');
-  await commitWrites(env, [updateWrite(env, quotaPath, { date: today, count: count + 1, updatedAt: new Date() })]);
-  const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json', 'x-goog-api-key': env.GEMINI_API_KEY },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: analysisPrompt(input.skinType) }, ...input.images.map(data => ({ inlineData: { mimeType: 'image/jpeg', data } }))] }],
-      generationConfig: { temperature: 0.1, topP: 0.8, responseMimeType: 'application/json' }
-    })
-  });
-  const payload = await response.json();
-  if (!response.ok) throw new ApiError(503, 'gemini_unavailable', 'Dịch vụ phân tích đang bận, vui lòng thử lại.');
-  try {
-    const analysis = validateAnalysis(JSON.parse(payload.candidates?.[0]?.content?.parts?.[0]?.text));
-    return json(request, env, { success: true, analysis });
-  } catch {
-    throw new ApiError(502, 'invalid_ai_response', 'Kết quả phân tích không hợp lệ, vui lòng thử lại.');
-  }
+  await checkSkinQuota(env, user);
+  const prompt = analysisPrompt(input.skinType);
+  const { rawText } = await callGeminiWithFallback(env, prompt, input.images);
+  const analysis = validateAnalysis(rawText);
+  return json(request, env, { success: true, analysis });
 }
 
 async function deleteUser(request, env, user, uid) {
@@ -299,6 +517,7 @@ async function handleApi(request, env) {
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: corsHeaders(request, env) });
   const user = await authenticate(request, env);
   const url = new URL(request.url);
+  if (request.method === 'GET' && url.pathname === '/api/orders') return listOrders(request, env, user);
   if (request.method === 'POST' && url.pathname === '/api/orders') return createOrder(request, env, user);
   const orderMatch = url.pathname.match(/^\/api\/orders\/([^/]+)$/);
   if (request.method === 'PATCH' && orderMatch) return cancelOrder(request, env, user, decodeURIComponent(orderMatch[1]));

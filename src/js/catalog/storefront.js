@@ -422,7 +422,7 @@
             $('.header-search input')?.setAttribute('value', incomingSearch);
         }
         if (new URLSearchParams(window.location.search).get('auth') === '1') {
-            window.authManager?.openAuthModal?.('Đăng nhập hoặc tạo tài khoản để tiếp tục.');
+            window.authManager?.openAuthModal?.();
         }
         if (window.feather) feather.replace();
     }

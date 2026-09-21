@@ -20,6 +20,7 @@
     'src/js/app/runtime-config.js',
     'src/js/app/scroll-lock.js',
     'src/js/app/firebase-init.js',
+    'src/data/products.js',
     'src/js/account/auth-firebase.js',
     'src/js/services/vietnam-address.js',
     'src/js/account/profile-dashboard.js'

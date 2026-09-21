@@ -196,9 +196,9 @@
 .profile-empty-illustration__spark--one { top: .7rem; left: 1rem; }
 .profile-empty-illustration__spark--two { right: 1rem; bottom: .65rem; font-size: .72rem; }
 .profile-score { color: #fff; background: #e26780; box-shadow: 0 7px 18px rgba(226,103,128,.2); }
-.profile-score--low { background: #bc5368; }
-.profile-score--mid { background: #e58b9e; }
-.profile-score--high { background: #d9657c; }
+.profile-score--low { background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%); box-shadow: 0 6px 16px rgba(225, 29, 72, 0.25); }
+.profile-score--mid { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); box-shadow: 0 6px 16px rgba(217, 119, 6, 0.25); }
+.profile-score--high { background: linear-gradient(135deg, #10b981 0%, #0d9488 100%); box-shadow: 0 6px 16px rgba(13, 148, 136, 0.25); }
 
 .profile-data-card { padding: 1.25rem; border: 1px solid #eee4e7; border-radius: 1rem; background: #faf8f9; }
 .profile-google-notice { max-width: 34rem; align-items: flex-start; gap: .75rem; padding: 1rem; border: 1px solid #ecdfe2; border-radius: 1rem; background: #faf8f9; color: #665b60; }
@@ -215,3 +215,65 @@
   .profile-save-bar { align-items: stretch; flex-direction: column; bottom: .5rem; }
   .profile-save-bar .profile-btn { width: 100%; }
 }
+
+/* --- 1. SỬA CỤM NÚT DANH SÁCH --- */
+.action-group {
+  display: flex;
+  align-items: center; /* Giữ các nút cùng chiều cao */
+  gap: 12px;
+}
+
+.btn-xem-chi-tiet, .btn-xem-phac-do {
+  background: linear-gradient(135deg, #FF5277 0%, #E11D48 100%) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-xem-chi-tiet:hover, .btn-xem-phac-do:hover {
+  box-shadow: 0 6px 20px rgba(225, 29, 72, 0.45);
+  transform: translateY(-1px);
+}
+
+.btn-soi-lai {
+  white-space: nowrap !important; /* Không cho rớt dòng */
+  background-color: #FFF1F2;
+  color: #E11D48;
+  border: 1px solid #FECDD3;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-soi-lai:hover {
+  background-color: #FFE4E6;
+  border-color: #FDA4AF;
+}
+
+.btn-gui-duoc-si {
+  white-space: nowrap !important;
+  background-color: #FFF1F2;
+  color: #E11D48;
+  border: 1px solid #FECDD3;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-gui-duoc-si:hover {
+  background-color: #FFE4E6;
+  border-color: #FDA4AF;
+}
+
+/* --- 2. SỬA POP-UP CHI TIẾT --- */
+.modal-body {
+  padding-top: 24px !important; /* Tránh lẹm mép trên */
+}
+
+/* Màu chỉ số y khoa chuẩn */
+.status-good { color: #10B981 !important; }    /* Khá / Tốt -> Xanh lá */
+.status-warning { color: #F59E0B !important; } /* Cần chú ý -> Cam */
+.status-danger { color: #E11D48 !important; }  /* Cần cải thiện -> Đỏ */
+

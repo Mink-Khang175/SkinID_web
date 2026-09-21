@@ -32,7 +32,7 @@ export default function Header() {
           </a>
           <button className="icon-btn header-account" type="button" aria-label="Tài khoản" onClick={() => {
             if (window.authManager?.getCurrentUser?.()) window.location.href = '/profile';
-            else window.authManager?.openAuthModal?.('Đăng nhập để quản lý hồ sơ và đơn hàng.');
+            else window.authManager?.openAuthModal?.();
           }}><i data-feather="user"></i></button>
           <button className="icon-btn cart-button" type="button" onClick={() => window.cartManager?.toggleCartUI?.()} aria-label="Mở giỏ hàng">
             <i data-feather="shopping-bag"></i><span id="cart-badge" className="opacity-0">0</span>
@@ -67,8 +67,12 @@ export default function Header() {
         <button type="button" onClick={() => {
           window?.toggleMobileMenu?.(false);
           if (window.authManager?.getCurrentUser?.()) window.location.href = '/profile';
-          else window.authManager?.openAuthModal?.('Đăng nhập để quản lý hồ sơ và đơn hàng.');
+          else window.authManager?.openAuthModal?.();
         }}>Tài khoản / Đơn hàng</button>
+        <button id="mobile-logout-button" type="button" className="text-rose-600 font-bold hidden text-left" onClick={() => {
+          window?.toggleMobileMenu?.(false);
+          window.authManager?.logout?.().then(() => { window.location.href = '/'; });
+        }}>Đăng xuất</button>
       </nav>
     </header>
   );

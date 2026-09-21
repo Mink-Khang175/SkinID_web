@@ -19,17 +19,23 @@ class AuthManager {
                 try {
                     if (firebaseUser) {
                         await this.loadUser(firebaseUser);
-                        await this.loadHistory();
-                        await this.loadOrders();
-                        await this.loadCart();
+                        this.updateHeaderUI();
+                        document.dispatchEvent(new CustomEvent('skinid:auth-changed', { detail: this.currentUser }));
+                        if (firstState) { firstState = false; resolve(); }
+                        await Promise.allSettled([
+                            this.loadHistory(),
+                            this.loadOrders(),
+                            this.loadCart()
+                        ]);
+                        document.dispatchEvent(new CustomEvent('skinid:data-loaded', { detail: this.currentUser }));
                     } else {
                         this.currentUser = null;
                         this.history = [];
                         this.orders = [];
                         this.cart = [];
+                        this.updateHeaderUI();
+                        document.dispatchEvent(new CustomEvent('skinid:auth-changed', { detail: null }));
                     }
-                    this.updateHeaderUI();
-                    document.dispatchEvent(new CustomEvent('skinid:auth-changed', { detail: this.currentUser }));
                 } catch (error) {
                     console.error('[SkinID Auth] Không thể tải dữ liệu người dùng:', error);
                 } finally {
@@ -76,15 +82,28 @@ class AuthManager {
 
     async loadOrders() {
         if (!this.currentUser) return [];
+        let firestoreOrders = [];
         try {
             const { collection, getDocs, query, where } = this.firebase.sdk.firestore;
             const result = await getDocs(query(collection(this.firebase.db, 'orders'), where('userId', '==', this.currentUser.uid)));
-            this.orders = result.docs
+            firestoreOrders = result.docs
                 .map(snapshot => ({ id: snapshot.id, ...snapshot.data() }))
                 .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
         } catch (error) {
-            console.warn('[SkinID Orders] Chưa thể tải đơn hàng:', error.message);
-            this.orders = [];
+            console.warn('[SkinID Orders] Chưa thể tải đơn hàng trực tiếp qua Firestore:', error.message);
+        }
+
+        if (firestoreOrders.length > 0) {
+            this.orders = firestoreOrders;
+        } else {
+            try {
+                const apiRes = await this.apiRequest('/orders', { method: 'GET', timeoutMs: 5000 });
+                if (apiRes && Array.isArray(apiRes.orders) && apiRes.orders.length > 0) {
+                    this.orders = apiRes.orders;
+                }
+            } catch (err) {
+                // Keep existing in-memory orders if any
+            }
         }
         return this.orders;
     }
@@ -99,8 +118,10 @@ class AuthManager {
         if (!firebaseUser) throw Object.assign(new Error('Vui lòng đăng nhập trước khi tiếp tục.'), { code: 'unauthenticated' });
         const token = await firebaseUser.getIdToken();
         const baseUrl = String(window.SKINID_CONFIG?.apiBaseUrl || '/api').replace(/\/$/, '');
+        const defaultTimeout = path.includes('analyze') ? 60000 : 30000;
+        const timeoutMs = Number(options?.timeoutMs) || defaultTimeout;
         const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 20000);
+        const timeout = setTimeout(() => controller.abort(), timeoutMs);
         let response;
         try {
             response = await fetch(`${baseUrl}${path}`, {
@@ -178,7 +199,25 @@ class AuthManager {
                     items: payload.items.map(item => ({ productId: item.productId, quantity: item.quantity }))
                 })
             });
+
+            // Cache immediately to guarantee order persistence for user
+            const newOrderRecord = {
+                id: response.orderId,
+                userId: this.currentUser.uid,
+                customer: payload.customer,
+                items: payload.items,
+                subtotal: response.subtotal || payload.items.reduce((s, it) => s + (it.price || 0) * (it.quantity || 1), 0),
+                shippingFee: response.shippingFee ?? 0,
+                total: response.total,
+                paymentMethod: payload.paymentMethod || 'cod',
+                paymentStatus: 'unpaid',
+                status: 'pending',
+                createdAt: new Date().toISOString()
+            };
             await this.loadOrders();
+            if (!this.orders.some(o => o.id === response.orderId)) {
+                this.orders.unshift(newOrderRecord);
+            }
             await this.loadUser(this.firebase.auth.currentUser);
             this.cart = [];
             return { success: true, orderId: response.orderId, total: response.total };
@@ -327,7 +366,13 @@ class AuthManager {
             dateFormatted: new Date().toLocaleString('vi-VN'), healthScore: Number(reportData.healthScore || 0),
             skinType: String(reportData.skinType || 'Da chưa xác định'), skinAge: Number(reportData.skinAge || 0),
             primaryConcerns: Array.isArray(reportData.primaryConcerns) ? reportData.primaryConcerns : [],
-            metrics: reportData.metrics || {}, recommendedRoutine: Array.isArray(reportData.recommendedRoutine) ? reportData.recommendedRoutine : [],
+            overallGrade: String(reportData.overallGrade || 'B'),
+            overallGradeComment: String(reportData.overallGradeComment || 'Làn da ở mức ổn định'),
+            analysis3Angles: String(reportData.analysis3Angles || ''),
+            metrics: reportData.metrics || {},
+            fullAnalysis: reportData.fullAnalysis || null,
+            recommendedRoutine: Array.isArray(reportData.recommendedRoutine) ? reportData.recommendedRoutine : [],
+            recommendedRoutineProducts: Array.isArray(reportData.recommendedRoutineProducts) ? reportData.recommendedRoutineProducts : [],
             createdAt: serverTimestamp()
         };
         const reference = await addDoc(collection(this.firebase.db, 'users', this.currentUser.uid, 'skinReports'), record);
@@ -387,6 +432,7 @@ class AuthManager {
             , 'invalid_address': error?.message || 'Vui lòng chọn đầy đủ địa chỉ giao hàng.'
             , 'invalid_phone': 'Số điện thoại Việt Nam chưa đúng định dạng.'
             , 'daily_limit': 'Bạn đã hết lượt phân tích da hôm nay.'
+            , 'rate_limited': 'Bạn đang thao tác quá nhanh hoặc đã đạt giới hạn tạm thời. Vui lòng thử lại sau ít phút.'
             , 'gemini_not_configured': 'Tính năng soi da đang được bảo trì. Vui lòng thử lại sau.'
             , 'gemini_unavailable': 'Dịch vụ phân tích đang bận, vui lòng thử lại.'
             , 'internal': 'Hệ thống chưa thể tạo đơn hàng lúc này. Vui lòng thử lại sau ít phút.'
@@ -398,6 +444,9 @@ class AuthManager {
     escapeHtml(value) { return String(value ?? '').replace(/[&<>'"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[c]); }
 
     updateHeaderUI() {
+        const mobileLogout = document.getElementById('mobile-logout-button');
+        if (mobileLogout) mobileLogout.classList.toggle('hidden', !this.currentUser);
+
         const section = document.getElementById('header-auth-section');
         if (!section) return;
         if (!this.currentUser) {
@@ -413,12 +462,13 @@ class AuthManager {
         const modal = document.getElementById('auth-modal'); if (!modal) return;
         const notice = document.getElementById('auth-modal-notice'), text = document.getElementById('auth-notice-text');
         if (notice) notice.classList.toggle('hidden', !message); if (text) text.textContent = message;
+        window.toggleAuthSlider?.('login');
         window.SkinIDScrollLock?.lock('auth');
-        modal.classList.remove('hidden'); setTimeout(() => { modal.classList.remove('opacity-0'); document.getElementById('auth-modal-content')?.classList.remove('scale-95'); }, 10);
+        modal.classList.remove('hidden'); setTimeout(() => { modal.classList.remove('opacity-0'); document.getElementById('auth-modal-content')?.classList.remove('scale-95'); if (window.feather) feather.replace(); }, 10);
     }
 
     closeAuthModal() { const modal = document.getElementById('auth-modal'); if (!modal) return; modal.classList.add('opacity-0'); window.SkinIDScrollLock?.unlock('auth'); setTimeout(() => modal.classList.add('hidden'), 300); }
-    openHistoryModal() { if (!this.currentUser) return this.openAuthModal('Vui lòng đăng nhập để xem lịch sử soi da.'); const modal = document.getElementById('history-modal'); if (!modal) return; this.renderHistoryContent(); window.SkinIDScrollLock?.lock('history'); modal.classList.remove('hidden'); setTimeout(() => modal.classList.remove('opacity-0'), 10); }
+    openHistoryModal() { if (!this.currentUser) return this.openAuthModal('Đăng nhập để xem lại lịch sử soi da của bạn nhé ✨'); const modal = document.getElementById('history-modal'); if (!modal) return; this.renderHistoryContent(); window.SkinIDScrollLock?.lock('history'); modal.classList.remove('hidden'); setTimeout(() => modal.classList.remove('opacity-0'), 10); }
     closeHistoryModal() { const modal = document.getElementById('history-modal'); if (!modal) return; modal.classList.add('opacity-0'); window.SkinIDScrollLock?.unlock('history'); setTimeout(() => modal.classList.add('hidden'), 300); }
 
     renderHistoryContent() {
@@ -434,8 +484,13 @@ class AuthManager {
 window.togglePasswordVisibility = window.togglePasswordVisibility || function (id, button) {
     const input = document.getElementById(id); if (!input) return;
     input.type = input.type === 'password' ? 'text' : 'password';
-    const icon = button?.querySelector('i'); if (icon) icon.setAttribute('data-feather', input.type === 'password' ? 'eye' : 'eye-off');
-    if (window.feather) feather.replace();
+    const icon = button?.querySelector('i');
+    if (icon) {
+        icon.setAttribute('data-feather', input.type === 'password' ? 'eye' : 'eye-off');
+        if (window.feather) feather.replace();
+    } else if (button) {
+        button.textContent = input.type === 'password' ? 'HIỆN' : 'ẨN';
+    }
 };
 window.handleConfirmPasswordInput = window.handleConfirmPasswordInput || function () {
     const password = document.getElementById('reg-password')?.value || '', confirmation = document.getElementById('reg-confirm-password')?.value || '', message = document.getElementById('reg-confirm-msg');
@@ -448,21 +503,90 @@ window.handlePasswordStrengthInput = window.handlePasswordStrengthInput || funct
     if (bar && label) { bar.className = `h-full ${result.color} transition-all duration-300`; bar.style.width = result.width; label.className = `text-[10px] font-bold ${result.textClass}`; label.textContent = result.label; }
     window.handleConfirmPasswordInput();
 };
+window.toggleAuthSlider = window.toggleAuthSlider || function (mode) {
+    const shell = document.getElementById('auth-modal-content');
+    if (!shell) return;
+    if (mode === 'register') {
+        shell.classList.remove('auth-mode-login');
+        shell.classList.add('auth-mode-register');
+    } else {
+        shell.classList.remove('auth-mode-register');
+        shell.classList.add('auth-mode-login');
+    }
+    // Reset forgot form if active
+    const loginForm = document.getElementById('form-login');
+    const forgotForm = document.getElementById('form-forgot');
+    if (loginForm && forgotForm) {
+        loginForm.classList.remove('hidden');
+        forgotForm.classList.add('hidden');
+    }
+    if (window.feather) feather.replace();
+};
+
+window.toggleAuthForgot = window.toggleAuthForgot || function (backToLogin = false) {
+    const loginForm = document.getElementById('form-login');
+    const forgotForm = document.getElementById('form-forgot');
+    if (!loginForm || !forgotForm) return;
+    if (backToLogin) {
+        loginForm.classList.remove('hidden');
+        forgotForm.classList.add('hidden');
+    } else {
+        loginForm.classList.add('hidden');
+        forgotForm.classList.remove('hidden');
+    }
+    if (window.feather) feather.replace();
+};
+
 window.toggleAuthForm = window.toggleAuthForm || function (mode) {
-    const forms = { login: document.getElementById('form-login'), register: document.getElementById('form-register'), forgot: document.getElementById('form-forgot') };
-    Object.values(forms).forEach(form => form?.classList.add('hidden')); forms[mode]?.classList.remove('hidden');
+    if (mode === 'register' || mode === 'login') {
+        window.toggleAuthSlider(mode);
+    } else if (mode === 'forgot') {
+        window.toggleAuthSlider('login');
+        window.toggleAuthForgot(false);
+    }
 };
+
 window.handleLoginSubmit = window.handleLoginSubmit || async function (event) {
-    event.preventDefault(); const result = await window.authManager.login(document.getElementById('login-email').value, document.getElementById('login-password').value, document.getElementById('login-remember')?.checked ?? true);
-    if (result.success) window.authManager.closeAuthModal(); else alert(result.message);
+    event.preventDefault();
+    const email = document.getElementById('login-email')?.value;
+    const password = document.getElementById('login-password')?.value;
+    const remember = document.getElementById('login-remember')?.checked ?? true;
+    const result = await window.authManager.login(email, password, remember);
+    if (result.success) {
+        window.authManager.closeAuthModal();
+    } else {
+        const notice = document.getElementById('auth-modal-notice');
+        const text = document.getElementById('auth-notice-text');
+        if (notice && text) {
+            text.textContent = result.message;
+            notice.classList.remove('hidden');
+        } else {
+            alert(result.message);
+        }
+    }
 };
+
 window.handleRegisterSubmit = window.handleRegisterSubmit || async function (event) {
-    event.preventDefault(); const result = await window.authManager.register(document.getElementById('reg-name').value, document.getElementById('reg-email').value, document.getElementById('reg-phone').value, document.getElementById('reg-password').value, document.getElementById('reg-confirm-password').value, true);
-    if (result.success) window.authManager.closeAuthModal(); else alert(result.message);
+    event.preventDefault();
+    const name = document.getElementById('reg-name')?.value;
+    const email = document.getElementById('reg-email')?.value;
+    const phone = document.getElementById('reg-phone')?.value;
+    const password = document.getElementById('reg-password')?.value;
+    const confirm = document.getElementById('reg-confirm-password')?.value;
+    const result = await window.authManager.register(name, email, phone, password, confirm, true);
+    if (result.success) {
+        window.authManager.closeAuthModal();
+    } else {
+        alert(result.message);
+    }
 };
+
 window.handleForgotSubmit = window.handleForgotSubmit || async function (event) {
-    event.preventDefault(); const email = document.getElementById('forgot-email').value, result = await window.authManager.resetPassword(email);
-    alert(result.message); if (result.success) window.toggleAuthForm('login');
+    event.preventDefault();
+    const email = document.getElementById('forgot-email')?.value;
+    const result = await window.authManager.resetPassword(email);
+    alert(result.message);
+    if (result.success) window.toggleAuthForgot(true);
 };
 
 const authManager = new AuthManager();

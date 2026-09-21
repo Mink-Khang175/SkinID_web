@@ -46,7 +46,7 @@ export default function SkincareRoutine() {
                 <button onClick={(event) => window?.closePrivacyModal?.()} className="px-5 py-2.5 rounded-xl font-medium text-gray-600 hover:bg-gray-200 bg-gray-100 transition-colors">
                     Hủy bỏ
                 </button>
-                <button id="btn-privacy-continue" disabled onClick={(event) => window?.requestCameraPermissionAndProceed?.()} className="scan-primary-button px-6 py-2.5 rounded-xl font-semibold text-white bg-gray-300 cursor-not-allowed transition-all flex items-center gap-2">
+                <button id="btn-privacy-continue" onClick={(event) => window?.requestCameraPermissionAndProceed?.()} className="scan-primary-button px-6 py-2.5 rounded-xl font-semibold text-white bg-gray-300 cursor-not-allowed transition-all flex items-center gap-2">
                     <i data-feather="camera" className="w-4 h-4"></i>
                     Cấp quyền Camera
                 </button>
@@ -250,6 +250,23 @@ export default function SkincareRoutine() {
                     </div>
                     <div className="w-16 h-16 rounded-xl overflow-hidden border-2 border-brand-petal/50 relative bg-gray-100" id="scan-thumb-3">
                         <div className="scan-line absolute inset-0 pointer-events-none"></div>
+                    </div>
+                </div>
+
+                {/* Analysis Error Alert Card (Replaces intrusive alert popups) */}
+                <div id="analysis-error-card" className="hidden w-full max-w-sm mt-6 p-4 rounded-2xl bg-rose-50/90 border border-rose-200 text-center shadow-sm">
+                    <div className="w-10 h-10 mx-auto mb-2 rounded-full bg-rose-100 flex items-center justify-center text-rose-600">
+                        <i data-feather="alert-circle" className="w-5 h-5"></i>
+                    </div>
+                    <h4 className="text-sm font-bold text-rose-800 mb-1">Chưa thể hoàn tất phân tích</h4>
+                    <p id="analysis-error-message" className="text-xs text-rose-600 mb-4 leading-relaxed">Kết nối mạng không ổn định hoặc dịch vụ đang bận. Vui lòng thử lại.</p>
+                    <div className="flex gap-2 justify-center">
+                        <button id="analysis-retry-btn" type="button" className="px-4 py-2 bg-brand-primary text-white text-xs font-bold rounded-xl shadow hover:bg-brand-dark transition-all flex items-center gap-1.5 cursor-pointer">
+                            <i data-feather="refresh-cw" className="w-3.5 h-3.5"></i> Thử lại
+                        </button>
+                        <button id="analysis-recapture-btn" type="button" className="px-4 py-2 bg-white text-gray-700 text-xs font-semibold rounded-xl border border-gray-200 hover:bg-gray-50 transition-all cursor-pointer">
+                            Chụp lại ảnh
+                        </button>
                     </div>
                 </div>
 
@@ -507,188 +524,207 @@ export default function SkincareRoutine() {
     {/* ========================================== */}
     {/* PRODUCT DETAIL MODAL (RILASTIL FORMULA & INGREDIENT SPEC) */}
     {/* ========================================== */}
-    {/* AUTH MODAL ULTRA PRO (Real Google Sign-In, Password Strength, Confirm Password, Remember Me) */}
-    <div id="auth-modal" className="fixed inset-0 z-[999] bg-black/75 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 hidden opacity-0 transition-all duration-300">
-        <div id="auth-modal-content" className="auth-shell transform scale-95 transition-all duration-300">
-            <aside className="auth-story" aria-hidden="true">
-                <span className="auth-story__eyebrow">SKINID MEMBERSHIP</span>
-                <h2>Một tài khoản.<br />Trọn hành trình làn da.</h2>
-                <p>Lưu hồ sơ da, đồng bộ giỏ hàng và theo dõi đơn mua trong một không gian riêng tư.</p>
-                <ul>
-                    <li><i data-feather="star"></i> Phác đồ cá nhân hóa</li>
-                    <li><i data-feather="shopping-bag"></i> Theo dõi đơn hàng</li>
-                    <li><i data-feather="shield"></i> Dữ liệu được bảo vệ</li>
-                </ul>
-                <span className="auth-story__orb auth-story__orb--one"></span>
-                <span className="auth-story__orb auth-story__orb--two"></span>
-            </aside>
-            <section className="auth-form-pane">
-            {/* Close Button */}
-            <button onClick={(event) => window.authManager?.closeAuthModal?.()} className="absolute top-5 right-5 text-gray-400 hover:text-gray-700 p-2 rounded-full hover:bg-gray-100/80 transition-colors z-10">
-                <i data-feather="x" className="w-5 h-5"></i>
-            </button>
+    {/* AUTH MODAL — MODERN E-COMMERCE STANDARD */}
+    <div id="auth-modal" className="fixed inset-0 z-[999] flex items-center justify-center p-3 sm:p-4 hidden opacity-0 transition-all duration-300" style={{background:'rgba(45, 31, 35, 0.65)', backdropFilter:'blur(12px)'}}>
+        <div id="auth-modal-content" className="auth-shell auth-mode-login transform scale-95 transition-all duration-300">
 
-            {/* Header Brand */}
-            <div className="text-center mb-4">
-                <div className="w-12 h-12 bg-gradient-to-tr from-brand-primary to-brand-accent rounded-2xl flex items-center justify-center mx-auto mb-2 text-white shadow-lg shadow-brand-primary/30 transform hover:scale-105 transition-transform">
-                    <i data-feather="user-check" className="w-7 h-7"></i>
-                </div>
-                <h3 className="text-2xl font-black text-brand-dark tracking-tight" id="auth-tab-title">Chào Mừng Đến SkinID</h3>
-                <p className="text-xs text-gray-600 font-medium mt-1">Đăng nhập để lưu lịch sử soi da & nhận phác đồ cá nhân hóa</p>
-                <div id="auth-modal-notice" className="text-xs font-bold text-rose-600 bg-rose-50 border border-rose-100 p-3 rounded-xl mt-3 hidden text-left flex items-center gap-2">
-                    <i data-feather="alert-circle" className="w-4 h-4 flex-shrink-0"></i>
-                    <span id="auth-notice-text"></span>
-                </div>
-            </div>
-
-            {/* Tab Switcher */}
-            <div className="flex bg-gray-100 p-1 rounded-2xl mb-4 border border-gray-200/60">
-                <button id="auth-tab-login" onClick={(event) => window?.toggleAuthForm?.('login')} className="w-1/2 py-2 text-xs font-extrabold rounded-xl bg-white text-gray-900 shadow-sm transition-all">Đăng nhập</button>
-                <button id="auth-tab-register" onClick={(event) => window?.toggleAuthForm?.('register')} className="w-1/2 py-2 text-xs font-extrabold rounded-xl text-gray-500 hover:text-gray-900 transition-all">Đăng ký mới</button>
-            </div>
-
-            {/* 1. LOGIN FORM */}
-            <form id="form-login" onSubmit={(event) => window?.handleLoginSubmit?.(event)} className="space-y-3">
-                <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Email đăng nhập</label>
-                    <div className="relative">
-                        <input type="email" id="login-email" required placeholder="nhapemail@gmail.com" className="w-full bg-gray-50 border border-gray-200 rounded-2xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:bg-white transition-all" />
-                        <i data-feather="mail" className="w-4 h-4 text-gray-400 absolute left-3.5 top-3.5"></i>
-                    </div>
-                </div>
-                <div>
-                    <div className="flex justify-between items-center mb-1">
-                        <label className="block text-xs font-bold text-gray-700">Mật khẩu</label>
-                        <button type="button" onClick={(event) => window?.toggleAuthForm?.('forgot')} className="text-xs font-bold text-brand-primary hover:underline">Quên mật khẩu?</button>
-                    </div>
-                    <div className="relative">
-                        <input type="password" id="login-password" required placeholder="••••••••" className="w-full bg-gray-50 border border-gray-200 rounded-2xl pl-10 pr-11 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:bg-white transition-all" />
-                        <i data-feather="lock" className="w-4 h-4 text-gray-400 absolute left-3.5 top-3.5"></i>
-                        <button type="button" onClick={(event) => window?.togglePasswordVisibility?.('login-password', event.currentTarget)} className="absolute right-3.5 top-3.5 text-gray-400 hover:text-gray-600 transition-colors">
-                            <i data-feather="eye" className="w-4 h-4"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div className="flex items-center justify-between">
-                    <label className="flex items-center gap-2 cursor-pointer select-none">
-                        <input type="checkbox" id="login-remember" defaultChecked className="w-4 h-4 rounded text-brand-primary focus:ring-brand-primary border-gray-300" />
-                        <span className="text-xs text-gray-600 font-semibold">Ghi nhớ đăng nhập</span>
-                    </label>
-                </div>
-
-                <button type="submit" className="w-full bg-brand-primary hover:bg-brand-dark text-white py-3 rounded-2xl font-bold text-sm shadow-lg shadow-brand-primary/30 transition-all flex items-center justify-center gap-2">
-                    <i data-feather="log-in" className="w-4 h-4"></i> Đăng nhập ngay
-                </button>
-            </form>
-
-            {/* Google sign-in is intentionally last so the email flow remains easy to scan. */}
-            <div className="relative flex py-3 items-center">
-                <div className="flex-grow border-t border-gray-200"></div>
-                <span className="flex-shrink mx-3 text-[11px] font-bold text-gray-400 uppercase tracking-widest">Hoặc</span>
-                <div className="flex-grow border-t border-gray-200"></div>
-            </div>
-            <button onClick={(event) => window.authManager?.triggerGoogleSignIn?.()} className="w-full bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 py-3 px-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-3 shadow-sm hover:shadow transition-all group">
-                <svg className="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform" viewBox="0 0 48 48" aria-hidden="true">
-                    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-                    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-                    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.28-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-                    <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-                </svg>
-                <span>Tiếp tục với Google</span>
-            </button>
-
-            {/* 2. REGISTER FORM */}
-            <form id="form-register" onSubmit={(event) => window?.handleRegisterSubmit?.(event)} className="space-y-3.5 hidden">
-                <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Họ và tên *</label>
-                    <div className="relative">
-                        <input type="text" id="reg-name" required placeholder="Nguyễn Văn A" className="w-full bg-gray-50 border border-gray-200 rounded-2xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:bg-white transition-all" />
-                        <i data-feather="user" className="w-4 h-4 text-gray-400 absolute left-3.5 top-3"></i>
-                    </div>
-                </div>
-                <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Email chính xác (Nhận báo cáo) *</label>
-                    <div className="relative">
-                        <input type="email" id="reg-email" required placeholder="email@gmail.com" className="w-full bg-gray-50 border border-gray-200 rounded-2xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:bg-white transition-all" />
-                        <i data-feather="mail" className="w-4 h-4 text-gray-400 absolute left-3.5 top-3"></i>
-                    </div>
-                </div>
-                <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Số điện thoại (Nhận tư vấn)</label>
-                    <div className="relative">
-                        <input type="tel" id="reg-phone" placeholder="0901234567" className="w-full bg-gray-50 border border-gray-200 rounded-2xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:bg-white transition-all" />
-                        <i data-feather="phone" className="w-4 h-4 text-gray-400 absolute left-3.5 top-3"></i>
-                    </div>
-                </div>
-                <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Tạo mật khẩu (Tối thiểu 6 ký tự) *</label>
-                    <div className="relative">
-                        <input type="password" id="reg-password" required onInput={(event) => window?.handlePasswordStrengthInput?.(event.currentTarget.value)} placeholder="Tối thiểu 6 ký tự" className="w-full bg-gray-50 border border-gray-200 rounded-2xl pl-10 pr-11 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:bg-white transition-all" />
-                        <i data-feather="lock" className="w-4 h-4 text-gray-400 absolute left-3.5 top-3"></i>
-                        <button type="button" onClick={(event) => window?.togglePasswordVisibility?.('reg-password', event.currentTarget)} className="absolute right-3.5 top-3 text-gray-400 hover:text-gray-600 transition-colors">
-                            <i data-feather="eye" className="w-4 h-4"></i>
-                        </button>
-                    </div>
-                    {/* Live Password Strength Meter */}
-                    <div className="mt-1.5 flex items-center gap-2">
-                        <div className="h-1.5 flex-grow bg-gray-200 rounded-full overflow-hidden">
-                            <div id="reg-strength-bar" className="h-full w-0 bg-gray-300 transition-all duration-300"></div>
-                        </div>
-                        <span id="reg-strength-label" className="text-[10px] font-bold text-gray-400 min-w-[60px] text-right">Chưa nhập</span>
-                    </div>
-                </div>
-                <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Xác nhận mật khẩu *</label>
-                    <div className="relative">
-                        <input type="password" id="reg-confirm-password" required onInput={(event) => window?.handleConfirmPasswordInput?.()} placeholder="Nhập lại mật khẩu" className="w-full bg-gray-50 border border-gray-200 rounded-2xl pl-10 pr-11 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:bg-white transition-all" />
-                        <i data-feather="check-circle" className="w-4 h-4 text-gray-400 absolute left-3.5 top-3"></i>
-                        <button type="button" onClick={(event) => window?.togglePasswordVisibility?.('reg-confirm-password', event.currentTarget)} className="absolute right-3.5 top-3 text-gray-400 hover:text-gray-600 transition-colors">
-                            <i data-feather="eye" className="w-4 h-4"></i>
-                        </button>
-                    </div>
-                    <p id="reg-confirm-msg" className="text-[10px] font-bold mt-1 hidden"></p>
-                </div>
-
-                <div className="pt-1">
-                    <label className="flex items-start gap-2 cursor-pointer select-none">
-                        <input type="checkbox" id="reg-terms" required defaultChecked className="w-4 h-4 mt-0.5 rounded text-brand-primary focus:ring-brand-primary border-gray-300" />
-                        <span className="text-[11px] text-gray-500 leading-tight">Tôi đồng ý với <a href="#" className="text-brand-primary font-bold hover:underline">Điều khoản sử dụng</a> và <a href="#" className="text-brand-primary font-bold hover:underline">Chính sách bảo mật</a> SkinID.</span>
-                    </label>
-                </div>
-
-                <button type="submit" className="w-full bg-gradient-to-r from-brand-primary to-brand-dark hover:opacity-95 text-white py-3.5 rounded-2xl font-bold text-sm shadow-lg shadow-brand-primary/30 transition-all mt-2 flex items-center justify-center gap-2">
-                    <i data-feather="user-plus" className="w-4 h-4"></i> Tạo tài khoản & Bắt đầu
-                </button>
-            </form>
-
-            {/* 3. FORGOT PASSWORD FORM */}
-            <form id="form-forgot" onSubmit={(event) => window?.handleForgotSubmit?.(event)} className="space-y-4 hidden">
-                <div className="bg-blue-50 border border-blue-100 p-3 rounded-2xl text-xs text-blue-800">
-                    <p className="font-bold mb-1">Cần khôi phục mật khẩu?</p>
-                    <p>Nhập địa chỉ email đăng ký. Chúng tôi sẽ gửi đường dẫn đặt lại mật khẩu an toàn.</p>
-                </div>
-                <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Email tài khoản</label>
-                    <div className="relative">
-                        <input type="email" id="forgot-email" required placeholder="nhapemail@gmail.com" className="w-full bg-gray-50 border border-gray-200 rounded-2xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:bg-white transition-all" />
-                        <i data-feather="mail" className="w-4 h-4 text-gray-400 absolute left-3.5 top-3.5"></i>
-                    </div>
-                </div>
-
-                <button type="submit" className="w-full bg-brand-primary hover:bg-brand-dark text-white py-3.5 rounded-2xl font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 scan-primary-button">
-                    <i data-feather="send" className="w-4 h-4"></i> Gửi Yêu Cầu Khôi Phục
+            {/* ══ PANEL: ĐĂNG NHẬP ══ */}
+            <div className="auth-panel auth-panel--login" id="auth-panel-login">
+                {/* Close button */}
+                <button onClick={(event) => window.authManager?.closeAuthModal?.()} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-700 hover:bg-rose-50 transition-colors z-10" aria-label="Đóng">
+                    <i data-feather="x" className="w-4 h-4"></i>
                 </button>
 
-                <div className="text-center pt-2">
-                    <button type="button" onClick={(event) => window?.toggleAuthForm?.('login')} className="text-xs font-bold text-gray-500 hover:text-gray-800 underline">
-                         Quay lại Đăng nhập
+                <div className="auth-panel__inner">
+                    {/* Clean Header */}
+                    <div className="text-center mb-5">
+                        <h3 className="auth-title-clean" id="auth-login-heading">Đăng nhập</h3>
+                        <p className="auth-subtitle-clean">Chào mừng bạn trở lại với SkinID</p>
+                    </div>
+
+                    {/* Inline notice (chỉ hiện khi có lời nhắc thân thiện) */}
+                    <div id="auth-modal-notice" className="auth-inline-notice hidden">
+                        <i data-feather="sparkles" className="w-3.5 h-3.5 flex-shrink-0 text-[#e45f7a]"></i>
+                        <span id="auth-notice-text"></span>
+                    </div>
+
+                    {/* Google Sign-in — Ưu tiên 1-click */}
+                    <button onClick={(event) => window.authManager?.triggerGoogleSignIn?.()} className="auth-google-btn group">
+                        <svg className="w-4.5 h-4.5 flex-shrink-0" viewBox="0 0 48 48" aria-hidden="true">
+                            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.28-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                        </svg>
+                        <span>Tiếp tục với Google</span>
                     </button>
+
+                    <div className="auth-divider"><span>hoặc với email</span></div>
+
+                    {/* Form đăng nhập sạch (KHÔNG ICON) */}
+                    <form id="form-login" onSubmit={(event) => window?.handleLoginSubmit?.(event)} className="space-y-3">
+                        <div>
+                            <label className="auth-field-label" htmlFor="login-email">Email</label>
+                            <input type="email" id="login-email" required placeholder="nhapemail@gmail.com" className="auth-field-input" autoComplete="email" />
+                        </div>
+                        <div>
+                            <div className="flex justify-between items-center mb-1">
+                                <label className="auth-field-label mb-0" htmlFor="login-password">Mật khẩu</label>
+                                <button type="button" onClick={(event) => window?.toggleAuthForgot?.()} className="auth-forgot-link">Quên mật khẩu?</button>
+                            </div>
+                            <div className="relative">
+                                <input type="password" id="login-password" required placeholder="••••••••" className="auth-field-input pr-14" autoComplete="current-password" />
+                                <button type="button" onClick={(event) => window?.togglePasswordVisibility?.('login-password', event.currentTarget)} className="auth-pwd-toggle">HIỆN</button>
+                            </div>
+                        </div>
+                        <div className="flex items-center justify-between pt-0.5">
+                            <label className="flex items-center gap-2 cursor-pointer select-none">
+                                <input type="checkbox" id="login-remember" defaultChecked className="w-4 h-4 rounded accent-[#e45f7a]" />
+                                <span className="text-xs text-[#6F686B] font-medium">Ghi nhớ đăng nhập</span>
+                            </label>
+                        </div>
+                        <button type="submit" className="auth-cta-btn">
+                            Đăng nhập
+                        </button>
+                    </form>
+
+                    {/* Form quên mật khẩu */}
+                    <form id="form-forgot" onSubmit={(event) => window?.handleForgotSubmit?.(event)} className="space-y-3 hidden">
+                        <p className="text-xs text-[#6F686B] leading-relaxed">Nhập email đăng ký của bạn. Chúng tôi sẽ gửi liên kết đặt lại mật khẩu an toàn.</p>
+                        <div>
+                            <label className="auth-field-label" htmlFor="forgot-email">Email tài khoản</label>
+                            <input type="email" id="forgot-email" required placeholder="nhapemail@gmail.com" className="auth-field-input" />
+                        </div>
+                        <button type="submit" className="auth-cta-btn">
+                            Gửi yêu cầu khôi phục
+                        </button>
+                        <button type="button" onClick={(event) => window?.toggleAuthForgot?.(true)} className="w-full text-center text-xs text-[#7A6E71] hover:text-[#282326] py-1 font-semibold transition-colors">← Quay lại đăng nhập</button>
+                    </form>
+
+                    {/* Mobile switch to Register */}
+                    <div className="auth-mobile-switch md:hidden text-center mt-4 pt-3 border-t border-rose-100">
+                        <span className="text-xs text-[#6F686B]">Chưa có tài khoản? </span>
+                        <button type="button" onClick={(event) => window?.toggleAuthSlider?.('register')} className="text-xs font-bold text-[#e45f7a] hover:underline">Tạo tài khoản ngay</button>
+                    </div>
                 </div>
-            </form>
-            </section>
+            </div>
+
+            {/* ══ PANEL: ĐĂNG KÝ ══ */}
+            <div className="auth-panel auth-panel--register" id="auth-panel-register">
+                {/* Close button */}
+                <button onClick={(event) => window.authManager?.closeAuthModal?.()} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-700 hover:bg-rose-50 transition-colors z-10" aria-label="Đóng">
+                    <i data-feather="x" className="w-4 h-4"></i>
+                </button>
+
+                <div className="auth-panel__inner">
+                    <div className="text-center mb-4">
+                        <h3 className="auth-title-clean">Tạo tài khoản</h3>
+                        <p className="auth-subtitle-clean">Đăng ký nhanh chóng chỉ trong 1 phút</p>
+                    </div>
+
+                    <form id="form-register" onSubmit={(event) => window?.handleRegisterSubmit?.(event)} className="mt-2">
+                        {/* Hàng 1: Họ tên + SĐT (2 cột) */}
+                        <div className="auth-grid-2">
+                            <div>
+                                <label className="auth-field-label" htmlFor="reg-name">Họ và tên *</label>
+                                <input type="text" id="reg-name" required placeholder="Nguyễn Văn A" className="auth-field-input" autoComplete="name" />
+                            </div>
+                            <div>
+                                <label className="auth-field-label" htmlFor="reg-phone">Số điện thoại</label>
+                                <input type="tel" id="reg-phone" placeholder="0901234567" className="auth-field-input" autoComplete="tel" />
+                            </div>
+                        </div>
+                        {/* Hàng 2: Email */}
+                        <div className="mt-2">
+                            <label className="auth-field-label" htmlFor="reg-email">Email *</label>
+                            <input type="email" id="reg-email" required placeholder="email@gmail.com" className="auth-field-input" autoComplete="email" />
+                        </div>
+                        {/* Hàng 3: Mật khẩu + Xác nhận (2 cột) */}
+                        <div className="auth-grid-2 mt-2">
+                            <div>
+                                <label className="auth-field-label" htmlFor="reg-password">Mật khẩu *</label>
+                                <div className="relative">
+                                    <input type="password" id="reg-password" required onInput={(event) => window?.handlePasswordStrengthInput?.(event.currentTarget.value)} placeholder="Tối thiểu 6 ký tự" className="auth-field-input pr-12" autoComplete="new-password" />
+                                    <button type="button" onClick={(event) => window?.togglePasswordVisibility?.('reg-password', event.currentTarget)} className="auth-pwd-toggle">HIỆN</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label className="auth-field-label" htmlFor="reg-confirm-password">Xác nhận *</label>
+                                <div className="relative">
+                                    <input type="password" id="reg-confirm-password" required onInput={(event) => window?.handleConfirmPasswordInput?.()} placeholder="Nhập lại mật khẩu" className="auth-field-input pr-12" autoComplete="new-password" />
+                                    <button type="button" onClick={(event) => window?.togglePasswordVisibility?.('reg-confirm-password', event.currentTarget)} className="auth-pwd-toggle">HIỆN</button>
+                                </div>
+                                <p id="reg-confirm-msg" className="text-[9px] font-bold mt-1 hidden"></p>
+                            </div>
+                        </div>
+
+                        {/* Terms */}
+                        <div className="mt-2">
+                            <label className="flex items-start gap-2 cursor-pointer select-none">
+                                <input type="checkbox" id="reg-terms" required defaultChecked className="w-3.5 h-3.5 mt-0.5 rounded accent-[#e45f7a] flex-shrink-0" />
+                                <span className="text-[11px] text-[#6F686B] leading-tight">Tôi đồng ý với <a href="#" className="text-[#e45f7a] font-semibold hover:underline">Điều khoản</a> &amp; <a href="#" className="text-[#e45f7a] font-semibold hover:underline">Bảo mật</a> SkinID.</span>
+                            </label>
+                        </div>
+                        <button type="submit" className="auth-cta-btn mt-2.5">
+                            Tạo tài khoản &amp; Bắt đầu
+                        </button>
+                    </form>
+
+                    {/* Google option */}
+                    <div className="auth-divider mt-2"><span>hoặc</span></div>
+                    <button onClick={(event) => window.authManager?.triggerGoogleSignIn?.()} className="auth-google-btn auth-google-btn--compact group">
+                        <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 48 48" aria-hidden="true">
+                            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.28-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                        </svg>
+                        <span>Đăng ký nhanh bằng Google</span>
+                    </button>
+
+                    {/* Mobile switch to Login */}
+                    <div className="auth-mobile-switch md:hidden text-center mt-3 pt-2 border-t border-rose-100">
+                        <span className="text-xs text-[#6F686B]">Đã có tài khoản? </span>
+                        <button type="button" onClick={(event) => window?.toggleAuthSlider?.('login')} className="text-xs font-bold text-[#e45f7a] hover:underline">Đăng nhập ngay</button>
+                    </div>
+                </div>
+            </div>
+
+            {/* ══ OVERLAY PANEL (Visual thuần cảm xúc, không chữ rườm rà) ══ */}
+            <div className="auth-overlay-panel" aria-hidden="true">
+                <video className="auth-overlay-panel__video" autoPlay muted loop playsInline preload="metadata">
+                    <source src="/videos/auth_video.mp4" type="video/mp4" />
+                </video>
+                {/* Lớp phủ Gradient Hồng Đào trong trẻo */}
+                <div className="auth-overlay-panel__gradient"></div>
+
+                {/* Nội dung khi Overlay đang ở TRÁI (Login mode) */}
+                <div className="auth-overlay-content auth-overlay-content--login">
+                    <h2 className="auth-overlay__headline-clean">Trọn hành trình làn da cùng SkinID.</h2>
+                    <div className="auth-overlay__cta-clean">
+                        <p className="text-xs text-white/90 mb-2.5">Chưa có tài khoản?</p>
+                        <button type="button" className="auth-ghost-btn" onClick={(event) => window.toggleAuthSlider?.('register')}>
+                            Tạo tài khoản ngay →
+                        </button>
+                    </div>
+                </div>
+
+                {/* Nội dung khi Overlay đang ở PHẢI (Register mode) */}
+                <div className="auth-overlay-content auth-overlay-content--register">
+                    <h2 className="auth-overlay__headline-clean">Chào mừng bạn trở lại với SkinID.</h2>
+                    <div className="auth-overlay__cta-clean">
+                        <p className="text-xs text-white/90 mb-2.5">Đã có tài khoản?</p>
+                        <button type="button" className="auth-ghost-btn" onClick={(event) => window.toggleAuthSlider?.('login')}>
+                            ← Đăng nhập ngay
+                        </button>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
+
+
 
     {/* HISTORY MODAL (View Past Scans) */}
     <div id="history-modal" className="fixed inset-0 z-[999] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">

@@ -4,7 +4,23 @@ export default function HeroBanner() {
   return (
     <section className="hero-carousel-section">
       <div id="hero-carousel" className="hero-carousel" aria-roledescription="carousel" aria-label="Ưu đãi và tiện ích nổi bật">
-        <article className="hero-slide hero-slide--products is-active" data-slide="0">
+        <article className="hero-slide hero-slide--scan is-active" data-slide="0">
+          <div className="hero-slide-inner">
+            <div className="hero-slide-copy">
+              <span className="hero-label">TIỆN ÍCH SOI DA AI</span>
+              <h2 className="leading-[1.05]">Hiểu làn da trước khi chọn sản phẩm</h2>
+              <p>Chụp ảnh khuôn mặt theo hướng dẫn để tham khảo tình trạng da và tìm nhanh nhóm sản phẩm phù hợp.</p>
+              <div className="hero-actions">
+                <a className="btn btn--ai-primary" href="/skin-analysis"><i data-feather="camera"></i> Bắt đầu soi da</a>
+                <button className="btn btn--secondary" type="button" onClick={() => window?.openConsultation?.()}>Tư vấn nhanh</button>
+              </div>
+              <small>Kết quả mang tính tham khảo, không thay thế chẩn đoán y khoa.</small>
+            </div>
+            <div className="scan-banner-media"><img src={assetUrl('/images/banners/hero-scan-ai.jpg')} alt="Minh họa tính năng soi da AI SkinID" /></div>
+          </div>
+        </article>
+
+        <article className="hero-slide hero-slide--products" data-slide="1">
           <div className="hero-slide-inner">
             <div className="hero-slide-copy">
               <span className="hero-label">RILASTIL · DƯỢC MỸ PHẨM TỪ Ý</span>
@@ -22,22 +38,6 @@ export default function HeroBanner() {
               <img className="stage-product stage-product--b" src={assetUrl('/images/products/rilastil/rilastil-serum-tai-tao-va-chong-lao-hoa-30ml-rilastil-multirepair-retinol-tech.avif')} alt="Serum Rilastil" />
               <img className="stage-product stage-product--c" src={assetUrl('/images/products/rilastil/rilastil-kem-duong-am-giup-can-bang-vi-sinh-ho-tro-phuc-hoi-da-mun-rilastil-acnestil-h-biome-cream.png')} alt="Kem dưỡng Rilastil" />
             </div>
-          </div>
-        </article>
-
-        <article className="hero-slide hero-slide--scan" data-slide="1">
-          <div className="hero-slide-inner">
-            <div className="hero-slide-copy">
-              <span className="hero-label">TIỆN ÍCH SOI DA AI</span>
-              <h2 className="leading-[1.05]">Hiểu làn da trước khi chọn sản phẩm</h2>
-              <p>Chụp ảnh khuôn mặt theo hướng dẫn để tham khảo tình trạng da và tìm nhanh nhóm sản phẩm phù hợp.</p>
-              <div className="hero-actions">
-                <a className="btn btn--ai-primary" href="/skin-analysis"><i data-feather="camera"></i> Bắt đầu soi da</a>
-                <button className="btn btn--secondary" type="button" onClick={() => window?.openConsultation?.()}>Tư vấn nhanh</button>
-              </div>
-              <small>Kết quả mang tính tham khảo, không thay thế chẩn đoán y khoa.</small>
-            </div>
-            <div className="scan-banner-media"><img src={assetUrl('/images/banners/hero-scan-ai.jpg')} alt="Minh họa tính năng soi da AI SkinID" /></div>
           </div>
         </article>
 
