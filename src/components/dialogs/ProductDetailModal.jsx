@@ -18,7 +18,6 @@ export default function ProductDetailModal() {
                   <span id="pmodal-price"></span>
                   <span id="pmodal-original-price" className="hidden"></span>
                 </div>
-                <div id="pmodal-license-badge" className="hidden mt-2 mb-3"></div>
                 <p id="pmodal-uses"></p>
                 <div className="spec">
                   <h4>Dung tích</h4>

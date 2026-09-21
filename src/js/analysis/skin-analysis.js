@@ -197,54 +197,31 @@ window.openProductDetailModal = function(productId) {
     }
 
     // License Document Link (TEMPLATE FOR NOTIFICATION OF COSMETIC PRODUCT)
-    const licenseBadge = document.getElementById('pmodal-license-badge');
     const licenseContainer = document.getElementById('pmodal-license-container');
-    
-    if (p.licenseUrl) {
-        if (licenseBadge) {
-            licenseBadge.innerHTML = `
-                <a href="${p.licenseUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 hover:border-rose-300 transition-all shadow-xs group" title="Mở Phiếu tiếp nhận công bố mỹ phẩm (Bản scan lưu trữ)">
-                    <i data-feather="file-text" class="w-3.5 h-3.5 text-rose-600 flex-shrink-0"></i>
-                    <span class="truncate">TEMPLATE FOR NOTIFICATION OF COSMETIC PRODUCT</span>
-                    <i data-feather="external-link" class="w-3 h-3 text-rose-400 group-hover:text-rose-600 flex-shrink-0 transition-colors"></i>
+    if (licenseContainer) {
+        if (p.licenseUrl) {
+            licenseContainer.innerHTML = `
+                <a href="${p.licenseUrl}" target="_blank" rel="noopener noreferrer" class="pmodal-license-link mt-2.5 inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-gray-200 bg-gray-50/70 hover:bg-white hover:border-gray-300 transition-all text-xs font-medium text-gray-700 hover:text-gray-900 group shadow-2xs" title="Mở Phiếu công bố sản phẩm mỹ phẩm (VN_CPP License)">
+                    <svg class="w-4 h-4 text-rose-500 group-hover:scale-105 transition-transform flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    <span class="font-semibold text-gray-800">TEMPLATE FOR NOTIFICATION OF COSMETIC PRODUCT</span>
+                    <span class="text-[11px] text-gray-400 font-normal hidden sm:inline">• Phiếu tiếp nhận công bố</span>
+                    <svg class="w-3.5 h-3.5 text-gray-400 group-hover:text-gray-700 ml-auto transition-colors flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
                 </a>
             `;
-            licenseBadge.classList.remove('hidden');
-        }
-        if (licenseContainer) {
-            licenseContainer.innerHTML = `
-                <div class="mt-3 p-3.5 rounded-xl bg-gradient-to-r from-rose-50/70 via-white to-slate-50 border border-rose-200/80 flex items-center justify-between gap-3 shadow-xs">
-                    <div class="flex items-center gap-3 min-w-0">
-                        <div class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 border border-rose-200/60 flex items-center justify-center flex-shrink-0 shadow-xs">
-                            <i data-feather="file-check" class="w-5 h-5 text-rose-600"></i>
-                        </div>
-                        <div class="min-w-0">
-                            <div class="flex items-center gap-1.5">
-                                <span class="text-[11px] font-black text-rose-600 uppercase tracking-wider">Hồ Sơ Pháp Lý</span>
-                                <span class="text-[10px] bg-rose-100 text-rose-800 font-bold px-1.5 py-0.5 rounded">Bộ Y Tế</span>
-                            </div>
-                            <div class="text-xs font-bold text-gray-800 tracking-tight uppercase truncate mt-0.5">
-                                TEMPLATE FOR NOTIFICATION OF COSMETIC PRODUCT
-                            </div>
-                            <div class="text-[11px] text-gray-500 truncate">
-                                Phiếu công bố sản phẩm mỹ phẩm chính ngạch (VN_CPP License)
-                            </div>
-                        </div>
-                    </div>
-                    <a href="${p.licenseUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-sm hover:shadow transition-all flex-shrink-0">
-                        <span>Xem hồ sơ</span>
-                        <i data-feather="arrow-up-right" class="w-3.5 h-3.5"></i>
-                    </a>
-                </div>
-            `;
-        }
-    } else {
-        if (licenseBadge) {
-            licenseBadge.innerHTML = '';
-            licenseBadge.classList.add('hidden');
-        }
-        if (licenseContainer) {
+            licenseContainer.classList.remove('hidden');
+        } else {
             licenseContainer.innerHTML = '';
+            licenseContainer.classList.add('hidden');
         }
     }
 
