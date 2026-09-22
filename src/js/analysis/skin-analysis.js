@@ -92,8 +92,30 @@ function renderCatalog() {
     }
 
     if (filtered.length === 0) {
-        grid.innerHTML = '<div class="col-span-full text-center text-gray-500 py-12 bg-white rounded-2xl border border-gray-100"><i data-feather="package" class="w-10 h-10 mx-auto text-gray-300 mb-2"></i>Không tìm thấy sản phẩm nào phù hợp với bộ lọc.</div>';
-        if (window.feather) feather.replace();
+        grid.innerHTML = `
+            <div class="col-span-full text-center py-16 px-4 bg-white/70 rounded-2xl border border-gray-100 shadow-2xs flex flex-col items-center justify-center">
+                <div class="w-14 h-14 rounded-full bg-rose-50 border border-rose-100 flex items-center justify-center mb-3.5 text-[#E85D75]">
+                    <svg class="w-6 h-6 stroke-[1.5]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        <path d="M11 8a3 3 0 0 0-3 3"></path>
+                    </svg>
+                </div>
+                <h3 class="text-sm font-bold text-gray-800">Không tìm thấy sản phẩm phù hợp</h3>
+                <p class="text-xs text-gray-500 mt-1 max-w-sm">Rất tiếc, không có sản phẩm nào khớp với tiêu chí lọc hiện tại của bạn.</p>
+                <button
+                    type="button"
+                    onclick="window.resetAllFilters && window.resetAllFilters()"
+                    class="mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold text-white bg-[#E85D75] hover:bg-[#d64a63] transition-colors shadow-2xs cursor-pointer"
+                >
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                        <path d="M3 3v5h5"></path>
+                    </svg>
+                    <span>Xóa bộ lọc & Xem tất cả</span>
+                </button>
+            </div>
+        `;
         return;
     }
 
@@ -138,18 +160,55 @@ window.filterByStep = function(step, el) {
 
 window.filterByBenefit = function(benefit, el) {
     currentBenefitFilter = benefit;
-    const pills = document.querySelectorAll('#benefit-filters .benefit-filter-pill');
-    pills.forEach(p => {
-        const isMatch = p.dataset.benefit === benefit;
-        p.classList.toggle('is-active', isMatch);
-        if (isMatch) {
-            p.classList.add('bg-[#E85D75]', 'text-white', 'border-[#E85D75]', 'shadow-xs');
-            p.classList.remove('bg-white', 'text-gray-700', 'border-rose-100');
-        } else {
-            p.classList.remove('bg-[#E85D75]', 'text-white', 'border-[#E85D75]', 'shadow-xs');
-            p.classList.add('bg-white', 'text-gray-700', 'border-rose-100');
-        }
+    const tabs = document.querySelectorAll('#benefit-filters .benefit-filter-tab');
+    tabs.forEach(t => {
+        const isMatch = t.dataset.benefit === benefit;
+        t.classList.toggle('is-active', isMatch);
+        t.classList.toggle('text-gray-900', isMatch);
+        t.classList.toggle('font-bold', isMatch);
+        t.classList.toggle('border-[#E85D75]', isMatch);
+        t.classList.toggle('border-transparent', !isMatch);
+        t.classList.toggle('text-gray-500', !isMatch);
+        t.classList.toggle('font-medium', !isMatch);
     });
+    renderCatalog();
+};
+
+window.resetAllFilters = function() {
+    currentBrandFilter = 'all';
+    currentStepFilter = 'all';
+    currentBenefitFilter = 'all';
+    currentSearchQuery = '';
+
+    // Reset Benefit Text Tabs
+    const tabs = document.querySelectorAll('#benefit-filters .benefit-filter-tab');
+    tabs.forEach(t => {
+        const isAll = t.dataset.benefit === 'all';
+        t.classList.toggle('is-active', isAll);
+        t.classList.toggle('text-gray-900', isAll);
+        t.classList.toggle('font-bold', isAll);
+        t.classList.toggle('border-[#E85D75]', isAll);
+        t.classList.toggle('border-transparent', !isAll);
+        t.classList.toggle('text-gray-500', !isAll);
+        t.classList.toggle('font-medium', !isAll);
+    });
+
+    // Reset Brand Select
+    const brandSelect = document.getElementById('brand-filter-select');
+    if (brandSelect) {
+        brandSelect.value = 'all';
+        window.syncCatalogDropdown?.(brandSelect);
+    }
+    // Reset Step Select
+    const stepSelect = document.getElementById('step-filter-select');
+    if (stepSelect) {
+        stepSelect.value = 'all';
+        window.syncCatalogDropdown?.(stepSelect);
+    }
+    // Reset search
+    const searchInput = document.getElementById('product-search');
+    if (searchInput) searchInput.value = '';
+
     renderCatalog();
 };
 
@@ -182,11 +241,11 @@ function initCatalog() {
         });
     });
 
-    // Setup benefit filter pills
-    const benefitBtns = document.querySelectorAll('#benefit-filters .benefit-filter-pill');
+    // Setup benefit filter tabs
+    const benefitBtns = document.querySelectorAll('#benefit-filters .benefit-filter-tab');
     benefitBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
-            const targetBtn = e.target.closest('.benefit-filter-pill');
+            const targetBtn = e.target.closest('.benefit-filter-tab');
             if (!targetBtn) return;
             filterByBenefit(targetBtn.dataset.benefit, targetBtn);
         });
