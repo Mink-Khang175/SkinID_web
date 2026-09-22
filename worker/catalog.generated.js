@@ -327,56 +327,56 @@ export const SERVER_CATALOG = [
     "name": "Kem Body Lotion TWON 200ml",
     "image": "/images/products/twon-body-lotion.png",
     "volume": "200ml",
-    "price": 279000
+    "price": 304000
   },
   {
     "id": "twon-kem-u-trang",
     "name": "Kem Ủ Trắng TWON 250ml",
     "image": "/images/products/twon-kem-u-trang.png",
     "volume": "250ml",
-    "price": 249000
+    "price": 275500
   },
   {
     "id": "twon-sua-tam",
     "name": "Sữa Tắm Hương Nước Hoa TWON 450ml",
     "image": "/images/products/twon-sua-tam.png",
     "volume": "450ml",
-    "price": 179000
+    "price": 199500
   },
   {
     "id": "dvah-sarika",
     "name": "Nước Hoa D'VAH SARIKA 10ml",
     "image": "/images/products/dvah-sarika.png",
     "volume": "10ml",
-    "price": 159000
+    "price": 180500
   },
   {
     "id": "dvah-kamal",
     "name": "Nước Hoa D'VAH KAMAL 10ml",
     "image": "/images/products/dvah-kamal.png",
     "volume": "10ml",
-    "price": 159000
+    "price": 180500
   },
   {
     "id": "dvah-rakta",
     "name": "Nước Hoa D'VAH RAKTA 10ml",
     "image": "/images/products/dvah-rakta.png",
     "volume": "10ml",
-    "price": 179000
+    "price": 199500
   },
   {
     "id": "dvah-tanmaya",
     "name": "Nước Hoa D'VAH TANMAYA 10ml",
     "image": "/images/products/dvah-tanmaya.png",
     "volume": "10ml",
-    "price": 179000
+    "price": 199500
   },
   {
     "id": "dvah-malini",
     "name": "Nước Hoa D'VAH MALINI 10ml",
     "image": "/images/products/dvah-malini.png",
     "volume": "10ml",
-    "price": 179000
+    "price": 199500
   },
   {
     "id": "rilastil-2110",
