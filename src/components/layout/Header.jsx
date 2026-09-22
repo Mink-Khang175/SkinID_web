@@ -52,6 +52,10 @@ export default function Header() {
             <a href="/#catalog" data-nav-step="moisturizer">Dưỡng ẩm</a>
             <a href="/#catalog" data-nav-step="sunscreen">Chống nắng</a>
             <a href="/#brands">Thương hiệu</a>
+            <a href="/#acie-teaser" className="acie-header-link font-bold text-[#E85D75] hover:text-rose-700 transition-colors inline-flex items-center gap-1.5">
+              <span>SKINID x ACIE VISION</span>
+              <span className="text-[9px] bg-rose-100 text-[#E85D75] px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider">Mới</span>
+            </a>
           </nav>
           <a className={`skin-tool-link${isAnalysisPage ? ' is-active' : ''}`} href="/skin-analysis" aria-current={isAnalysisPage ? 'page' : undefined}>
             <i data-feather="camera"></i> Soi da AI
@@ -63,6 +67,10 @@ export default function Header() {
         <a href="/#featured-products" data-nav-step="all" onClick={() => window?.toggleMobileMenu?.(false)}>Tất cả sản phẩm</a>
         <a href="/#categories" onClick={() => window?.toggleMobileMenu?.(false)}>Danh mục</a>
         <a href="/#brands" onClick={() => window?.toggleMobileMenu?.(false)}>Thương hiệu</a>
+        <a href="/#acie-teaser" className="text-[#E85D75] font-bold flex items-center justify-between" onClick={() => window?.toggleMobileMenu?.(false)}>
+          <span>SKINID x ACIE VISION</span>
+          <span className="text-[9px] bg-rose-100 text-[#E85D75] px-1.5 py-0.5 rounded-full font-bold">Mới</span>
+        </a>
         <a href="/skin-analysis" onClick={() => window?.toggleMobileMenu?.(false)}>Soi da AI</a>
         <button type="button" onClick={() => {
           window?.toggleMobileMenu?.(false);

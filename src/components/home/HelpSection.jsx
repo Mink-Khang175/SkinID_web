@@ -34,10 +34,10 @@ export default function HelpSection() {
       <span className="help-visual__status"><i></i> AI đang nhận diện 12 vùng da</span>
     </div>
     <div className="help-options" aria-label="Chọn nhanh nhu cầu làn da">
-      <button className="concern-card" type="button" data-concern="mụn" data-step="treatment"><i data-feather="circle"></i><span><b>Da dầu & mụn</b><small>Làm sạch và đặc trị</small></span><i data-feather="arrow-up-right"></i></button>
-      <button className="concern-card" type="button" data-concern="ẩm" data-step="moisturizer"><i data-feather="droplet"></i><span><b>Da khô, thiếu ẩm</b><small>Cấp ẩm và phục hồi</small></span><i data-feather="arrow-up-right"></i></button>
-      <button className="concern-card" type="button" data-concern="nhạy cảm" data-step="moisturizer"><i data-feather="feather"></i><span><b>Da nhạy cảm</b><small>Công thức dịu nhẹ</small></span><i data-feather="arrow-up-right"></i></button>
-      <button className="concern-card" type="button" data-concern="sắc tố" data-step="treatment"><i data-feather="sun"></i><span><b>Thâm nám & sắc tố</b><small>Đều màu và bảo vệ da</small></span><i data-feather="arrow-up-right"></i></button>
+      <button className="concern-card" type="button" data-benefit="tri-mun-kiem-dau" data-step="all"><i data-feather="circle"></i><span><b>Da dầu & mụn</b><small>Làm sạch & kiềm dầu</small></span><i data-feather="arrow-up-right"></i></button>
+      <button className="concern-card" type="button" data-benefit="cap-am-chuyen-sau" data-step="all"><i data-feather="droplet"></i><span><b>Da khô, thiếu ẩm</b><small>Cấp ẩm chuyên sâu</small></span><i data-feather="arrow-up-right"></i></button>
+      <button className="concern-card" type="button" data-benefit="phuc-hoi-diu-da" data-step="all"><i data-feather="feather"></i><span><b>Da nhạy cảm</b><small>Phục hồi & làm dịu</small></span><i data-feather="arrow-up-right"></i></button>
+      <button className="concern-card" type="button" data-benefit="sang-da-mo-tham" data-step="all"><i data-feather="sun"></i><span><b>Thâm nám & sắc tố</b><small>Sáng da & mờ thâm</small></span><i data-feather="arrow-up-right"></i></button>
     </div>
   </div>
 </section>

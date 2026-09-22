@@ -7,7 +7,6 @@ import BrandShowcase from '../components/home/BrandShowcase.jsx';
 import CategorySection from '../components/home/CategorySection.jsx';
 import HelpSection from '../components/home/HelpSection.jsx';
 import HeroBanner from '../components/home/HeroBanner.jsx';
-import HotPromotion from '../components/home/HotPromotion.jsx';
 import ProductList from '../components/home/ProductList.jsx';
 import TrustBenefits from '../components/home/TrustBenefits.jsx';
 import Footer from '../components/layout/Footer.jsx';
@@ -34,7 +33,6 @@ export default function HomePage() {
         <CategorySection />
         <ProductList />
         <HelpSection />
-        <HotPromotion />
         <BrandShowcase />
         <AcieTeaser />
         <TrustBenefits />

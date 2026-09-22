@@ -174,7 +174,6 @@
             if (!event.target.closest('[data-catalog-dropdown]')) closeAll();
         });
     }
-
     function setupMerchandisingLinks() {
         if (!$('#catalog')) return;
         $$('.category-item, [data-nav-step]').forEach((button) => {
@@ -193,9 +192,10 @@
         $$('.concern-card').forEach((button) => {
             button.addEventListener('click', () => {
                 applyCatalogState({
-                    brand: button.dataset.brand || 'all',
-                    step: button.dataset.step || 'all',
-                    query: button.dataset.concern || ''
+                    brand: 'all',
+                    step: 'all',
+                    benefit: button.dataset.benefit || 'all',
+                    query: ''
                 });
             });
         });
