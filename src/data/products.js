@@ -36,7 +36,11 @@ window.LOCAL_PRODUCTS = [
         "fullIngredients": "Aqua (Water) • Polysorbate 20 • Sodium Lauroyl Sarcosinate • Ceteareth-60 Myristyl Glycol • Glycerin • Cocamidopropyl Betaine • PEG-3 Distearate • Sodium Cocoamphoacetate • Lauryl Glucoside • Sodium Methyl Cocoyl Taurate • Coco-glucoside • Glyceryl Oleate • Xylitol • PEG-7 Glyceryl Cocoate • Butylene Glycol • Oenothera biennis (Evening Primrose) Oil • Sodium Hyaluronate • Hydrolyzed Hyaluronic Acid • Sodium Lauroyl Lactylate • Ceramide NP • Ceramide AP • Ceramide EOP • Olus Oil (Vegetable Oil) • Phytosphingosine • Cholesterol • Butyrospermum parkii (Shea) Butter • Tocopheryl Acetate • PEG-150 Distearate • Citric Acid • C12-13 Alkyl Lactate • Carbomer • Xanthan Gum • Tocopherol • Hydrogenated Palm Glycerides Citrate • Lecithin • Ascorbyl Palmitate • Sodium Chloride • Pentaerythrityl Tetra-di-t-Butyl Hydroxyhydrocinnamate • Phenoxyethanol • Chlorphenesin • Benzoic Acid • Ethylhexylglycerin • o-cymen-5-ol • Disodium EDTA • Tetrasodium EDTA • Parfum (Fragrance).",
         "image": "/images/products/rilastil-sua-rua-mat-duong-am-rilastil-aqua-face-cleanser-50ml.avif",
         "originalImageUrl": "https://rilastilvn.com.vn/wp-content/uploads/2026/04/10-3.avif",
-        "link": "https://rilastilvn.com.vn/san-pham/sua-rua-mat-duong-am-rilastil-aqua-face-cleanser-50ml/"
+        "link": "https://rilastilvn.com.vn/san-pham/sua-rua-mat-duong-am-rilastil-aqua-face-cleanser-50ml/",
+        "benefits": [
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Cấp ẩm sâu"
     },
     {
         "id": "rilastil-2103",
@@ -82,7 +86,11 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8055510243227",
         "dimensions": "15x20x15",
         "licenseUrl": "https://drive.google.com/file/d/1j3BF6PNRdgHsKqvgVqS33tSZpnYjOgFm/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1j3BF6PNRdgHsKqvgVqS33tSZpnYjOgFm.webp"
+        "licenseImageUrl": "/images/licenses/1j3BF6PNRdgHsKqvgVqS33tSZpnYjOgFm.webp",
+        "benefits": [
+            "tri-mun-kiem-dau"
+        ],
+        "benefitName": "Trị mụn & Kiềm dầu"
     },
     {
         "id": "rilastil-2101",
@@ -129,7 +137,11 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8055510247874",
         "dimensions": "12x4x3",
         "licenseUrl": "https://drive.google.com/file/d/1whA70yfad759EvBwrdZWfNI21rukRfZN/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1whA70yfad759EvBwrdZWfNI21rukRfZN.webp"
+        "licenseImageUrl": "/images/licenses/1whA70yfad759EvBwrdZWfNI21rukRfZN.webp",
+        "benefits": [
+            "chong-lao-hoa"
+        ],
+        "benefitName": "Chống lão hóa"
     },
     {
         "id": "rilastil-2098",
@@ -169,7 +181,11 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8055510240776",
         "dimensions": "10x5x5",
         "licenseUrl": "https://drive.google.com/file/d/1jw81qdomGa4IHkcIQ0lZTr-FXi7-uUrb/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1jw81qdomGa4IHkcIQ0lZTr-FXi7-uUrb.webp"
+        "licenseImageUrl": "/images/licenses/1jw81qdomGa4IHkcIQ0lZTr-FXi7-uUrb.webp",
+        "benefits": [
+            "tri-mun-kiem-dau"
+        ],
+        "benefitName": "Trị mụn & Kiềm dầu"
     },
     {
         "id": "rilastil-2097",
@@ -209,7 +225,11 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8055510240783",
         "dimensions": "10x5x5",
         "licenseUrl": "https://drive.google.com/file/d/13GzlyGVCI5eGKA7OmYoNbZPatdsz3fHx/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/13GzlyGVCI5eGKA7OmYoNbZPatdsz3fHx.webp"
+        "licenseImageUrl": "/images/licenses/13GzlyGVCI5eGKA7OmYoNbZPatdsz3fHx.webp",
+        "benefits": [
+            "tri-mun-kiem-dau"
+        ],
+        "benefitName": "Trị mụn & Kiềm dầu"
     },
     {
         "id": "rilastil-2096",
@@ -249,7 +269,11 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8055510240769",
         "dimensions": "20x20x20",
         "licenseUrl": "https://drive.google.com/file/d/1hF_w02qh8-TYgFhKFD0jX8Yt6XJwp7XZ/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1hF_w02qh8-TYgFhKFD0jX8Yt6XJwp7XZ.webp"
+        "licenseImageUrl": "/images/licenses/1hF_w02qh8-TYgFhKFD0jX8Yt6XJwp7XZ.webp",
+        "benefits": [
+            "tri-mun-kiem-dau"
+        ],
+        "benefitName": "Trị mụn & Kiềm dầu"
     },
     {
         "id": "rilastil-2095",
@@ -295,7 +319,13 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8055510242299",
         "dimensions": "10x5x5",
         "licenseUrl": "https://drive.google.com/file/d/18eeQji4nYn5x53Bo_-vV6QQQ_xoskIay/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/18eeQji4nYn5x53Bo_-vV6QQQ_xoskIay.webp"
+        "licenseImageUrl": "/images/licenses/18eeQji4nYn5x53Bo_-vV6QQQ_xoskIay.webp",
+        "benefits": [
+            "tri-mun-kiem-dau",
+            "phuc-hoi-diu-da",
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Trị mụn & Kiềm dầu"
     },
     {
         "id": "rilastil-2093",
@@ -340,7 +370,12 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8050444857939",
         "dimensions": "5x5x5",
         "licenseUrl": "https://drive.google.com/file/d/1YFuhsidPu0NDLwmMqtEWCGFljuxeESfb/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1YFuhsidPu0NDLwmMqtEWCGFljuxeESfb.webp"
+        "licenseImageUrl": "/images/licenses/1YFuhsidPu0NDLwmMqtEWCGFljuxeESfb.webp",
+        "benefits": [
+            "sang-da-mo-tham",
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Sáng da & Mờ thâm"
     },
     {
         "id": "rilastil-2092",
@@ -385,7 +420,12 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8058031940668",
         "dimensions": "5x5x5",
         "licenseUrl": "https://drive.google.com/file/d/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK.webp"
+        "licenseImageUrl": "/images/licenses/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK.webp",
+        "benefits": [
+            "phuc-hoi-diu-da",
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Phục hồi & Dịu da"
     },
     {
         "id": "rilastil-2089",
@@ -424,7 +464,11 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/tay-trang-rilastil-daily-care-micellar-solution-100ml-sao-chep/",
         "dimensions": "5x5x5",
         "licenseUrl": "https://drive.google.com/file/d/1JeLSKHGykdPwri75pnF5Tzb_D5TQ_UbK/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1JeLSKHGykdPwri75pnF5Tzb_D5TQ_UbK.webp"
+        "licenseImageUrl": "/images/licenses/1JeLSKHGykdPwri75pnF5Tzb_D5TQ_UbK.webp",
+        "benefits": [
+            "tri-mun-kiem-dau"
+        ],
+        "benefitName": "Trị mụn & Kiềm dầu"
     },
     {
         "id": "rilastil-2087",
@@ -464,7 +508,11 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8050444852798",
         "dimensions": "20x20x20",
         "licenseUrl": "https://drive.google.com/file/d/1JeLSKHGykdPwri75pnF5Tzb_D5TQ_UbK/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1JeLSKHGykdPwri75pnF5Tzb_D5TQ_UbK.webp"
+        "licenseImageUrl": "/images/licenses/1JeLSKHGykdPwri75pnF5Tzb_D5TQ_UbK.webp",
+        "benefits": [
+            "tri-mun-kiem-dau"
+        ],
+        "benefitName": "Trị mụn & Kiềm dầu"
     },
     {
         "id": "rilastil-2085",
@@ -510,7 +558,12 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8050444857977",
         "dimensions": "5x5x5",
         "licenseUrl": "https://drive.google.com/file/d/19UA0Hozb7cNgS2TFIx24bFG6EF-wGvi-/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/19UA0Hozb7cNgS2TFIx24bFG6EF-wGvi-.webp"
+        "licenseImageUrl": "/images/licenses/19UA0Hozb7cNgS2TFIx24bFG6EF-wGvi-.webp",
+        "benefits": [
+            "phuc-hoi-diu-da",
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Phục hồi & Dịu da"
     },
     {
         "id": "rilastil-2070",
@@ -556,7 +609,11 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8055510241919",
         "dimensions": "5x5x10",
         "licenseUrl": "https://drive.google.com/file/d/1qyxthlBqAECzijHH_wdyoY7qRgIpUQ9s/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1qyxthlBqAECzijHH_wdyoY7qRgIpUQ9s.webp"
+        "licenseImageUrl": "/images/licenses/1qyxthlBqAECzijHH_wdyoY7qRgIpUQ9s.webp",
+        "benefits": [
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Cấp ẩm sâu"
     },
     {
         "id": "rilastil-2067",
@@ -598,7 +655,11 @@ window.LOCAL_PRODUCTS = [
         "fullIngredients": "Aqua (Water) • Glycerin • Dimethicone • 1,2-Hexanediol • Hydroxyethyl Acrylate/Sodium Acryloyldimethyl Taurate Copolymer • Bis-PEG-18 Methyl Ether Dimethyl Silane • Hydrolyzed Hyaluronic Acid • Sodium Hyaluronate • Ceramide NP • Ceramide AP • Ceramide EOP • Phytosphingosine • Cholesterol • Sodium Lauroyl Lactylate • Tocopheryl Acetate • Polysorbate 60 • Sorbitan Isostearate • Carbomer • Xanthan Gum • Citric Acid • Sodium Hydroxide • Hydroxyacetophenone • Tetrasodium Glutamate Diacetate • Parfum (Fragrance).",
         "image": "/images/products/rilastil-kem-cap-am-chuyen-sau-72h-rilastil-aqua-intense-gel-72h-40ml.avif",
         "originalImageUrl": "https://rilastilvn.com.vn/wp-content/uploads/2026/01/12-1.avif",
-        "link": "https://rilastilvn.com.vn/san-pham/kem-cap-am-chuyen-sau-72h-rilastil-aqua-intense-gel-72h-40ml/"
+        "link": "https://rilastilvn.com.vn/san-pham/kem-cap-am-chuyen-sau-72h-rilastil-aqua-intense-gel-72h-40ml/",
+        "benefits": [
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Cấp ẩm sâu"
     },
     {
         "id": "rilastil-1942",
@@ -644,7 +705,11 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8055510241827",
         "dimensions": "5x5x5",
         "licenseUrl": "https://drive.google.com/file/d/1Ae3OmmJuL89FjDsySO524m-b6vBRv_v_/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1Ae3OmmJuL89FjDsySO524m-b6vBRv_v_.webp"
+        "licenseImageUrl": "/images/licenses/1Ae3OmmJuL89FjDsySO524m-b6vBRv_v_.webp",
+        "benefits": [
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Cấp ẩm sâu"
     },
     {
         "id": "rilastil-1939",
@@ -684,7 +749,11 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8055510243036",
         "dimensions": "20x20x20",
         "licenseUrl": "https://drive.google.com/file/d/1TTK6PFxFsPV7yO2q1EtIMoNVVT5ITaNb/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1TTK6PFxFsPV7yO2q1EtIMoNVVT5ITaNb.webp"
+        "licenseImageUrl": "/images/licenses/1TTK6PFxFsPV7yO2q1EtIMoNVVT5ITaNb.webp",
+        "benefits": [
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Cấp ẩm sâu"
     },
     {
         "id": "rilastil-1936",
@@ -720,7 +789,11 @@ window.LOCAL_PRODUCTS = [
         "fullIngredients": "Aqua (Water) • PEG-8 Beeswax • PEG-8 • Olus Oil (Vegetable Oil) • PEG-6 Stearate • Ethylhexyl Palmitate • Oryza sativa (Rice) Bran Oil • C12-15 Alkyl Benzoate • Dimethicone • Sodium DNA • Tocopheryl Acetate • Hydrolyzed Glycosaminoglycans • Leucine • Isoleucine • Valine • Allantoin • Glyceryl Stearate • PEG-32 Stearate • Carbomer • Triethanolamine • Phenoxyethanol • Ethylhexylglycerin • Disodium EDTA • Parfum (Fragrance).",
         "image": "/images/products/rilastil-kem-ngan-ngua-ran-da-rilastil-stretch-marks-cream-75ml.png",
         "originalImageUrl": "https://rilastilvn.com.vn/wp-content/uploads/2024/09/Kem-ran-75ml.png",
-        "link": "https://rilastilvn.com.vn/san-pham/kem-ngan-ngua-ran-da-rilastil-stretch-marks-cream-75ml/"
+        "link": "https://rilastilvn.com.vn/san-pham/kem-ngan-ngua-ran-da-rilastil-stretch-marks-cream-75ml/",
+        "benefits": [
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Cấp ẩm sâu"
     },
     {
         "id": "rilastil-1876",
@@ -765,7 +838,12 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8050444858233",
         "dimensions": "20x20x20",
         "licenseUrl": "https://drive.google.com/file/d/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK.webp"
+        "licenseImageUrl": "/images/licenses/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK.webp",
+        "benefits": [
+            "phuc-hoi-diu-da",
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Phục hồi & Dịu da"
     },
     {
         "id": "rilastil-1872",
@@ -810,7 +888,11 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8050444859568",
         "dimensions": "30x30x30",
         "licenseUrl": "https://drive.google.com/file/d/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK.webp"
+        "licenseImageUrl": "/images/licenses/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK.webp",
+        "benefits": [
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Cấp ẩm sâu"
     },
     {
         "id": "rilastil-1871",
@@ -855,7 +937,11 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8050444856970",
         "dimensions": "15x20x15",
         "licenseUrl": "https://drive.google.com/file/d/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK.webp"
+        "licenseImageUrl": "/images/licenses/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK.webp",
+        "benefits": [
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Cấp ẩm sâu"
     },
     {
         "id": "rilastil-1868",
@@ -900,7 +986,12 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8050444858226",
         "dimensions": "20x20x20",
         "licenseUrl": "https://drive.google.com/file/d/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK.webp"
+        "licenseImageUrl": "/images/licenses/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK.webp",
+        "benefits": [
+            "phuc-hoi-diu-da",
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Phục hồi & Dịu da"
     },
     {
         "id": "rilastil-1867",
@@ -945,7 +1036,11 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8050444858776",
         "dimensions": "20x20x20",
         "licenseUrl": "https://drive.google.com/file/d/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK.webp"
+        "licenseImageUrl": "/images/licenses/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK.webp",
+        "benefits": [
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Cấp ẩm sâu"
     },
     {
         "id": "rilastil-1864",
@@ -986,7 +1081,12 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8055510240585",
         "dimensions": "20x20x20",
         "licenseUrl": "https://drive.google.com/file/d/1yYYQd0ttptKChoV5pm4IZPHTUUdNsfwR/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1yYYQd0ttptKChoV5pm4IZPHTUUdNsfwR.webp"
+        "licenseImageUrl": "/images/licenses/1yYYQd0ttptKChoV5pm4IZPHTUUdNsfwR.webp",
+        "benefits": [
+            "chong-nang",
+            "chong-lao-hoa"
+        ],
+        "benefitName": "Chống nắng"
     },
     {
         "id": "rilastil-1860",
@@ -1029,7 +1129,13 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8050444859612",
         "dimensions": "20x20x20",
         "licenseUrl": "https://drive.google.com/file/d/1gG3WynSSRgHSyv1P1205wf-wi7roqgBT/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1gG3WynSSRgHSyv1P1205wf-wi7roqgBT.webp"
+        "licenseImageUrl": "/images/licenses/1gG3WynSSRgHSyv1P1205wf-wi7roqgBT.webp",
+        "benefits": [
+            "chong-nang",
+            "chong-lao-hoa",
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Chống nắng"
     },
     {
         "id": "rilastil-1857",
@@ -1072,7 +1178,13 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8050444858042",
         "dimensions": "20x20x20",
         "licenseUrl": "https://drive.google.com/file/d/1gG3WynSSRgHSyv1P1205wf-wi7roqgBT/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1gG3WynSSRgHSyv1P1205wf-wi7roqgBT.webp"
+        "licenseImageUrl": "/images/licenses/1gG3WynSSRgHSyv1P1205wf-wi7roqgBT.webp",
+        "benefits": [
+            "chong-nang",
+            "chong-lao-hoa",
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Chống nắng"
     },
     {
         "id": "rilastil-1856",
@@ -1119,7 +1231,12 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8050444859513",
         "dimensions": "20x20x20",
         "licenseUrl": "https://drive.google.com/file/d/1ZNM7of3XZseH6rMbPgkytC_SQanIC22v/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1ZNM7of3XZseH6rMbPgkytC_SQanIC22v.webp"
+        "licenseImageUrl": "/images/licenses/1ZNM7of3XZseH6rMbPgkytC_SQanIC22v.webp",
+        "benefits": [
+            "chong-nang",
+            "tri-mun-kiem-dau"
+        ],
+        "benefitName": "Chống nắng"
     },
     {
         "id": "rilastil-1853",
@@ -1162,7 +1279,12 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8055510240509",
         "dimensions": "10x10x10",
         "licenseUrl": "https://drive.google.com/file/d/1e1DWuBoaJIFsL6cyIrO1FmBZGKI03vR6/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1e1DWuBoaJIFsL6cyIrO1FmBZGKI03vR6.webp"
+        "licenseImageUrl": "/images/licenses/1e1DWuBoaJIFsL6cyIrO1FmBZGKI03vR6.webp",
+        "benefits": [
+            "tri-mun-kiem-dau",
+            "sang-da-mo-tham"
+        ],
+        "benefitName": "Trị mụn & Kiềm dầu"
     },
     {
         "id": "rilastil-1844",
@@ -1205,7 +1327,12 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8058031942570",
         "dimensions": "5x5x5",
         "licenseUrl": "https://drive.google.com/file/d/1e1DWuBoaJIFsL6cyIrO1FmBZGKI03vR6/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1e1DWuBoaJIFsL6cyIrO1FmBZGKI03vR6.webp"
+        "licenseImageUrl": "/images/licenses/1e1DWuBoaJIFsL6cyIrO1FmBZGKI03vR6.webp",
+        "benefits": [
+            "tri-mun-kiem-dau",
+            "sang-da-mo-tham"
+        ],
+        "benefitName": "Trị mụn & Kiềm dầu"
     },
     {
         "id": "rilastil-1831",
@@ -1246,7 +1373,13 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8055510240516",
         "dimensions": "3x4x7",
         "licenseUrl": "https://drive.google.com/file/d/1FmN4pIDN2S6bbYwfLwaOWhVGoLsjcrK-/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1FmN4pIDN2S6bbYwfLwaOWhVGoLsjcrK-.webp"
+        "licenseImageUrl": "/images/licenses/1FmN4pIDN2S6bbYwfLwaOWhVGoLsjcrK-.webp",
+        "benefits": [
+            "tri-mun-kiem-dau",
+            "phuc-hoi-diu-da",
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Trị mụn & Kiềm dầu"
     },
     {
         "id": "rilastil-1810",
@@ -1292,7 +1425,12 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8050444857960",
         "dimensions": "10x10x10",
         "licenseUrl": "https://drive.google.com/file/d/18eeQji4nYn5x53Bo_-vV6QQQ_xoskIay/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/18eeQji4nYn5x53Bo_-vV6QQQ_xoskIay.webp"
+        "licenseImageUrl": "/images/licenses/18eeQji4nYn5x53Bo_-vV6QQQ_xoskIay.webp",
+        "benefits": [
+            "tri-mun-kiem-dau",
+            "phuc-hoi-diu-da"
+        ],
+        "benefitName": "Trị mụn & Kiềm dầu"
     },
     {
         "id": "rilastil-1805",
@@ -1338,7 +1476,12 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8050444858592",
         "dimensions": "10x5x5",
         "licenseUrl": "https://drive.google.com/file/d/18eeQji4nYn5x53Bo_-vV6QQQ_xoskIay/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/18eeQji4nYn5x53Bo_-vV6QQQ_xoskIay.webp"
+        "licenseImageUrl": "/images/licenses/18eeQji4nYn5x53Bo_-vV6QQQ_xoskIay.webp",
+        "benefits": [
+            "tri-mun-kiem-dau",
+            "phuc-hoi-diu-da"
+        ],
+        "benefitName": "Trị mụn & Kiềm dầu"
     },
     {
         "id": "rilastil-1774",
@@ -1384,7 +1527,11 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8033224810522",
         "dimensions": "20x20x20",
         "licenseUrl": "https://drive.google.com/file/d/1yzvdAMzvEpPB7kA0_PhPOJMTpCrAXY8N/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1yzvdAMzvEpPB7kA0_PhPOJMTpCrAXY8N.webp"
+        "licenseImageUrl": "/images/licenses/1yzvdAMzvEpPB7kA0_PhPOJMTpCrAXY8N.webp",
+        "benefits": [
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Cấp ẩm sâu"
     },
     {
         "id": "rilastil-1566",
@@ -1427,7 +1574,12 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8055510240363",
         "dimensions": "20x20x20",
         "licenseUrl": "https://drive.google.com/file/d/1ckpS5u52oyPQ3_9tk3cDLYVGO6nx7XBP/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1ckpS5u52oyPQ3_9tk3cDLYVGO6nx7XBP.webp"
+        "licenseImageUrl": "/images/licenses/1ckpS5u52oyPQ3_9tk3cDLYVGO6nx7XBP.webp",
+        "benefits": [
+            "chong-lao-hoa",
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Chống lão hóa"
     },
     {
         "id": "rilastil-1564",
@@ -1475,7 +1627,12 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8055510240370",
         "dimensions": "5x5x10",
         "licenseUrl": "https://drive.google.com/file/d/131xVstrVDXuzKfHe9r7C3qHdTwnSlxmA/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/131xVstrVDXuzKfHe9r7C3qHdTwnSlxmA.webp"
+        "licenseImageUrl": "/images/licenses/131xVstrVDXuzKfHe9r7C3qHdTwnSlxmA.webp",
+        "benefits": [
+            "chong-lao-hoa",
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Chống lão hóa"
     },
     {
         "id": "rilastil-1562",
@@ -1518,7 +1675,12 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8050444859407",
         "dimensions": "20x20x20",
         "licenseUrl": "https://drive.google.com/file/d/1yYYQd0ttptKChoV5pm4IZPHTUUdNsfwR/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1yYYQd0ttptKChoV5pm4IZPHTUUdNsfwR.webp"
+        "licenseImageUrl": "/images/licenses/1yYYQd0ttptKChoV5pm4IZPHTUUdNsfwR.webp",
+        "benefits": [
+            "chong-nang",
+            "chong-lao-hoa"
+        ],
+        "benefitName": "Chống nắng"
     },
     {
         "id": "rilastil-1122",
@@ -1558,7 +1720,11 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8033224814841",
         "dimensions": "10x5x5",
         "licenseUrl": "https://drive.google.com/file/d/1JeLSKHGykdPwri75pnF5Tzb_D5TQ_UbK/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1JeLSKHGykdPwri75pnF5Tzb_D5TQ_UbK.webp"
+        "licenseImageUrl": "/images/licenses/1JeLSKHGykdPwri75pnF5Tzb_D5TQ_UbK.webp",
+        "benefits": [
+            "tri-mun-kiem-dau"
+        ],
+        "benefitName": "Trị mụn & Kiềm dầu"
     },
     {
         "id": "rilastil-1528",
@@ -1603,7 +1769,12 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8055510242275",
         "dimensions": "10x5x5",
         "licenseUrl": "https://drive.google.com/file/d/1azhckKl-McMHzPLSxINvHxLTMtLJiEKl/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1azhckKl-McMHzPLSxINvHxLTMtLJiEKl.webp"
+        "licenseImageUrl": "/images/licenses/1azhckKl-McMHzPLSxINvHxLTMtLJiEKl.webp",
+        "benefits": [
+            "tri-mun-kiem-dau",
+            "sang-da-mo-tham"
+        ],
+        "benefitName": "Trị mụn & Kiềm dầu"
     },
     {
         "id": "rilastil-1524",
@@ -1649,7 +1820,12 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8050444852637",
         "dimensions": "10x5x10",
         "licenseUrl": "https://drive.google.com/file/d/18eeQji4nYn5x53Bo_-vV6QQQ_xoskIay/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/18eeQji4nYn5x53Bo_-vV6QQQ_xoskIay.webp"
+        "licenseImageUrl": "/images/licenses/18eeQji4nYn5x53Bo_-vV6QQQ_xoskIay.webp",
+        "benefits": [
+            "tri-mun-kiem-dau",
+            "phuc-hoi-diu-da"
+        ],
+        "benefitName": "Trị mụn & Kiềm dầu"
     },
     {
         "id": "rilastil-1128",
@@ -1689,7 +1865,11 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8050444859841",
         "dimensions": "20x20x20",
         "licenseUrl": "https://drive.google.com/file/d/1H85uQb2ZTE7XArxxd56k3vQDyxqP6JBG/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1H85uQb2ZTE7XArxxd56k3vQDyxqP6JBG.webp"
+        "licenseImageUrl": "/images/licenses/1H85uQb2ZTE7XArxxd56k3vQDyxqP6JBG.webp",
+        "benefits": [
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Cấp ẩm sâu"
     },
     {
         "id": "rilastil-1125",
@@ -1735,7 +1915,12 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8050444853603",
         "dimensions": "10x5x5",
         "licenseUrl": "https://drive.google.com/file/d/19UA0Hozb7cNgS2TFIx24bFG6EF-wGvi-/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/19UA0Hozb7cNgS2TFIx24bFG6EF-wGvi-.webp"
+        "licenseImageUrl": "/images/licenses/19UA0Hozb7cNgS2TFIx24bFG6EF-wGvi-.webp",
+        "benefits": [
+            "phuc-hoi-diu-da",
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Phục hồi & Dịu da"
     },
     {
         "id": "rilastil-1120",
@@ -1775,7 +1960,11 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8050444852866",
         "dimensions": "20x20x20",
         "licenseUrl": "https://drive.google.com/file/d/1Yk25NOcvRn_RnEeHL1Ur-jsGQm7zxw8q/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1Yk25NOcvRn_RnEeHL1Ur-jsGQm7zxw8q.webp"
+        "licenseImageUrl": "/images/licenses/1Yk25NOcvRn_RnEeHL1Ur-jsGQm7zxw8q.webp",
+        "benefits": [
+            "tri-mun-kiem-dau"
+        ],
+        "benefitName": "Trị mụn & Kiềm dầu"
     },
     {
         "id": "rilastil-537",
@@ -1820,7 +2009,11 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8055510240752",
         "dimensions": "20x20x20",
         "licenseUrl": "https://drive.google.com/file/d/1bwJ8UIP1IaF0iwAtS6zpNy9lJTWRFysI/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1bwJ8UIP1IaF0iwAtS6zpNy9lJTWRFysI.webp"
+        "licenseImageUrl": "/images/licenses/1bwJ8UIP1IaF0iwAtS6zpNy9lJTWRFysI.webp",
+        "benefits": [
+            "tri-mun-kiem-dau"
+        ],
+        "benefitName": "Trị mụn & Kiềm dầu"
     },
     {
         "id": "rilastil-525",
@@ -1866,7 +2059,11 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8050444858646",
         "dimensions": "20x20x20",
         "licenseUrl": "https://drive.google.com/file/d/17TX_sQ4o2dD5h5XjcnBS5K8trSmjrPbW/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/17TX_sQ4o2dD5h5XjcnBS5K8trSmjrPbW.webp"
+        "licenseImageUrl": "/images/licenses/17TX_sQ4o2dD5h5XjcnBS5K8trSmjrPbW.webp",
+        "benefits": [
+            "cap-am-chuyen-sau"
+        ],
+        "benefitName": "Cấp ẩm sâu"
     },
     {
         "id": "rilastil-520",
@@ -1908,7 +2105,11 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8055510240035",
         "dimensions": "10x5x5",
         "licenseUrl": "https://drive.google.com/file/d/1whA70yfad759EvBwrdZWfNI21rukRfZN/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1whA70yfad759EvBwrdZWfNI21rukRfZN.webp"
+        "licenseImageUrl": "/images/licenses/1whA70yfad759EvBwrdZWfNI21rukRfZN.webp",
+        "benefits": [
+            "sang-da-mo-tham"
+        ],
+        "benefitName": "Sáng da & Mờ thâm"
     },
     {
         "id": "rilastil-499",
@@ -1953,7 +2154,11 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8050444857915",
         "dimensions": "10x10x10",
         "licenseUrl": "https://drive.google.com/file/d/1jHhVOFM-y5DpidLqx_IhAcuRx9L-7RvU/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1jHhVOFM-y5DpidLqx_IhAcuRx9L-7RvU.webp"
+        "licenseImageUrl": "/images/licenses/1jHhVOFM-y5DpidLqx_IhAcuRx9L-7RvU.webp",
+        "benefits": [
+            "sang-da-mo-tham"
+        ],
+        "benefitName": "Sáng da & Mờ thâm"
     },
     {
         "id": "rilastil-486",
@@ -1998,7 +2203,11 @@ window.LOCAL_PRODUCTS = [
         "barcode": "8050444857922",
         "dimensions": "5x5x5",
         "licenseUrl": "https://drive.google.com/file/d/1nu7A3GPIUjUDvRs25YOMGhZEik2BjaGH/view?usp=sharing",
-        "licenseImageUrl": "/images/licenses/1nu7A3GPIUjUDvRs25YOMGhZEik2BjaGH.webp"
+        "licenseImageUrl": "/images/licenses/1nu7A3GPIUjUDvRs25YOMGhZEik2BjaGH.webp",
+        "benefits": [
+            "sang-da-mo-tham"
+        ],
+        "benefitName": "Sáng da & Mờ thâm"
     },
     {
         "id": "twon-body-lotion",
@@ -2038,7 +2247,11 @@ window.LOCAL_PRODUCTS = [
         "fullIngredients": "Aqua (Water), Glycerin, Niacinamide (Vitamin B3), Caprylic/Capric Triglyceride, Dimethicone, Cetearyl Alcohol, Titanium Dioxide, Fragrance, Phenoxyethanol, Ethylhexylglycerin, Xanthan Gum.",
         "image": "/images/products/twon-body-lotion.png",
         "originalImageUrl": "https://twon-website.danh-huynh.workers.dev/assets/twon-body-lotion.png",
-        "link": "https://twon-website.danh-huynh.workers.dev/san-pham.html?id=twon-body-lotion"
+        "link": "https://twon-website.danh-huynh.workers.dev/san-pham.html?id=twon-body-lotion",
+        "benefits": [
+            "body-nuoc-hoa"
+        ],
+        "benefitName": "Cơ thể & Nước hoa"
     },
     {
         "id": "twon-kem-u-trang",
@@ -2077,7 +2290,11 @@ window.LOCAL_PRODUCTS = [
         "fullIngredients": "Aqua (Water), Glycerin, Alpha Arbutin, Niacinamide, Pearl Powder, Glutathione, Stearic Acid, Cetyl Alcohol, Titanium Dioxide, Fragrance, Phenoxyethanol.",
         "image": "/images/products/twon-kem-u-trang.png",
         "originalImageUrl": "https://twon-website.danh-huynh.workers.dev/assets/twon-kem-u-trang.png",
-        "link": "https://twon-website.danh-huynh.workers.dev/san-pham.html?id=twon-kem-u-trang"
+        "link": "https://twon-website.danh-huynh.workers.dev/san-pham.html?id=twon-kem-u-trang",
+        "benefits": [
+            "body-nuoc-hoa"
+        ],
+        "benefitName": "Cơ thể & Nước hoa"
     },
     {
         "id": "twon-sua-tam",
@@ -2115,7 +2332,11 @@ window.LOCAL_PRODUCTS = [
         "fullIngredients": "Aqua (Water), Sodium Laureth Sulfate, Cocamidopropyl Betaine, Glycerin, Sodium Chloride, Parfum (Fragrance), Tocopheryl Acetate, Citric Acid, Disodium EDTA, Phenoxyethanol.",
         "image": "/images/products/twon-sua-tam.png",
         "originalImageUrl": "https://twon-website.danh-huynh.workers.dev/assets/twon-sua-tam.png",
-        "link": "https://twon-website.danh-huynh.workers.dev/san-pham.html?id=twon-sua-tam"
+        "link": "https://twon-website.danh-huynh.workers.dev/san-pham.html?id=twon-sua-tam",
+        "benefits": [
+            "body-nuoc-hoa"
+        ],
+        "benefitName": "Cơ thể & Nước hoa"
     },
     {
         "id": "dvah-sarika",
@@ -2152,7 +2373,11 @@ window.LOCAL_PRODUCTS = [
         "fullIngredients": "Alcohol Denat, Parfum (Fragrance), Aqua (Water), Limonene, Linalool, Citral, Benzyl Salicylate.",
         "image": "/images/products/dvah-sarika.png",
         "originalImageUrl": "https://twon-website.danh-huynh.workers.dev/assets/dvah-sarika.png",
-        "link": "https://twon-website.danh-huynh.workers.dev/san-pham.html?id=dvah-sarika"
+        "link": "https://twon-website.danh-huynh.workers.dev/san-pham.html?id=dvah-sarika",
+        "benefits": [
+            "body-nuoc-hoa"
+        ],
+        "benefitName": "Cơ thể & Nước hoa"
     },
     {
         "id": "dvah-kamal",
@@ -2189,7 +2414,11 @@ window.LOCAL_PRODUCTS = [
         "fullIngredients": "Alcohol Denat, Parfum (Fragrance), Aqua (Water), Nelumbo Nucifera (Lotus) Flower Extract, Hydroxycitronellal, Geraniol.",
         "image": "/images/products/dvah-kamal.png",
         "originalImageUrl": "https://twon-website.danh-huynh.workers.dev/assets/dvah-kamal.png",
-        "link": "https://twon-website.danh-huynh.workers.dev/san-pham.html?id=dvah-kamal"
+        "link": "https://twon-website.danh-huynh.workers.dev/san-pham.html?id=dvah-kamal",
+        "benefits": [
+            "body-nuoc-hoa"
+        ],
+        "benefitName": "Cơ thể & Nước hoa"
     },
     {
         "id": "dvah-rakta",
@@ -2226,7 +2455,11 @@ window.LOCAL_PRODUCTS = [
         "fullIngredients": "Alcohol Denat, Parfum (Fragrance), Aqua (Water), Vanillin, Coumarin, Eugenol, Benzyl Benzoate.",
         "image": "/images/products/dvah-rakta.png",
         "originalImageUrl": "https://twon-website.danh-huynh.workers.dev/assets/dvah-rakta.png",
-        "link": "https://twon-website.danh-huynh.workers.dev/san-pham.html?id=dvah-rakta"
+        "link": "https://twon-website.danh-huynh.workers.dev/san-pham.html?id=dvah-rakta",
+        "benefits": [
+            "body-nuoc-hoa"
+        ],
+        "benefitName": "Cơ thể & Nước hoa"
     },
     {
         "id": "dvah-tanmaya",
@@ -2263,7 +2496,11 @@ window.LOCAL_PRODUCTS = [
         "fullIngredients": "Alcohol Denat, Parfum (Fragrance), Aqua (Water), Santalum Album (Sandalwood) Oil, Alpha-Isomethyl Ionone, Isoeugenol.",
         "image": "/images/products/dvah-tanmaya.png",
         "originalImageUrl": "https://twon-website.danh-huynh.workers.dev/assets/dvah-tanmaya.png",
-        "link": "https://twon-website.danh-huynh.workers.dev/san-pham.html?id=dvah-tanmaya"
+        "link": "https://twon-website.danh-huynh.workers.dev/san-pham.html?id=dvah-tanmaya",
+        "benefits": [
+            "body-nuoc-hoa"
+        ],
+        "benefitName": "Cơ thể & Nước hoa"
     },
     {
         "id": "dvah-malini",
@@ -2300,7 +2537,11 @@ window.LOCAL_PRODUCTS = [
         "fullIngredients": "Alcohol Denat, Parfum (Fragrance), Aqua (Water), Citronellol, Hexyl Cinnamal, Benzyl Alcohol.",
         "image": "/images/products/dvah-malini.png",
         "originalImageUrl": "https://twon-website.danh-huynh.workers.dev/assets/dvah-malini.png",
-        "link": "https://twon-website.danh-huynh.workers.dev/san-pham.html?id=dvah-malini"
+        "link": "https://twon-website.danh-huynh.workers.dev/san-pham.html?id=dvah-malini",
+        "benefits": [
+            "body-nuoc-hoa"
+        ],
+        "benefitName": "Cơ thể & Nước hoa"
     },
     {
         "id": "rilastil-2110",
@@ -2349,6 +2590,10 @@ window.LOCAL_PRODUCTS = [
         "image": "/images/products/rilastil/rilastil-kem-phuc-hoi-lam-diu-va-bao-ve-da-rilastil-cicastil-balm-40ml.jpg",
         "originalImageUrl": "https://p16-oec-sg.ibyteimg.com/tos-alisg-i-aphluv4xwc-sg/04e0fddc9bb04deba00dda372a20ebe6~tplv-aphluv4xwc-origin-jpeg.jpeg?dr=15568&from=520841845&height=1000&idc=my&ps=933b5bde&shcp=2c1af732&shp=1f0b6a75&t=555f072d&width=1000",
         "link": "https://rilastilvn.com.vn/",
-        "licenseImageUrl": "/images/licenses/1D4IgaokLKZGpU47VLpGyY5EK1v7mDxrY.webp"
+        "licenseImageUrl": "/images/licenses/1D4IgaokLKZGpU47VLpGyY5EK1v7mDxrY.webp",
+        "benefits": [
+            "phuc-hoi-diu-da"
+        ],
+        "benefitName": "Phục hồi & Dịu da"
     }
 ];

@@ -90,7 +90,7 @@
         return buttons.find((button) => button.dataset[dataName] === value) || null;
     }
 
-    function applyCatalogState({ brand = 'all', step = 'all', query = '' } = {}) {
+    function applyCatalogState({ brand = 'all', step = 'all', benefit = 'all', query = '' } = {}) {
         const brandButton = chooseFilterButton('#brand-filters .filter-btn', 'brand', String(brand).toLowerCase());
         const stepButton = chooseFilterButton('#step-filters .step-filter-btn', 'step', step);
         const searchInput = $('#product-search');
@@ -99,6 +99,7 @@
 
         if (typeof filterByBrand === 'function') filterByBrand(brand, brandButton);
         if (typeof filterByStep === 'function') filterByStep(step, stepButton);
+        if (typeof filterByBenefit === 'function') filterByBenefit(benefit);
         if (searchInput) searchInput.value = query;
         if (brandSelect) brandSelect.value = String(brand).toLowerCase();
         if (stepSelect) stepSelect.value = step;

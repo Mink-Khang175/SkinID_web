@@ -28,14 +28,26 @@ function normalizeProductSearch(value) {
         .replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase().trim();
 }
 
-function filterProducts(products, { brand = 'all', step = 'all', query = '' } = {}) {
+function getProductBenefits(product) {
+    if (Array.isArray(product.benefits) && product.benefits.length > 0) {
+        return product.benefits.map(b => String(b).toLowerCase().trim());
+    }
+    return [];
+}
+
+function filterProducts(products, { brand = 'all', step = 'all', benefit = 'all', query = '' } = {}) {
     const targetBrand = normalizeProductBrand(brand);
     const targetStep = String(step || 'all').toLowerCase().trim();
+    const targetBenefit = String(benefit || 'all').toLowerCase().trim();
     const search = normalizeProductSearch(query);
     return products.filter(product => {
         if (targetBrand !== 'all' && targetBrand &&
             normalizeProductBrand(product.brandSlug || product.brand) !== targetBrand) return false;
         if (targetStep !== 'all' && !getProductCategories(product).includes(targetStep)) return false;
+        if (targetBenefit !== 'all' && targetBenefit) {
+            const benefits = getProductBenefits(product);
+            if (!benefits.includes(targetBenefit)) return false;
+        }
         const text = [product.name, product.brand, product.brandSlug, product.fullIngredients,
             ...(product.keyActives || []), ...(product.mainActives || [])].join(' ');
         return !search || normalizeProductSearch(text).includes(search);
@@ -43,5 +55,5 @@ function filterProducts(products, { brand = 'all', step = 'all', query = '' } = 
 }
 
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { normalizeProductBrand, getProductCategories, filterProducts };
+    module.exports = { normalizeProductBrand, getProductCategories, getProductBenefits, filterProducts };
 }

@@ -1,6 +1,7 @@
 // GLOBAL CATALOG FILTER STATE
 let currentBrandFilter = 'all';
 let currentStepFilter = 'all';
+let currentBenefitFilter = 'all';
 let currentSearchQuery = '';
 
 let currentBudget = 'Essential';
@@ -78,7 +79,10 @@ function renderCatalog() {
     grid.innerHTML = '';
     
     const filtered = filterProducts(PRODUCTS, {
-        brand: currentBrandFilter, step: currentStepFilter, query: currentSearchQuery
+        brand: currentBrandFilter,
+        step: currentStepFilter,
+        benefit: currentBenefitFilter,
+        query: currentSearchQuery
     });
 
     // Update Result Count UI Indicator
@@ -132,6 +136,23 @@ window.filterByStep = function(step, el) {
     renderCatalog();
 };
 
+window.filterByBenefit = function(benefit, el) {
+    currentBenefitFilter = benefit;
+    const pills = document.querySelectorAll('#benefit-filters .benefit-filter-pill');
+    pills.forEach(p => {
+        const isMatch = p.dataset.benefit === benefit;
+        p.classList.toggle('is-active', isMatch);
+        if (isMatch) {
+            p.classList.add('bg-[#E85D75]', 'text-white', 'border-[#E85D75]', 'shadow-xs');
+            p.classList.remove('bg-white', 'text-gray-700', 'border-rose-100');
+        } else {
+            p.classList.remove('bg-[#E85D75]', 'text-white', 'border-[#E85D75]', 'shadow-xs');
+            p.classList.add('bg-white', 'text-gray-700', 'border-rose-100');
+        }
+    });
+    renderCatalog();
+};
+
 function initCatalog() {
     renderCatalog();
 
@@ -158,6 +179,16 @@ function initCatalog() {
             const targetBtn = e.target.closest('.step-filter-btn');
             if (!targetBtn) return;
             filterByStep(targetBtn.dataset.step, targetBtn);
+        });
+    });
+
+    // Setup benefit filter pills
+    const benefitBtns = document.querySelectorAll('#benefit-filters .benefit-filter-pill');
+    benefitBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const targetBtn = e.target.closest('.benefit-filter-pill');
+            if (!targetBtn) return;
+            filterByBenefit(targetBtn.dataset.benefit, targetBtn);
         });
     });
 

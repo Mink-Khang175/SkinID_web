@@ -31,4 +31,13 @@ for (const id of ['rilastil-1939', 'rilastil-1936', 'rilastil-1872']) {
     assert(ids(filterProducts(products, { step: 'special' })).includes(id));
 }
 assert(filterProducts(products, { query: 'sua rua mat' }).length > 0);
-console.log('PASS: 168 brand/category/search combinations, aliases, empty intersections and category regressions.');
+
+// Benefit filtering tests
+assert(filterProducts(products, { benefit: 'tri-mun-kiem-dau' }).length > 0);
+assert(filterProducts(products, { benefit: 'sang-da-mo-tham' }).length > 0);
+assert(filterProducts(products, { benefit: 'chong-lao-hoa' }).length > 0);
+assert(filterProducts(products, { benefit: 'chong-nang' }).length > 0);
+assert.equal(filterProducts(products, { brand: 'twon', benefit: 'tri-mun-kiem-dau' }).length, 0);
+assert(filterProducts(products, { brand: 'rilastil', benefit: 'tri-mun-kiem-dau', step: 'cleanser' }).length > 0);
+
+console.log('PASS: 168 brand/category/search combinations, aliases, empty intersections, benefit grouping and category regressions.');
