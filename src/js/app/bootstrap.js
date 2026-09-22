@@ -37,7 +37,7 @@
   function loadScript(src) {
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = `${src}?v=20260910-3`;
+      script.src = `${src}?v=20260922-4`;
       script.onload = resolve;
       script.onerror = () => reject(new Error(`Không thể tải ${src}`));
       document.body.appendChild(script);

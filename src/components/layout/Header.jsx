@@ -5,27 +5,25 @@ export default function Header() {
   const isHomePage = window.location.pathname === '/';
   const isAnalysisPage = window.location.pathname.startsWith('/skin-analysis');
 
-  const [activeItem, setActiveItem] = useState(() => {
-    if (typeof window === 'undefined') return 'all';
-    const hash = window.location.hash;
-    if (hash === '#brands') return 'brands';
-    if (hash === '#acie-teaser') return 'acie-teaser';
-    return isHomePage ? 'all' : '';
-  });
+  const [activeItem, setActiveItem] = useState(() => (isHomePage ? 'all' : ''));
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+      }
+      window.scrollTo(0, 0);
+      if (window.location.hash) {
+        try {
+          history.replaceState(null, '', window.location.pathname + window.location.search);
+        } catch (_) {}
+      }
+    }
+
     const handleSync = (e) => {
       if (e.detail) setActiveItem(e.detail);
     };
     window.addEventListener('skinid:nav-sync', handleSync);
-
-    const onHash = () => {
-      const hash = window.location.hash;
-      if (hash === '#brands') setActiveItem('brands');
-      else if (hash === '#acie-teaser') setActiveItem('acie-teaser');
-      else if (hash === '#catalog' || hash === '#featured-products') setActiveItem('all');
-    };
-    window.addEventListener('hashchange', onHash);
 
     const prevSync = window.syncPrimaryNavigation;
     window.syncPrimaryNavigation = (stepOrTarget = 'all') => {
@@ -37,7 +35,6 @@ export default function Header() {
 
     return () => {
       window.removeEventListener('skinid:nav-sync', handleSync);
-      window.removeEventListener('hashchange', onHash);
     };
   }, [isHomePage]);
 
@@ -47,7 +44,6 @@ export default function Header() {
       const el = document.getElementById(targetId);
       if (el) {
         el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        try { history.replaceState(null, '', `/#${targetId}`); } catch (_) {}
       }
       window.syncPrimaryNavigation?.(key);
     } else if (stepType) {

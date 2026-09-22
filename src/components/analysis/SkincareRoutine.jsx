@@ -314,10 +314,10 @@ export default function SkincareRoutine() {
                                 {/* Injected by JS */}
                             </div>
                             <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
-                                <button onClick={(event) => window.emailService?.promptSendEmail?.()} className="px-5 py-2.5 bg-gradient-to-r from-[#D96B82] to-[#C8526B] hover:from-[#C8526B] hover:to-[#B24058] text-white rounded-xl font-bold text-xs sm:text-sm shadow-md shadow-rose-200/40 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer">
+                                <button onClick={(event) => window.emailService?.promptSendEmail?.()} style={{ color: '#ffffff' }} className="px-5 py-2.5 bg-gradient-to-r from-[#D96B82] to-[#C8526B] hover:from-[#C8526B] hover:to-[#B24058] text-white rounded-xl font-bold text-xs sm:text-sm shadow-md shadow-rose-200/40 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer">
                                     <i data-feather="mail" className="w-4 h-4"></i> Gửi báo cáo về Email
                                 </button>
-                                <button onClick={() => { window.location.href = '/profile?tab=history'; }} className="px-5 py-2.5 bg-white border border-gray-300 hover:border-gray-900 text-gray-800 hover:text-black rounded-xl font-bold text-xs sm:text-sm shadow-2xs hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 scan-primary-button">
+                                <button onClick={() => { window.location.href = '/profile?tab=history'; }} className="px-5 py-2.5 bg-white border border-gray-300 hover:border-gray-900 text-gray-800 hover:text-black rounded-xl font-bold text-xs sm:text-sm shadow-2xs hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2">
                                     <i data-feather="clock" className="w-4 h-4"></i> Xem lịch sử cá nhân
                                 </button>
                             </div>

@@ -186,9 +186,6 @@
                 if (section) {
                     event.preventDefault();
                     section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    try {
-                        history.replaceState(null, '', `/#${targetId}`);
-                    } catch (_) {}
                 }
             });
         });

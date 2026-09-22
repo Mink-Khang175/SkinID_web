@@ -114,7 +114,7 @@
 .nav-line{border:0}
 .desktop-nav a{
   position:relative;
-  color:#4f494c;
+  color:#4f494c!important;
   font-weight:500;
   transition:color .2s ease;
 }
@@ -128,12 +128,33 @@
   border-radius:2px;
   background:var(--brand-pink);
   opacity:0;
+  pointer-events:none;
   transition:left .2s ease,right .2s ease,opacity .2s ease;
 }
-.desktop-nav a:hover,.desktop-nav a.is-active{color:var(--brand-pink)}
-.desktop-nav a.is-active{font-weight:700}
+.desktop-nav a:hover{color:var(--brand-pink)!important}
+.desktop-nav a.is-active{color:var(--brand-pink)!important;font-weight:700}
 .desktop-nav a.is-active::after{left:0;right:0;opacity:1}
 .skin-tool-link.is-active{color:var(--brand-pink)}
+
+/* Enforce pure crisp white text on all brand pink buttons regardless of CSS layer cascade */
+button.text-white,
+a.text-white,
+.text-white,
+.acie-teaser-btn,
+.product-card__cart-button,
+.profile-btn--primary,
+.btn-xem-chi-tiet,
+.btn-xem-phac-do {
+  color:#ffffff!important;
+}
+.acie-teaser-btn *,
+.product-card__cart-button *,
+.profile-btn--primary *,
+.btn-xem-chi-tiet *,
+.btn-xem-phac-do * {
+  color:#ffffff!important;
+  stroke:#ffffff!important;
+}
 
 .hero-slide-copy h1,.hero-slide-copy h2{
   max-width:10.5em;
