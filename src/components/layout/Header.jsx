@@ -1,8 +1,64 @@
+import { useState, useEffect } from 'react';
 import { assetUrl } from '../../assets/index.js';
 
 export default function Header() {
   const isHomePage = window.location.pathname === '/';
   const isAnalysisPage = window.location.pathname.startsWith('/skin-analysis');
+
+  const [activeItem, setActiveItem] = useState(() => {
+    if (typeof window === 'undefined') return 'all';
+    const hash = window.location.hash;
+    if (hash === '#brands') return 'brands';
+    if (hash === '#acie-teaser') return 'acie-teaser';
+    return isHomePage ? 'all' : '';
+  });
+
+  useEffect(() => {
+    const handleSync = (e) => {
+      if (e.detail) setActiveItem(e.detail);
+    };
+    window.addEventListener('skinid:nav-sync', handleSync);
+
+    const onHash = () => {
+      const hash = window.location.hash;
+      if (hash === '#brands') setActiveItem('brands');
+      else if (hash === '#acie-teaser') setActiveItem('acie-teaser');
+      else if (hash === '#catalog' || hash === '#featured-products') setActiveItem('all');
+    };
+    window.addEventListener('hashchange', onHash);
+
+    const prevSync = window.syncPrimaryNavigation;
+    window.syncPrimaryNavigation = (stepOrTarget = 'all') => {
+      setActiveItem(stepOrTarget);
+      if (typeof prevSync === 'function') {
+        try { prevSync(stepOrTarget); } catch (_) {}
+      }
+    };
+
+    return () => {
+      window.removeEventListener('skinid:nav-sync', handleSync);
+      window.removeEventListener('hashchange', onHash);
+    };
+  }, [isHomePage]);
+
+  const handleNavClick = (key, targetId = null, stepType = null) => {
+    setActiveItem(key);
+    if (targetId) {
+      const el = document.getElementById(targetId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        try { history.replaceState(null, '', `/#${targetId}`); } catch (_) {}
+      }
+      window.syncPrimaryNavigation?.(key);
+    } else if (stepType) {
+      window.filterByStep?.(stepType);
+      const catalogEl = document.getElementById('catalog') || document.getElementById('featured-products');
+      if (catalogEl) catalogEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.syncPrimaryNavigation?.(key);
+    } else {
+      window.syncPrimaryNavigation?.(key);
+    }
+  };
 
   return (
     <header className="site-header">
@@ -46,13 +102,82 @@ export default function Header() {
       <div className="nav-line">
         <div className="container nav-inner">
           <nav className="desktop-nav" aria-label="Điều hướng chính">
-            <a className={isHomePage ? 'is-active' : ''} href="/#featured-products" data-nav-step="all" aria-current={isHomePage ? 'page' : undefined}>Tất cả sản phẩm</a>
-            <a href="/#catalog" data-nav-step="cleanser">Làm sạch</a>
-            <a href="/#catalog" data-nav-step="treatment">Tinh chất & đặc trị</a>
-            <a href="/#catalog" data-nav-step="moisturizer">Dưỡng ẩm</a>
-            <a href="/#catalog" data-nav-step="sunscreen">Chống nắng</a>
-            <a href="/#brands" data-nav-target="brands">Thương hiệu</a>
-            <a href="/#acie-teaser" data-nav-target="acie-teaser" className="acie-header-link inline-flex items-center gap-1.5 font-medium transition-colors">
+            <a
+              className={activeItem === 'all' ? 'is-active' : ''}
+              href="/#featured-products"
+              data-nav-step="all"
+              aria-current={activeItem === 'all' ? 'page' : undefined}
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick('all', 'featured-products');
+              }}
+            >
+              Tất cả sản phẩm
+            </a>
+            <a
+              className={activeItem === 'cleanser' ? 'is-active' : ''}
+              href="/#catalog"
+              data-nav-step="cleanser"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick('cleanser', null, 'cleanser');
+              }}
+            >
+              Làm sạch
+            </a>
+            <a
+              className={activeItem === 'treatment' ? 'is-active' : ''}
+              href="/#catalog"
+              data-nav-step="treatment"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick('treatment', null, 'treatment');
+              }}
+            >
+              Tinh chất & đặc trị
+            </a>
+            <a
+              className={activeItem === 'moisturizer' ? 'is-active' : ''}
+              href="/#catalog"
+              data-nav-step="moisturizer"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick('moisturizer', null, 'moisturizer');
+              }}
+            >
+              Dưỡng ẩm
+            </a>
+            <a
+              className={activeItem === 'sunscreen' ? 'is-active' : ''}
+              href="/#catalog"
+              data-nav-step="sunscreen"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick('sunscreen', null, 'sunscreen');
+              }}
+            >
+              Chống nắng
+            </a>
+            <a
+              className={activeItem === 'brands' ? 'is-active' : ''}
+              href="/#brands"
+              data-nav-target="brands"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick('brands', 'brands');
+              }}
+            >
+              Thương hiệu
+            </a>
+            <a
+              href="/#acie-teaser"
+              data-nav-target="acie-teaser"
+              className={`acie-header-link inline-flex items-center gap-1.5 font-medium transition-colors ${activeItem === 'acie-teaser' ? 'is-active' : ''}`}
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick('acie-teaser', 'acie-teaser');
+              }}
+            >
               <span>SKINID x ACIE VISION</span>
               <span className="text-[9px] bg-rose-100 text-rose-800 px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider">Mới</span>
             </a>

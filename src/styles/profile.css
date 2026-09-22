@@ -48,12 +48,12 @@
   border: 3px solid #fff;
   border-radius: 999px;
   color: #fff;
-  background: #1E1B1D;
-  box-shadow: 0 4px 12px rgba(30, 27, 29, 0.25);
+  background: linear-gradient(135deg, #D96B82, #C8526B);
+  box-shadow: 0 4px 12px rgba(217, 107, 130, 0.3);
   cursor: pointer;
   transition: transform .2s ease, background .2s ease;
 }
-.profile-avatar-edit:hover { background: #000; transform: translateY(-2px); }
+.profile-avatar-edit:hover { background: linear-gradient(135deg, #C8526B, #B24058); transform: translateY(-2px); }
 .profile-provider-badge {
   display: inline-flex;
   align-items: center;
@@ -97,9 +97,9 @@
   transform: scaleX(.35);
   transition: background .2s ease, transform .2s ease;
 }
-.profile-page .tab-btn:hover { color: #1E1B1D; background: #fff9fa; }
-.profile-page .tab-btn.active { color: #1E1B1D !important; background: #fff; font-weight: 800; }
-.profile-page .tab-btn.active::after { background: #1E1B1D; transform: scaleX(1); }
+.profile-page .tab-btn:hover { color: #C8526B; background: #fff9fa; }
+.profile-page .tab-btn.active { color: #C8526B !important; background: #fff; font-weight: 800; }
+.profile-page .tab-btn.active::after { background: #D96B82; transform: scaleX(1); }
 
 .profile-btn {
   min-height: 2.65rem;
@@ -116,10 +116,10 @@
   transition: transform .2s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
 }
 .profile-btn:hover { transform: translateY(-1px); }
-.profile-btn--primary { color: #fff; background: #1E1B1D; box-shadow: 0 4px 14px rgba(30,27,29,.2); }
-.profile-btn--primary:hover { background: #000; box-shadow: 0 6px 18px rgba(0,0,0,.25); }
+.profile-btn--primary { color: #fff; background: linear-gradient(135deg, #D96B82, #C8526B); box-shadow: 0 4px 14px rgba(217,107,130,.28); }
+.profile-btn--primary:hover { background: linear-gradient(135deg, #C8526B, #B24058); box-shadow: 0 6px 18px rgba(200,82,107,.35); }
 .profile-btn--secondary { color: #282326; background: #fff; border-color: #D8D2D4; }
-.profile-btn--secondary:hover { background: #F8F6F7; border-color: #1E1B1D; color: #1E1B1D; }
+.profile-btn--secondary:hover { background: #FFF7F8; border-color: #D96B82; color: #C8526B; }
 .profile-btn--danger { color: #b42318; background: #fff; border-color: #f1b7b2; }
 .profile-btn--danger:hover { background: #fff3f2; border-color: #d92d20; }
 
@@ -224,17 +224,17 @@
 }
 
 .btn-xem-chi-tiet, .btn-xem-phac-do {
-  background: #1E1B1D !important;
+  background: linear-gradient(135deg, #D96B82, #C8526B) !important;
   color: #FFFFFF !important;
-  box-shadow: 0 4px 14px rgba(30, 27, 29, 0.18);
+  box-shadow: 0 4px 14px rgba(217, 107, 130, 0.28);
   border-radius: 10px;
   font-weight: 700;
   transition: all 0.2s ease;
 }
 
 .btn-xem-chi-tiet:hover, .btn-xem-phac-do:hover {
-  background: #000000 !important;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.24);
+  background: linear-gradient(135deg, #C8526B, #B24058) !important;
+  box-shadow: 0 6px 18px rgba(200, 82, 107, 0.35);
   transform: translateY(-1px);
 }
 
@@ -249,9 +249,9 @@
 }
 
 .btn-soi-lai:hover {
-  background-color: #F8F6F7;
-  border-color: #1E1B1D;
-  color: #1E1B1D;
+  background-color: #FFF7F8;
+  border-color: #D96B82;
+  color: #C8526B;
 }
 
 .btn-gui-duoc-si {
@@ -265,9 +265,9 @@
 }
 
 .btn-gui-duoc-si:hover {
-  background-color: #F8F6F7;
-  border-color: #1E1B1D;
-  color: #1E1B1D;
+  background-color: #FFF7F8;
+  border-color: #D96B82;
+  color: #C8526B;
 }
 
 /* --- 2. SỬA POP-UP CHI TIẾT --- */

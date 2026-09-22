@@ -178,9 +178,9 @@ window.filterByBenefit = function(benefit, el) {
     tabs.forEach(t => {
         const isMatch = t.dataset.benefit === benefit;
         t.classList.toggle('is-active', isMatch);
-        t.classList.toggle('text-gray-900', isMatch);
+        t.classList.toggle('text-[#C8526B]', isMatch);
         t.classList.toggle('font-bold', isMatch);
-        t.classList.toggle('border-[#1E1B1D]', isMatch);
+        t.classList.toggle('border-[#D96B82]', isMatch);
         t.classList.toggle('border-transparent', !isMatch);
         t.classList.toggle('text-gray-500', !isMatch);
         t.classList.toggle('font-medium', !isMatch);
@@ -199,9 +199,9 @@ window.resetAllFilters = function() {
     tabs.forEach(t => {
         const isAll = t.dataset.benefit === 'all';
         t.classList.toggle('is-active', isAll);
-        t.classList.toggle('text-gray-900', isAll);
+        t.classList.toggle('text-[#C8526B]', isAll);
         t.classList.toggle('font-bold', isAll);
-        t.classList.toggle('border-[#1E1B1D]', isAll);
+        t.classList.toggle('border-[#D96B82]', isAll);
         t.classList.toggle('border-transparent', !isAll);
         t.classList.toggle('text-gray-500', !isAll);
         t.classList.toggle('font-medium', !isAll);

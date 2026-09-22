@@ -85,6 +85,7 @@
             if (isActive) link.setAttribute('aria-current', 'true');
             else link.removeAttribute('aria-current');
         });
+        window.dispatchEvent(new CustomEvent('skinid:nav-sync', { detail: step }));
     }
 
     function chooseFilterButton(selector, dataName, value) {

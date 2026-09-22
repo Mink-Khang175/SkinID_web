@@ -44,7 +44,7 @@ export default function AcieTeaser() {
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <button
                   type="button"
-                  className="px-6 py-3 rounded-full text-xs sm:text-sm font-bold text-white bg-[#1E1B1D] hover:bg-black transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer inline-flex items-center gap-2"
+                  className="px-6 py-3 rounded-full text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-[#D96B82] to-[#C8526B] hover:from-[#C8526B] hover:to-[#B24058] transition-all duration-200 shadow-md shadow-rose-200/50 hover:shadow-lg hover:-translate-y-0.5 cursor-pointer inline-flex items-center gap-2"
                   onClick={() => {
                     if (window.openConsultation) {
                       window.openConsultation();
@@ -59,7 +59,7 @@ export default function AcieTeaser() {
                     <polyline points="12 5 19 12 12 19"></polyline>
                   </svg>
                 </button>
-                <span className="text-xs text-gray-400 font-medium">
+                <span className="text-xs text-gray-500 font-medium">
                   Ưu tiên 500 suất trải nghiệm đầu tiên tại TP.HCM & Hà Nội
                 </span>
               </div>

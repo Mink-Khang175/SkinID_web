@@ -502,7 +502,7 @@ window.handleProfileLogout = async function handleProfileLogout() {
                                     <h5 class="text-xs font-bold text-gray-900 truncate">${window.authManager.escapeHtml(p.name)}</h5>
                                     <p class="text-xs font-black text-brand-dark mt-0.5">${formatPrice(p.price || 0)}</p>
                                 </div>
-                                <button onclick="if(window.cartManager) { cartManager.addItem('${p.id}', 1); cartManager.openCart(); }" class="px-2.5 py-1.5 bg-[#1E1B1D] text-white text-[11px] font-bold rounded-lg hover:bg-black transition-all flex items-center gap-1 flex-shrink-0 cursor-pointer">
+                                <button onclick="if(window.cartManager) { cartManager.addItem('${p.id}', 1); cartManager.openCart(); }" class="px-2.5 py-1.5 bg-gradient-to-r from-[#D96B82] to-[#C8526B] hover:from-[#C8526B] hover:to-[#B24058] text-white text-[11px] font-bold rounded-lg transition-all flex items-center gap-1 flex-shrink-0 cursor-pointer shadow-xs">
                                     <i data-feather="plus" class="w-3 h-3"></i> Mua
                                 </button>
                             </div>
@@ -570,8 +570,9 @@ window.handleProfileLogout = async function handleProfileLogout() {
                             </div>
                             <h4 class="font-black text-gray-800 text-base mb-1">Chưa Có Đơn Hàng Nào</h4>
                             <p class="text-xs text-gray-400 max-w-sm mx-auto mb-6">Bạn chưa thực hiện đơn đặt hàng nào tại SkinID. Khám phá các sản phẩm dược mỹ phẩm chuẩn y khoa ngay!</p>
-                            <a href="/#catalog" class="inline-flex items-center gap-2 px-6 py-2.5 bg-[#1E1B1D] text-white text-xs font-bold rounded-xl shadow-sm hover:bg-black transition-all">
-                                <i data-feather="grid" class="w-4 h-4"></i> Khám phá sản phẩm
+                            <a href="/#catalog" class="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#D96B82] to-[#C8526B] hover:from-[#C8526B] hover:to-[#B24058] text-white text-xs font-bold rounded-xl shadow-md shadow-rose-200/40 transition-all">
+                                <span>Khám phá sản phẩm ngay</span>
+                                <i data-feather="arrow-right" class="w-4 h-4"></i>
                             </a>
                         </div>
                     `;
@@ -672,7 +673,7 @@ window.handleProfileLogout = async function handleProfileLogout() {
                     <div class="text-center py-8 text-gray-500">
                         <p class="text-sm font-bold text-gray-700 mb-1">Đã có lỗi khi hiển thị đơn hàng</p>
                         <p class="text-xs text-gray-400 mb-3">${err.message}</p>
-                        <button onclick="window.location.reload()" class="px-4 py-2 bg-[#1E1B1D] text-white text-xs font-bold rounded-xl hover:bg-black transition-all">Tải lại trang</button>
+                        <button onclick="window.location.reload()" class="px-4 py-2 bg-gradient-to-r from-[#D96B82] to-[#C8526B] hover:from-[#C8526B] hover:to-[#B24058] text-white text-xs font-bold rounded-xl transition-all shadow-xs cursor-pointer">Tải lại trang</button>
                     </div>
                 `;
             }
