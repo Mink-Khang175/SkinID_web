@@ -2,32 +2,66 @@ import { useState, useEffect } from 'react';
 import { assetUrl } from '../../assets/index.js';
 
 export default function Header() {
-  const isHomePage = window.location.pathname === '/';
+  const isHomePage = window.location.pathname === '/' || window.location.pathname === '/index.html';
   const isAnalysisPage = window.location.pathname.startsWith('/skin-analysis');
+  const isAciePage = window.location.pathname.startsWith('/acie');
 
-  const [activeItem, setActiveItem] = useState(() => (isHomePage ? 'all' : ''));
+  const [activeItem, setActiveItem] = useState(() => {
+    if (isAciePage) return 'acie';
+    if (isAnalysisPage) return 'analysis';
+    if (!isHomePage) return '';
+    if (typeof window !== 'undefined') {
+      const step = new URLSearchParams(window.location.search).get('step');
+      if (step) return step;
+      if (window.location.hash === '#brands') return 'brands';
+      if (window.location.hash === '#acie-teaser') return 'acie-teaser';
+    }
+    return 'all';
+  });
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       if ('scrollRestoration' in history) {
         history.scrollRestoration = 'manual';
       }
-      window.scrollTo(0, 0);
-      if (window.location.hash) {
-        try {
-          history.replaceState(null, '', window.location.pathname + window.location.search);
-        } catch (_) {}
+      const hash = window.location.hash;
+      const step = new URLSearchParams(window.location.search).get('step');
+      if (step && typeof window.filterByStep === 'function') {
+        window.filterByStep(step);
+      }
+      if (hash) {
+        const targetId = hash.replace('#', '');
+        setTimeout(() => {
+          const el = document.getElementById(targetId);
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 120);
+      } else if (isHomePage && !window.location.search) {
+        window.scrollTo(0, 0);
       }
     }
 
     const handleSync = (e) => {
-      if (e.detail) setActiveItem(e.detail);
+      if (e.detail) {
+        setActiveItem(e.detail);
+        if (typeof document !== 'undefined') {
+          document.querySelectorAll('.desktop-nav a').forEach((a) => {
+            const itemKey = a.dataset.navStep || a.dataset.navTarget;
+            a.classList.toggle('is-active', itemKey === e.detail);
+          });
+        }
+      }
     };
     window.addEventListener('skinid:nav-sync', handleSync);
 
     const prevSync = window.syncPrimaryNavigation;
     window.syncPrimaryNavigation = (stepOrTarget = 'all') => {
       setActiveItem(stepOrTarget);
+      if (typeof document !== 'undefined') {
+        document.querySelectorAll('.desktop-nav a').forEach((a) => {
+          const itemKey = a.dataset.navStep || a.dataset.navTarget;
+          a.classList.toggle('is-active', itemKey === stepOrTarget);
+        });
+      }
       if (typeof prevSync === 'function') {
         try { prevSync(stepOrTarget); } catch (_) {}
       }
@@ -40,6 +74,23 @@ export default function Header() {
 
   const handleNavClick = (key, targetId = null, stepType = null) => {
     setActiveItem(key);
+    if (typeof document !== 'undefined') {
+      document.querySelectorAll('.desktop-nav a').forEach((a) => {
+        const itemKey = a.dataset.navStep || a.dataset.navTarget;
+        a.classList.toggle('is-active', itemKey === key);
+      });
+    }
+    if (!isHomePage) {
+      if (stepType) {
+        window.location.href = `/?step=${stepType}#catalog`;
+      } else if (targetId) {
+        window.location.href = `/#${targetId}`;
+      } else {
+        window.location.href = '/';
+      }
+      return;
+    }
+
     if (targetId) {
       const el = document.getElementById(targetId);
       if (el) {
@@ -166,13 +217,9 @@ export default function Header() {
               Thương hiệu
             </a>
             <a
-              href="/#acie-teaser"
-              data-nav-target="acie-teaser"
-              className={`acie-header-link inline-flex items-center gap-1.5 font-medium transition-colors ${activeItem === 'acie-teaser' ? 'is-active' : ''}`}
-              onClick={(e) => {
-                e.preventDefault();
-                handleNavClick('acie-teaser', 'acie-teaser');
-              }}
+              href="/acie"
+              data-nav-target="acie"
+              className={`acie-header-link inline-flex items-center gap-1.5 font-medium transition-colors ${isAciePage || activeItem === 'acie' ? 'is-active' : ''}`}
             >
               <span>SKINID x ACIE VISION</span>
               <span className="text-[9px] bg-rose-100 text-rose-800 px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider">Mới</span>
@@ -192,11 +239,7 @@ export default function Header() {
           const el = document.getElementById('brands');
           if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); window.syncPrimaryNavigation?.('brands'); }
         }}>Thương hiệu</a>
-        <a href="/#acie-teaser" data-nav-target="acie-teaser" className="font-semibold flex items-center justify-between text-gray-800" onClick={(e) => {
-          window?.toggleMobileMenu?.(false);
-          const el = document.getElementById('acie-teaser');
-          if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); window.syncPrimaryNavigation?.('acie-teaser'); }
-        }}>
+        <a href="/acie" data-nav-target="acie" className={`font-semibold flex items-center justify-between ${isAciePage ? 'text-rose-600' : 'text-gray-800'}`} onClick={() => window?.toggleMobileMenu?.(false)}>
           <span>SKINID x ACIE VISION</span>
           <span className="text-[9px] bg-rose-100 text-rose-800 px-1.5 py-0.5 rounded-full font-bold">Mới</span>
         </a>

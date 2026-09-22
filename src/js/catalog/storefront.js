@@ -80,9 +80,10 @@
         $$('.desktop-nav a').forEach((link) => {
             const navStep = link.dataset.navStep;
             const navTarget = link.dataset.navTarget;
-            const isActive = (navStep && navStep === step) || (navTarget && navTarget === step);
+            const key = navStep || navTarget;
+            const isActive = key === step;
             link.classList.toggle('is-active', isActive);
-            if (isActive) link.setAttribute('aria-current', 'true');
+            if (isActive) link.setAttribute('aria-current', 'page');
             else link.removeAttribute('aria-current');
         });
         window.dispatchEvent(new CustomEvent('skinid:nav-sync', { detail: step }));
@@ -191,10 +192,10 @@
         });
 
         if (!$('#catalog')) return;
-        $$('.category-item, [data-nav-step]').forEach((button) => {
+        $$('#categories .category-item, #categories [data-step]').forEach((button) => {
             button.addEventListener('click', (event) => {
                 event.preventDefault();
-                applyCatalogState({ step: button.dataset.step || button.dataset.navStep || 'all', benefit: 'all' });
+                applyCatalogState({ step: button.dataset.step || 'all', benefit: 'all' });
             });
         });
 
@@ -432,6 +433,10 @@
         setupCarousel();
         setupConsultation();
         setupModalDismissal();
+        const incomingStep = new URLSearchParams(window.location.search).get('step');
+        if (incomingStep) {
+            applyCatalogState({ step: incomingStep, benefit: 'all' });
+        }
         const incomingSearch = new URLSearchParams(window.location.search).get('search');
         if (incomingSearch && $('#product-search')) {
             window.handleHeaderSearch(incomingSearch, false);

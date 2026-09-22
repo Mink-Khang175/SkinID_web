@@ -1,6 +1,12 @@
 /* Loads the public product catalog from Firestore, with the bundled catalog as an offline fallback. */
 (function loadCatalog() {
     const fallback = Array.isArray(window.LOCAL_PRODUCTS) ? window.LOCAL_PRODUCTS : [];
+    // Enforce 5% discount on fallback products if originalPrice exists
+    fallback.forEach(p => {
+        if (p.originalPrice) {
+            p.price = Math.round(p.originalPrice * 0.95);
+        }
+    });
     window.PRODUCTS = fallback;
 
     window.SKINID_CATALOG_READY = (async () => {
@@ -9,7 +15,20 @@
             const snapshot = await firebase.sdk.firestore.getDocs(
                 firebase.sdk.firestore.collection(firebase.db, 'products')
             );
-            const products = snapshot.docs.map(document => ({ ...document.data(), id: document.id }));
+            const fallbackMap = new Map(fallback.map(p => [p.id, p]));
+            const products = snapshot.docs.map(document => {
+                const data = document.data();
+                const local = fallbackMap.get(document.id) || {};
+                const orig = local.originalPrice ?? data.originalPrice;
+                const price = orig ? Math.round(orig * 0.95) : (local.price ?? data.price);
+                return {
+                    ...data,
+                    ...local,
+                    id: document.id,
+                    price,
+                    originalPrice: orig
+                };
+            });
             if (!products.length) throw new Error('Collection products đang trống.');
             window.PRODUCTS = products;
             document.dispatchEvent(new CustomEvent('skinid:catalog-ready', { detail: { source: 'firestore', count: products.length } }));

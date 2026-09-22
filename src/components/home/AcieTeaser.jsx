@@ -42,10 +42,20 @@ export default function AcieTeaser() {
               </p>
 
               <div className="mt-8 flex flex-wrap items-center gap-4">
+                <a
+                  href="/acie"
+                  className="px-6 py-3 rounded-full text-xs sm:text-sm font-bold !text-white bg-gradient-to-r from-[#FF5277] to-[#E85D75] hover:from-[#E85D75] hover:to-[#D44C64] transition-all duration-200 shadow-md shadow-rose-300/40 hover:shadow-lg hover:-translate-y-0.5 cursor-pointer inline-flex items-center gap-2"
+                  style={{ color: '#ffffff' }}
+                >
+                  <span style={{ color: '#ffffff' }}>Khám phá công nghệ Acie®</span>
+                  <svg style={{ color: '#ffffff', stroke: '#ffffff' }} className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
                 <button
                   type="button"
-                  className="acie-teaser-btn px-6 py-3 rounded-full text-xs sm:text-sm font-bold !text-white bg-gradient-to-r from-[#FF5277] to-[#E85D75] hover:from-[#E85D75] hover:to-[#D44C64] transition-all duration-200 shadow-md shadow-rose-300/40 hover:shadow-lg hover:-translate-y-0.5 cursor-pointer inline-flex items-center gap-2"
-                  style={{ color: '#ffffff' }}
+                  className="px-6 py-3 rounded-full text-xs sm:text-sm font-bold text-gray-700 bg-white hover:bg-gray-50 border border-gray-200 transition-all duration-200 hover:shadow-xs cursor-pointer inline-flex items-center gap-2"
                   onClick={() => {
                     if (window.openConsultation) {
                       window.openConsultation();
@@ -54,15 +64,8 @@ export default function AcieTeaser() {
                     }
                   }}
                 >
-                  <span style={{ color: '#ffffff' }}>Đăng ký trải nghiệm sớm</span>
-                  <svg style={{ color: '#ffffff', stroke: '#ffffff' }} className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
+                  <span>Đăng ký tại Store</span>
                 </button>
-                <span className="text-xs text-gray-500 font-medium">
-                  Ưu tiên 500 suất trải nghiệm đầu tiên tại TP.HCM & Hà Nội
-                </span>
               </div>
             </div>
 

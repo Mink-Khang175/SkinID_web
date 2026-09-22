@@ -112,7 +112,8 @@
   transition:border-color .2s ease,box-shadow .2s ease;
 }
 .nav-line{border:0}
-.desktop-nav a{
+.desktop-nav a,
+.desktop-nav a:visited {
   position:relative;
   color:#4f494c!important;
   font-weight:500;
@@ -131,10 +132,24 @@
   pointer-events:none;
   transition:left .2s ease,right .2s ease,opacity .2s ease;
 }
-.desktop-nav a:hover{color:var(--brand-pink)!important}
-.desktop-nav a.is-active{color:var(--brand-pink)!important;font-weight:700}
+.desktop-nav a:hover,
+.desktop-nav a:hover:visited {
+  color:var(--brand-pink)!important;
+}
+.desktop-nav a.is-active,
+.desktop-nav a.is-active:visited {
+  color:var(--brand-pink)!important;
+  font-weight:700;
+}
 .desktop-nav a.is-active::after{left:0;right:0;opacity:1}
-.skin-tool-link.is-active{color:var(--brand-pink)}
+.skin-tool-link,
+.skin-tool-link:visited {
+  color:var(--rose-dark);
+}
+.skin-tool-link.is-active,
+.skin-tool-link.is-active:visited {
+  color:var(--brand-pink)!important;
+}
 
 /* Enforce pure crisp white text on all brand pink buttons regardless of CSS layer cascade */
 button.text-white,
