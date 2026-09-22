@@ -191,7 +191,7 @@ export default defineConfig({
         { src: 'src/assets/images/products/*/*', dest: 'images/products', rename: { stripBase: 5 } },
         { src: 'src/assets/images/banners/hero-scan-ai.jpg', dest: '.', rename: { stripBase: 4, name: 'og-image.jpg' } },
         // Video assets served at /videos/* in both dev and prod
-        { src: 'src/assets/videos/*', dest: 'videos' },
+        { src: 'src/assets/videos/*', dest: 'videos', rename: { stripBase: 3 } },
       ]
     })
   ],

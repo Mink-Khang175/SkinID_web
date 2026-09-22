@@ -209,6 +209,14 @@ window.openProductDetailModal = function(productId) {
         }
     }
 
+    // Reset license drawer to collapsed state
+    const licenseDrawer = document.getElementById('pmodal-license-drawer');
+    const licenseToggleText = document.getElementById('pmodal-license-toggle-text');
+    const licenseArrow = document.getElementById('pmodal-license-arrow');
+    if (licenseDrawer) licenseDrawer.classList.add('hidden');
+    if (licenseToggleText) licenseToggleText.innerText = 'Xem phiếu';
+    if (licenseArrow) licenseArrow.classList.remove('rotate-180');
+
     if (licenseImgPath) {
         const fullLicenseSrc = window.SKINID_ASSET_URL ? window.SKINID_ASSET_URL(licenseImgPath) : licenseImgPath;
         if (licenseImg) {
@@ -304,6 +312,24 @@ window.openProductDetailModal = function(productId) {
         if (typeof feather !== 'undefined') feather.replace();
     }, 10);
     window.SkinIDScrollLock?.lock('product-detail');
+};
+
+window.toggleLicensePreview = function() {
+    const drawer = document.getElementById('pmodal-license-drawer');
+    const toggleText = document.getElementById('pmodal-license-toggle-text');
+    const arrow = document.getElementById('pmodal-license-arrow');
+    if (!drawer) return;
+
+    const isHidden = drawer.classList.contains('hidden');
+    if (isHidden) {
+        drawer.classList.remove('hidden');
+        if (toggleText) toggleText.innerText = 'Thu gọn';
+        if (arrow) arrow.classList.add('rotate-180');
+    } else {
+        drawer.classList.add('hidden');
+        if (toggleText) toggleText.innerText = 'Xem phiếu';
+        if (arrow) arrow.classList.remove('rotate-180');
+    }
 };
 
 window.openLicenseModal = function() {

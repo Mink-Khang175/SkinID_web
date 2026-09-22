@@ -1,47 +1,17 @@
-# Kiểm tra luồng profile người dùng
+# Kiểm tra luồng profile người dùng (báo cáo lịch sử)
 
-## Đã kiểm tra
+> Báo cáo ngày 2026-09-10 ghi nhận prototype cũ. Các kết luận về tài khoản, mật khẩu và lịch sử lưu trong `localStorage`/`sessionStorage` không còn mô tả mã hiện tại. Giữ file để tra cứu lịch sử, không dùng làm hướng dẫn triển khai.
 
-- Đăng ký: tên, email, số điện thoại Việt Nam, mật khẩu xác nhận và email trùng.
-- Đăng nhập/đăng xuất, chọn lưu phiên local hoặc session.
-- Cập nhật hồ sơ: tên, điện thoại, ngày sinh, giới tính, địa chỉ, loại da nền và vấn đề ưu tiên.
-- Đổi mật khẩu tài khoản local.
-- Lưu, xem và xóa lịch sử soi da theo user ID.
-- Tab Hồ sơ / Lịch sử / Cài đặt và truy cập profile khi chưa đăng nhập.
+## Trạng thái hiện tại
 
-Kiểm thử tự động `tests/profile-flows.test.js` đạt cho các luồng local nêu trên.
+- `src/js/account/auth-firebase.js` dùng Firebase Authentication cho Email/Password và Google. Firebase SDK quản lý phiên đăng nhập; ứng dụng không lưu mật khẩu plaintext.
+- Hồ sơ tại `users/{uid}` và lịch sử soi da tại `users/{uid}/skinReports/{reportId}` được đọc/ghi qua Firestore. Chức năng xóa lịch sử chỉ xóa báo cáo của người dùng đang đăng nhập, không xóa tài khoản hoặc hồ sơ.
+- Giỏ của người dùng đăng nhập lưu tại `users/{uid}/commerce/cart`; giỏ khách tồn tại trong bộ nhớ trang cho tới khi đăng nhập.
+- Quyền quản trị dựa trên Firebase custom claim `admin`; API Worker kiểm tra token cho thao tác đặc quyền.
+- Ba ảnh đầu vào được gửi tới Cloudflare Worker và Gemini. Ứng dụng lưu báo cáo, không chủ động lưu ảnh chụp vào Firestore hoặc Storage. Kết quả chỉ mang tính tham khảo.
 
-## Kết luận quan trọng
+## Phạm vi báo cáo gốc
 
-Đây là prototype local trên trình duyệt, không phải hệ thống tài khoản production:
+Bản audit gốc kiểm tra prototype local: đăng ký, đăng nhập, cập nhật hồ sơ, đổi mật khẩu, lịch sử soi da và các tab hồ sơ. Các nhận định về Google giả lập, mật khẩu plaintext, quyền quản trị qua cấu hình local và dữ liệu chỉ nằm trong trình duyệt **chỉ áp dụng cho phiên bản cũ**.
 
-1. Users, mật khẩu, session và lịch sử soi da nằm trong localStorage/sessionStorage.
-   Người dùng có thể xóa, sửa hoặc sao chép dữ liệu trên thiết bị của họ.
-2. Mật khẩu local đang lưu dạng plaintext. Không được dùng cho khách hàng thật.
-3. Luồng Google hiện có modal tài khoản mẫu và một nhánh nhập email trực tiếp; chúng không
-   phải chứng thực Google phía server. JWT của Google cũng chỉ được decode ở client, không
-   được verify chữ ký/audience/issuer tại server.
-4. Ô “Cấu hình Quản trị viên Google Client ID” để bất kỳ người dùng trên chính thiết bị đó
-   thay đổi cấu hình local. Nó không hề là quyền quản trị thực và không nên hiển thị public.
-5. “Xóa toàn bộ dữ liệu” hiện chỉ xóa lịch sử scan của user hiện tại. Nó không xóa profile,
-   tài khoản local, dữ liệu trên thiết bị khác hay bất kỳ dữ liệu nào trên server.
-6. Các câu “bảo mật chuẩn y tế”, “AI ground-truth”, “bệnh án”, “xóa hình ảnh trên hệ thống”
-   không phù hợp với hiện trạng: ảnh chụp không được lưu bởi flow hiện tại, còn số liệu fallback
-   là mô phỏng khi endpoint AI không hoạt động.
-7. URL triển khai mới là một origin khác nên localStorage/profile từ domain cũ sẽ không tự
-   chuyển sang domain mới. Đây là hành vi browser bình thường.
-
-## Điều kiện để đưa profile vào production
-
-- Backend xác thực thật: session cookie HttpOnly/Secure/SameSite hoặc OAuth Authorization Code
-  với callback server; server xác minh Google ID token.
-- Backend hash mật khẩu bằng Argon2id/bcrypt, reset password qua email đã xác minh; không gửi
-  hoặc lưu plaintext.
-- API phân quyền theo user server-side cho profile, scan history, export và delete; không dùng
-  user ID từ browser để cấp quyền.
-- Tách trang/cấu hình quản trị khỏi profile khách hàng; phân quyền admin từ server.
-- Chính sách consent, retention/xóa dữ liệu ảnh và audit log được công ty phê duyệt trước khi
-  lưu kết quả soi da.
-- Bỏ hoặc gắn nhãn rõ ràng các dữ liệu mô phỏng; không gọi chúng là kết quả y tế hay ground truth.
-
-Tài liệu này là review kỹ thuật; chưa thay cơ chế auth vì điều đó cần API/backend công ty.
+Muốn đánh giá bản hiện tại cần kiểm tra thêm cấu hình triển khai, Firebase Rules và API Worker. Việc đọc mã không xác nhận cấu hình dịch vụ production.

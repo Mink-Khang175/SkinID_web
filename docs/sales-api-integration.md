@@ -17,17 +17,17 @@ Không coi localStorage hoặc dữ liệu gửi từ trình duyệt là bằng 
 Web SkinID
    │ HTTPS, phiên người dùng
    ▼
-API công ty / lớp adapter server nếu cần
-   ├─ API phần mềm bán hàng: SKU, khách hàng, giỏ/đơn/tồn kho
-   ├─ Gemini: phân tích ảnh, khóa chỉ giữ tại server
-   └─ Kho báo cáo/đồng ý xử lý ảnh (chỉ khi hệ thống có hỗ trợ)
+Firebase Authentication + Cloudflare Worker hiện có
+   ├─ Adapter API phần mềm bán hàng (đề xuất): SKU, giá, tồn kho, đơn
+   ├─ Gemini: phân tích ảnh, khóa giữ tại Worker
+   └─ Firestore: hồ sơ và báo cáo da theo quyền truy cập hiện tại
 ```
 
 Nếu API công ty đã có endpoint dành cho frontend với xác thực người dùng,
 có thể gọi trực tiếp. Nếu API yêu cầu master API key/client secret, bắt buộc giữ
 chúng ở server và thêm adapter. Không đưa token quản trị phần mềm bán hàng vào JS.
 
-Đây là phương án, không phải cấu trúc backend đã được thêm vào repository.
+Adapter phần mềm bán hàng ở trên chỉ là phương án; chưa được thêm vào repository.
 
 ## 3. Xin gì từ đội backend trước?
 
@@ -48,15 +48,16 @@ Chưa có tài liệu API của công ty nên mọi route bên dưới đều ch
 
 | Hiện tại | Khi nối backend | Lưu ý |
 | --- | --- | --- |
-| src/data/products.js — 54 sản phẩm | API catalog/variants | Map ID local ↔ SKU thật, không ghép chỉ theo tên |
+| `src/data/products.js` — catalog đóng gói, catalog runtime ưu tiên Firestore | API catalog/variants | Map ID hiện tại ↔ SKU thật, không ghép chỉ theo tên |
 | brand / brandSlug | brandId + slug chuẩn | DVAH/D'VAH là alias hiển thị |
 | stepType / SHOP_CATEGORY_OVERRIDES | categoryIds và thuộc tính routine riêng | Nhóm mua sắm không đồng nhất bước routine |
 | price / originalPrice | Giá bán/giá so sánh từ server | Server tính lại khi đặt hàng |
 | volume | Thuộc tính biến thể | Xác nhận 2 xung đột dung tích trong báo cáo catalog |
 | mainActives / keyActives / fullIngredients / usage | Custom fields/PIM nếu API có | Không tự bịa khi API thiếu; dùng trạng thái chưa cập nhật |
-| cart localStorage | Guest cart hoặc cart API | Chuyển giỏ guest khi đăng nhập, kiểm tra lại SKU/giá/tồn |
-| account/auth.js localStorage | Phiên xác thực server | Không dùng userId từ local làm bằng chứng đăng nhập |
-| Lịch sử soi da local | API báo cáo riêng nếu được duyệt | Người dùng chỉ xem báo cáo được cấp quyền |
+| `src/js/cart/cart.js`: giỏ khách trong bộ nhớ; giỏ đăng nhập trong Firestore | Giỏ API nếu phần mềm bán hàng hỗ trợ | Ghép giỏ khách khi đăng nhập, kiểm tra lại SKU/giá/tồn |
+| `src/js/account/auth-firebase.js`: Firebase Authentication | Xác thực liên thông nếu cần | Worker hiện xác minh Firebase ID token; không dùng UID do client tự gửi để cấp quyền |
+| `users/{uid}/skinReports` trên Firestore | API báo cáo riêng nếu được duyệt | Người dùng chỉ xem báo cáo được cấp quyền |
+| `worker/index.js`: API tạo/hủy/xem đơn trên Firestore | Adapter đồng bộ đơn với phần mềm bán hàng | Chốt nguồn dữ liệu chính và xử lý đồng bộ trước khi tích hợp |
 | Chuyển Zalo | Đơn nháp + kênh tư vấn, tùy hợp đồng | Mở Zalo không có nghĩa đã tạo đơn/đã thanh toán |
 
 ## 5. Luồng tối thiểu để bán hàng
@@ -96,9 +97,8 @@ Không hiển thị stack trace hoặc token trong lỗi UI.
 
 - Thêm adapter API trong src/js/services/ sau khi chốt contract; không fetch phân tán
   trong ProductCard hoặc HTML.
-- Bootstrap nạp adapter, lấy catalog rồi mới dựng UI. Giữ fixture products.js cho demo/test,
-  không trộn dữ liệu fixture vào giao dịch production.
-- cart/cart.js và account/auth.js chuyển từ local persistence sang adapter đã xác thực.
+- Điều chỉnh `src/js/catalog/catalog-loader.js` để nạp catalog từ adapter sau khi chốt API. Xem lại fallback catalog đóng gói và cách Worker định giá để dữ liệu giao dịch nhất quán.
+- Điều chỉnh `src/js/cart/cart.js`, `src/js/account/auth-firebase.js` và `worker/index.js` theo hợp đồng xác thực, giỏ và đơn đã chốt; hiện các luồng này dùng Firebase/Firestore và Worker.
 - ProductCard và modal tiếp tục nhận view model thống nhất; không phải thiết kế lại.
 - Các click analytics (xem sản phẩm, lọc, thêm giỏ) là event tùy chọn, không tự động
   gửi hết sang hệ thống bán hàng. Chốt mục đích và danh sách sự kiện trước.

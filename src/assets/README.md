@@ -1,34 +1,31 @@
-# HƯỚNG DẪN QUẢN LÝ TÀI NGUYÊN (ASSETS GUIDE)
+# Ảnh và video của SkinID
 
-Để dự án luôn gọn gàng, tối giản và dễ tìm kiếm, **toàn bộ tài nguyên tĩnh (ảnh, video)** của SkinID được quy hoạch tập trung duy nhất tại thư mục:
+## Thư mục nào là nguồn?
 
+`src/assets/` là nơi lưu tài nguyên gốc trong repository. Hãy thêm hoặc sửa ảnh tại đây, rồi commit thay đổi. `dist/` là kết quả do `npm run build` tạo lại; không thêm hoặc sửa ảnh trực tiếp trong `dist/` vì lần build tiếp theo sẽ ghi đè.
+
+```text
+src/assets/images/
+  banners/             Ảnh banner
+  brands/              Logo thương hiệu
+  licenses/            Ảnh giấy tờ sản phẩm
+  products/rilastil/   Ảnh sản phẩm Rilastil
+  products/dvah/       Ảnh sản phẩm D'VAH
+  products/twon/       Ảnh sản phẩm TWON
+  logo.png             Logo SkinID
+src/assets/videos/     Video giao diện
 ```
-src/assets/
-├── images/
-│   ├── banners/      # Ảnh banner chính, minh họa AI
-│   ├── brands/       # Logo các thương hiệu đối tác (TWON, D'VAH, Rilastil)
-│   ├── products/     # Toàn bộ ảnh sản phẩm của hệ thống
-│   │   ├── rilastil/ # Ảnh sản phẩm Rilastil
-│   │   ├── dvah/     # Ảnh sản phẩm D'VAH
-│   │   └── twon/     # Ảnh sản phẩm TWON
-│   └── logo.png      # Logo chính SkinID
-└── videos/
-    └── auth_video.mp4 # Video nền Auth Modal
-```
 
----
+## Website lấy ảnh như thế nào?
 
-### Khi tải ảnh mới về, lưu ở đâu?
-- **Ảnh sản phẩm**: Bạn chỉ cần lưu vào thư mục thương hiệu tương ứng:
-  - Rilastil: `src/assets/images/products/rilastil/`
-  - D'VAH: `src/assets/images/products/dvah/`
-  - TWON: `src/assets/images/products/twon/`
-  *(Hoặc lưu thẳng vào `src/assets/images/products/` - hệ thống đã có bộ giải quyết tự động nhận diện cả hai cấu trúc).*
-- **Video mới**: Lưu vào `src/assets/videos/`.
+- Khi chạy `npm run dev`, Vite phục vụ ảnh từ `src/assets/`. Hàm `assetUrl` trong `src/assets/index.js` đổi đường dẫn `/images/...` thành URL phù hợp với môi trường dev.
+- Khi chạy `npm run build`, cấu hình `vite.config.mjs` sao chép ảnh và video sang `dist/images/` và `dist/videos/`. Cloudflare Worker phục vụ thư mục `dist/` theo `wrangler.jsonc`; GitHub Actions tự build trước khi deploy.
+- Catalog ưu tiên lấy dữ liệu sản phẩm từ Firestore. Trường `image` của sản phẩm là **đường dẫn hoặc URL**, không phải bản thân file ảnh. Đường dẫn local như `/images/products/...` chỉ hiển thị nếu file tương ứng đã nằm trong bản deploy. URL ngoài được tải từ máy chủ bên ngoài.
 
----
+## Thêm hoặc thay ảnh sản phẩm
 
-### Cơ chế nhận diện tự động
-Hệ thống sử dụng bộ điều hướng tài nguyên thông minh (`assetUrl` & middleware Vite):
-1. **Môi trường Dev (`npm run dev`)**: Tự động tìm kiếm ảnh cả ở dạng phẳng (`/images/products/...`) lẫn lồng thương hiệu (`/images/products/rilastil/...`), không bao giờ bị lỗi 404 hay hiển thị placeholder xám.
-2. **Môi trường Production (`npm run build`)**: Tự động đóng gói kép cả cấu trúc thư mục thương hiệu và cấu trúc phẳng vào `dist/images/products/`, đảm bảo deploy lên Cloudflare / CDN hoạt động 100% trơn tru.
+1. Đặt file gốc vào `src/assets/images/products/<thuong-hieu>/`.
+2. Cập nhật trường `image` của sản phẩm thành `/images/products/<thuong-hieu>/<ten-file>` trong nguồn catalog phù hợp: Firestore cho dữ liệu đang dùng, `src/data/products.js` cho catalog dự phòng.
+3. Chạy `npm run build` rồi kiểm tra file tương ứng trong `dist/images/products/<thuong-hieu>/`. Commit file gốc và thay đổi catalog; không commit `dist/`.
+
+Hiện build còn tạo thêm bản phẳng tại `dist/images/products/<ten-file>` để tương thích với dữ liệu catalog cũ dùng đường dẫn không có thư mục thương hiệu. Đây là **bản sao khi build**, không phải nơi thứ hai để quản lý ảnh. Có thể bỏ bản sao này sau khi toàn bộ dữ liệu Firestore và đường dẫn sử dụng ảnh đã được chuyển sang đường dẫn có thương hiệu.
