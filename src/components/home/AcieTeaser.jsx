@@ -27,9 +27,9 @@ export default function AcieTeaser() {
 
             {/* Editorial Content: Tối giản, không gạch đầu dòng, không số liệu ảo */}
             <div className="lg:col-span-7 flex flex-col items-start justify-center">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFE4E8] text-[#E85D75] text-[11px] font-bold tracking-widest uppercase mb-4">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-rose-50 border border-rose-200/70 text-rose-800 text-[11px] font-bold tracking-widest uppercase mb-4">
                 <span>SKINID x ACIE VISION</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-[#E85D75]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
                 <span className="text-[10px] font-semibold text-rose-700">SẮP RA MẮT</span>
               </div>
 
@@ -44,7 +44,7 @@ export default function AcieTeaser() {
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <button
                   type="button"
-                  className="px-6 py-3 rounded-full text-xs sm:text-sm font-bold text-white bg-[#E85D75] hover:bg-[#d64a63] transition-all duration-200 shadow-xs hover:shadow-md cursor-pointer inline-flex items-center gap-2"
+                  className="px-6 py-3 rounded-full text-xs sm:text-sm font-bold text-white bg-[#1E1B1D] hover:bg-black transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer inline-flex items-center gap-2"
                   onClick={() => {
                     if (window.openConsultation) {
                       window.openConsultation();

@@ -77,8 +77,10 @@
     }
 
     function syncPrimaryNavigation(step = 'all') {
-        $$('.desktop-nav [data-nav-step]').forEach((link) => {
-            const isActive = link.dataset.navStep === step;
+        $$('.desktop-nav a').forEach((link) => {
+            const navStep = link.dataset.navStep;
+            const navTarget = link.dataset.navTarget;
+            const isActive = (navStep && navStep === step) || (navTarget && navTarget === step);
             link.classList.toggle('is-active', isActive);
             if (isActive) link.setAttribute('aria-current', 'true');
             else link.removeAttribute('aria-current');
@@ -175,17 +177,32 @@
         });
     }
     function setupMerchandisingLinks() {
+        $$('.desktop-nav a[data-nav-target]').forEach((link) => {
+            link.addEventListener('click', (event) => {
+                const targetId = link.dataset.navTarget;
+                syncPrimaryNavigation(targetId);
+                const section = document.getElementById(targetId);
+                if (section) {
+                    event.preventDefault();
+                    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    try {
+                        history.replaceState(null, '', `/#${targetId}`);
+                    } catch (_) {}
+                }
+            });
+        });
+
         if (!$('#catalog')) return;
         $$('.category-item, [data-nav-step]').forEach((button) => {
             button.addEventListener('click', (event) => {
                 event.preventDefault();
-                applyCatalogState({ step: button.dataset.step || button.dataset.navStep || 'all' });
+                applyCatalogState({ step: button.dataset.step || button.dataset.navStep || 'all', benefit: 'all' });
             });
         });
 
         $$('.brand-cards [data-brand]').forEach((button) => {
             button.addEventListener('click', () => {
-                applyCatalogState({ brand: button.dataset.brand });
+                applyCatalogState({ brand: button.dataset.brand, benefit: 'all' });
             });
         });
 
@@ -425,6 +442,16 @@
         if (new URLSearchParams(window.location.search).get('auth') === '1') {
             window.authManager?.openAuthModal?.();
         }
+        if (window.location.hash === '#brands') {
+            syncPrimaryNavigation('brands');
+        } else if (window.location.hash === '#acie-teaser') {
+            syncPrimaryNavigation('acie-teaser');
+        }
+        window.addEventListener('hashchange', () => {
+            if (window.location.hash === '#brands') syncPrimaryNavigation('brands');
+            else if (window.location.hash === '#acie-teaser') syncPrimaryNavigation('acie-teaser');
+            else if (window.location.hash === '#catalog' || window.location.hash === '#featured-products') syncPrimaryNavigation('all');
+        });
         if (window.feather) feather.replace();
     }
 

@@ -88,13 +88,27 @@ function renderCatalog() {
     // Update Result Count UI Indicator
     const countEl = document.getElementById('filter-result-count');
     if (countEl) {
-        countEl.innerHTML = `Hiển thị <span class="font-extrabold text-brand-primary">${filtered.length}</span> sản phẩm`;
+        let benefitTag = '';
+        if (currentBenefitFilter && currentBenefitFilter !== 'all') {
+            const labels = {
+                'tri-mun-kiem-dau': 'Da dầu & mụn',
+                'cap-am-chuyen-sau': 'Da khô & cấp ẩm',
+                'phuc-hoi-diu-da': 'Da nhạy cảm',
+                'sang-da-mo-tham': 'Thâm nám & sắc tố',
+                'chong-lao-hoa': 'Chống lão hóa',
+                'chong-nang': 'Chống nắng',
+                'body-nuoc-hoa': 'Body & Nước hoa'
+            };
+            const label = labels[currentBenefitFilter] || currentBenefitFilter;
+            benefitTag = ` <span class="inline-flex items-center gap-1 ml-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-800 border border-gray-200">${label} <button type="button" onclick="window.filterByBenefit && window.filterByBenefit('all')" class="hover:text-red-500 font-bold ml-1 cursor-pointer" title="Bỏ lọc nhu cầu">×</button></span>`;
+        }
+        countEl.innerHTML = `Hiển thị <span class="font-extrabold text-brand-primary">${filtered.length}</span> sản phẩm${benefitTag}`;
     }
 
     if (filtered.length === 0) {
         grid.innerHTML = `
             <div class="col-span-full text-center py-16 px-4 bg-white/70 rounded-2xl border border-gray-100 shadow-2xs flex flex-col items-center justify-center">
-                <div class="w-14 h-14 rounded-full bg-rose-50 border border-rose-100 flex items-center justify-center mb-3.5 text-[#E85D75]">
+                <div class="w-12 h-12 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center mb-3 text-gray-600">
                     <svg class="w-6 h-6 stroke-[1.5]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -106,9 +120,9 @@ function renderCatalog() {
                 <button
                     type="button"
                     onclick="window.resetAllFilters && window.resetAllFilters()"
-                    class="mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold text-white bg-[#E85D75] hover:bg-[#d64a63] transition-colors shadow-2xs cursor-pointer"
+                    class="mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold text-gray-800 bg-white border border-gray-300 hover:bg-gray-50 hover:border-gray-900 hover:text-black transition-all shadow-2xs cursor-pointer"
                 >
-                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg class="w-3.5 h-3.5 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
                         <path d="M3 3v5h5"></path>
                     </svg>
@@ -166,7 +180,7 @@ window.filterByBenefit = function(benefit, el) {
         t.classList.toggle('is-active', isMatch);
         t.classList.toggle('text-gray-900', isMatch);
         t.classList.toggle('font-bold', isMatch);
-        t.classList.toggle('border-[#E85D75]', isMatch);
+        t.classList.toggle('border-[#1E1B1D]', isMatch);
         t.classList.toggle('border-transparent', !isMatch);
         t.classList.toggle('text-gray-500', !isMatch);
         t.classList.toggle('font-medium', !isMatch);
@@ -187,7 +201,7 @@ window.resetAllFilters = function() {
         t.classList.toggle('is-active', isAll);
         t.classList.toggle('text-gray-900', isAll);
         t.classList.toggle('font-bold', isAll);
-        t.classList.toggle('border-[#E85D75]', isAll);
+        t.classList.toggle('border-[#1E1B1D]', isAll);
         t.classList.toggle('border-transparent', !isAll);
         t.classList.toggle('text-gray-500', !isAll);
         t.classList.toggle('font-medium', !isAll);

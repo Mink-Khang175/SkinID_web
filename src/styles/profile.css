@@ -48,12 +48,12 @@
   border: 3px solid #fff;
   border-radius: 999px;
   color: #fff;
-  background: #e26780;
-  box-shadow: 0 5px 14px rgba(226,103,128,.3);
+  background: #1E1B1D;
+  box-shadow: 0 4px 12px rgba(30, 27, 29, 0.25);
   cursor: pointer;
   transition: transform .2s ease, background .2s ease;
 }
-.profile-avatar-edit:hover { background: #cc5069; transform: translateY(-2px); }
+.profile-avatar-edit:hover { background: #000; transform: translateY(-2px); }
 .profile-provider-badge {
   display: inline-flex;
   align-items: center;
@@ -97,9 +97,9 @@
   transform: scaleX(.35);
   transition: background .2s ease, transform .2s ease;
 }
-.profile-page .tab-btn:hover { color: #b84960; background: #fff9fa; }
-.profile-page .tab-btn.active { color: #d65f77 !important; background: #fff; }
-.profile-page .tab-btn.active::after { background: #e26780; transform: scaleX(1); }
+.profile-page .tab-btn:hover { color: #1E1B1D; background: #fff9fa; }
+.profile-page .tab-btn.active { color: #1E1B1D !important; background: #fff; font-weight: 800; }
+.profile-page .tab-btn.active::after { background: #1E1B1D; transform: scaleX(1); }
 
 .profile-btn {
   min-height: 2.65rem;
@@ -116,10 +116,10 @@
   transition: transform .2s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
 }
 .profile-btn:hover { transform: translateY(-1px); }
-.profile-btn--primary { color: #fff; background: #e26780; box-shadow: 0 7px 18px rgba(226,103,128,.2); }
-.profile-btn--primary:hover { background: #cf566e; box-shadow: 0 10px 24px rgba(226,103,128,.28); }
-.profile-btn--secondary { color: #a94156; background: #fff; border-color: #e9b9c3; }
-.profile-btn--secondary:hover { background: #fff7f8; border-color: #e26780; }
+.profile-btn--primary { color: #fff; background: #1E1B1D; box-shadow: 0 4px 14px rgba(30,27,29,.2); }
+.profile-btn--primary:hover { background: #000; box-shadow: 0 6px 18px rgba(0,0,0,.25); }
+.profile-btn--secondary { color: #282326; background: #fff; border-color: #D8D2D4; }
+.profile-btn--secondary:hover { background: #F8F6F7; border-color: #1E1B1D; color: #1E1B1D; }
 .profile-btn--danger { color: #b42318; background: #fff; border-color: #f1b7b2; }
 .profile-btn--danger:hover { background: #fff3f2; border-color: #d92d20; }
 
@@ -224,47 +224,50 @@
 }
 
 .btn-xem-chi-tiet, .btn-xem-phac-do {
-  background: linear-gradient(135deg, #FF5277 0%, #E11D48 100%) !important;
+  background: #1E1B1D !important;
   color: #FFFFFF !important;
-  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
+  box-shadow: 0 4px 14px rgba(30, 27, 29, 0.18);
   border-radius: 10px;
-  font-weight: 600;
+  font-weight: 700;
   transition: all 0.2s ease;
 }
 
 .btn-xem-chi-tiet:hover, .btn-xem-phac-do:hover {
-  box-shadow: 0 6px 20px rgba(225, 29, 72, 0.45);
+  background: #000000 !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.24);
   transform: translateY(-1px);
 }
 
 .btn-soi-lai {
   white-space: nowrap !important; /* Không cho rớt dòng */
-  background-color: #FFF1F2;
-  color: #E11D48;
-  border: 1px solid #FECDD3;
+  background-color: #FFFFFF;
+  color: #282326;
+  border: 1px solid #D8D2D4;
   border-radius: 10px;
-  font-weight: 600;
+  font-weight: 700;
   transition: all 0.2s ease;
 }
 
 .btn-soi-lai:hover {
-  background-color: #FFE4E6;
-  border-color: #FDA4AF;
+  background-color: #F8F6F7;
+  border-color: #1E1B1D;
+  color: #1E1B1D;
 }
 
 .btn-gui-duoc-si {
   white-space: nowrap !important;
-  background-color: #FFF1F2;
-  color: #E11D48;
-  border: 1px solid #FECDD3;
+  background-color: #FFFFFF;
+  color: #282326;
+  border: 1px solid #D8D2D4;
   border-radius: 10px;
-  font-weight: 600;
+  font-weight: 700;
   transition: all 0.2s ease;
 }
 
 .btn-gui-duoc-si:hover {
-  background-color: #FFE4E6;
-  border-color: #FDA4AF;
+  background-color: #F8F6F7;
+  border-color: #1E1B1D;
+  color: #1E1B1D;
 }
 
 /* --- 2. SỬA POP-UP CHI TIẾT --- */

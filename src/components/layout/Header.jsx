@@ -51,10 +51,10 @@ export default function Header() {
             <a href="/#catalog" data-nav-step="treatment">Tinh chất & đặc trị</a>
             <a href="/#catalog" data-nav-step="moisturizer">Dưỡng ẩm</a>
             <a href="/#catalog" data-nav-step="sunscreen">Chống nắng</a>
-            <a href="/#brands">Thương hiệu</a>
-            <a href="/#acie-teaser" className="acie-header-link font-bold text-[#E85D75] hover:text-rose-700 transition-colors inline-flex items-center gap-1.5">
+            <a href="/#brands" data-nav-target="brands">Thương hiệu</a>
+            <a href="/#acie-teaser" data-nav-target="acie-teaser" className="acie-header-link inline-flex items-center gap-1.5 font-medium transition-colors">
               <span>SKINID x ACIE VISION</span>
-              <span className="text-[9px] bg-rose-100 text-[#E85D75] px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider">Mới</span>
+              <span className="text-[9px] bg-rose-100 text-rose-800 px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider">Mới</span>
             </a>
           </nav>
           <a className={`skin-tool-link${isAnalysisPage ? ' is-active' : ''}`} href="/skin-analysis" aria-current={isAnalysisPage ? 'page' : undefined}>
@@ -66,10 +66,18 @@ export default function Header() {
       <nav id="mobile-menu" className="mobile-menu hidden" aria-label="Điều hướng di động">
         <a href="/#featured-products" data-nav-step="all" onClick={() => window?.toggleMobileMenu?.(false)}>Tất cả sản phẩm</a>
         <a href="/#categories" onClick={() => window?.toggleMobileMenu?.(false)}>Danh mục</a>
-        <a href="/#brands" onClick={() => window?.toggleMobileMenu?.(false)}>Thương hiệu</a>
-        <a href="/#acie-teaser" className="text-[#E85D75] font-bold flex items-center justify-between" onClick={() => window?.toggleMobileMenu?.(false)}>
+        <a href="/#brands" data-nav-target="brands" onClick={(e) => {
+          window?.toggleMobileMenu?.(false);
+          const el = document.getElementById('brands');
+          if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); window.syncPrimaryNavigation?.('brands'); }
+        }}>Thương hiệu</a>
+        <a href="/#acie-teaser" data-nav-target="acie-teaser" className="font-semibold flex items-center justify-between text-gray-800" onClick={(e) => {
+          window?.toggleMobileMenu?.(false);
+          const el = document.getElementById('acie-teaser');
+          if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); window.syncPrimaryNavigation?.('acie-teaser'); }
+        }}>
           <span>SKINID x ACIE VISION</span>
-          <span className="text-[9px] bg-rose-100 text-[#E85D75] px-1.5 py-0.5 rounded-full font-bold">Mới</span>
+          <span className="text-[9px] bg-rose-100 text-rose-800 px-1.5 py-0.5 rounded-full font-bold">Mới</span>
         </a>
         <a href="/skin-analysis" onClick={() => window?.toggleMobileMenu?.(false)}>Soi da AI</a>
         <button type="button" onClick={() => {
