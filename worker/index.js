@@ -432,7 +432,8 @@ function validateAnalysis(rawText) {
 
 const GEMINI_MODELS = [
   'gemini-2.5-flash',
-  'gemini-2.5-flash-lite'
+  'gemini-2.5-flash-lite',
+  'gemini-flash-latest'
 ];
 
 function isRetryableGeminiError(status) {
@@ -467,21 +468,44 @@ async function callGeminiWithFallback(env, prompt, images) {
         if (rawText) return { rawText, model };
       }
 
-      if (!isRetryableGeminiError(response.status)) {
-        const errJson = await response.json().catch(() => ({}));
-        console.error(`[SkinID Gemini] Non-retryable error from ${model} (${response.status}):`, errJson);
-        throw new ApiError(response.status === 401 || response.status === 403 ? 503 : 400, 'gemini_error', 'Không thể hoàn tất yêu cầu phân tích da.');
+      const errJson = await response.json().catch(() => ({}));
+      const geminiMsg = errJson?.error?.message || `HTTP ${response.status}`;
+      const errReason = errJson?.error?.details?.[0]?.reason || errJson?.error?.status || '';
+      console.error(`[SkinID Gemini] Error from model ${model} (${response.status}):`, errJson);
+
+      // Specific error handling for API key issues
+      if (response.status === 401 || response.status === 403 || errReason === 'API_KEY_INVALID' || geminiMsg.toLowerCase().includes('api key')) {
+        throw new ApiError(503, 'gemini_key_invalid', `Khóa API Gemini chưa hợp lệ hoặc chưa được cấu hình đúng trên hệ thống (${geminiMsg}).`);
       }
 
-      console.warn(`[SkinID Gemini] Model ${model} returned retryable status ${response.status}, trying fallback...`);
-      lastError = new Error(`Model ${model} returned ${response.status}`);
+      // Specific error handling for Quota / Rate limits
+      if (response.status === 429 || errReason === 'RESOURCE_EXHAUSTED' || geminiMsg.toLowerCase().includes('quota')) {
+        lastError = new ApiError(429, 'gemini_quota_exhausted', 'Hạn mức (quota) Gemini của hệ thống đã tạm thời đạt giới hạn. Vui lòng thử lại sau ít phút.');
+        console.warn(`[SkinID Gemini] Model ${model} quota exhausted, trying next model...`);
+        continue;
+      }
+
+      if (isRetryableGeminiError(response.status)) {
+        console.warn(`[SkinID Gemini] Model ${model} returned retryable status ${response.status}, trying fallback...`);
+        lastError = new Error(`Model ${model} returned ${response.status}`);
+        continue;
+      }
+
+      // If non-retryable for this specific model (e.g. 404 not found in region), try next model before failing
+      lastError = new ApiError(400, 'gemini_error', `Không thể hoàn tất phân tích da (${geminiMsg}).`);
     } catch (err) {
-      if (err instanceof ApiError) throw err;
-      console.warn(`[SkinID Gemini] Error with model ${model}:`, err.message);
-      lastError = err;
+      if (err instanceof ApiError) {
+        if (err.code === 'gemini_key_invalid') throw err;
+        lastError = err;
+      } else {
+        console.warn(`[SkinID Gemini] Error with model ${model}:`, err.message);
+        lastError = err;
+      }
     }
   }
-  throw new ApiError(503, 'gemini_unavailable', 'Dịch vụ phân tích đang bận, vui lòng thử lại.');
+
+  if (lastError instanceof ApiError) throw lastError;
+  throw new ApiError(503, 'gemini_unavailable', 'Dịch vụ phân tích AI đang bận hoặc tạm thời gián đoạn, vui lòng thử lại sau ít phút.');
 }
 
 async function analyzeSkin(request, env, user) {
