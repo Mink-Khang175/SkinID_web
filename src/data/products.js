@@ -37,6 +37,7 @@ window.LOCAL_PRODUCTS = [
         "image": "/images/products/rilastil-sua-rua-mat-duong-am-rilastil-aqua-face-cleanser-50ml.avif",
         "originalImageUrl": "https://rilastilvn.com.vn/wp-content/uploads/2026/04/10-3.avif",
         "link": "https://rilastilvn.com.vn/san-pham/sua-rua-mat-duong-am-rilastil-aqua-face-cleanser-50ml/",
+        "licenseImageUrl": "/images/licenses/1yzvdAMzvEpPB7kA0_PhPOJMTpCrAXY8N.webp",
         "benefits": [
             "cap-am-chuyen-sau"
         ],
@@ -85,7 +86,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/xit-co-the-danh-cho-da-mun-150ml-rilastil-acnestil-body-spray-150ml/",
         "barcode": "8055510243227",
         "dimensions": "15x20x15",
-        "licenseUrl": "https://drive.google.com/file/d/1j3BF6PNRdgHsKqvgVqS33tSZpnYjOgFm/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1j3BF6PNRdgHsKqvgVqS33tSZpnYjOgFm.webp",
         "benefits": [
             "tri-mun-kiem-dau"
@@ -136,7 +136,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/serum-tai-tao-va-chong-lao-hoa-30ml-rilastil-multirepair-retinol-tech/",
         "barcode": "8055510240035",
         "dimensions": "10x5x5",
-        "licenseUrl": "https://drive.google.com/file/d/1whA70yfad759EvBwrdZWfNI21rukRfZN/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1whA70yfad759EvBwrdZWfNI21rukRfZN.webp",
         "benefits": [
             "chong-lao-hoa"
@@ -180,7 +179,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/sua-rua-mat-tay-trang-2-trong-1-danh-cho-moi-loai-da-200ml-rilastil-daily-care-make-up-removing-cleasing-milk-200ml/",
         "barcode": "8055510240776",
         "dimensions": "10x5x5",
-        "licenseUrl": "https://drive.google.com/file/d/1jw81qdomGa4IHkcIQ0lZTr-FXi7-uUrb/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1jw81qdomGa4IHkcIQ0lZTr-FXi7-uUrb.webp",
         "benefits": [
             "tri-mun-kiem-dau"
@@ -224,7 +222,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/nuoc-hoa-hong-danh-cho-moi-loai-da-200ml-rilastil-daily-care-rebalancing-soothing-toner-200ml/",
         "barcode": "8055510240783",
         "dimensions": "10x5x5",
-        "licenseUrl": "https://drive.google.com/file/d/13GzlyGVCI5eGKA7OmYoNbZPatdsz3fHx/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/13GzlyGVCI5eGKA7OmYoNbZPatdsz3fHx.webp",
         "benefits": [
             "tri-mun-kiem-dau"
@@ -268,7 +265,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/nuoc-hoa-hong-danh-cho-da-dau-rilastil-daily-care-rebalancing-astringent-toner-200ml/",
         "barcode": "8055510240769",
         "dimensions": "20x20x20",
-        "licenseUrl": "https://drive.google.com/file/d/1hF_w02qh8-TYgFhKFD0jX8Yt6XJwp7XZ/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1hF_w02qh8-TYgFhKFD0jX8Yt6XJwp7XZ.webp",
         "benefits": [
             "tri-mun-kiem-dau"
@@ -318,7 +314,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/kem-duong-am-giup-can-bang-vi-sinh-ho-tro-phuc-hoi-da-mun-rilastil-acnestil-h-biome-cream/",
         "barcode": "8050444852637",
         "dimensions": "10x5x10",
-        "licenseUrl": "https://drive.google.com/file/d/18eeQji4nYn5x53Bo_-vV6QQQ_xoskIay/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/18eeQji4nYn5x53Bo_-vV6QQQ_xoskIay.webp",
         "benefits": [
             "tri-mun-kiem-dau",
@@ -369,7 +364,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/kem-duong-am-va-ho-tro-lam-mo-cac-vung-da-bi-sam-mau-rilastil-d-clar-daily-depigmenting-cream/",
         "barcode": "8050444857939",
         "dimensions": "5x5x5",
-        "licenseUrl": "https://drive.google.com/file/d/1YFuhsidPu0NDLwmMqtEWCGFljuxeESfb/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1YFuhsidPu0NDLwmMqtEWCGFljuxeESfb.webp",
         "benefits": [
             "sang-da-mo-tham",
@@ -419,7 +413,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/kem-cap-am-chong-man-ngua-rilastil-xerolact-pb-balm-lipid-replenishing-anti-irritation-50ml/",
         "barcode": "8058031940668",
         "dimensions": "5x5x5",
-        "licenseUrl": "https://drive.google.com/file/d/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK.webp",
         "benefits": [
             "phuc-hoi-diu-da",
@@ -463,7 +456,6 @@ window.LOCAL_PRODUCTS = [
         "originalImageUrl": "https://rilastilvn.com.vn/wp-content/uploads/2026/01/4.avif",
         "link": "https://rilastilvn.com.vn/san-pham/tay-trang-rilastil-daily-care-micellar-solution-100ml-sao-chep/",
         "dimensions": "5x5x5",
-        "licenseUrl": "https://drive.google.com/file/d/1JeLSKHGykdPwri75pnF5Tzb_D5TQ_UbK/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1JeLSKHGykdPwri75pnF5Tzb_D5TQ_UbK.webp",
         "benefits": [
             "tri-mun-kiem-dau"
@@ -507,7 +499,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/tay-trang-rilastil-daily-care-micellar-solution-250ml/",
         "barcode": "8050444852798",
         "dimensions": "20x20x20",
-        "licenseUrl": "https://drive.google.com/file/d/1JeLSKHGykdPwri75pnF5Tzb_D5TQ_UbK/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1JeLSKHGykdPwri75pnF5Tzb_D5TQ_UbK.webp",
         "benefits": [
             "tri-mun-kiem-dau"
@@ -557,7 +548,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/mat-na-cap-am-rilastil-aqua-moisturizing-mask-30ml-sao-chep/",
         "barcode": "8050444853603",
         "dimensions": "10x5x5",
-        "licenseUrl": "https://drive.google.com/file/d/19UA0Hozb7cNgS2TFIx24bFG6EF-wGvi-/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/19UA0Hozb7cNgS2TFIx24bFG6EF-wGvi-.webp",
         "benefits": [
             "phuc-hoi-diu-da",
@@ -608,7 +598,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/kem-cap-am-chuyen-sau-72h-rilastil-aqua-intense-gel-72h-15ml/",
         "barcode": "8055510249649",
         "dimensions": "5x5x5",
-        "licenseUrl": "https://drive.google.com/file/d/142Yxhh45296uI8SbkEpNOScMwIATwH5k/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/142Yxhh45296uI8SbkEpNOScMwIATwH5k.webp",
         "benefits": [
             "cap-am-chuyen-sau"
@@ -662,7 +651,6 @@ window.LOCAL_PRODUCTS = [
         "benefitName": "Cấp ẩm sâu",
         "barcode": "8055510241919",
         "dimensions": "5x5x10",
-        "licenseUrl": "https://drive.google.com/file/d/1qyxthlBqAECzijHH_wdyoY7qRgIpUQ9s/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1qyxthlBqAECzijHH_wdyoY7qRgIpUQ9s.webp"
     },
     {
@@ -708,7 +696,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/kem-duong-am-cho-vung-mat-rilastil-aqua-eye-contour-cream-15ml/",
         "barcode": "8055510241827",
         "dimensions": "5x5x5",
-        "licenseUrl": "https://drive.google.com/file/d/1Ae3OmmJuL89FjDsySO524m-b6vBRv_v_/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1Ae3OmmJuL89FjDsySO524m-b6vBRv_v_.webp",
         "benefits": [
             "cap-am-chuyen-sau"
@@ -752,7 +739,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/kem-ngan-ngua-ran-da-rilastil-stretch-marks-cream-200ml/",
         "barcode": "8055510243036",
         "dimensions": "20x20x20",
-        "licenseUrl": "https://drive.google.com/file/d/1TTK6PFxFsPV7yO2q1EtIMoNVVT5ITaNb/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1TTK6PFxFsPV7yO2q1EtIMoNVVT5ITaNb.webp",
         "benefits": [
             "cap-am-chuyen-sau"
@@ -794,6 +780,7 @@ window.LOCAL_PRODUCTS = [
         "image": "/images/products/rilastil-kem-ngan-ngua-ran-da-rilastil-stretch-marks-cream-75ml.png",
         "originalImageUrl": "https://rilastilvn.com.vn/wp-content/uploads/2024/09/Kem-ran-75ml.png",
         "link": "https://rilastilvn.com.vn/san-pham/kem-ngan-ngua-ran-da-rilastil-stretch-marks-cream-75ml/",
+        "licenseImageUrl": "/images/licenses/1TTK6PFxFsPV7yO2q1EtIMoNVVT5ITaNb.webp",
         "benefits": [
             "cap-am-chuyen-sau"
         ],
@@ -841,7 +828,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/kem-cap-am-chong-man-ngua-rilastil-xerolact-pb-balm-lipid-replenishing-anti-irritation-400ml/",
         "barcode": "8050444858226",
         "dimensions": "20x20x20",
-        "licenseUrl": "https://drive.google.com/file/d/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK.webp",
         "benefits": [
             "phuc-hoi-diu-da",
@@ -891,7 +877,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/gel-rua-mat-tam-toan-than-rilastil-xerolact-cleansing-gel-750ml/",
         "barcode": "8050444859568",
         "dimensions": "30x30x30",
-        "licenseUrl": "https://drive.google.com/file/d/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK.webp",
         "benefits": [
             "cap-am-chuyen-sau"
@@ -940,7 +925,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/gel-rua-mat-tam-toan-than-rilastil-xerolact-cleansing-gel-400ml/",
         "barcode": "8050444856970",
         "dimensions": "15x20x15",
-        "licenseUrl": "https://drive.google.com/file/d/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK.webp",
         "benefits": [
             "cap-am-chuyen-sau"
@@ -989,7 +973,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/kem-cap-am-chong-man-ngua-rilastil-xerolact-pb-balm-lipid-replenishing-anti-irritation-200ml/",
         "barcode": "8050444858233",
         "dimensions": "20x20x20",
-        "licenseUrl": "https://drive.google.com/file/d/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK.webp",
         "benefits": [
             "phuc-hoi-diu-da",
@@ -1039,7 +1022,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/gel-rua-mat-tam-toan-than-rilastil-xerolact-cleansing-gel-200ml/",
         "barcode": "8050444858776",
         "dimensions": "20x20x20",
-        "licenseUrl": "https://drive.google.com/file/d/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1oFgQwgvkquEzNPTWdKId0gmoj9tqp-rK.webp",
         "benefits": [
             "cap-am-chuyen-sau"
@@ -1084,7 +1066,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/kem-chong-nang-danh-cho-da-nhay-cam-rilastil-allergy-protective-fluid-spf-50-50ml/",
         "barcode": "8050444859407",
         "dimensions": "20x20x20",
-        "licenseUrl": "https://drive.google.com/file/d/1yYYQd0ttptKChoV5pm4IZPHTUUdNsfwR/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1yYYQd0ttptKChoV5pm4IZPHTUUdNsfwR.webp",
         "benefits": [
             "chong-nang",
@@ -1132,7 +1113,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/kem-chong-nang-cap-am-velvet-rilastil-sun-system-velvet-touch-moisturizing-velvet-cream-spf-50-50ml/",
         "barcode": "8050444859612",
         "dimensions": "20x20x20",
-        "licenseUrl": "https://drive.google.com/file/d/1gG3WynSSRgHSyv1P1205wf-wi7roqgBT/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1gG3WynSSRgHSyv1P1205wf-wi7roqgBT.webp",
         "benefits": [
             "chong-nang",
@@ -1181,7 +1161,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/kem-chong-nang-cap-am-water-touch-rilastil-sun-system-water-touch-moisturizing-fluid-spf-50-50ml/",
         "barcode": "8050444858042",
         "dimensions": "20x20x20",
-        "licenseUrl": "https://drive.google.com/file/d/1gG3WynSSRgHSyv1P1205wf-wi7roqgBT/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1gG3WynSSRgHSyv1P1205wf-wi7roqgBT.webp",
         "benefits": [
             "chong-nang",
@@ -1234,7 +1213,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/kem-chong-nang-danh-cho-da-dau-mun-rilastil-acnestil-sebum-normalizing-cream-spf-50-40ml/",
         "barcode": "8050444859513",
         "dimensions": "20x20x20",
-        "licenseUrl": "https://drive.google.com/file/d/1ZNM7of3XZseH6rMbPgkytC_SQanIC22v/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1ZNM7of3XZseH6rMbPgkytC_SQanIC22v.webp",
         "benefits": [
             "chong-nang",
@@ -1282,7 +1260,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/dung-dich-tay-da-chet-ngua-mun-mo-tham-nam-rilastil-acnestil-micropeeling-100ml/",
         "barcode": "8058031942570",
         "dimensions": "5x5x5",
-        "licenseUrl": "https://drive.google.com/file/d/1e1DWuBoaJIFsL6cyIrO1FmBZGKI03vR6/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1e1DWuBoaJIFsL6cyIrO1FmBZGKI03vR6.webp",
         "benefits": [
             "tri-mun-kiem-dau",
@@ -1330,7 +1307,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/dung-dich-tay-da-chet-ngua-mun-mo-tham-nam-rilastil-acnestil-micropeeling-30ml/",
         "barcode": "8055510240509",
         "dimensions": "10x10x10",
-        "licenseUrl": "https://drive.google.com/file/d/1e1DWuBoaJIFsL6cyIrO1FmBZGKI03vR6/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1e1DWuBoaJIFsL6cyIrO1FmBZGKI03vR6.webp",
         "benefits": [
             "tri-mun-kiem-dau",
@@ -1376,7 +1352,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/serum-cap-am-danh-cho-da-mun-rilastil-acnestil-pb-soothing-sebum-normalising-gel-30ml/",
         "barcode": "8055510240516",
         "dimensions": "3x4x7",
-        "licenseUrl": "https://drive.google.com/file/d/1FmN4pIDN2S6bbYwfLwaOWhVGoLsjcrK-/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1FmN4pIDN2S6bbYwfLwaOWhVGoLsjcrK-.webp",
         "benefits": [
             "tri-mun-kiem-dau",
@@ -1428,7 +1403,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/gel-rua-mat-danh-cho-da-mun-rilastil-acnestil-cleansing-gel-400ml/",
         "barcode": "8050444857960",
         "dimensions": "10x10x10",
-        "licenseUrl": "https://drive.google.com/file/d/18eeQji4nYn5x53Bo_-vV6QQQ_xoskIay/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/18eeQji4nYn5x53Bo_-vV6QQQ_xoskIay.webp",
         "benefits": [
             "tri-mun-kiem-dau",
@@ -1479,7 +1453,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/gel-rua-mat-danh-cho-da-mun-rilastil-acnestil-cleansing-gel-200ml/",
         "barcode": "8055510242299",
         "dimensions": "10x5x5",
-        "licenseUrl": "https://drive.google.com/file/d/18eeQji4nYn5x53Bo_-vV6QQQ_xoskIay/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/18eeQji4nYn5x53Bo_-vV6QQQ_xoskIay.webp",
         "benefits": [
             "tri-mun-kiem-dau",
@@ -1530,7 +1503,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/sua-rua-mat-duong-am-rilastil-aqua-face-cleanser/",
         "barcode": "8033224810522",
         "dimensions": "20x20x20",
-        "licenseUrl": "https://drive.google.com/file/d/1yzvdAMzvEpPB7kA0_PhPOJMTpCrAXY8N/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1yzvdAMzvEpPB7kA0_PhPOJMTpCrAXY8N.webp",
         "benefits": [
             "cap-am-chuyen-sau"
@@ -1577,7 +1549,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/rilastil-hydrotenseur-restructuring-anti-wrinkle-serum/",
         "barcode": "8055510240363",
         "dimensions": "20x20x20",
-        "licenseUrl": "https://drive.google.com/file/d/1ckpS5u52oyPQ3_9tk3cDLYVGO6nx7XBP/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1ckpS5u52oyPQ3_9tk3cDLYVGO6nx7XBP.webp",
         "benefits": [
             "chong-lao-hoa",
@@ -1630,7 +1601,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/rilastil-hydrotenseur-restructuring-anti-wrinkle-cream/",
         "barcode": "8055510240370",
         "dimensions": "5x5x10",
-        "licenseUrl": "https://drive.google.com/file/d/131xVstrVDXuzKfHe9r7C3qHdTwnSlxmA/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/131xVstrVDXuzKfHe9r7C3qHdTwnSlxmA.webp",
         "benefits": [
             "chong-lao-hoa",
@@ -1678,7 +1648,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/rilastil-age-repair-anti-age-protective-cream-spf-50/",
         "barcode": "8055510240585",
         "dimensions": "20x20x20",
-        "licenseUrl": "https://drive.google.com/file/d/1yYYQd0ttptKChoV5pm4IZPHTUUdNsfwR/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1yYYQd0ttptKChoV5pm4IZPHTUUdNsfwR.webp",
         "benefits": [
             "chong-nang",
@@ -1723,7 +1692,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/rilastil-daily-care-micellar-solution/",
         "barcode": "8033224814841",
         "dimensions": "10x5x5",
-        "licenseUrl": "https://drive.google.com/file/d/1JeLSKHGykdPwri75pnF5Tzb_D5TQ_UbK/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1JeLSKHGykdPwri75pnF5Tzb_D5TQ_UbK.webp",
         "benefits": [
             "tri-mun-kiem-dau"
@@ -1772,7 +1740,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/rilastil-acnestil-attiva-cream/",
         "barcode": "8055510242275",
         "dimensions": "10x5x5",
-        "licenseUrl": "https://drive.google.com/file/d/1azhckKl-McMHzPLSxINvHxLTMtLJiEKl/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1azhckKl-McMHzPLSxINvHxLTMtLJiEKl.webp",
         "benefits": [
             "tri-mun-kiem-dau",
@@ -1823,7 +1790,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/rilastil-acnestil-cleansing-mousse/",
         "barcode": "8050444858592",
         "dimensions": "10x5x5",
-        "licenseUrl": "https://drive.google.com/file/d/18eeQji4nYn5x53Bo_-vV6QQQ_xoskIay/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/18eeQji4nYn5x53Bo_-vV6QQQ_xoskIay.webp",
         "benefits": [
             "tri-mun-kiem-dau",
@@ -1868,7 +1834,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/elasticizing-cream-dry-and-inelastic-skin-export/",
         "barcode": "8050444859841",
         "dimensions": "20x20x20",
-        "licenseUrl": "https://drive.google.com/file/d/1H85uQb2ZTE7XArxxd56k3vQDyxqP6JBG/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1H85uQb2ZTE7XArxxd56k3vQDyxqP6JBG.webp",
         "benefits": [
             "cap-am-chuyen-sau"
@@ -1918,7 +1883,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/aqua-moisturizing-mask/",
         "barcode": "8050444857977",
         "dimensions": "5x5x5",
-        "licenseUrl": "https://drive.google.com/file/d/19UA0Hozb7cNgS2TFIx24bFG6EF-wGvi-/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/19UA0Hozb7cNgS2TFIx24bFG6EF-wGvi-.webp",
         "benefits": [
             "phuc-hoi-diu-da",
@@ -1963,7 +1927,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/daily-care-expoliating-face-cream/",
         "barcode": "8050444852866",
         "dimensions": "20x20x20",
-        "licenseUrl": "https://drive.google.com/file/d/1Yk25NOcvRn_RnEeHL1Ur-jsGQm7zxw8q/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1Yk25NOcvRn_RnEeHL1Ur-jsGQm7zxw8q.webp",
         "benefits": [
             "tri-mun-kiem-dau"
@@ -2012,7 +1975,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/gel-rua-mat-danh-cho-da-nhay-cam-daily-care-purifying-cleasing-gel-200ml/",
         "barcode": "8055510240752",
         "dimensions": "20x20x20",
-        "licenseUrl": "https://drive.google.com/file/d/1bwJ8UIP1IaF0iwAtS6zpNy9lJTWRFysI/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1bwJ8UIP1IaF0iwAtS6zpNy9lJTWRFysI.webp",
         "benefits": [
             "tri-mun-kiem-dau"
@@ -2062,7 +2024,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/serum-cap-cam-aqua-intense-gel-serum/",
         "barcode": "8050444858646",
         "dimensions": "20x20x20",
-        "licenseUrl": "https://drive.google.com/file/d/17TX_sQ4o2dD5h5XjcnBS5K8trSmjrPbW/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/17TX_sQ4o2dD5h5XjcnBS5K8trSmjrPbW.webp",
         "benefits": [
             "cap-am-chuyen-sau"
@@ -2108,7 +2069,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/gel-serum/",
         "barcode": "8055510247874",
         "dimensions": "12x4x3",
-        "licenseUrl": "https://drive.google.com/file/d/1whA70yfad759EvBwrdZWfNI21rukRfZN/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1whA70yfad759EvBwrdZWfNI21rukRfZN.webp",
         "benefits": [
             "sang-da-mo-tham"
@@ -2157,7 +2117,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/rilastil-d-clar-depigmenting-concentrate-drops-30ml/",
         "barcode": "8050444857915",
         "dimensions": "10x10x10",
-        "licenseUrl": "https://drive.google.com/file/d/1jHhVOFM-y5DpidLqx_IhAcuRx9L-7RvU/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1jHhVOFM-y5DpidLqx_IhAcuRx9L-7RvU.webp",
         "benefits": [
             "sang-da-mo-tham"
@@ -2206,7 +2165,6 @@ window.LOCAL_PRODUCTS = [
         "link": "https://rilastilvn.com.vn/san-pham/d-clar-concentrated-micropeeling/",
         "barcode": "8050444857922",
         "dimensions": "5x5x5",
-        "licenseUrl": "https://drive.google.com/file/d/1nu7A3GPIUjUDvRs25YOMGhZEik2BjaGH/view?usp=sharing",
         "licenseImageUrl": "/images/licenses/1nu7A3GPIUjUDvRs25YOMGhZEik2BjaGH.webp",
         "benefits": [
             "sang-da-mo-tham"
@@ -2556,7 +2514,6 @@ window.LOCAL_PRODUCTS = [
         "slug": "kem-phuc-hoi-lam-diu-va-bao-ve-da-da-nang-rilastil-cicastil-multi-use-soothing-repairing-balm-40ml",
         "barcode": "8055510248000",
         "dimensions": "10x5x5",
-        "licenseUrl": "https://drive.google.com/file/d/1D4IgaokLKZGpU47VLpGyY5EK1v7mDxrY/view?usp=sharing",
         "price": 427500,
         "originalPrice": 450000,
         "volume": "40ML",

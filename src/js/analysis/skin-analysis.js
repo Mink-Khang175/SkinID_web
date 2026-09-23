@@ -300,44 +300,6 @@ window.openProductDetailModal = function(productId) {
         origPriceEl.classList.add('hidden');
     }
 
-    // TEMPLATE FOR NOTIFICATION OF COSMETIC PRODUCT (First Page Direct Preview)
-    const licenseContainer = document.getElementById('pmodal-license-container');
-    const licenseImg = document.getElementById('pmodal-license-img');
-    const modalLicenseImg = document.getElementById('license-modal-img');
-
-    let licenseImgPath = p.licenseImageUrl;
-    if (!licenseImgPath && p.licenseUrl) {
-        const m = p.licenseUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
-        if (m) {
-            licenseImgPath = `/images/licenses/${m[1]}.webp`;
-        }
-    }
-
-    // Reset license drawer to collapsed state
-    const licenseDrawer = document.getElementById('pmodal-license-drawer');
-    const licenseToggleText = document.getElementById('pmodal-license-toggle-text');
-    const licenseArrow = document.getElementById('pmodal-license-arrow');
-    if (licenseDrawer) licenseDrawer.classList.add('hidden');
-    if (licenseToggleText) licenseToggleText.innerText = 'Xem phiếu';
-    if (licenseArrow) licenseArrow.classList.remove('rotate-180');
-
-    if (licenseImgPath) {
-        const fullLicenseSrc = window.SKINID_ASSET_URL ? window.SKINID_ASSET_URL(licenseImgPath) : licenseImgPath;
-        if (licenseImg) {
-            licenseImg.src = fullLicenseSrc;
-        }
-        if (modalLicenseImg) {
-            modalLicenseImg.src = fullLicenseSrc;
-        }
-        if (licenseContainer) {
-            licenseContainer.classList.remove('hidden');
-        }
-    } else {
-        if (licenseContainer) {
-            licenseContainer.classList.add('hidden');
-        }
-    }
-
     document.getElementById('pmodal-volume').innerText = p.volume || 'Tiêu chuẩn';
     document.getElementById('pmodal-uses').innerText = p.uses || p.description || 'Sản phẩm dược mỹ phẩm chuyên sâu từ Rilastil.';
     document.getElementById('pmodal-usage').innerText = p.usage || 'Sử dụng hàng ngày vào sáng và tối.';

@@ -5,8 +5,10 @@ export default function Header() {
   const isHomePage = window.location.pathname === '/' || window.location.pathname === '/index.html';
   const isAnalysisPage = window.location.pathname.startsWith('/skin-analysis');
   const isAciePage = window.location.pathname.startsWith('/acie');
+  const isCompliancePage = window.location.pathname.startsWith('/tra-cuu-cong-bo') || window.location.pathname.startsWith('/compliance');
 
   const [activeItem, setActiveItem] = useState(() => {
+    if (isCompliancePage) return 'compliance';
     if (isAciePage) return 'acie';
     if (isAnalysisPage) return 'analysis';
     if (!isHomePage) return '';
@@ -224,6 +226,13 @@ export default function Header() {
               <span>SKINID x ACIE VISION</span>
               <span className="text-[9px] bg-rose-100 text-rose-800 px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider">Mới</span>
             </a>
+            <a
+              href="/tra-cuu-cong-bo"
+              data-nav-target="compliance"
+              className={`compliance-header-link inline-flex items-center font-medium transition-colors ${isCompliancePage || activeItem === 'compliance' ? 'is-active' : ''}`}
+            >
+              Tra cứu công bố
+            </a>
           </nav>
           <a className={`skin-tool-link${isAnalysisPage ? ' is-active' : ''}`} href="/skin-analysis" aria-current={isAnalysisPage ? 'page' : undefined}>
             <i data-feather="camera"></i> Soi da AI
@@ -243,6 +252,7 @@ export default function Header() {
           <span>SKINID x ACIE VISION</span>
           <span className="text-[9px] bg-rose-100 text-rose-800 px-1.5 py-0.5 rounded-full font-bold">Mới</span>
         </a>
+        <a href="/tra-cuu-cong-bo" data-nav-target="compliance" className={`font-semibold ${isCompliancePage ? 'text-rose-600' : 'text-gray-800'}`} onClick={() => window?.toggleMobileMenu?.(false)}>Tra cứu công bố</a>
         <a href="/skin-analysis" onClick={() => window?.toggleMobileMenu?.(false)}>Soi da AI</a>
         <button type="button" onClick={() => {
           window?.toggleMobileMenu?.(false);

@@ -36,6 +36,8 @@ const reactComponents = [
     'src/pages/SkinAnalysisPage.jsx',
     'src/pages/ProfilePage.jsx',
     'src/pages/AdminPage.jsx',
+    'src/pages/AciePage.jsx',
+    'src/pages/CompliancePage.jsx',
     'src/components/layout/Header.jsx',
     'src/components/home/HeroBanner.jsx',
     'src/components/home/CategorySection.jsx',
