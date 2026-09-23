@@ -442,11 +442,12 @@ function isRetryableGeminiError(status) {
 
 async function callGeminiWithFallback(env, prompt, images) {
   let lastError = null;
+  const apiBase = (env.GEMINI_BASE_URL || 'https://generativelanguage.googleapis.com').replace(/\/$/, '');
   for (const model of GEMINI_MODELS) {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 45000);
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${env.GEMINI_API_KEY}`, {
+      const response = await fetch(`${apiBase}/v1beta/models/${model}:generateContent?key=${env.GEMINI_API_KEY}`, {
         method: 'POST',
         headers: { 'content-type': 'application/json', 'x-goog-api-key': env.GEMINI_API_KEY },
         body: JSON.stringify({
@@ -482,6 +483,13 @@ async function callGeminiWithFallback(env, prompt, images) {
       if (response.status === 429 || errReason === 'RESOURCE_EXHAUSTED' || geminiMsg.toLowerCase().includes('quota')) {
         lastError = new ApiError(429, 'gemini_quota_exhausted', 'Hạn mức (quota) Gemini của hệ thống đã tạm thời đạt giới hạn. Vui lòng thử lại sau ít phút.');
         console.warn(`[SkinID Gemini] Model ${model} quota exhausted, trying next model...`);
+        continue;
+      }
+
+      // Specific error handling for Region / Geolocation restrictions
+      if (geminiMsg.toLowerCase().includes('location is not supported') || errReason === 'FAILED_PRECONDITION') {
+        lastError = new ApiError(400, 'gemini_location_error', `Vị trí máy chủ tạm thời chưa được Google AI hỗ trợ (${geminiMsg}). Cloudflare Smart Placement đang tối ưu định tuyến, vui lòng nhấn thử lại.`);
+        console.warn(`[SkinID Gemini] Model ${model} location blocked, trying next model...`);
         continue;
       }
 
