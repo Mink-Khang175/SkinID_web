@@ -1725,13 +1725,13 @@ window.LOCAL_PRODUCTS = [
         "uses": "kiềm dầu, cân bằng độ ẩm, ngăn ngừa và trị mụn, làm giảm vết thâm, tái tạo tế bào và phục hồi làn da thương tổn, giúp da tươi sáng, khỏe mạnh và săn chắc.",
         "usage": "1-2 lần/ ngày",
         "keyActives": [
-            ": Bạt sừng nhẹ, kháng viêm.",
-            ": Kháng viêm, giảm đỏ, giảm ngứa. Ức chế sản xuất bã nhờn, giảm mụn. Làm sáng da.",
+            "SODIUM SALICYLATE: Bạt sừng nhẹ, kháng viêm.",
+            "POTASSIUM AZELOYL DIGLYCINATE, NIACINAMIDE: Kháng viêm, giảm đỏ, giảm ngứa. Ức chế sản xuất bã nhờn, giảm mụn. Làm sáng da.",
             "PANTHENOL TOCOPHERYL ACETATE SODIUM HYALURONATE : Dưỡng ẩm, chống lão hóa và ngăn ngừa viêm, giảm đỏ."
         ],
         "mainActives": [
-            "",
-            "",
+            "SODIUM SALICYLATE",
+            "POTASSIUM AZELOYL DIGLYCINATE, NIACINAMIDE",
             "PANTHENOL TOCOPHERYL ACETATE SODIUM HYALURONATE"
         ],
         "fullIngredients": "Aqua (Water) • Dibutyl Adipate • Dimethicone • Niacinamide • Glycerin • Arachidyl Alcohol • Behenyl Alcohol • Polymethyl Methacrylate • Panthenol • Polyacrylate Crosspolymer-6 • Helianthus annuus (Sunflower) Seed Oil • Potassium Azeloyl Diglycinate • Arachidyl Glucoside • Propanediol • Sodium Salicylate • Tocopheryl Acetate • Dipotassium Glycyrrhizate • Xanthan Gum • Sodium Lauroyl Lactylate • Sodium Hyaluronate • Zinc PCA • Copper PCA • Citric Acid • Ceramide NP • Sodium DNA • Ceramide AP • Phytosphingosine • Cholesterol • Carbomer • Oligopeptide- 10 • Ceramide EOP • Tocopherol • Disodium EDTA • Phenoxyethanol • Ethylhexylglycerin • Chlorhexidine Digluconate • Sodium Benzoate.",
@@ -2006,15 +2006,15 @@ window.LOCAL_PRODUCTS = [
             "combination",
             "sensitive"
         ],
-        "uses": "AQUA INTENSE GEL SERUM là tinh chất dưỡng ẩm đa tầng chuyên sâu, cấp ẩm cho các lớp sâu dưới da và dưỡng ẩm trên bề mặt da giúp làn da mềm mịn, căng mọng. ___________________________________________________________________________________________________________________________ ĐẶC TRƯNG SẢN PHẨM Kế",
+        "uses": "AQUA INTENSE GEL SERUM là tinh chất dưỡng ẩm đa tầng chuyên sâu, cấp ẩm cho các lớp sâu dưới da và dưỡng ẩm trên bề mặt da giúp làn da mềm mịn, căng mọng.",
         "usage": "Sử dụng hàng ngày vào sáng và tối",
         "keyActives": [
-            ": Cấp ẩm cho các lớp sâu của da và dưỡng ẩm trên bề mặt da",
+            "HYALURONIC ACID ĐA TẦNG: Cấp ẩm cho các lớp sâu của da và dưỡng ẩm trên bề mặt da",
             "PENTYLENE GLYCOL, GLYCERIN : Dưỡng ẩm, giúp làn da mềm, mịn, căng bóng",
             "CHONDRUS CRISPUS POWDER (CARRAGEENAN): Chứa CARRAGEENAN chống lại các tác nhân ô nhiễm từ môi trường. Chứa beta-carotene, zeaxanthin, lutein là các chất chống oxy hóa mạnh giúp bảo vệ da khỏi tác động khi tiếp xúc với ánh sáng xanh. Chứa nhiều polysaccharide, peptide, và amino acid giúp dưỡng ẩm da."
         ],
         "mainActives": [
-            "",
+            "HYALURONIC ACID ĐA TẦNG",
             "PENTYLENE GLYCOL, GLYCERIN",
             "CHONDRUS CRISPUS POWDER"
         ],

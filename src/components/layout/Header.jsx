@@ -157,11 +157,6 @@ export default function Header() {
     if (window.authManager?.getCurrentUser?.()) window.location.href = '/profile';
     else window.authManager?.openAuthModal?.();
   };
-  const search = event => {
-    event.preventDefault();
-    const query = new FormData(event.currentTarget).get('search').trim();
-    window.location.href = '/products' + (query ? '?search=' + encodeURIComponent(query) : '');
-  };
 
   return <>
     <header className="site-header skinid-header minimal-header">
@@ -188,7 +183,6 @@ export default function Header() {
             {navigationGroups.map((item, index) => <button key={item.id} id={'nav-group-' + item.id} className={'drawer-group' + (activeGroup === item.id ? ' is-active' : '')} type="button" aria-controls="drawer-submenu" aria-expanded={activeGroup === item.id && (!compact || mobileLevel)} onPointerEnter={event => hoverGroup(event, item.id)} onPointerLeave={scheduleGroupClose} onFocus={() => { if (!isCompact()) selectGroup(item.id); }} onClick={() => selectGroup(item.id, true)} onKeyDown={event => { if (event.key === 'ArrowRight') { event.preventDefault(); selectGroup(item.id, true); } }}><span className="drawer-number">0{index + 1}</span><span>{item.title}</span><Icon name="arrow" /></button>)}
             <div className="drawer-explore"><span className="drawer-eyebrow">CÙNG SKINID KHÁM PHÁ</span><a href="/#featured-products" onClick={() => close(false)}>Sản phẩm nổi bật <span aria-hidden="true">↗</span></a><a href="/skin-analysis" onClick={() => close(false)}>Soi da AI <span aria-hidden="true">↗</span></a><a href="/acie" onClick={() => close(false)}>Gặp gỡ ACIE <small>Sắp ra mắt</small></a></div>
             {compact && <button className="drawer-account" type="button" onClick={() => { close(false); requestAnimationFrame(account); }}><Icon name="user" />Tài khoản của bạn</button>}
-            <form className="drawer-search" onSubmit={search}><input name="search" type="search" placeholder="Tìm sản phẩm…" aria-label="Tìm sản phẩm trong menu" /><button type="submit" aria-label="Tìm kiếm"><Icon name="search" /></button></form>
             </div>
             <a className="drawer-compliance" href="/tra-cuu-cong-bo" onClick={() => close(false)}><Icon name="shield" /><span>Tra cứu phiếu công bố<small>Thông tin sản phẩm minh bạch</small></span><span aria-hidden="true">↗</span></a>
           </nav>

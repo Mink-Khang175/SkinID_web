@@ -38,8 +38,10 @@ export default function ProductDetailModal() {
       const volEl = document.getElementById('pmodal-volume');
       if (volEl) volEl.innerText = p.volume || 'Tiêu chuẩn';
 
+      const rawUses = p.uses || p.description || 'Sản phẩm dược mỹ phẩm chuyên sâu chính hãng.';
+      const cleanUses = typeof rawUses === 'string' ? rawUses.replace(/[_─—–-]{3,}[\s\S]*/g, '').trim() : rawUses;
       const usesEl = document.getElementById('pmodal-uses');
-      if (usesEl) usesEl.innerText = p.uses || p.description || 'Sản phẩm dược mỹ phẩm chuyên sâu chính hãng.';
+      if (usesEl) usesEl.innerText = cleanUses || rawUses;
 
       const usageEl = document.getElementById('pmodal-usage');
       if (usageEl) usageEl.innerText = p.usage || 'Sử dụng hàng ngày vào sáng và tối.';
@@ -50,8 +52,9 @@ export default function ProductDetailModal() {
         if (p.keyActives && p.keyActives.length > 0) {
           p.keyActives.forEach(act => {
             const parts = act.split(':');
-            const title = parts[0] ? parts[0].trim() : '';
+            const rawTitle = parts[0] ? parts[0].trim() : '';
             const desc = parts.slice(1).join(':').trim();
+            const title = rawTitle || 'HOẠT CHẤT CHÍNH';
             const item = document.createElement('div');
             item.className = 'mb-2.5';
             item.innerHTML = `<span class="font-bold text-gray-900 text-xs sm:text-sm uppercase tracking-wide text-brand-dark">${title}:</span><span class="text-xs sm:text-sm text-gray-700 leading-relaxed"> ${desc}</span>`;
