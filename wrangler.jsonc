@@ -4,7 +4,7 @@
   "main": "worker/index.js",
   "compatibility_date": "2026-09-20",
   "placement": {
-    "mode": "smart"
+    "region": "gcp:us-central1"
   },
   "assets": {
     "directory": "./dist",
