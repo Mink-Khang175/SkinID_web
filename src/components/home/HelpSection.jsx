@@ -117,118 +117,43 @@ export default function HelpSection() {
       aria-labelledby="need-advisor-title"
     >
       <div className="container gentle-advisor-grid">
-        {/* ===============================================================
-            CỘT TRÁI (40%): Nội dung tĩnh & Duy nhất 1 CTA Pill
-            =============================================================== */}
-        <div className="advisor-static-col">
-          <span className="advisor-tagline adv-anim-item adv-anim-tagline">TƯ VẤN CHUYÊN BIỆT · SKIN CARE CONCERNS</span>
-          
-          <h2 id="need-advisor-title" className="advisor-heading adv-anim-item adv-anim-heading">
-            Chăm sóc đúng điều <span className="highlight-pink">làn da đang cần</span>
-          </h2>
-          
-          <p className="advisor-description adv-anim-item adv-anim-desc">
-            Không còn băn khoăn giữa hàng trăm bước chăm sóc. Lắng nghe làn da để tìm thấy routine lý tưởng, tối ưu theo từng mục tiêu thực tế của bạn.
-          </p>
+        <header className="advisor-static-col">
+          <span className="advisor-tagline adv-anim-item adv-anim-tagline">CHỌN THEO LÀN DA · KHÔNG THEO XU HƯỚNG</span>
+          <div className="advisor-heading-row">
+            <h2 id="need-advisor-title" className="advisor-heading adv-anim-item adv-anim-heading">
+              Hôm nay, làn da<br /><span className="highlight-pink">đang muốn kể gì?</span>
+            </h2>
+            <div className="advisor-intro-side adv-anim-item adv-anim-desc">
+              <p className="advisor-description">Chọn một mối quan tâm để SkinID gợi ý hướng chăm sóc ngắn gọn, dễ hiểu và vừa đủ với làn da.</p>
+              <button className="advisor-inline-cta" type="button" onClick={() => window.openConsultation?.()}>
+                Trò chuyện cùng SkinID <span aria-hidden="true">↗</span>
+              </button>
+            </div>
+          </div>
+        </header>
 
-          <div className="advisor-cta-wrap adv-anim-item adv-anim-cta">
-            <button
-              className="advisor-pill-cta"
-              type="button"
-              onClick={() => window.openConsultation?.()}
+        <div className="concern-bento adv-anim-item adv-anim-cluster">
+          {CONCERNS.map((item, index) => (
+            <a
+              key={item.id}
+              href={`/products?benefit=${item.id}`}
+              onClick={(e) => handleSelectBenefit(e, item.id)}
+              className={`concern-bento__card concern-bento__card--${index + 1}`}
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '18px', height: '18px' }}>
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-              </svg>
-              <span>Tư vấn chọn theo nhu cầu</span>
-            </button>
-          </div>
-        </div>
-
-        {/* ===============================================================
-            CỘT PHẢI (60%): Cụm Floating Cluster (4 Nhu cầu da so le)
-            - Không có container bọc màu cứng hay border
-            - 4 thẻ bo góc 32px, shadow xám siêu nhạt nổi khối 3D
-            - Mặc định: Thu gọn (Icon + Tiêu đề)
-            - Hover: Height transition mở rộng mô tả + tag thành phần
-            - Animation: Floating Y chậm liên tục 4s
-            =============================================================== */}
-        <div className="advisor-floating-col adv-anim-item adv-anim-cluster">
-          <div className="floating-cluster-canvas">
-            {/* Cột 1 (So le Y: 0px & 36px) */}
-            <div className="floating-cluster-lane lane-left">
-              {[CONCERNS[0], CONCERNS[2]].map((item) => (
-                <a
-                  key={item.id}
-                  href={`/products?benefit=${item.id}`}
-                  onClick={(e) => handleSelectBenefit(e, item.id)}
-                  className={`floating-concern-card ${item.floatClass}`}
-                >
-                  <div className="floating-card-header">
-                    <div
-                      className="floating-card-icon"
-                      style={{ backgroundColor: item.iconBg, color: item.iconColor }}
-                    >
-                      {renderIcon(item.id)}
-                    </div>
-                    <div className="floating-card-title-wrap">
-                      <span className="floating-card-title">{item.title}</span>
-                    </div>
-                    <span className="floating-card-arrow" aria-hidden="true">→</span>
-                  </div>
-
-                  {/* Vùng mở rộng mượt mà (Height transition qua grid-template-rows) */}
-                  <div className="floating-card-expand">
-                    <div className="floating-card-expand-inner">
-                      <p className="floating-card-desc">{item.desc}</p>
-                      <div className="floating-card-tags">
-                        {item.tags.map((tag) => (
-                          <span key={tag} className="floating-pill-tag">{tag}</span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              ))}
-            </div>
-
-            {/* Cột 2 (So le Y: 48px & 36px) */}
-            <div className="floating-cluster-lane lane-right">
-              {[CONCERNS[1], CONCERNS[3]].map((item) => (
-                <a
-                  key={item.id}
-                  href={`/products?benefit=${item.id}`}
-                  onClick={(e) => handleSelectBenefit(e, item.id)}
-                  className={`floating-concern-card ${item.floatClass}`}
-                >
-                  <div className="floating-card-header">
-                    <div
-                      className="floating-card-icon"
-                      style={{ backgroundColor: item.iconBg, color: item.iconColor }}
-                    >
-                      {renderIcon(item.id)}
-                    </div>
-                    <div className="floating-card-title-wrap">
-                      <span className="floating-card-title">{item.title}</span>
-                    </div>
-                    <span className="floating-card-arrow" aria-hidden="true">→</span>
-                  </div>
-
-                  {/* Vùng mở rộng mượt mà (Height transition qua grid-template-rows) */}
-                  <div className="floating-card-expand">
-                    <div className="floating-card-expand-inner">
-                      <p className="floating-card-desc">{item.desc}</p>
-                      <div className="floating-card-tags">
-                        {item.tags.map((tag) => (
-                          <span key={tag} className="floating-pill-tag">{tag}</span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
+              <span className="concern-bento__index">0{index + 1}</span>
+              <span className="floating-card-icon" style={{ backgroundColor: item.iconBg, color: item.iconColor }}>
+                {renderIcon(item.id)}
+              </span>
+              <span className="concern-bento__body">
+                <b>{item.title}</b>
+                <span>{item.desc}</span>
+              </span>
+              <span className="concern-bento__tags">
+                {item.tags.map((tag) => <small key={tag}>{tag}</small>)}
+              </span>
+              <span className="concern-bento__arrow" aria-hidden="true">↗</span>
+            </a>
+          ))}
         </div>
       </div>
     </section>

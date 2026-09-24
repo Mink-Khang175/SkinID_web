@@ -544,7 +544,7 @@ export default function SkincareRoutine() {
 
                     {/* Inline notice (chỉ hiện khi có lời nhắc thân thiện) */}
                     <div id="auth-modal-notice" className="auth-inline-notice hidden">
-                        <i data-feather="sparkles" className="w-3.5 h-3.5 flex-shrink-0 text-[#e45f7a]"></i>
+                        <i data-feather="star" className="w-3.5 h-3.5 flex-shrink-0 text-[#e45f7a]"></i>
                         <span id="auth-notice-text"></span>
                     </div>
 

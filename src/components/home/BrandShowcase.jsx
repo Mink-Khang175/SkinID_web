@@ -1,20 +1,36 @@
+import { useEffect, useRef, useState } from 'react';
 import { assetUrl } from '../../assets/index.js';
 
 export default function BrandShowcase() {
+  const sectionRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const node = sectionRef.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      setIsVisible(true);
+      observer.disconnect();
+    }, { threshold: 0.14 });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
-<section id="brands" className="section brand-shop">
+<section id="brands" ref={sectionRef} className={`section brand-shop ${isVisible ? 'is-visible' : ''}`}>
   <div className="container">
-    <div className="section-heading">
+    <div className="section-heading brand-reveal brand-reveal--heading">
       <div>
-        <span className="section-kicker">THƯƠNG HIỆU CHÍNH HÃNG</span>
-        <h2>Khám phá thương hiệu</h2>
-        <p>Mỗi thương hiệu là một nhóm nhu cầu riêng, dễ xem và dễ so sánh.</p>
+        <span className="section-kicker">TUYỂN CHỌN BỞI SKINID</span>
+        <h2>Ba thế giới.<br />Một chuẩn chăm sóc.</h2>
+        <p>Từ dược mỹ phẩm đến hương thơm cá nhân — mỗi thương hiệu mang một cảm xúc riêng.</p>
       </div>
     </div>
 
     <div className="brand-cards">
-      <button className="brand-card brand-card--rilastil" type="button" data-brand="Rilastil" aria-label="Khám phá sản phẩm Rilastil">
+      <button className="brand-card brand-card--rilastil brand-reveal" type="button" data-brand="Rilastil" aria-label="Khám phá sản phẩm Rilastil">
         <span className="brand-card-media">
           <img src={assetUrl('/images/products/rilastil/rilastil-serum-tai-tao-va-chong-lao-hoa-30ml-rilastil-multirepair-retinol-tech.avif')} alt="Tinh chất chăm sóc da Rilastil" loading="lazy" />
         </span>
@@ -26,7 +42,7 @@ export default function BrandShowcase() {
         </span>
       </button>
 
-      <button className="brand-card brand-card--twon" type="button" data-brand="TWON" aria-label="Khám phá sản phẩm TWON">
+      <button className="brand-card brand-card--twon brand-reveal" type="button" data-brand="TWON" aria-label="Khám phá sản phẩm TWON">
         <span className="brand-card-media">
           <img src={assetUrl('/images/products/twon/twon-body-lotion-cutout.png')} alt="Kem dưỡng thể TWON" loading="lazy" />
         </span>
@@ -38,7 +54,7 @@ export default function BrandShowcase() {
         </span>
       </button>
 
-      <button className="brand-card brand-card--dvah" type="button" data-brand="DVAH" aria-label="Khám phá sản phẩm D'VAH">
+      <button className="brand-card brand-card--dvah brand-reveal" type="button" data-brand="DVAH" aria-label="Khám phá sản phẩm D'VAH">
         <span className="brand-card-media">
           <img src={assetUrl('/images/products/dvah/dvah-kamal-cutout.png')} alt="Nước hoa D'VAH Kamal" loading="lazy" />
         </span>

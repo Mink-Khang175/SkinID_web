@@ -4,6 +4,8 @@ import './assets/index.js';
 import './styles/site.css';
 import './styles/soft-storefront.css';
 import './styles/navigation-drawer.css';
+import './styles/home-refresh.css';
+import './styles/scroll-reveal.css';
 
 window.trackSkinIDEvent = function trackSkinIDEvent(eventName, eventParams = {}) {
   console.log(`[Analytics Event] ${eventName}:`, eventParams);

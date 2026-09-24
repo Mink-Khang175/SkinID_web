@@ -38,7 +38,7 @@ const ROUTINE_DATA = {
 
 export default function FeaturedProducts() {
   const [products, setProducts] = useState([]);
-  const [heroId, setHeroId] = useState('rilastil-525');
+  const [heroId, setHeroId] = useState('rilastil-1774');
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef(null);
 
@@ -64,11 +64,20 @@ export default function FeaturedProducts() {
   }, []);
 
   useEffect(() => {
-    const ids = ['rilastil-525', 'rilastil-1774', 'rilastil-2067', 'rilastil-1857'];
+    products.forEach((product) => {
+      const image = new Image();
+      image.src = assetUrl(product.image, product.brandSlug);
+      image.decode?.().catch(() => {});
+    });
+  }, [products]);
+
+  useEffect(() => {
+    const ids = ['rilastil-1774', 'rilastil-525', 'rilastil-2067', 'rilastil-1857'];
     const getCatalog = () => (Array.isArray(window.PRODUCTS) && window.PRODUCTS.length > 0)
       ? window.PRODUCTS
       : (Array.isArray(window.LOCAL_PRODUCTS) ? window.LOCAL_PRODUCTS : []);
 
+    let interval;
     const update = () => {
       const cat = getCatalog();
       if (!cat.length) return;
@@ -77,15 +86,19 @@ export default function FeaturedProducts() {
         .filter(Boolean);
       if (list.length > 0) {
         setProducts(list);
+        if (list.length === ids.length && interval) {
+          clearInterval(interval);
+          interval = undefined;
+        }
       }
     };
 
     update();
-    const interval = setInterval(update, 200);
+    interval = setInterval(update, 200);
     document.addEventListener('skinid:ready', update);
     document.addEventListener('skinid:catalog-ready', update);
     return () => {
-      clearInterval(interval);
+      if (interval) clearInterval(interval);
       document.removeEventListener('skinid:ready', update);
       document.removeEventListener('skinid:catalog-ready', update);
     };
@@ -104,9 +117,13 @@ export default function FeaturedProducts() {
   };
 
   const handleOpenDetail = (productId) => {
-    if (typeof window.openProductDetailModal === 'function') {
-      window.openProductDetailModal(productId);
-    }
+    document.dispatchEvent(new CustomEvent('skinid:open-product-detail', {
+      detail: { productId },
+    }));
+  };
+
+  const activateProduct = (productId) => {
+    if (productId !== heroId) setHeroId(productId);
   };
 
   // Xác định sản phẩm Ngôi sao (Hero) và các sản phẩm vệ tinh (Satellites)
@@ -127,145 +144,125 @@ export default function FeaturedProducts() {
       className={`section borderless-hero-showcase ${isVisible ? 'is-visible' : ''}`}
       aria-label="Sản phẩm nổi bật"
     >
-      <div className="container relative z-10">
-        <div className="borderless-showcase-grid">
-          {/* ===============================================================
-              CỘT TRÁI (40%): Cụm Typography
-              =============================================================== */}
-          <div className="borderless-typography-col">
-            {/* Tagline nhỏ, font in hoa, tracking rộng */}
-            <span className="hero-showcase-tagline hero-anim-item hero-anim-tagline">
-              CLINICAL ROUTINE · STAR SELECTION
-            </span>
-
-            {/* Tiêu đề chính to, hiện đại */}
-            <h2 className="hero-showcase-heading hero-anim-item hero-anim-heading">
-              {heroStory?.headline || 'Tinh Chất Cấp Ẩm Chuyên Sâu Rilastil'}
-            </h2>
-
-            {/* Đoạn mô tả ngắn màu xám nhạt (#666666) */}
-            <p className="hero-showcase-desc hero-anim-item hero-anim-desc">
-              {heroStory?.desc || 'Bộ giải pháp phục hồi và cấp ẩm tầng sâu từ Dược mỹ phẩm Ý. Công thức chuẩn y khoa thẩm thấu tức thì, khóa ẩm 72 giờ và nuôi dưỡng hàng rào bảo vệ tự nhiên.'}
-            </p>
-
-            {/* Nhãn đặc tính sản phẩm */}
-            <div className="hero-showcase-meta hero-anim-item hero-anim-desc">
-              <span className="hero-meta-badge">{heroStory?.roleTag}</span>
-              <span className="hero-meta-step">{heroStory?.stepLabel}</span>
-            </div>
-
-            {/* Call To Action: Nút bấm hình viên thuốc (Pill-shape), nền #E06D81 */}
-            <div className="hero-showcase-actions hero-anim-item hero-anim-actions">
-              {heroProduct && (
-                <>
-                  <button
-                    type="button"
-                    className="hero-pill-btn hero-pill-btn--primary"
-                    onClick={(e) => handleAddToCart(e, heroProduct.id)}
-                    aria-label={`Thêm ${heroProduct.name} vào giỏ hàng`}
-                  >
-                    <span>Thêm vào giỏ · {heroProduct.price?.toLocaleString('vi-VN')}₫</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ width: '15px', height: '15px' }}>
-                      <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"></path>
-                      <line x1="3" y1="6" x2="21" y2="6"></line>
-                      <path d="M16 10a4 4 0 01-8 0"></path>
-                    </svg>
-                  </button>
-                  <button
-                    type="button"
-                    className="hero-pill-btn hero-pill-btn--outline"
-                    onClick={() => handleOpenDetail(heroProduct.id)}
-                  >
-                    <span>Chi tiết sản phẩm ↗</span>
-                  </button>
-                </>
-              )}
-            </div>
+      <div className="container relative z-10 routine-home">
+        <header className="routine-home__intro">
+          <span className="hero-showcase-tagline" data-reveal data-reveal-delay="0">ROUTINE ĐƯỢC TUYỂN CHỌN</span>
+          <div className="routine-home__intro-row">
+            <h2 data-reveal data-reveal-delay="90">Chăm da theo nhịp.<br /><em>Nhẹ nhàng mà đúng.</em></h2>
+            <p data-reveal data-reveal-delay="180">Một routine bốn bước rõ ràng, được sắp xếp để làn da nhận đúng điều mình cần vào đúng thời điểm.</p>
           </div>
+        </header>
 
-          {/* ===============================================================
-              CỘT PHẢI (60%): Khu vực hiển thị sản phẩm tách nền (trong suốt)
-              - Không có thẻ div nào bọc nền màu cứng.
-              - Đặt trực tiếp ảnh PNG lên nền trắng.
-              =============================================================== */}
-          <div className="borderless-products-col hero-anim-item hero-anim-products">
-            {products.length === 0 ? (
-              <div className="borderless-loading">Đang tải sản phẩm nổi bật…</div>
-            ) : (
-              <div className="borderless-stage-layout">
-                {/* 1. Sản phẩm lớn chính (Centerpiece Hero Product) */}
-                {heroProduct && (
-                  <div className="floating-hero-wrapper floating-anim-hero">
+        {products.length === 0 ? (
+          <div className="borderless-loading">Đang chuẩn bị routine dành cho bạn…</div>
+        ) : (
+          <div className="routine-stage">
+            <div className="routine-stage__copy" aria-live="polite">
+              <span className="routine-stage__step" data-reveal data-reveal-delay="0">
+                <span key={`step-${heroProduct.id}`} className="routine-swap-text">{heroStory?.stepLabel}</span>
+              </span>
+              <h3 data-reveal data-reveal-delay="80">
+                <span key={`headline-${heroProduct.id}`} className="routine-swap-text">{heroStory?.headline}</span>
+              </h3>
+              <p data-reveal data-reveal-delay="160">
+                <span key={`desc-${heroProduct.id}`} className="routine-swap-text">{heroStory?.desc}</span>
+              </p>
+              <div className="hero-showcase-meta" data-reveal data-reveal-delay="240">
+                <span key={`meta-${heroProduct.id}`} className="routine-swap-meta">
+                  <span className="hero-meta-badge">{heroStory?.roleTag}</span>
+                  <span className="routine-stage__volume">{heroProduct?.volume}</span>
+                </span>
+              </div>
+              <div className="hero-showcase-actions" data-reveal data-reveal-delay="320">
+                <button
+                  type="button"
+                  className="hero-pill-btn hero-pill-btn--primary"
+                  onClick={(e) => handleAddToCart(e, heroProduct.id)}
+                  aria-label={`Thêm ${heroProduct.name} vào giỏ hàng`}
+                >
+                  Thêm vào giỏ · {heroProduct.price?.toLocaleString('vi-VN')}₫
+                </button>
+                <button
+                  type="button"
+                  className="routine-text-link"
+                  onClick={() => handleOpenDetail(heroProduct.id)}
+                >
+                  Xem chi tiết <span aria-hidden="true">↗</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="routine-stage__product" data-reveal="soft-scale" data-reveal-delay="220">
+              <span className="routine-orbit routine-orbit--one" aria-hidden="true"></span>
+              <span className="routine-orbit routine-orbit--two" aria-hidden="true"></span>
+              <div className="routine-product-stack">
+                {products.map((product) => {
+                  const isActive = product.id === heroProduct.id;
+                  return (
                     <button
                       type="button"
-                      className="floating-hero-trigger"
-                      onClick={() => handleOpenDetail(heroProduct.id)}
-                      aria-label={`Xem chi tiết ${heroProduct.name}`}
+                      className={`floating-hero-trigger routine-product-layer ${isActive ? 'is-active' : ''}`}
+                      key={product.id}
+                      onClick={() => handleOpenDetail(product.id)}
+                      aria-label={`Xem chi tiết ${product.name}`}
+                      aria-hidden={!isActive}
+                      tabIndex={isActive ? 0 : -1}
                     >
                       <img
                         className="floating-hero-image"
-                        src={assetUrl(heroProduct.image, heroProduct.brandSlug)}
-                        alt={heroProduct.name}
+                        src={assetUrl(product.image, product.brandSlug)}
+                        alt={isActive ? product.name : ''}
                         loading="eager"
+                        decoding="async"
                       />
                     </button>
-                    <div className="floating-hero-caption">
-                      <span className="caption-glow-dot" aria-hidden="true"></span>
-                      <span>{heroProduct.volume} · Đang xem tâm điểm</span>
-                    </div>
-                  </div>
-                )}
-
-                {/* 2. Cụm các sản phẩm bổ trợ lơ lửng xung quanh (Satellite Items) */}
-                <div className="floating-satellites-group">
-                  {satelliteProducts.map((sat, idx) => {
-                    const satStory = ROUTINE_DATA[sat.id] || {
-                      stepNum: `0${idx + 1}`,
-                      satelliteLabel: `0${idx + 1} · Routine`,
-                    };
-                    const floatAnimClass = `floating-anim-sat-${idx + 1}`;
-
-                    return (
-                      <div
-                        key={sat.id}
-                        className={`floating-satellite-item ${floatAnimClass}`}
-                        onClick={() => setHeroId(sat.id)}
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={(e) => { if (e.key === 'Enter') setHeroId(sat.id); }}
-                        aria-label={`Chọn ${sat.name} làm tâm điểm`}
-                      >
-                        <div className="floating-satellite-visual">
-                          <img
-                            className="floating-satellite-image"
-                            src={assetUrl(sat.image, sat.brandSlug)}
-                            alt={sat.name}
-                            loading="lazy"
-                          />
-                        </div>
-                        <div className="floating-satellite-meta">
-                          <span className="satellite-step-pill">{satStory.satelliteLabel}</span>
-                          <span className="satellite-name-link">{window.productDisplayName?.(sat) || sat.name}</span>
-                          <div className="satellite-bottom-row">
-                            <span className="satellite-price">{sat.price?.toLocaleString('vi-VN')}₫</span>
-                            <button
-                              type="button"
-                              className="satellite-add-btn"
-                              aria-label={`Thêm ${sat.name} vào giỏ`}
-                              onClick={(e) => handleAddToCart(e, sat.id)}
-                            >
-                              +
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                  );
+                })}
               </div>
-            )}
+              <span className="routine-stage__focus-label"><i></i>Sản phẩm tâm điểm</span>
+            </div>
+
+            <div className="routine-step-rail" aria-label="Các bước trong routine">
+              {products.map((product, idx) => {
+                const story = ROUTINE_DATA[product.id] || { satelliteLabel: `0${idx + 1} · Routine` };
+                const isActive = product.id === heroProduct.id;
+                return (
+                  <div
+                    className={`routine-choice ${isActive ? 'is-active' : ''}`}
+                    key={product.id}
+                    data-reveal
+                    data-reveal-delay={360 + idx * 70}
+                    onMouseEnter={() => activateProduct(product.id)}
+                    onFocusCapture={() => activateProduct(product.id)}
+                  >
+                    <button
+                      type="button"
+                      className="routine-step__select"
+                      onClick={() => activateProduct(product.id)}
+                      aria-pressed={isActive}
+                      aria-label={`Chọn ${product.name} làm tâm điểm`}
+                    >
+                      <span className="routine-step__number">{story.stepNum || `0${idx + 1}`}</span>
+                      <span className="routine-step__visual">
+                        <img src={assetUrl(product.image, product.brandSlug)} alt="" loading="lazy" />
+                      </span>
+                      <span className="routine-step__meta">
+                        <small>{story.satelliteLabel}</small>
+                        <b>{window.productDisplayName?.(product) || product.name}</b>
+                      </span>
+                    </button>
+                    <button
+                      type="button"
+                      className="routine-step__add"
+                      aria-label={`Thêm ${product.name} vào giỏ`}
+                      onClick={(e) => handleAddToCart(e, product.id)}
+                    >+</button>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

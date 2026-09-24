@@ -139,6 +139,9 @@ export default function ProductDetailModal() {
 
     window.openProductDetailModal = openModal;
     window.closeProductDetailModal = closeModal;
+    const handleOpenRequest = (event) => openModal(event.detail?.productId);
+    document.addEventListener('skinid:open-product-detail', handleOpenRequest);
+    return () => document.removeEventListener('skinid:open-product-detail', handleOpenRequest);
   }, []);
 
   return (

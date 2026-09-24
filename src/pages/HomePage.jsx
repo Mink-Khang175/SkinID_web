@@ -5,7 +5,6 @@ import AcieTeaser from '../components/home/AcieTeaser.jsx';
 import BrandShowcase from '../components/home/BrandShowcase.jsx';
 import HelpSection from '../components/home/HelpSection.jsx';
 import HeroBanner from '../components/home/HeroBanner.jsx';
-import BrandBar from '../components/home/BrandBar.jsx';
 import FeaturedProducts from '../components/home/FeaturedProducts.jsx';
 import TrustBenefits from '../components/home/TrustBenefits.jsx';
 import Footer from '../components/layout/Footer.jsx';
@@ -14,21 +13,23 @@ import MobileNav from '../components/layout/MobileNav.jsx';
 import OfferBar from '../components/layout/OfferBar.jsx';
 import useLegacyApplication from '../hooks/useLegacyApplication.js';
 import usePageMetadata from '../hooks/usePageMetadata.js';
+import useScrollReveal from '../hooks/useScrollReveal.js';
 
 export default function HomePage() {
+  const mainRef = useRef(null);
   usePageMetadata({
     title: 'SkinID.vn — Phân tích da AI & Dược mỹ phẩm Chính Hãng',
     description: 'Nền tảng phân tích da AI và mua dược mỹ phẩm Rilastil, chăm sóc cơ thể TWON và nước hoa D\'VAH chính hãng tại SkinID.vn.'
   });
   useLegacyApplication('home');
+  useScrollReveal(mainRef);
 
   return (
     <>
       <OfferBar />
       <Header />
-      <main id="top">
+      <main id="top" ref={mainRef} className="home-refresh scroll-reveal-root">
         <HeroBanner />
-        <BrandBar />
         <FeaturedProducts />
         <HelpSection />
         <BrandShowcase />
@@ -43,3 +44,4 @@ export default function HomePage() {
     </>
   );
 }
+import { useRef } from 'react';

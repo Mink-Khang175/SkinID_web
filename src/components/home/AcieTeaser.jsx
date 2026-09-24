@@ -32,7 +32,9 @@ export default function AcieTeaser() {
       ref={sectionRef}
       className={`section acie-home borderless-acie-section ${isVisible ? 'is-visible' : ''}`}
     >
-      <div className="container acie-home-grid">
+      <div className="container acie-home-grid acie-home-panel">
+        <span className="acie-panel-orb acie-panel-orb--one" aria-hidden="true"></span>
+        <span className="acie-panel-orb acie-panel-orb--two" aria-hidden="true"></span>
         <div className="acie-home-copy">
           {/* Bước 1: Cụm chữ nhỏ mờ dần hiện lên (Fade-in) */}
           <span className="section-kicker acie-anim-item acie-anim-tagline">
@@ -68,6 +70,11 @@ export default function AcieTeaser() {
             >
               <span>Đăng ký tại Store</span>
             </button>
+          </div>
+          <div className="acie-mini-signals acie-anim-item acie-anim-actions" aria-label="Điểm nổi bật của ACIE">
+            <span><i></i> Vi điểm AI</span>
+            <span><i></i> Routine cá nhân</span>
+            <span><i></i> Theo dõi mỗi ngày</span>
           </div>
         </div>
 
