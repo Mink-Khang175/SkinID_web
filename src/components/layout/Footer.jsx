@@ -15,8 +15,8 @@ export default function Footer() {
       </div>
       <div>
         <h3>Mua sắm</h3>
-        <a href="/#featured-products">Tất cả sản phẩm</a>
-        <a href="/#categories">Danh mục</a>
+        <a href="/products">Tất cả sản phẩm</a>
+        <a href="/tra-cuu-cong-bo">Tra cứu công bố</a>
         <a href="/#brands">Thương hiệu</a>
         <button type="button" onClick={(event) => window?.openConsultation?.()}>Tư vấn sản phẩm</button>
       </div>

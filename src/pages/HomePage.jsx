@@ -2,12 +2,11 @@ import SkincareRoutine from '../components/analysis/SkincareRoutine.jsx';
 import ProductDetailModal from '../components/dialogs/ProductDetailModal.jsx';
 import StorefrontModals from '../components/dialogs/StorefrontModals.jsx';
 import AcieTeaser from '../components/home/AcieTeaser.jsx';
-import BrandBar from '../components/home/BrandBar.jsx';
 import BrandShowcase from '../components/home/BrandShowcase.jsx';
-import CategorySection from '../components/home/CategorySection.jsx';
 import HelpSection from '../components/home/HelpSection.jsx';
 import HeroBanner from '../components/home/HeroBanner.jsx';
-import ProductList from '../components/home/ProductList.jsx';
+import BrandBar from '../components/home/BrandBar.jsx';
+import FeaturedProducts from '../components/home/FeaturedProducts.jsx';
 import TrustBenefits from '../components/home/TrustBenefits.jsx';
 import Footer from '../components/layout/Footer.jsx';
 import Header from '../components/layout/Header.jsx';
@@ -30,8 +29,7 @@ export default function HomePage() {
       <main id="top">
         <HeroBanner />
         <BrandBar />
-        <CategorySection />
-        <ProductList />
+        <FeaturedProducts />
         <HelpSection />
         <BrandShowcase />
         <AcieTeaser />

@@ -77,6 +77,19 @@ function renderCatalog() {
     const grid = document.getElementById('product-grid');
     if (!grid) return;
     grid.innerHTML = '';
+    if (window.location.pathname === '/products') {
+        const params = new URLSearchParams();
+        if (currentBrandFilter !== 'all') params.set('brand', currentBrandFilter);
+        if (currentStepFilter !== 'all') params.set('step', currentStepFilter);
+        if (currentBenefitFilter !== 'all') params.set('benefit', currentBenefitFilter);
+        if (currentSearchQuery) params.set('search', currentSearchQuery);
+        const sort = document.getElementById('catalog-sort')?.value;
+        if (sort && sort !== 'featured') params.set('sort', sort);
+        const next = '/products' + (params.size ? '?' + params : '') + window.location.hash;
+        if (next !== window.location.pathname + window.location.search + window.location.hash) history.replaceState(null, '', next);
+    }
+    const benefitSelect = document.getElementById('benefit-filter-select');
+    if (benefitSelect) benefitSelect.value = currentBenefitFilter;
     
     const filtered = filterProducts(PRODUCTS, {
         brand: currentBrandFilter,
@@ -102,27 +115,27 @@ function renderCatalog() {
             const label = labels[currentBenefitFilter] || currentBenefitFilter;
             benefitTag = ` <span class="inline-flex items-center gap-1 ml-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-800 border border-gray-200">${label} <button type="button" onclick="window.filterByBenefit && window.filterByBenefit('all')" class="hover:text-red-500 font-bold ml-1 cursor-pointer" title="Bỏ lọc nhu cầu">×</button></span>`;
         }
-        countEl.innerHTML = `Hiển thị <span class="font-extrabold text-brand-primary">${filtered.length}</span> sản phẩm${benefitTag}`;
+        countEl.innerHTML = `<strong>${filtered.length}</strong> sản phẩm${benefitTag}`;
     }
 
     if (filtered.length === 0) {
         grid.innerHTML = `
-            <div class="col-span-full text-center py-16 px-4 bg-white/70 rounded-2xl border border-gray-100 shadow-2xs flex flex-col items-center justify-center">
-                <div class="w-12 h-12 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center mb-3 text-gray-600">
-                    <svg class="w-6 h-6 stroke-[1.5]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        <path d="M11 8a3 3 0 0 0-3 3"></path>
+            <div class="col-span-full text-center py-20 px-6 bg-[#FFFFFF] rounded-2xl border border-[#E9ECEF] shadow-xs flex flex-col items-center justify-center">
+                <div class="w-16 h-16 rounded-full bg-[#F8F9FA] border border-[#E9ECEF] flex items-center justify-center mb-4 text-[#6C757D]">
+                    <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <line x1="21" y1="21" x2="16.5" y2="16.5"></line>
+                        <circle cx="11" cy="11" r="3" stroke-dasharray="1.5 1.5"></circle>
                     </svg>
                 </div>
-                <h3 class="text-sm font-bold text-gray-800">Không tìm thấy sản phẩm phù hợp</h3>
-                <p class="text-xs text-gray-500 mt-1 max-w-sm">Rất tiếc, không có sản phẩm nào khớp với tiêu chí lọc hiện tại của bạn.</p>
+                <h3 class="text-base font-semibold text-[#181517]">Không tìm thấy sản phẩm Dược mỹ phẩm phù hợp</h3>
+                <p class="text-xs text-[#6C757D] mt-1.5 max-w-md leading-relaxed">Bộ lọc hiện tại không có kết quả khớp. Bạn có thể xóa tiêu chí lọc để duyệt toàn bộ danh mục sản phẩm chuẩn Y khoa.</p>
                 <button
                     type="button"
                     onclick="window.resetAllFilters && window.resetAllFilters()"
-                    class="mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold text-gray-800 bg-white border border-gray-300 hover:bg-gray-50 hover:border-gray-900 hover:text-black transition-all shadow-2xs cursor-pointer"
+                    class="mt-5 inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-semibold text-white bg-[#181517] hover:bg-[#BE185D] transition-colors shadow-xs cursor-pointer"
                 >
-                    <svg class="w-3.5 h-3.5 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
                         <path d="M3 3v5h5"></path>
                     </svg>
@@ -174,6 +187,11 @@ window.filterByStep = function(step, el) {
 
 window.filterByBenefit = function(benefit, el) {
     currentBenefitFilter = benefit;
+    const benefitSelect = document.getElementById('benefit-filter-select');
+    if (benefitSelect) {
+        benefitSelect.value = benefit;
+        window.syncCatalogDropdown?.(benefitSelect);
+    }
     const tabs = document.querySelectorAll('#benefit-filters .benefit-filter-tab');
     tabs.forEach(t => {
         const isMatch = t.dataset.benefit === benefit;
@@ -219,6 +237,14 @@ window.resetAllFilters = function() {
         stepSelect.value = 'all';
         window.syncCatalogDropdown?.(stepSelect);
     }
+    // Reset Benefit Select
+    const benefitSelect = document.getElementById('benefit-filter-select');
+    if (benefitSelect) {
+        benefitSelect.value = 'all';
+        window.syncCatalogDropdown?.(benefitSelect);
+    }
+    const sort = document.getElementById('catalog-sort');
+    if (sort) { sort.value = 'featured'; window.syncCatalogDropdown?.(sort); sort.dispatchEvent(new Event('change')); }
     // Reset search
     const searchInput = document.getElementById('product-search');
     if (searchInput) searchInput.value = '';
@@ -227,6 +253,19 @@ window.resetAllFilters = function() {
 };
 
 function initCatalog() {
+    if (window.location.pathname === '/products') {
+        const params = new URLSearchParams(window.location.search);
+        const valid = (key, values) => values.includes(params.get(key)) ? params.get(key) : 'all';
+        currentBrandFilter = valid('brand', ['rilastil', 'twon', 'dvah']);
+        currentStepFilter = valid('step', ['cleanser', 'toner', 'treatment', 'moisturizer', 'sunscreen', 'special']);
+        currentBenefitFilter = valid('benefit', ['tri-mun-kiem-dau', 'cap-am-chuyen-sau', 'phuc-hoi-diu-da', 'sang-da-mo-tham', 'chong-lao-hoa', 'chong-nang', 'body-nuoc-hoa']);
+        currentSearchQuery = params.get('search') || '';
+        for (const [id, value] of [
+            ['brand-filter-select', currentBrandFilter], ['step-filter-select', currentStepFilter],
+            ['benefit-filter-select', currentBenefitFilter], ['product-search', currentSearchQuery],
+            ['catalog-sort', ['price-asc', 'price-desc'].includes(params.get('sort')) ? params.get('sort') : 'featured']
+        ]) { const control = document.getElementById(id); if (control) control.value = value; }
+    }
     renderCatalog();
 
     const brandSelect = document.getElementById('brand-filter-select');
@@ -234,6 +273,9 @@ function initCatalog() {
 
     const stepSelect = document.getElementById('step-filter-select');
     stepSelect?.addEventListener('change', () => filterByStep(stepSelect.value));
+
+    const benefitSelect = document.getElementById('benefit-filter-select');
+    benefitSelect?.addEventListener('change', () => filterByBenefit(benefitSelect.value));
     
     // Setup brand filters
     const brandBtns = document.querySelectorAll('#brand-filters .filter-btn');
@@ -277,32 +319,43 @@ function initCatalog() {
 
 // PRODUCT DETAIL MODAL (Matching Rilastil Training & Product Spec)
 window.openProductDetailModal = function(productId) {
-    const p = PRODUCTS.find(prod => prod.id === productId);
+    const catalog = (Array.isArray(window.PRODUCTS) && window.PRODUCTS.length > 0)
+        ? window.PRODUCTS
+        : (Array.isArray(window.LOCAL_PRODUCTS) ? window.LOCAL_PRODUCTS : (typeof PRODUCTS !== 'undefined' ? PRODUCTS : []));
+    const p = catalog.find(prod => prod.id === productId);
     if (!p) return;
 
     let modal = document.getElementById('product-detail-modal');
     if (!modal) return;
 
-    const imgSrc = (p.image.startsWith('http') || p.image.startsWith('data:'))
+    const imgSrc = (p.image && (p.image.startsWith('http') || p.image.startsWith('data:')))
         ? p.image
         : (window.SKINID_ASSET_URL ? window.SKINID_ASSET_URL(p.image, p.brandSlug) : p.image);
     
     // Fill data
-    document.getElementById('pmodal-line').innerText = p.line || p.brand || 'CHĂM SÓC DA';
-    document.getElementById('pmodal-title').innerText = p.name;
-    document.getElementById('pmodal-price').innerText = formatPrice(p.price);
+    const lineEl = document.getElementById('pmodal-line');
+    if (lineEl) lineEl.innerText = p.line || p.brand || 'CHĂM SÓC DA';
+    const titleEl = document.getElementById('pmodal-title');
+    if (titleEl) titleEl.innerText = (typeof productDisplayName === 'function' ? productDisplayName(p) : p.name);
+    const priceEl = document.getElementById('pmodal-price');
+    if (priceEl) priceEl.innerText = formatPrice(p.price);
     
     const origPriceEl = document.getElementById('pmodal-original-price');
-    if (p.originalPrice && p.originalPrice > p.price) {
-        origPriceEl.innerText = formatPrice(p.originalPrice);
-        origPriceEl.classList.remove('hidden');
-    } else {
-        origPriceEl.classList.add('hidden');
+    if (origPriceEl) {
+        if (p.originalPrice && p.originalPrice > p.price) {
+            origPriceEl.innerText = formatPrice(p.originalPrice);
+            origPriceEl.classList.remove('hidden');
+        } else {
+            origPriceEl.classList.add('hidden');
+        }
     }
 
-    document.getElementById('pmodal-volume').innerText = p.volume || 'Tiêu chuẩn';
-    document.getElementById('pmodal-uses').innerText = p.uses || p.description || 'Sản phẩm dược mỹ phẩm chuyên sâu từ Rilastil.';
-    document.getElementById('pmodal-usage').innerText = p.usage || 'Sử dụng hàng ngày vào sáng và tối.';
+    const volEl = document.getElementById('pmodal-volume');
+    if (volEl) volEl.innerText = p.volume || 'Tiêu chuẩn';
+    const usesEl = document.getElementById('pmodal-uses');
+    if (usesEl) usesEl.innerText = p.uses || p.description || 'Sản phẩm dược mỹ phẩm chuyên sâu từ Rilastil.';
+    const usageEl = document.getElementById('pmodal-usage');
+    if (usageEl) usageEl.innerText = p.usage || 'Sử dụng hàng ngày vào sáng và tối.';
     
     // Key actives formatted list
     const activesContainer = document.getElementById('pmodal-key-actives');
@@ -358,15 +411,20 @@ window.openProductDetailModal = function(productId) {
     const addBtn = document.getElementById('pmodal-add-cart-btn');
     if (addBtn) {
         addBtn.onclick = () => {
-            cartManager.addItem(p.id);
-            showToast('Đã thêm sản phẩm vào giỏ hàng!');
-            closeProductDetailModal();
+            if (window.cartManager) {
+                window.cartManager.addItem(p.id);
+            }
+            if (typeof showToast === 'function') {
+                showToast('Đã thêm sản phẩm vào giỏ hàng!');
+            }
+            window.closeProductDetailModal?.();
         };
     }
 
     // Open animation
     modal.classList.remove('hidden');
     modal.classList.add('flex');
+    modal.style.display = 'flex';
     setTimeout(() => {
         modal.classList.remove('opacity-0');
         modal.classList.add('opacity-100');
@@ -430,8 +488,9 @@ window.closeProductDetailModal = function() {
     setTimeout(() => {
         modal.classList.add('hidden');
         modal.classList.remove('flex');
-    }, 300);
-    window.SkinIDScrollLock?.unlock('product-detail');
+        modal.style.display = 'none';
+        window.SkinIDScrollLock?.unlock('product-detail');
+    }, 250);
 };
 
 // SMART AI INGREDIENT & CONCERN MATCHING
@@ -636,10 +695,6 @@ function closeScanModal() {
     } else {
         stopWebcam();
     }
-    if (document.body.classList.contains('scan-page-body')) {
-        window.location.href = '/';
-        return;
-    }
     const modal = document.getElementById('ai-modal');
     if (!modal) return;
     modal.classList.remove('opacity-100');
@@ -647,6 +702,9 @@ function closeScanModal() {
     setTimeout(() => {
         modal.classList.remove('flex');
         modal.classList.add('hidden');
+        if (document.body.classList.contains('scan-page-body')) {
+            document.getElementById('scan-start')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     }, 300);
     window.SkinIDScrollLock?.unlock('skin-analysis');
 }

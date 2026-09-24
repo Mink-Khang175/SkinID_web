@@ -53,11 +53,13 @@ for (const file of reactComponents) {
     assert(!/<!--[\s\S]*?-->/.test(jsx), `${file}: HTML comments are not valid JSX comments`);
 }
 const reactApp = read('src/pages/HomePage.jsx');
-for (const component of ['Header', 'HeroBanner', 'CategorySection', 'ProductList', 'BrandShowcase', 'SkincareRoutine', 'Footer']) {
+for (const component of ['Header', 'HeroBanner', 'FeaturedProducts', 'BrandShowcase', 'SkincareRoutine', 'Footer']) {
     assert.match(reactApp, new RegExp(`<${component} \\/>`), `App must render ${component}`);
 }
-assert(reactApp.indexOf('<ProductList />') < reactApp.indexOf('<HelpSection />'));
+assert(reactApp.indexOf('<FeaturedProducts />') < reactApp.indexOf('<HelpSection />'));
 assert(reactApp.indexOf('<HelpSection />') < reactApp.indexOf('<BrandShowcase />'));
+assert(!reactApp.includes('<ProductList />'));
+assert(read('src/pages/ProductsPage.jsx').includes('<ProductList />'));
 const analysisApp = read('src/pages/SkinAnalysisPage.jsx');
 for (const component of ['Header', 'SkincareRoutine', 'Footer', 'MobileNav', 'StorefrontModals', 'ProductDetailModal']) {
     assert.match(analysisApp, new RegExp(`<${component} \/>`), `SkinAnalysisPage must render ${component}`);

@@ -1,269 +1,205 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { assetUrl } from '../../assets/index.js';
 
+export const navigationGroups = [
+  {
+    id: 'steps', title: 'Bước chăm sóc da', note: 'Từng bước nhỏ, chăm sóc mỗi ngày.',
+    links: [
+      ['Làm sạch & tẩy trang', '/products?step=cleanser'],
+      ['Toner & cân bằng', '/products?step=toner'],
+      ['Tinh chất & đặc trị', '/products?step=treatment'],
+      ['Dưỡng ẩm', '/products?step=moisturizer'],
+      ['Chống nắng', '/products?step=sunscreen'],
+      ['Cơ thể & nước hoa', '/products?step=special']
+    ],
+    image: '/images/products/rilastil/rilastil-serum-cap-cam-aqua-intense-gel-serum.png',
+    imageAlt: 'Tinh chất dưỡng ẩm Rilastil Aqua', previewTitle: 'Một chút chăm sóc, dành riêng cho da.',
+    previewLabel: 'Khám phá sản phẩm nổi bật', previewHref: '/#featured-products'
+  },
+  {
+    id: 'needs', title: 'Nhu cầu làn da', note: 'Bắt đầu từ điều làn da đang cần.',
+    links: [
+      ['Da dầu & mụn', '/products?benefit=tri-mun-kiem-dau'],
+      ['Da khô & cấp ẩm', '/products?benefit=cap-am-chuyen-sau'],
+      ['Phục hồi & làm dịu', '/products?benefit=phuc-hoi-diu-da'],
+      ['Sáng da & mờ thâm', '/products?benefit=sang-da-mo-tham'],
+      ['Chống lão hóa', '/products?benefit=chong-lao-hoa']
+    ],
+    image: '/images/banners/ai-skin-model-v1.png', imageAlt: 'Khám phá nhu cầu làn da cùng SkinID',
+    previewTitle: 'Chưa biết làn da cần gì?', previewLabel: 'Khám phá soi da AI', previewHref: '/skin-analysis'
+  },
+  {
+    id: 'brands', title: 'Thương hiệu', note: 'Khám phá thế giới chăm sóc của bạn.',
+    links: [
+      ['Rilastil · Chăm sóc da', '/products?brand=rilastil'],
+      ['TWON · Chăm sóc cơ thể', '/products?brand=twon'],
+      ["D’VAH · Nước hoa", '/products?brand=dvah']
+    ],
+    image: '/images/products/rilastil/rilastil-serum-tai-tao-va-chong-lao-hoa-30ml-rilastil-multirepair-retinol-tech.avif',
+    imageAlt: 'Tinh chất Rilastil', previewTitle: 'Mỗi thương hiệu, một câu chuyện.',
+    previewLabel: 'Ghé thăm các thương hiệu', previewHref: '/#brands'
+  }
+];
+
+function Icon({ name }) {
+  const paths = {
+    menu: <><path d="M4 6h16M4 12h16M4 18h16" /></>,
+    search: <><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4 4" /></>,
+    user: <><circle cx="12" cy="8" r="3.5" /><path d="M5 21v-2a7 7 0 0 1 14 0v2" /></>,
+    bag: <><path d="M5 7h14l1 14H4L5 7Z" /><path d="M8 8V6a4 4 0 0 1 8 0v2" /></>,
+    shield: <><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z" /><path d="m8 12 3 3 5-6" /></>,
+    close: <path d="m6 6 12 12M6 18 18 6" />,
+    arrow: <path d="m9 5 7 7-7 7" />
+  };
+  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name]}</svg>;
+}
+
 export default function Header() {
-  const isHomePage = window.location.pathname === '/' || window.location.pathname === '/index.html';
-  const isAnalysisPage = window.location.pathname.startsWith('/skin-analysis');
-  const isAciePage = window.location.pathname.startsWith('/acie');
-  const isCompliancePage = window.location.pathname.startsWith('/tra-cuu-cong-bo') || window.location.pathname.startsWith('/compliance');
-
-  const [activeItem, setActiveItem] = useState(() => {
-    if (isCompliancePage) return 'compliance';
-    if (isAciePage) return 'acie';
-    if (isAnalysisPage) return 'analysis';
-    if (!isHomePage) return '';
-    if (typeof window !== 'undefined') {
-      const step = new URLSearchParams(window.location.search).get('step');
-      if (step) return step;
-      if (window.location.hash === '#brands') return 'brands';
-      if (window.location.hash === '#acie-teaser') return 'acie-teaser';
-    }
-    return 'all';
-  });
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      if ('scrollRestoration' in history) {
-        history.scrollRestoration = 'manual';
-      }
-      const hash = window.location.hash;
-      const step = new URLSearchParams(window.location.search).get('step');
-      if (step && typeof window.filterByStep === 'function') {
-        window.filterByStep(step);
-      }
-      if (hash) {
-        const targetId = hash.replace('#', '');
-        setTimeout(() => {
-          const el = document.getElementById(targetId);
-          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 120);
-      } else if (isHomePage && !window.location.search) {
-        window.scrollTo(0, 0);
-      }
-    }
-
-    const handleSync = (e) => {
-      if (e.detail) {
-        setActiveItem(e.detail);
-        if (typeof document !== 'undefined') {
-          document.querySelectorAll('.desktop-nav a').forEach((a) => {
-            const itemKey = a.dataset.navStep || a.dataset.navTarget;
-            a.classList.toggle('is-active', itemKey === e.detail);
-          });
-        }
-      }
-    };
-    window.addEventListener('skinid:nav-sync', handleSync);
-
-    const prevSync = window.syncPrimaryNavigation;
-    window.syncPrimaryNavigation = (stepOrTarget = 'all') => {
-      setActiveItem(stepOrTarget);
-      if (typeof document !== 'undefined') {
-        document.querySelectorAll('.desktop-nav a').forEach((a) => {
-          const itemKey = a.dataset.navStep || a.dataset.navTarget;
-          a.classList.toggle('is-active', itemKey === stepOrTarget);
-        });
-      }
-      if (typeof prevSync === 'function') {
-        try { prevSync(stepOrTarget); } catch (_) {}
-      }
-    };
-
-    return () => {
-      window.removeEventListener('skinid:nav-sync', handleSync);
-    };
-  }, [isHomePage]);
-
-  const handleNavClick = (key, targetId = null, stepType = null) => {
-    setActiveItem(key);
-    if (typeof document !== 'undefined') {
-      document.querySelectorAll('.desktop-nav a').forEach((a) => {
-        const itemKey = a.dataset.navStep || a.dataset.navTarget;
-        a.classList.toggle('is-active', itemKey === key);
-      });
-    }
-    if (!isHomePage) {
-      if (stepType) {
-        window.location.href = `/?step=${stepType}#catalog`;
-      } else if (targetId) {
-        window.location.href = `/#${targetId}`;
-      } else {
-        window.location.href = '/';
-      }
-      return;
-    }
-
-    if (targetId) {
-      const el = document.getElementById(targetId);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-      window.syncPrimaryNavigation?.(key);
-    } else if (stepType) {
-      window.filterByStep?.(stepType);
-      const catalogEl = document.getElementById('catalog') || document.getElementById('featured-products');
-      if (catalogEl) catalogEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      window.syncPrimaryNavigation?.(key);
-    } else {
-      window.syncPrimaryNavigation?.(key);
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeGroup, setActiveGroup] = useState(null);
+  const [mobileLevel, setMobileLevel] = useState(false);
+  const [compact, setCompact] = useState(() => window.matchMedia('(max-width: 720px)').matches);
+  const trigger = useRef(null);
+  const drawer = useRef(null);
+  const panel = useRef(null);
+  const closeTimer = useRef(null);
+  const groupTimer = useRef(null);
+  const pinned = useRef(false);
+  const group = navigationGroups.find(item => item.id === activeGroup);
+  const isCompact = () => compact;
+  const cancelClose = () => window.clearTimeout(closeTimer.current);
+  const cancelGroup = () => window.clearTimeout(groupTimer.current);
+  const close = useCallback((restoreFocus = true) => {
+    window.clearTimeout(closeTimer.current);
+    window.clearTimeout(groupTimer.current);
+    setIsOpen(false);
+    setActiveGroup(null);
+    setMobileLevel(false);
+    pinned.current = false;
+    if (restoreFocus) requestAnimationFrame(() => trigger.current?.focus());
+  }, []);
+  const open = () => {
+    cancelClose();
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) setIsOpen(true);
+  };
+  const openPinned = () => { cancelClose(); pinned.current = true; setIsOpen(true); };
+  const scheduleClose = () => {
+    cancelClose();
+    if (!pinned.current) closeTimer.current = window.setTimeout(() => close(), 220);
+  };
+  const selectGroup = (id, enterPanel = false) => {
+    cancelGroup();
+    cancelClose();
+    setActiveGroup(id);
+    if (enterPanel) {
+      pinned.current = true;
+      setMobileLevel(true);
+      requestAnimationFrame(() => panel.current?.querySelector('a')?.focus());
     }
   };
+  const hoverGroup = (event, id) => {
+    if (event.pointerType !== 'mouse' || isCompact()) return;
+    cancelGroup();
+    groupTimer.current = window.setTimeout(() => setActiveGroup(id), 90);
+  };
+  const scheduleGroupClose = event => {
+    if (isCompact() || (event?.pointerType && event.pointerType !== 'mouse')) return;
+    cancelGroup();
+    groupTimer.current = window.setTimeout(() => setActiveGroup(null), 180);
+  };
+  const back = () => {
+    setMobileLevel(false);
+    requestAnimationFrame(() => document.getElementById('nav-group-' + activeGroup)?.focus());
+  };
 
-  return (
-    <header className="site-header">
+  useEffect(() => {
+    if (!isOpen) return;
+    // The portal is outside #root, so background controls are inert while the drawer is open.
+    const root = document.getElementById('root');
+    const wasInert = root?.inert;
+    if (root) root.inert = true;
+    document.body.classList.add('navigation-drawer-open');
+    const focusDrawer = () => {
+      if (!drawer.current?.contains(document.activeElement)) drawer.current?.querySelector('[data-first-link]')?.focus();
+    };
+    const frame = requestAnimationFrame(focusDrawer);
+    // Recheck after the entrance transition; a just-hidden element may reject focus.
+    const focusTimer = window.setTimeout(focusDrawer, 280);
+    const onKeyDown = event => {
+      if (event.key === 'Escape') { event.preventDefault(); event.stopImmediatePropagation(); close(); return; }
+      if (event.key !== 'Tab') return;
+      pinned.current = true;
+      const items = [...drawer.current.querySelectorAll('a[href],button,input')].filter(item => !item.disabled && item.getClientRects().length);
+      const first = items[0], last = items.at(-1);
+      if (!drawer.current.contains(document.activeElement)) { event.preventDefault(); first?.focus(); }
+      else if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    };
+    document.addEventListener('keydown', onKeyDown, true);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.clearTimeout(focusTimer);
+      if (root) root.inert = wasInert;
+      document.body.classList.remove('navigation-drawer-open');
+      document.removeEventListener('keydown', onKeyDown, true);
+    };
+  }, [isOpen, close]);
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 720px)');
+    const resize = event => { setCompact(event.matches); close(); };
+    media.addEventListener('change', resize);
+    return () => media.removeEventListener('change', resize);
+  }, [close]);
+  useEffect(() => () => { window.clearTimeout(closeTimer.current); window.clearTimeout(groupTimer.current); }, []);
+
+  const account = () => {
+    if (window.authManager?.getCurrentUser?.()) window.location.href = '/profile';
+    else window.authManager?.openAuthModal?.();
+  };
+  const search = event => {
+    event.preventDefault();
+    const query = new FormData(event.currentTarget).get('search').trim();
+    window.location.href = '/products' + (query ? '?search=' + encodeURIComponent(query) : '');
+  };
+
+  return <>
+    <header className="site-header skinid-header minimal-header">
       <div className="container header-main">
-        <a className="brand" href="/#top" aria-label="SkinID.vn — Trang chủ">
-          <img src={assetUrl('/images/logo.png')} alt="" />
-          <span><b>SkinID</b><em>.vn</em></span>
-        </a>
-
-        <label className="header-search">
-          <i data-feather="search"></i>
-          <input
-            type="search"
-            placeholder="Bạn đang tìm sản phẩm gì?"
-            aria-label="Tìm kiếm nhanh"
-            onInput={(event) => window?.handleHeaderSearch?.(event.currentTarget.value, false)}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') window.handleHeaderSearch?.(event.currentTarget.value, true);
-            }}
-          />
-        </label>
-
+        <button ref={trigger} className="minimal-menu-trigger" type="button" aria-expanded={isOpen} aria-controls="product-menu" aria-haspopup="dialog" onMouseEnter={open} onMouseLeave={scheduleClose} onClick={openPinned} onKeyDown={event => { if (event.key === 'ArrowDown') { event.preventDefault(); openPinned(); } }}><Icon name="menu" /><span>Menu</span></button>
+        <a className="brand" href="/" aria-label="SkinID.vn — Trang chủ"><img src={assetUrl('/images/logo.png')} alt="" /><span><b>SkinID</b><em>.vn</em></span></a>
         <div className="header-actions">
-          <a className="support-link" href="https://zalo.me/0924093461" target="_blank" rel="noopener">
-            <i data-feather="message-circle"></i>
-            <span>Tư vấn<br /><b>0924.093.461</b></span>
-          </a>
-          <button className="icon-btn header-account" type="button" aria-label="Tài khoản" onClick={() => {
-            if (window.authManager?.getCurrentUser?.()) window.location.href = '/profile';
-            else window.authManager?.openAuthModal?.();
-          }}><i data-feather="user"></i></button>
-          <button className="icon-btn cart-button" type="button" onClick={() => window.cartManager?.toggleCartUI?.()} aria-label="Mở giỏ hàng">
-            <i data-feather="shopping-bag"></i><span id="cart-badge" className="opacity-0">0</span>
-          </button>
-          <button className="icon-btn mobile-menu-btn" type="button" onClick={() => window?.toggleMobileMenu?.()} aria-label="Mở menu">
-            <i data-feather="menu"></i>
-          </button>
+          <a className="header-compliance" href="/tra-cuu-cong-bo"><Icon name="shield" /><span>Tra cứu công bố</span></a>
+          <a className="icon-btn" href="/products#catalog-search" aria-label="Tìm sản phẩm"><Icon name="search" /></a>
+          <button className="icon-btn minimal-account" type="button" aria-label="Tài khoản" onClick={account}><Icon name="user" /></button>
+          <button className="icon-btn cart-button" type="button" aria-label="Mở giỏ hàng" onClick={() => window.cartManager?.toggleCartUI?.()}><Icon name="bag" /><span id="cart-badge" className="opacity-0">0</span></button>
         </div>
       </div>
-
-      <div className="nav-line">
-        <div className="container nav-inner">
-          <nav className="desktop-nav" aria-label="Điều hướng chính">
-            <a
-              className={activeItem === 'all' ? 'is-active' : ''}
-              href="/#featured-products"
-              data-nav-step="all"
-              aria-current={activeItem === 'all' ? 'page' : undefined}
-              onClick={(e) => {
-                e.preventDefault();
-                handleNavClick('all', 'featured-products');
-              }}
-            >
-              Tất cả sản phẩm
-            </a>
-            <a
-              className={activeItem === 'cleanser' ? 'is-active' : ''}
-              href="/#catalog"
-              data-nav-step="cleanser"
-              onClick={(e) => {
-                e.preventDefault();
-                handleNavClick('cleanser', null, 'cleanser');
-              }}
-            >
-              Làm sạch
-            </a>
-            <a
-              className={activeItem === 'treatment' ? 'is-active' : ''}
-              href="/#catalog"
-              data-nav-step="treatment"
-              onClick={(e) => {
-                e.preventDefault();
-                handleNavClick('treatment', null, 'treatment');
-              }}
-            >
-              Tinh chất & đặc trị
-            </a>
-            <a
-              className={activeItem === 'moisturizer' ? 'is-active' : ''}
-              href="/#catalog"
-              data-nav-step="moisturizer"
-              onClick={(e) => {
-                e.preventDefault();
-                handleNavClick('moisturizer', null, 'moisturizer');
-              }}
-            >
-              Dưỡng ẩm
-            </a>
-            <a
-              className={activeItem === 'sunscreen' ? 'is-active' : ''}
-              href="/#catalog"
-              data-nav-step="sunscreen"
-              onClick={(e) => {
-                e.preventDefault();
-                handleNavClick('sunscreen', null, 'sunscreen');
-              }}
-            >
-              Chống nắng
-            </a>
-            <a
-              className={activeItem === 'brands' ? 'is-active' : ''}
-              href="/#brands"
-              data-nav-target="brands"
-              onClick={(e) => {
-                e.preventDefault();
-                handleNavClick('brands', 'brands');
-              }}
-            >
-              Thương hiệu
-            </a>
-            <a
-              href="/acie"
-              data-nav-target="acie"
-              className={`acie-header-link inline-flex items-center gap-1.5 font-medium transition-colors ${isAciePage || activeItem === 'acie' ? 'is-active' : ''}`}
-            >
-              <span>SKINID x ACIE VISION</span>
-              <span className="text-[9px] bg-rose-100 text-rose-800 px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider">Mới</span>
-            </a>
-            <a
-              href="/tra-cuu-cong-bo"
-              data-nav-target="compliance"
-              className={`compliance-header-link inline-flex items-center font-medium transition-colors ${isCompliancePage || activeItem === 'compliance' ? 'is-active' : ''}`}
-            >
-              Tra cứu công bố
-            </a>
-          </nav>
-          <a className={`skin-tool-link${isAnalysisPage ? ' is-active' : ''}`} href="/skin-analysis" aria-current={isAnalysisPage ? 'page' : undefined}>
-            <i data-feather="camera"></i> Soi da AI
-          </a>
-        </div>
-      </div>
-
-      <nav id="mobile-menu" className="mobile-menu hidden" aria-label="Điều hướng di động">
-        <a href="/#featured-products" data-nav-step="all" onClick={() => window?.toggleMobileMenu?.(false)}>Tất cả sản phẩm</a>
-        <a href="/#categories" onClick={() => window?.toggleMobileMenu?.(false)}>Danh mục</a>
-        <a href="/#brands" data-nav-target="brands" onClick={(e) => {
-          window?.toggleMobileMenu?.(false);
-          const el = document.getElementById('brands');
-          if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); window.syncPrimaryNavigation?.('brands'); }
-        }}>Thương hiệu</a>
-        <a href="/acie" data-nav-target="acie" className={`font-semibold flex items-center justify-between ${isAciePage ? 'text-rose-600' : 'text-gray-800'}`} onClick={() => window?.toggleMobileMenu?.(false)}>
-          <span>SKINID x ACIE VISION</span>
-          <span className="text-[9px] bg-rose-100 text-rose-800 px-1.5 py-0.5 rounded-full font-bold">Mới</span>
-        </a>
-        <a href="/tra-cuu-cong-bo" data-nav-target="compliance" className={`font-semibold ${isCompliancePage ? 'text-rose-600' : 'text-gray-800'}`} onClick={() => window?.toggleMobileMenu?.(false)}>Tra cứu công bố</a>
-        <a href="/skin-analysis" onClick={() => window?.toggleMobileMenu?.(false)}>Soi da AI</a>
-        <button type="button" onClick={() => {
-          window?.toggleMobileMenu?.(false);
-          if (window.authManager?.getCurrentUser?.()) window.location.href = '/profile';
-          else window.authManager?.openAuthModal?.();
-        }}>Tài khoản / Đơn hàng</button>
-        <button id="mobile-logout-button" type="button" className="text-rose-600 font-bold hidden text-left" onClick={() => {
-          window?.toggleMobileMenu?.(false);
-          window.authManager?.logout?.().then(() => { window.location.href = '/'; });
-        }}>Đăng xuất</button>
-      </nav>
     </header>
-  );
+    {createPortal(<div className={'navigation-layer' + (isOpen ? ' is-open' : '')} inert={!isOpen} aria-hidden={!isOpen}>
+      <div className="navigation-backdrop" onClick={() => close()} />
+      <div ref={drawer} id="product-menu" className={'navigation-drawer' + (group ? ' has-submenu' : '') + (mobileLevel ? ' is-sublevel' : '')} role="dialog" aria-modal="true" aria-labelledby="navigation-title" onMouseEnter={cancelClose} onMouseLeave={scheduleClose} onPointerDown={() => { pinned.current = true; }}>
+        <div className="drawer-heading"><div><span className="drawer-eyebrow">SKINID.VN</span><h2 id="navigation-title">Chăm sóc theo cách của bạn</h2></div><button type="button" className="drawer-close" aria-label="Đóng menu" onClick={() => close()}><Icon name="close" /></button></div>
+        <div className="drawer-columns">
+          <nav className="drawer-primary" aria-label="Khám phá SkinID">
+            <div className="drawer-primary-scroll">
+            <a className="drawer-all" href="/products" data-first-link onClick={() => close(false)}>Tất cả sản phẩm <span aria-hidden="true">↗</span></a>
+            <span className="drawer-eyebrow drawer-section-label">TÌM ĐIỀU PHÙ HỢP</span>
+            {navigationGroups.map((item, index) => <button key={item.id} id={'nav-group-' + item.id} className={'drawer-group' + (activeGroup === item.id ? ' is-active' : '')} type="button" aria-controls="drawer-submenu" aria-expanded={activeGroup === item.id && (!compact || mobileLevel)} onPointerEnter={event => hoverGroup(event, item.id)} onPointerLeave={scheduleGroupClose} onFocus={() => { if (!isCompact()) selectGroup(item.id); }} onClick={() => selectGroup(item.id, true)} onKeyDown={event => { if (event.key === 'ArrowRight') { event.preventDefault(); selectGroup(item.id, true); } }}><span className="drawer-number">0{index + 1}</span><span>{item.title}</span><Icon name="arrow" /></button>)}
+            <div className="drawer-explore"><span className="drawer-eyebrow">CÙNG SKINID KHÁM PHÁ</span><a href="/#featured-products" onClick={() => close(false)}>Sản phẩm nổi bật <span aria-hidden="true">↗</span></a><a href="/skin-analysis" onClick={() => close(false)}>Soi da AI <span aria-hidden="true">↗</span></a><a href="/acie" onClick={() => close(false)}>Gặp gỡ ACIE <small>Sắp ra mắt</small></a></div>
+            {compact && <button className="drawer-account" type="button" onClick={() => { close(false); requestAnimationFrame(account); }}><Icon name="user" />Tài khoản của bạn</button>}
+            <form className="drawer-search" onSubmit={search}><input name="search" type="search" placeholder="Tìm sản phẩm…" aria-label="Tìm sản phẩm trong menu" /><button type="submit" aria-label="Tìm kiếm"><Icon name="search" /></button></form>
+            </div>
+            <a className="drawer-compliance" href="/tra-cuu-cong-bo" onClick={() => close(false)}><Icon name="shield" /><span>Tra cứu phiếu công bố<small>Thông tin sản phẩm minh bạch</small></span><span aria-hidden="true">↗</span></a>
+          </nav>
+          <nav ref={panel} id="drawer-submenu" className="drawer-secondary" aria-label={group?.title || 'Danh mục con'} aria-hidden={!group} onPointerEnter={cancelGroup} onPointerLeave={scheduleGroupClose} onKeyDown={event => { if (event.key === 'ArrowLeft') { event.preventDefault(); back(); } }}>
+            <button className="drawer-back" type="button" onClick={back}>← Quay lại menu</button>
+            {group && <><span className="drawer-eyebrow">{group.title}</span><h3>{group.note}</h3>
+            <div className="drawer-links" key={group.id}>{group.links.map(([label, href]) => <a key={href} href={href} onClick={() => close(false)}>{label}<span aria-hidden="true">↗</span></a>)}</div>
+            <a className={'drawer-editorial drawer-editorial--' + group.id} href={group.previewHref} onClick={() => close(false)}><img src={assetUrl(group.image)} alt={group.imageAlt} /><div><span className="drawer-eyebrow">GỢI Ý TỪ SKINID</span><p>{group.previewTitle}</p><span className="drawer-editorial-cta">{group.previewLabel} →</span></div></a></>}
+          </nav>
+        </div>
+      </div>
+    </div>, document.body)}
+  </>;
 }

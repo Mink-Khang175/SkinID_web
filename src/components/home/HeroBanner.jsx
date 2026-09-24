@@ -24,11 +24,11 @@ export default function HeroBanner() {
           <div className="hero-slide-inner">
             <div className="hero-slide-copy">
               <span className="hero-label">RILASTIL · DƯỢC MỸ PHẨM TỪ Ý</span>
-              <h1 className="leading-[1.05]">Chăm da đúng cách.<br />Mua sắm dễ dàng</h1>
+              <h1 className="leading-[1.05]">Dịu dàng với da.<br />Yêu thương chính mình.</h1>
               <p>Sản phẩm rõ nguồn gốc, thông tin đầy đủ và phân loại dễ tìm theo từng nhu cầu.</p>
               <div className="hero-actions">
-                <a className="btn btn--primary" href="#catalog">Mua sắm ngay</a>
-                <a className="btn btn--secondary" href="#categories">Xem danh mục</a>
+                <a className="btn btn--primary" href="/products">Mua sắm ngay</a>
+                <a className="btn btn--secondary" href="/products">Xem danh mục</a>
               </div>
             </div>
             <div className="slide-product-stage">

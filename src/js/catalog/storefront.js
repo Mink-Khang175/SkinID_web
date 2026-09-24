@@ -6,72 +6,6 @@
     const $ = (selector, root = document) => root.querySelector(selector);
     const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
 
-    function productImage(product) {
-        if (!product || !product.image) return '';
-        return product.image.startsWith('http') || product.image.startsWith('data:')
-            ? product.image
-            : (window.SKINID_ASSET_URL ? window.SKINID_ASSET_URL(product.image) : product.image);
-    }
-
-    function conciseName(name) {
-        if (!name) return '';
-        return name
-            .toLowerCase()
-            .replace(/\s+/g, ' ')
-            .replace(/rilastil/g, 'Rilastil')
-            .replace(/dvah/g, "D'VAH")
-            .replace(/twon/g, 'TWON')
-            .replace(/(^|[.!?]\s+)([a-zà-ỹ])/g, (match, lead, letter) => lead + letter.toUpperCase());
-    }
-
-    function renderFeatured() {
-        const grid = $('#featured-grid');
-        if (!grid || typeof PRODUCTS === 'undefined') return;
-
-        const desiredSteps = ['cleanser', 'treatment', 'moisturizer', 'sunscreen'];
-        const selected = desiredSteps
-            .map((step) => PRODUCTS.find((product) => product.stepType === step && product.image && product.price))
-            .filter(Boolean);
-
-        grid.innerHTML = selected.map((product, index) => `
-            <article class="featured-card" tabindex="0" role="button" aria-label="Xem ${product.name}" data-product-id="${product.id}">
-                <div class="featured-media">
-                    <span class="badge">Bước ${index + 1}</span>
-                    <img src="${productImage(product)}" alt="${product.name}" loading="lazy">
-                </div>
-                <div class="featured-body">
-                    <span class="featured-brand">${product.brand} · ${product.line || product.category}</span>
-                    <h3>${conciseName(product.name)}</h3>
-                    <p class="featured-use">${product.uses || ''}</p>
-                    <div class="price-row">
-                        <span class="price">${formatPrice(product.price)}</span>
-                        <button class="mini-add" type="button" data-add-id="${product.id}" aria-label="Thêm ${product.name} vào giỏ"><i data-feather="plus"></i></button>
-                    </div>
-                </div>
-            </article>
-        `).join('');
-
-        $$('.featured-card', grid).forEach((card) => {
-            const open = () => openProductDetailModal(card.dataset.productId);
-            card.addEventListener('click', (event) => {
-                if (!event.target.closest('[data-add-id]')) open();
-            });
-            card.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                    event.preventDefault();
-                    open();
-                }
-            });
-        });
-
-        $$('[data-add-id]', grid).forEach((button) => {
-            button.addEventListener('click', () => {
-                cartManager.addItem(button.dataset.addId);
-                showToast('Đã thêm sản phẩm vào giỏ hàng');
-            });
-        });
-    }
-
     function scrollToCatalog() {
         ($('#featured-products') || $('#catalog'))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -95,11 +29,21 @@
     }
 
     function applyCatalogState({ brand = 'all', step = 'all', benefit = 'all', query = '' } = {}) {
+        if (window.location.pathname !== '/products') {
+            const params = new URLSearchParams();
+            if (brand !== 'all') params.set('brand', String(brand).toLowerCase());
+            if (step !== 'all') params.set('step', step);
+            if (benefit !== 'all') params.set('benefit', benefit);
+            if (query) params.set('search', query);
+            window.location.href = '/products' + (params.size ? '?' + params : '');
+            return;
+        }
         const brandButton = chooseFilterButton('#brand-filters .filter-btn', 'brand', String(brand).toLowerCase());
         const stepButton = chooseFilterButton('#step-filters .step-filter-btn', 'step', step);
         const searchInput = $('#product-search');
         const brandSelect = $('#brand-filter-select');
         const stepSelect = $('#step-filter-select');
+        const benefitSelect = $('#benefit-filter-select');
 
         if (typeof filterByBrand === 'function') filterByBrand(brand, brandButton);
         if (typeof filterByStep === 'function') filterByStep(step, stepButton);
@@ -107,8 +51,10 @@
         if (searchInput) searchInput.value = query;
         if (brandSelect) brandSelect.value = String(brand).toLowerCase();
         if (stepSelect) stepSelect.value = step;
+        if (benefitSelect) benefitSelect.value = benefit;
         window.syncCatalogDropdown?.(brandSelect);
         window.syncCatalogDropdown?.(stepSelect);
+        window.syncCatalogDropdown?.(benefitSelect);
         syncPrimaryNavigation(step);
         if (typeof currentSearchQuery !== 'undefined') currentSearchQuery = query;
         if (typeof renderCatalog === 'function') renderCatalog();
@@ -128,7 +74,9 @@
             if (!dropdown) return;
             const options = $$('[data-dropdown-value]', dropdown);
             const selected = options.find((option) => option.dataset.dropdownValue === input.value) || options[0];
-            dropdown.querySelector('[data-dropdown-label]').textContent = selected?.textContent?.replace('✓', '').trim() || '';
+            const defaultLabel = dropdown.dataset.defaultLabel;
+            const selectedLabel = selected?.textContent?.replace('✓', '').trim() || '';
+            dropdown.querySelector('[data-dropdown-label]').textContent = input.value === 'all' && defaultLabel ? defaultLabel : selectedLabel;
             options.forEach((option) => {
                 const isActive = option === selected;
                 option.classList.toggle('is-active', isActive);
@@ -191,7 +139,7 @@
             });
         });
 
-        if (!$('#catalog')) return;
+
         $$('#categories .category-item, #categories [data-step]').forEach((button) => {
             button.addEventListener('click', (event) => {
                 event.preventDefault();
@@ -238,6 +186,7 @@
             });
             renderCatalog();
         });
+        sort.dispatchEvent(new Event('change'));
     }
 
     function setupCarousel() {
@@ -328,7 +277,7 @@
             return;
         }
         if (submit && value.trim()) {
-            window.location.href = `/?search=${encodeURIComponent(value.trim())}#catalog`;
+            window.location.href = `/products?search=${encodeURIComponent(value.trim())}`;
         }
     };
 
@@ -349,6 +298,10 @@
         const cta = $('#consultation-cta');
         const result = $('#consultation-result');
         const copyByStep = {
+            'tri-mun-kiem-dau': '<strong>Gợi ý cấu trúc:</strong> Làm sạch dịu nhẹ → hoạt chất đặc trị kiểm soát dầu mụn → dưỡng phục hồi nhẹ thoáng → chống nắng kiềm dầu.',
+            'cap-am-chuyen-sau': '<strong>Gợi ý cấu trúc:</strong> Làm sạch không khô căng → tinh chất cấp nước đa tầng → kem dưỡng khóa ẩm → chống nắng.',
+            'sang-da-mo-tham': '<strong>Gợi ý cấu trúc:</strong> Làm sạch → tinh chất mờ thâm/chống oxy hóa → dưỡng ẩm đều màu → chống nắng phổ rộng.',
+            'phuc-hoi-diu-da': '<strong>Gợi ý cấu trúc:</strong> Làm sạch tối giản → tinh chất làm dịu phục hồi → kem dưỡng củng cố hàng rào da → chống nắng dịu nhẹ.',
             treatment: '<strong>Gợi ý cấu trúc:</strong> Làm sạch dịu nhẹ → hoạt chất đặc trị phù hợp → dưỡng phục hồi → chống nắng mỗi sáng.',
             moisturizer: '<strong>Gợi ý cấu trúc:</strong> Làm sạch không khô căng → lớp cấp ẩm → kem dưỡng khóa ẩm → chống nắng.',
             sunscreen: '<strong>Gợi ý cấu trúc:</strong> Làm sạch → sản phẩm hỗ trợ đều màu/đàn hồi → dưỡng ẩm → chống nắng phổ rộng.'
@@ -359,21 +312,45 @@
                 $$('.consult-option').forEach((item) => item.classList.remove('active'));
                 button.classList.add('active');
                 selectedConsultationStep = button.dataset.consult;
+                const benefitUrl = `/products?benefit=${encodeURIComponent(selectedConsultationStep)}`;
                 if (result) {
-                    result.innerHTML = `<span class="modal-kicker">Routine cho ${button.dataset.label}</span><p>${copyByStep[selectedConsultationStep]}</p>`;
+                    result.innerHTML = `
+                        <div class="result-header">
+                            <span class="modal-kicker">Routine cho ${button.dataset.label}</span>
+                            <a class="result-category-link" href="${benefitUrl}">Xem category ${button.dataset.label} ↗</a>
+                        </div>
+                        <p>${copyByStep[selectedConsultationStep] || ''}</p>
+                    `;
                     result.classList.remove('hidden');
                 }
                 if (cta) {
-                    cta.disabled = false;
-                    cta.textContent = 'Xem sản phẩm phù hợp';
+                    cta.removeAttribute('disabled');
+                    cta.classList.remove('is-disabled');
+                    cta.setAttribute('aria-disabled', 'false');
+                    cta.setAttribute('href', benefitUrl);
+                    cta.textContent = `Xem sản phẩm theo yêu cầu (${button.dataset.label}) →`;
                 }
             });
         });
 
-        cta?.addEventListener('click', () => {
-            if (!selectedConsultationStep) return;
-            closeConsultation();
-            applyCatalogState({ step: selectedConsultationStep });
+        cta?.addEventListener('click', (event) => {
+            if (!selectedConsultationStep || cta.getAttribute('aria-disabled') === 'true') {
+                event.preventDefault();
+                return;
+            }
+            const isBenefit = ['tri-mun-kiem-dau', 'cap-am-chuyen-sau', 'phuc-hoi-diu-da', 'sang-da-mo-tham', 'chong-lao-hoa'].includes(selectedConsultationStep);
+            if (window.location.pathname === '/products') {
+                event.preventDefault();
+                closeConsultation();
+                if (isBenefit) {
+                    applyCatalogState({ brand: 'all', step: 'all', benefit: selectedConsultationStep, query: '' });
+                } else {
+                    applyCatalogState({ step: selectedConsultationStep });
+                }
+            } else {
+                closeConsultation();
+                // Let the anchor navigate directly to benefitUrl
+            }
         });
     }
 
@@ -426,21 +403,18 @@
 
     function init() {
         window.syncPrimaryNavigation = syncPrimaryNavigation;
-        renderFeatured();
         setupMerchandisingLinks();
         setupCatalogDropdowns();
         setupSort();
         setupCarousel();
         setupConsultation();
         setupModalDismissal();
-        const incomingStep = new URLSearchParams(window.location.search).get('step');
-        if (incomingStep) {
-            applyCatalogState({ step: incomingStep, benefit: 'all' });
-        }
-        const incomingSearch = new URLSearchParams(window.location.search).get('search');
-        if (incomingSearch && $('#product-search')) {
-            window.handleHeaderSearch(incomingSearch, false);
-            $('.header-search input')?.setAttribute('value', incomingSearch);
+        if (window.location.pathname !== '/products') {
+            const incoming = new URLSearchParams(window.location.search);
+            if (['step', 'brand', 'benefit', 'search'].some(key => incoming.has(key)) || window.location.hash === '#catalog') {
+                window.location.replace('/products' + window.location.search);
+                return;
+            }
         }
         if (new URLSearchParams(window.location.search).get('auth') === '1') {
             window.authManager?.openAuthModal?.();
