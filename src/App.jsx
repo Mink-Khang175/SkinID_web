@@ -6,6 +6,7 @@ import AdminPage from './pages/AdminPage.jsx';
 import AciePage from './pages/AciePage.jsx';
 import CompliancePage from './pages/CompliancePage.jsx';
 import { CartProvider } from './features/cart/index.js';
+import { AuthProvider } from './features/auth/index.js';
 
 export default function App() {
   const path = window.location.pathname.replace(/\/+$/, '') || '/';
@@ -17,6 +18,12 @@ export default function App() {
   else if (path === '/tra-cuu-cong-bo' || path === '/compliance' || path === '/kiem-chung') content = <CompliancePage />;
   else if (path === '/products') content = <ProductsPage />;
 
-  return <CartProvider>{content}</CartProvider>;
+  return (
+    <AuthProvider>
+      <CartProvider>
+        {content}
+      </CartProvider>
+    </AuthProvider>
+  );
 }
 
