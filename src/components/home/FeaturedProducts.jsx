@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { assetUrl } from '../../assets/index.js';
+import { useCart } from '../../features/cart/index.js';
 
 const ROUTINE_DATA = {
   'rilastil-525': {
@@ -104,16 +105,11 @@ export default function FeaturedProducts() {
     };
   }, []);
 
+  const { addToCart } = useCart();
+
   const handleAddToCart = (e, productId) => {
     e.stopPropagation();
-    if (typeof window.addToCart === 'function') {
-      window.addToCart(productId);
-    } else if (window.cartManager) {
-      window.cartManager.addItem(productId, 1);
-      if (typeof window.showToast === 'function') {
-        window.showToast('Đã thêm sản phẩm vào giỏ hàng!');
-      }
-    }
+    addToCart(productId);
   };
 
   const handleOpenDetail = (productId) => {
