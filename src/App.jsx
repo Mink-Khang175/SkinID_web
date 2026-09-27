@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import ProductsPage from './pages/ProductsPage.jsx';
 import HomePage from './pages/HomePage.jsx';
 import ProfilePage from './pages/ProfilePage.jsx';
@@ -9,7 +10,17 @@ import { CartProvider } from './features/cart/index.js';
 import { AuthProvider } from './features/auth/index.js';
 
 export default function App() {
-  const path = window.location.pathname.replace(/\/+$/, '') || '/';
+  const [currentPath, setCurrentPath] = useState(() => window.location.pathname.replace(/\/+$/, '') || '/');
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setCurrentPath(window.location.pathname.replace(/\/+$/, '') || '/');
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const path = currentPath;
   let content = <HomePage />;
   if (path === '/profile' || path === '/profile.html') content = <ProfilePage />;
   else if (path === '/skin-analysis' || path === '/skin-analysis.html') content = <SkinAnalysisPage />;
