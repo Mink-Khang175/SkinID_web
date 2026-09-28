@@ -1,13 +1,63 @@
 import { importPKCS8, SignJWT } from 'jose';
+import { normalizeFirebasePrivateKey } from './app/env.js';
 
 const tokenCache = new Map();
 
-function normalizePrivateKey(value) {
-  let key = String(value || '').trim();
-  if ((key.startsWith('"') && key.endsWith('"')) || (key.startsWith("'") && key.endsWith("'"))) {
-    key = key.slice(1, -1);
+export function convertPkcs1ToPkcs8(pkcs1Pem) {
+  const rawBase64 = String(pkcs1Pem || '')
+    .replace(/-----BEGIN RSA PRIVATE KEY-----/g, '')
+    .replace(/-----END RSA PRIVATE KEY-----/g, '')
+    .replace(/[\r\n\s]/g, '');
+
+  let binary;
+  if (typeof Buffer !== 'undefined') {
+    binary = Buffer.from(rawBase64, 'base64');
+  } else {
+    const rawString = atob(rawBase64);
+    binary = new Uint8Array(rawString.length);
+    for (let i = 0; i < rawString.length; i++) {
+      binary[i] = rawString.charCodeAt(i);
+    }
   }
-  return key.replace(/\\n/g, '\n').replace(/\r\n/g, '\n').trim();
+
+  function encodeLength(len) {
+    if (len < 128) return [len];
+    const bytes = [];
+    let temp = len;
+    while (temp > 0) {
+      bytes.unshift(temp & 0xff);
+      temp >>= 8;
+    }
+    return [0x80 | bytes.length, ...bytes];
+  }
+
+  // AlgorithmIdentifier for rsaEncryption: 1.2.840.113549.1.1.1
+  const algoId = [0x30, 0x0d, 0x06, 0x09, 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x01, 0x01, 0x01, 0x05, 0x00];
+  const version = [0x02, 0x01, 0x00];
+
+  const derBytes = Array.from(binary);
+  const octetString = [0x04, ...encodeLength(derBytes.length), ...derBytes];
+  const inner = [...version, ...algoId, ...octetString];
+  const pkcs8Der = [0x30, ...encodeLength(inner.length), ...inner];
+
+  let base64;
+  if (typeof Buffer !== 'undefined') {
+    base64 = Buffer.from(pkcs8Der).toString('base64');
+  } else {
+    let str = '';
+    for (let i = 0; i < pkcs8Der.length; i++) {
+      str += String.fromCharCode(pkcs8Der[i]);
+    }
+    base64 = btoa(str);
+  }
+
+  const lines = base64.match(/.{1,64}/g) || [];
+  return `-----BEGIN PRIVATE KEY-----\n${lines.join('\n')}\n-----END PRIVATE KEY-----`;
+}
+
+export async function importPKCS1(pem, alg = 'RS256') {
+  const pkcs8 = convertPkcs1ToPkcs8(pem);
+  return importPKCS8(pkcs8, alg);
 }
 
 export function encodeValue(value) {
@@ -47,7 +97,21 @@ async function getGoogleAccessToken(env) {
   const cached = tokenCache.get(cacheKey);
   if (cached && cached.expiresAt > Date.now() + 60_000) return cached.token;
 
-  const privateKey = await importPKCS8(normalizePrivateKey(env.FIREBASE_PRIVATE_KEY), 'RS256');
+  const normalizedPrivateKey = normalizeFirebasePrivateKey(env.FIREBASE_PRIVATE_KEY);
+  let privateKey;
+  if (normalizedPrivateKey.includes('BEGIN RSA PRIVATE KEY')) {
+    privateKey = await importPKCS1(normalizedPrivateKey, 'RS256');
+  } else {
+    try {
+      privateKey = await importPKCS8(normalizedPrivateKey, 'RS256');
+    } catch (error) {
+      if (error && String(error.message).includes('pkcs8')) {
+        privateKey = await importPKCS1(normalizedPrivateKey, 'RS256');
+      } else {
+        throw error;
+      }
+    }
+  }
   const now = Math.floor(Date.now() / 1000);
   const assertion = await new SignJWT({
     scope: 'https://www.googleapis.com/auth/datastore https://www.googleapis.com/auth/identitytoolkit'

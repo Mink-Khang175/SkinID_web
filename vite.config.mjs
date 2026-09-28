@@ -5,22 +5,72 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
-function loadDevVars() {
-  const env = { ...process.env, IS_LOCAL_DEV: 'true', NODE_ENV: 'development' };
-  const devVarsPath = resolve(import.meta.dirname, '.dev.vars');
-  if (fs.existsSync(devVarsPath)) {
-    const lines = fs.readFileSync(devVarsPath, 'utf8').split('\n');
-    for (const line of lines) {
-      const trimmed = line.trim();
+function parseEnvFile(filePath) {
+  if (!fs.existsSync(filePath)) return {};
+  const content = fs.readFileSync(filePath, 'utf8');
+  const result = {};
+  const lines = content.split(/\r?\n/);
+  let currentKey = null;
+  let currentValue = '';
+  let inMultiLine = false;
+
+  for (const rawLine of lines) {
+    if (!inMultiLine) {
+      const trimmed = rawLine.trim();
       if (!trimmed || trimmed.startsWith('#')) continue;
-      const idx = trimmed.indexOf('=');
+      const idx = rawLine.indexOf('=');
       if (idx > 0) {
-        const key = trimmed.slice(0, idx).trim();
-        const val = trimmed.slice(idx + 1).trim();
-        env[key] = val;
+        const key = rawLine.slice(0, idx).trim();
+        let val = rawLine.slice(idx + 1).trim();
+        if ((val.startsWith('"') && !val.endsWith('"')) || (val.startsWith("'") && !val.endsWith("'")) || val === '"' || val === "'") {
+          inMultiLine = val[0];
+          currentKey = key;
+          currentValue = val.slice(1);
+        } else {
+          if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+            val = val.slice(1, -1);
+          }
+          result[key] = val;
+        }
+      }
+    } else {
+      if (rawLine.trim().endsWith(inMultiLine)) {
+        currentValue += '\n' + rawLine.slice(0, rawLine.lastIndexOf(inMultiLine));
+        result[currentKey] = currentValue;
+        currentKey = null;
+        currentValue = '';
+        inMultiLine = false;
+      } else {
+        currentValue += '\n' + rawLine;
       }
     }
   }
+  return result;
+}
+
+function loadDevVars() {
+  const envFileVars = parseEnvFile(resolve(import.meta.dirname, '.env'));
+  const devVars = parseEnvFile(resolve(import.meta.dirname, '.dev.vars'));
+  const env = {
+    ...process.env,
+    ...envFileVars,
+    ...devVars,
+    IS_LOCAL_DEV: 'true',
+    NODE_ENV: 'development'
+  };
+
+  const credPath = env.GOOGLE_APPLICATION_CREDENTIALS || process.env.GOOGLE_APPLICATION_CREDENTIALS;
+  if (credPath && fs.existsSync(credPath)) {
+    try {
+      const sa = JSON.parse(fs.readFileSync(credPath, 'utf8'));
+      if (sa.client_email && !env.FIREBASE_CLIENT_EMAIL) env.FIREBASE_CLIENT_EMAIL = sa.client_email;
+      if (sa.private_key && !env.FIREBASE_PRIVATE_KEY) env.FIREBASE_PRIVATE_KEY = sa.private_key;
+      if (sa.project_id && !env.FIREBASE_PROJECT_ID) env.FIREBASE_PROJECT_ID = sa.project_id;
+    } catch {
+      // Ignore invalid JSON
+    }
+  }
+
   return env;
 }
 

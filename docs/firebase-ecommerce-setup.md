@@ -48,3 +48,8 @@ npm run firebase:set-admin -- admin@example.com
 
 Đăng xuất rồi đăng nhập lại để nhận custom claim mới. Service-account JSON đã được
 gitignore và không được đặt trong `src/`, `dist/` hay commit lên GitHub.
+
+`FIREBASE_PRIVATE_KEY` phải là trường `private_key` trong service-account JSON, giữ đủ
+hai marker `-----BEGIN PRIVATE KEY-----` và `-----END PRIVATE KEY-----`. Khi đặt trong
+`.dev.vars` hoặc Cloudflare Secret, có thể dùng chuỗi `\n` cho xuống dòng. Worker hỗ trợ
+cả PEM `BEGIN PRIVATE KEY` (PKCS#8) và `BEGIN RSA PRIVATE KEY` (PKCS#1).

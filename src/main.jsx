@@ -6,6 +6,7 @@ import './styles/soft-storefront.css';
 import './styles/navigation-drawer.css';
 import './styles/home-refresh.css';
 import './styles/scroll-reveal.css';
+import './styles/scan-refresh.css';
 import './shared/ui/route-status.css';
 import { initializeAnalytics, installLegacyFirebaseBridge } from './infrastructure/firebase/index.js';
 import { installLegacyRuntimeConfig } from './shared/config/runtime.js';

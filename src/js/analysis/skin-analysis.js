@@ -657,6 +657,7 @@ async function requestCameraPermissionAndProceed() {
 function openScanModal() {
     const modal = document.getElementById('ai-modal');
     if (!modal) return;
+    document.body.classList.remove('scan-results-ready');
     modal.classList.remove('hidden');
     modal.classList.add('flex');
     setTimeout(() => {
@@ -708,6 +709,7 @@ function closeScanModal() {
     }
     const modal = document.getElementById('ai-modal');
     if (!modal) return;
+    document.body.classList.remove('scan-results-ready');
     modal.classList.remove('opacity-100');
     modal.classList.add('opacity-0');
     setTimeout(() => {
@@ -1142,6 +1144,7 @@ async function startAnalysis() {
 window.startAnalysis = startAnalysis;
 
 function resetToCaptureFlow() {
+    document.body.classList.remove('scan-results-ready');
     const errorCard = document.getElementById('analysis-error-card');
     if (errorCard) errorCard.classList.add('hidden');
     document.getElementById('analyzing-flow').classList.add('hidden');
@@ -1162,7 +1165,14 @@ function scrollScanWorkspaceToTop() {
     const modal = document.getElementById('ai-modal');
     if (!modal) return;
     if (document.body.classList.contains('scan-page-body')) {
-        window.scrollTo({ top: Math.max(0, modal.offsetTop - 110), behavior: 'smooth' });
+        const target = document.body.classList.contains('scan-results-ready')
+            ? document.getElementById('results-flow')
+            : modal;
+        const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({
+            top: Math.max(0, target.offsetTop - 96),
+            behavior: reducedMotion ? 'auto' : 'smooth'
+        });
     } else {
         modal.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -1174,6 +1184,7 @@ function renderResults(data, weatherData) {
     
     document.getElementById('results-flow').classList.remove('hidden');
     document.getElementById('results-flow').classList.add('flex');
+    document.body.classList.add('scan-results-ready');
     
     // Header
     const now = new Date();
@@ -1384,71 +1395,74 @@ function renderResults(data, weatherData) {
     };
     
     if (concernTitle && concernDesc) {
-        concernTitle.innerHTML = `⚠️ Phát hiện ${translateConcern(worst1.id)} & ${translateConcern(worst2.id)}`;
-        concernDesc.innerText = `Điểm da tổng thể của bạn là ${targetScore}/100. AI phát hiện rủi ro cao ở ${translateConcern(worst1.id).toLowerCase()} và ${translateConcern(worst2.id).toLowerCase()}. Vui lòng tuân thủ phác đồ bên dưới để cải thiện.`;
+        concernTitle.innerText = `${translateConcern(worst1.id)} & ${translateConcern(worst2.id)}`;
+        concernDesc.innerText = `Điểm da tổng thể là ${targetScore}/100. Bạn nên ưu tiên cân bằng ${translateConcern(worst1.id).toLowerCase()} và ${translateConcern(worst2.id).toLowerCase()} bằng một routine dịu nhẹ, đều đặn.`;
+    }
+
+    const moistureH = parseInt(data.moisture) || 60;
+    const sebumH = Math.max(10, 100 - (parseInt(data.sebum) || 60));
+    const poresH = Math.max(10, 100 - (parseInt(data.pores) || 60));
+    const pigmentH = Math.max(10, 100 - (parseInt(data.pigmentation) || 50));
+    const elasticityH = parseInt(data.elasticity) || 65;
+    const melasmaH = parseInt(data.melasma) || Math.max(15, pigmentH - 10);
+    const eyeWrinklesH = parseInt(data.eyeWrinkles) || Math.round(elasticityH * 0.95);
+    const nasolabialFoldsH = parseInt(data.nasolabialFolds) || Math.round(elasticityH * 0.9);
+    const rednessH = parseInt(data.redness) || Math.round(moistureH * 0.7 + 25);
+
+    scrollScanWorkspaceToTop();
+
+    // Persist the report independently from the optional chart library. A chart
+    // rendering failure must never make a completed scan disappear from Profile.
+    const authState = readModernAuth();
+    if (authState.isAuthenticated && window.lastSavedSkinReportSeed !== reportSeed) {
+        const currentUser = authState.user || {};
+        const routineProducts = (window.currentRoutineProducts && window.currentRoutineProducts.length > 0)
+            ? window.currentRoutineProducts
+            : (window.currentRoutineIds ? PRODUCTS.filter(p => window.currentRoutineIds.includes(p.id)) : []);
+        const report = {
+            userName: currentUser.name,
+            healthScore: targetScore,
+            skinType: data.skinTypeSummary || 'Da hỗn hợp',
+            skinAge: parseInt(data.skinAge) || 25,
+            primaryConcerns: data.activeIngredients || [],
+            overallGrade: data.overallGrade || 'B',
+            overallGradeComment: data.overallGradeComment || 'Làn da ở mức ổn định',
+            analysis3Angles: data.analysis3Angles || '',
+            fullAnalysis: data,
+            metrics: {
+                moisture: data.moisture,
+                sebum: data.sebum,
+                pores: data.pores,
+                pigmentation: data.pigmentation,
+                elasticity: data.elasticity,
+                melasma: data.melasma,
+                eyeWrinkles: data.eyeWrinkles,
+                nasolabialFolds: data.nasolabialFolds,
+                redness: data.redness,
+                acneBacteria: data.acneBacteria,
+                texture: data.texture,
+                darkCircles: data.darkCircles
+            },
+            recommendedRoutine: window.currentRoutineIds || [],
+            recommendedRoutineProducts: routineProducts
+        };
+        window.lastSavedSkinReportSeed = reportSeed;
+        saveModernSkinReport(report, {
+            userName: currentUser.name,
+            healthScore: targetScore,
+            skinType: data.skinTypeSummary || 'Da hỗn hợp',
+            skinAge: parseInt(data.skinAge) || 25,
+            recommendedRoutineProducts: routineProducts
+        }).catch(error => {
+            window.lastSavedSkinReportSeed = '';
+            console.error('[SkinID history]', error);
+        });
     }
 
     const ctxRadar = document.getElementById('radarChart');
     if (ctxRadar && typeof Chart !== 'undefined') {
         if (window.skinRadarChart) window.skinRadarChart.destroy();
-        
-        const moistureH = parseInt(data.moisture) || 60;
-        const sebumH = Math.max(10, 100 - (parseInt(data.sebum) || 60));
-        const poresH = Math.max(10, 100 - (parseInt(data.pores) || 60));
-        const pigmentH = Math.max(10, 100 - (parseInt(data.pigmentation) || 50));
-        const elasticityH = parseInt(data.elasticity) || 65;
-        const melasmaH = parseInt(data.melasma) || Math.max(15, pigmentH - 10);
-        const eyeWrinklesH = parseInt(data.eyeWrinkles) || Math.round(elasticityH * 0.95);
-        const nasolabialFoldsH = parseInt(data.nasolabialFolds) || Math.round(elasticityH * 0.9);
-        const rednessH = parseInt(data.redness) || Math.round(moistureH * 0.7 + 25);
-        
-        // smooth scroll to top of modal
-        scrollScanWorkspaceToTop();
 
-        // Automatically Save Scan History & Dispatch Email Report to Logged-in User
-        const authState = readModernAuth();
-        if (authState.isAuthenticated) {
-            const currentUser = authState.user || {};
-            const routineProducts = (window.currentRoutineProducts && window.currentRoutineProducts.length > 0) 
-                ? window.currentRoutineProducts 
-                : (window.currentRoutineIds ? PRODUCTS.filter(p => window.currentRoutineIds.includes(p.id)) : []);
-
-            const report = {
-                userName: currentUser.name,
-                healthScore: targetScore,
-                skinType: data.skinTypeSummary || 'Da hỗn hợp',
-                skinAge: parseInt(data.skinAge) || 25,
-                primaryConcerns: data.activeIngredients || [],
-                overallGrade: data.overallGrade || 'B',
-                overallGradeComment: data.overallGradeComment || 'Làn da ở mức ổn định',
-                analysis3Angles: data.analysis3Angles || '',
-                fullAnalysis: data,
-                metrics: {
-                    moisture: data.moisture,
-                    sebum: data.sebum,
-                    pores: data.pores,
-                    pigmentation: data.pigmentation,
-                    elasticity: data.elasticity,
-                    melasma: data.melasma,
-                    eyeWrinkles: data.eyeWrinkles,
-                    nasolabialFolds: data.nasolabialFolds,
-                    redness: data.redness,
-                    acneBacteria: data.acneBacteria,
-                    texture: data.texture,
-                    darkCircles: data.darkCircles
-                },
-                recommendedRoutine: window.currentRoutineIds || [],
-                recommendedRoutineProducts: routineProducts
-            };
-            saveModernSkinReport(report, {
-                    userName: currentUser.name,
-                    healthScore: targetScore,
-                    skinType: data.skinTypeSummary || 'Da hỗn hợp',
-                    skinAge: parseInt(data.skinAge) || 25,
-                    recommendedRoutineProducts: routineProducts
-            }).catch(error => console.error('[SkinID history]', error));
-        }
-        
         const acneBacteriaH = parseInt(data.acneBacteria) || Math.round(sebumH * 0.8 + 15);
         const textureH = parseInt(data.texture) || Math.round((moistureH + poresH) / 2);
         const darkCirclesH = parseInt(data.darkCircles) || Math.round((targetScore + pigmentH) / 2);
@@ -1498,7 +1512,7 @@ function renderResults(data, weatherData) {
         
         const envMetrics = document.getElementById('environment-metrics');
         if (envMetrics) {
-            const temp = (weatherData && weatherData.temp) || 31;
+            const temp = (weatherData && (weatherData.tempC ?? weatherData.temp)) || 31;
             const humidity = (weatherData && weatherData.humidity) || 78;
             const uvIndex = (weatherData && weatherData.uvIndex) || 7;
             const isRealtime = weatherData && weatherData.temp;
@@ -1537,27 +1551,27 @@ function renderResults(data, weatherData) {
             'sebum': {
                 name: 'Dầu thừa (Sebum)',
                 cause: 'Tuyến bã nhờn hoạt động quá mức do màng lipid bề mặt bị tổn thương, khiến da mất nước và cơ thể phải tiết dầu để bù ẩm.',
-                forecast: 'Lỗ chân lông sẽ phình to vĩnh viễn, tạo môi trường yếm khí cho vi khuẩn P.Acnes bùng phát thành mụn viêm sưng nang.'
+                forecast: 'Nếu không cân bằng lại dầu và độ ẩm, lỗ chân lông có thể trông rõ hơn và da dễ xuất hiện bít tắc.'
             },
             'pigment': {
                 name: 'Sắc tố UV',
                 cause: 'Hắc sắc tố Melanin dưới đáy hạ bì bị kích thích đẩy lên liên tục do bức xạ mặt trời phá hủy tế bào.',
-                forecast: 'Sẽ hình thành nám chân sâu và tàn nhang mảng lớn khó trị. Cấu trúc DNA biểu bì suy yếu khiến da lão hóa cực nhanh.'
+                forecast: 'Sắc tố có thể đậm và kém đồng đều hơn nếu da tiếp tục tiếp xúc tia UV mà không được bảo vệ đầy đủ.'
             },
             'pores': {
                 name: 'Lỗ chân lông to',
                 cause: 'Sự tích tụ tế bào chết và bã nhờn lâu ngày làm bít tắc cổ nang lông, kết hợp với sự suy giảm collagen quanh nang lông.',
-                forecast: 'Bề mặt da sẽ sần sùi vĩnh viễn (sẹo rỗ li ti), mất khả năng hấp thụ dưỡng chất từ các sản phẩm skincare đắt tiền.'
+                forecast: 'Bề mặt da có thể sần và dễ bít tắc hơn; nên ưu tiên làm sạch dịu nhẹ và chăm sóc đều đặn.'
             },
             'moisture': {
                 name: 'Độ ẩm bề mặt',
                 cause: 'Hàng rào bảo vệ da (Skin Barrier) bị nứt gãy khiến nước bốc hơi nhanh chóng (TEWL) ra ngoài môi trường.',
-                forecast: 'Da sẽ chuyển sang trạng thái bong tróc, nhạy cảm kích ứng với mọi loại mỹ phẩm. Nếp nhăn li ti lan rộng toàn mặt.'
+                forecast: 'Da có thể khô căng, bong nhẹ và nhạy cảm hơn nếu hàng rào bảo vệ chưa được phục hồi.'
             },
             'elasticity': {
                 name: 'Độ đàn hồi',
                 cause: 'Mạng lưới sợi Collagen và Elastin bị đứt gãy do tuổi tác, tia UV hoặc gốc tự do phá hoại mà không được tổng hợp bù đắp.',
-                forecast: 'Da sẽ chảy xệ thành nếp gấp sâu ở rãnh cười và khóe mắt, form dáng V-line ban đầu sẽ bị phá vỡ hoàn toàn.'
+                forecast: 'Độ săn chắc có thể giảm dần; chống nắng, ngủ đủ và routine phù hợp sẽ hỗ trợ duy trì cấu trúc da.'
             }
         };
 
@@ -1589,7 +1603,7 @@ function renderResults(data, weatherData) {
                 </div>
             `;
             
-            forecastText.innerHTML = `Nếu tiếp tục duy trì thói quen hiện tại: <br><br> 1. ${detail1.forecast} <br> 2. ${detail2.forecast} <br><br> Bạn bắt buộc phải sử dụng các hoạt chất đặc trị ngay từ bây giờ để thiết lập lại trật tự tế bào trước khi quá muộn.`;
+            forecastText.innerHTML = `Nếu duy trì thói quen hiện tại: <br><br> 1. ${detail1.forecast} <br> 2. ${detail2.forecast} <br><br> Hãy bắt đầu từ một routine dịu nhẹ, theo dõi phản ứng của da và tham khảo bác sĩ da liễu khi có dấu hiệu bất thường.`;
             
             if (typeof feather !== 'undefined') {
                 setTimeout(() => feather.replace(), 100);
@@ -1644,11 +1658,11 @@ function renderResults(data, weatherData) {
             radarInsights.innerHTML = `
                 <div class="flex items-center gap-3 p-3 bg-red-50 rounded-xl border border-red-100 mb-2">
                     <div class="w-2 h-2 rounded-full bg-red-500"></div>
-                    <span class="text-sm text-red-700 font-medium">${translateConcern(worst1.id)} bị co thắt trầm trọng dưới mức 30%.</span>
+                    <span class="text-sm text-red-700 font-medium">${translateConcern(worst1.id)} là chỉ số nên được ưu tiên theo dõi.</span>
                 </div>
                 <div class="flex items-center gap-3 p-3 bg-orange-50 rounded-xl border border-orange-100">
                     <div class="w-2 h-2 rounded-full bg-orange-500"></div>
-                    <span class="text-sm text-orange-700 font-medium">${translateConcern(worst2.id)} mất cân bằng, cần can thiệp hạ bì.</span>
+                    <span class="text-sm text-orange-700 font-medium">${translateConcern(worst2.id)} cần được chăm sóc ổn định và đánh giá lại.</span>
                 </div>
             `;
         }

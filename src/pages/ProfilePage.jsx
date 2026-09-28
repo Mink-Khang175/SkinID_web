@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { assetUrl } from '../assets/index.js';
 import {
   ProfileHero,
   ProfileHistoryOverview,
@@ -10,6 +9,11 @@ import {
   ProfileScanDetailModal,
   useProfile
 } from '../features/profile/index.js';
+import Footer from '../components/layout/Footer.jsx';
+import Header from '../components/layout/Header.jsx';
+import MobileNav from '../components/layout/MobileNav.jsx';
+import OfferBar from '../components/layout/OfferBar.jsx';
+import StorefrontModals from '../components/dialogs/StorefrontModals.jsx';
 import usePageMetadata from '../hooks/usePageMetadata.js';
 import '../styles/profile.css';
 
@@ -100,52 +104,26 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="profile-page min-h-screen flex flex-col bg-gray-50/50">
-{/* NAVBAR */}
-    <header className="profile-header sticky top-0 z-50 bg-white/95 backdrop-blur-md transition-all">
-        <div className="container mx-auto px-4 lg:px-8 h-20 flex items-center justify-between">
-            <a href="/" className="flex items-center gap-3 group">
-                <img src={assetUrl('/images/logo.png')} alt="" className="h-10 w-10 object-contain transition-transform group-hover:scale-105" />
-                <span className="text-xl font-black tracking-tight text-gray-900">SkinID<span className="text-brand-primary">.vn</span></span>
-            </a>
+    <>
+    <OfferBar />
+    <Header />
+    <div className="profile-page min-h-screen flex flex-col">
+    <main className="profile-main container">
 
-            <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-700">
-                <a href="/" className="hover:text-brand-primary transition-colors flex items-center gap-1.5">
-                    Trang chủ
-                </a>
-                <a href="/#catalog-section" className="hover:text-brand-primary transition-colors flex items-center gap-1.5">
-                    Sản phẩm
-                </a>
-                <a href="/#brand-story" className="hover:text-brand-primary transition-colors flex items-center gap-1.5">
-                    Thương hiệu
-                </a>
-            </nav>
-
-            <div className="flex items-center gap-3">
-                <a href="/skin-analysis" className="profile-btn profile-btn--primary hidden sm:flex">
-                    Soi Da AI Ngay
-                </a>
-                <button 
-                    type="button" 
-                    onClick={handleLogout}
-                    className="px-3.5 py-2 text-gray-600 hover:text-rose-600 hover:bg-rose-50 rounded-xl border border-gray-200 hover:border-rose-200 text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm cursor-pointer" 
-                    title="Đăng xuất tài khoản"
-                >
-                    <span>Đăng xuất</span>
-                </button>
+        <header className="profile-page-heading">
+            <span>KHÔNG GIAN CỦA BẠN</span>
+            <div>
+                <h1>Chăm da có nhịp.<br /><em>Lưu giữ từng thay đổi.</em></h1>
+                <p>Hồ sơ, kết quả soi da và đơn hàng được sắp xếp trong một hành trình nhẹ nhàng, rõ ràng và riêng tư.</p>
             </div>
-        </div>
-    </header>
-
-    {/* MAIN CONTENT */}
-    <main className="flex-grow container mx-auto px-4 lg:px-8 py-8 md:py-12 max-w-6xl">
+        </header>
 
         <ProfileHero user={user} historyCount={history.length} isLoading={isLoading} onAvatarChange={handleAvatarChange} />
         {pageMessage && <div role={pageMessage.type === 'error' ? 'alert' : 'status'} className={`mb-6 rounded-2xl px-4 py-3 text-xs font-semibold ${pageMessage.type === 'error' ? 'bg-rose-50 text-rose-700' : 'bg-emerald-50 text-emerald-700'}`}>{pageMessage.text}</div>}
         {/* DASHBOARD NAVIGATION TABS */}
-        <div className="profile-tabs flex overflow-x-auto no-scrollbar bg-white mb-8">
-            {[['profile', 'Hồ Sơ Cá Nhân'], ['history', 'Lịch Sử Soi Da & Phác Đồ'], ['orders', 'Đơn Hàng'], ['settings', 'Cài Đặt & Bảo Mật']].map(([tab, label]) => (
-                <button key={tab} type="button" onClick={() => selectTab(tab)} aria-selected={activeTab === tab} className={`tab-btn ${activeTab === tab ? 'active' : ''} flex-1 min-w-[140px] py-4 px-4 text-xs sm:text-sm font-bold text-gray-600 transition-all flex items-center justify-center gap-2`}>{label}</button>
+        <div className="profile-tabs flex overflow-x-auto no-scrollbar mb-8" role="tablist" aria-label="Khu vực hồ sơ">
+            {[['profile', 'Hồ sơ cá nhân'], ['history', 'Lịch sử soi da'], ['orders', 'Đơn hàng'], ['settings', 'Cài đặt']].map(([tab, label]) => (
+                <button key={tab} id={`profile-tab-${tab}`} type="button" role="tab" aria-controls={`profile-panel-${tab}`} onClick={() => selectTab(tab)} aria-selected={activeTab === tab} className={`tab-btn ${activeTab === tab ? 'active' : ''} flex-1 min-w-[140px] py-4 px-4 text-xs sm:text-sm font-bold text-gray-600 flex items-center justify-center gap-2`}>{label}</button>
             ))}
         </div>
 
@@ -153,23 +131,23 @@ export default function ProfilePage() {
         {/* TAB 1: HỒ SƠ CÁ NHÂN & THỂ TRẠNG DA */}
         {/* =================================================================== */}
         {activeTab === 'profile' && (
-            <div className="space-y-8"><ProfileIdentityForm user={user} isSaving={isSaving} onSave={saveProfile} /></div>
+            <div id="profile-panel-profile" role="tabpanel" aria-labelledby="profile-tab-profile" className="profile-tab-panel space-y-8"><ProfileIdentityForm user={user} isSaving={isSaving} onSave={saveProfile} /></div>
         )}
         {/* =================================================================== */}
         {/* TAB 2: LỊCH SỬ SOI DA & TIẾN TRÌNH BIỂU ĐỒ */}
         {/* =================================================================== */}
-        {activeTab === 'history' && <div className="space-y-8">
+        {activeTab === 'history' && <div id="profile-panel-history" role="tabpanel" aria-labelledby="profile-tab-history" className="profile-tab-panel space-y-8">
 
             <ProfileHistoryOverview history={history} />
 
             {/* Detailed Scan Timeline List */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-200 shadow-sm">
+            <div className="profile-surface p-6 sm:p-8">
                 <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
                     <div>
                         <h2 className="text-lg font-black text-gray-900">Nhật Ký Các Phiên Soi Da Chi Tiết</h2>
                         <p className="text-xs text-gray-500">Toàn bộ hồ sơ báo cáo và chu trình chăm sóc da đã được AI phân tích tham khảo</p>
                     </div>
-                    <a href="/" className="text-xs font-bold text-brand-primary hover:underline flex items-center gap-1">
+                    <a href="/skin-analysis" className="text-xs font-bold text-brand-primary hover:underline flex items-center gap-1">
                         + Soi da mới
                     </a>
                 </div>
@@ -178,8 +156,8 @@ export default function ProfilePage() {
             </div>
         </div>}
 
-        {activeTab === 'orders' && <div className="space-y-5">
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-200 shadow-sm">
+        {activeTab === 'orders' && <div id="profile-panel-orders" role="tabpanel" aria-labelledby="profile-tab-orders" className="profile-tab-panel space-y-5">
+            <div className="profile-surface p-6 sm:p-8">
                 <div className="pb-4 mb-5 border-b border-gray-100">
                     <h2 className="text-lg font-black text-gray-900">Đơn Hàng Của Tôi</h2>
                     <p className="text-xs text-gray-500">Theo dõi trạng thái xác nhận, giao hàng và thanh toán của mọi đơn mua.</p>
@@ -191,10 +169,10 @@ export default function ProfilePage() {
         {/* =================================================================== */}
         {/* TAB 4: CÀI ĐẶT & BẢO MẬT & QUYỀN RIÊNG TƯ */}
         {/* =================================================================== */}
-        {activeTab === 'settings' && <div className="space-y-8">
+        {activeTab === 'settings' && <div id="profile-panel-settings" role="tabpanel" aria-labelledby="profile-tab-settings" className="profile-tab-panel space-y-8">
 
             {/* 3.1 Đổi Mật Khẩu */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-200 shadow-sm">
+            <div className="profile-surface p-6 sm:p-8">
                 <div className="pb-4 mb-6 border-b border-gray-100">
                     <h2 className="text-lg font-black text-gray-900">Bảo Mật & Mật Khẩu</h2>
                     <p className="text-xs text-gray-500">Thay đổi mật khẩu đăng nhập tài khoản Email cá nhân</p>
@@ -223,29 +201,31 @@ export default function ProfilePage() {
             </div>
 
             {/* 3.2 Quyền Riêng Tư & Dữ Liệu Cá Nhân (NĐ 13/2023) */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-200 shadow-sm">
+            <div className="profile-surface p-6 sm:p-8">
                 <div className="pb-4 mb-6 border-b border-gray-100">
                     <h2 className="text-lg font-black text-gray-900">Quyền riêng tư & dữ liệu</h2>
                     <p className="text-xs text-gray-500">Bạn có thể tải bản sao dữ liệu hoặc xóa lịch sử soi da khỏi tài khoản.</p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="profile-data-card flex flex-col justify-between border-2 border-brand-primary/20 bg-gradient-to-br from-brand-blush/60 via-white to-brand-blush/20">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <div className="profile-data-card flex flex-col justify-between bg-gradient-to-br from-[#FFF0F4] via-[#FFFFFF] to-[#FFF5F7] shadow-[0_12px_32px_rgba(224,109,129,0.08)]">
                         <div>
-                            <div className="flex items-center gap-2 text-brand-dark font-black text-sm mb-1.5">
-                                <svg className="w-4 h-4 text-brand-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                    <polyline points="14 2 14 8 20 8"></polyline>
-                                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                                    <polyline points="10 9 9 9 8 9"></polyline>
-                                </svg>
-                                Xuất Báo Cáo PDF (Export PDF)
+                            <div className="flex items-center gap-2 text-[#282326] font-extrabold text-sm mb-2">
+                                <span className="w-7 h-7 rounded-full bg-[#FFF0F4] text-[#E06D81] flex items-center justify-center flex-shrink-0">
+                                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                        <polyline points="10 9 9 9 8 9"></polyline>
+                                    </svg>
+                                </span>
+                                Xuất Báo Cáo PDF
                             </div>
-                            <p className="text-xs text-gray-600 mb-4 leading-relaxed">Tải về báo cáo hồ sơ cá nhân, 12 chỉ số cấu trúc da và chu trình chăm sóc gợi ý ở định dạng PDF rõ ràng, khoa học.</p>
+                            <p className="text-xs text-[#6F686B] mb-5 leading-relaxed">Tải về báo cáo hồ sơ cá nhân, 12 chỉ số cấu trúc da và phác đồ dược mỹ phẩm đề xuất định dạng PDF sắc nét.</p>
                         </div>
-                        <button type="button" onClick={downloadPdf} className="profile-btn profile-btn--primary self-start flex items-center gap-2 shadow-sm">
-                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <button type="button" onClick={downloadPdf} className="profile-btn profile-btn--primary self-start flex items-center gap-2">
+                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                 <polyline points="7 10 12 15 17 10"></polyline>
                                 <line x1="12" y1="15" x2="12" y2="3"></line>
@@ -254,34 +234,38 @@ export default function ProfilePage() {
                         </button>
                     </div>
 
-                    <div className="profile-data-card flex flex-col justify-between">
+                    <div className="profile-data-card flex flex-col justify-between bg-gradient-to-br from-[#EEF7FF] via-[#FFFFFF] to-[#F5FAFF] shadow-[0_12px_32px_rgba(27,108,168,0.06)]">
                         <div>
-                            <div className="flex items-center gap-2 text-gray-800 font-bold text-sm mb-1.5">
-                                <svg className="w-4 h-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                    <polyline points="14 2 14 8 20 8"></polyline>
-                                    <line x1="12" y1="18" x2="12" y2="12"></line>
-                                    <line x1="9" y1="15" x2="15" y2="15"></line>
-                                </svg>
-                                Xuất Tệp Dữ Liệu (JSON)
+                            <div className="flex items-center gap-2 text-[#282326] font-extrabold text-sm mb-2">
+                                <span className="w-7 h-7 rounded-full bg-[#EEF7FF] text-[#1B6CA8] flex items-center justify-center flex-shrink-0">
+                                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="12" y1="18" x2="12" y2="12"></line>
+                                        <line x1="9" y1="15" x2="15" y2="15"></line>
+                                    </svg>
+                                </span>
+                                Xuất Dữ Liệu (JSON)
                             </div>
-                            <p className="text-xs text-gray-500 mb-4 leading-relaxed">Tải về hồ sơ, lịch sử soi da, phác đồ và đơn hàng ở định dạng dữ liệu kỹ thuật JSON.</p>
+                            <p className="text-xs text-[#6F686B] mb-5 leading-relaxed">Tải về hồ sơ, lịch sử soi da, phác đồ và đơn hàng ở định dạng dữ liệu kỹ thuật chuẩn JSON.</p>
                         </div>
                         <button type="button" onClick={downloadData} className="profile-btn profile-btn--secondary self-start">
                             Tải Xuống Dữ Liệu
                         </button>
                     </div>
 
-                    <div className="p-5 rounded-2xl bg-rose-50/50 border border-rose-100 flex flex-col justify-between">
+                    <div className="profile-data-card flex flex-col justify-between bg-gradient-to-br from-[#FFF0F0] via-[#FFFFFF] to-[#FFF5F5] shadow-[0_12px_32px_rgba(180,35,24,0.06)]">
                         <div>
-                            <div className="flex items-center gap-2 text-rose-800 font-bold text-sm mb-1.5">
-                                <svg className="w-4 h-4 text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                                    <polyline points="3 6 5 6 21 6"></polyline>
-                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                </svg>
-                                Xóa lịch sử soi da
+                            <div className="flex items-center gap-2 text-[#B42318] font-extrabold text-sm mb-2">
+                                <span className="w-7 h-7 rounded-full bg-[#FEE4E2] text-[#B42318] flex items-center justify-center flex-shrink-0">
+                                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    </svg>
+                                </span>
+                                Xóa Lịch Sử Soi Da
                             </div>
-                            <p className="text-xs text-rose-900/70 mb-4 leading-relaxed">Xóa vĩnh viễn các báo cáo soi da đã lưu. Hồ sơ, giỏ hàng và đơn mua vẫn được giữ nguyên.</p>
+                            <p className="text-xs text-[#6F686B] mb-5 leading-relaxed">Xóa vĩnh viễn các báo cáo soi da đã lưu. Hồ sơ, giỏ hàng và đơn mua vẫn được bảo toàn nguyên vẹn.</p>
                         </div>
                         <button type="button" onClick={handleClearHistory} className="profile-btn profile-btn--danger self-start">
                             Xóa lịch sử soi da
@@ -291,7 +275,7 @@ export default function ProfilePage() {
             </div>
 
             {/* 3.3 Quản lý phiên đăng nhập */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-200 shadow-sm">
+            <div className="profile-surface p-6 sm:p-8">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
                         <h2 className="text-lg font-black text-gray-900">Phiên Đăng Nhập</h2>
@@ -300,7 +284,7 @@ export default function ProfilePage() {
                     <button 
                         type="button" 
                         onClick={handleLogout}
-                        className="px-5 py-2.5 bg-gray-50 hover:bg-gray-100 text-gray-700 hover:text-gray-900 border border-gray-200 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 self-start sm:self-auto cursor-pointer"
+                        className="profile-btn profile-btn--secondary self-start sm:self-auto"
                     >
                         <span>Đăng xuất tài khoản</span>
                     </button>
@@ -312,15 +296,10 @@ export default function ProfilePage() {
     </main>
 
     <ProfileScanDetailModal history={history} />
-
-    {/* FOOTER */}
-    <footer className="bg-white border-t border-brand-petal/40 py-8 text-center text-xs text-gray-400">
-        <div className="container mx-auto px-4">
-            <p>© 2026 SkinID.vn - Nền tảng hỗ trợ phân tích và chăm sóc da. Bản quyền thuộc về CÔNG TY TNHH FIELDMAN.</p>
-        </div>
-    </footer>
-
-    {/* SCRIPTS */}
     </div>
+    <Footer />
+    <MobileNav />
+    <StorefrontModals />
+    </>
   );
 }

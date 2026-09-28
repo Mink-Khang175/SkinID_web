@@ -46,6 +46,9 @@ Giá trị Firebase lấy trong file service-account JSON:
 
 `ALLOWED_ORIGINS` là URL production, ví dụ `https://skinid-web.<subdomain>.workers.dev`.
 Các secret chỉ nằm trong Cloudflare, không được đưa vào `src/`, `.env` hoặc GitHub source.
+`FIREBASE_PRIVATE_KEY` phải giữ nguyên marker `BEGIN/END PRIVATE KEY` của JSON; nếu dùng
+chuỗi một dòng, thay các xuống dòng bằng `\n`. Worker hỗ trợ cả PKCS#8 (`BEGIN PRIVATE KEY`)
+và PKCS#1 (`BEGIN RSA PRIVATE KEY`).
 
 ## 4. Cho phép đăng nhập trên domain Cloudflare
 

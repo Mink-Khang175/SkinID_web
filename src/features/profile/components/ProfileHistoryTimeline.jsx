@@ -3,19 +3,19 @@ import { exportUserPdfReport } from '../services/profilePdfExport.js';
 function scoreTheme(score) {
   if (score < 60) {
     return {
-      score: 'bg-gradient-to-br from-rose-500 to-red-600 text-white shadow-rose-500/20',
-      card: 'border-rose-200/80 hover:border-rose-400'
+      score: 'bg-gradient-to-br from-[#FF7893] to-[#BD3F5B] text-white shadow-[0_8px_20px_rgba(224,62,98,0.25)]',
+      chip: 'bg-[#FFF2F4] text-[#BD3F5B]'
     };
   }
   if (score < 75) {
     return {
-      score: 'bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-amber-500/20',
-      card: 'border-amber-200/80 hover:border-amber-400'
+      score: 'bg-gradient-to-br from-[#FBBF24] to-[#D97706] text-white shadow-[0_8px_20px_rgba(217,119,6,0.22)]',
+      chip: 'bg-[#FEF3C7] text-[#B45309]'
     };
   }
   return {
-    score: 'bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-emerald-500/20',
-    card: 'border-emerald-200/80 hover:border-emerald-400'
+    score: 'bg-gradient-to-br from-[#34D399] to-[#059669] text-white shadow-[0_8px_20px_rgba(5,150,105,0.22)]',
+    chip: 'bg-[#ECFDF5] text-[#047857]'
   };
 }
 
@@ -27,14 +27,16 @@ export default function ProfileHistoryTimeline({ history = [] }) {
   if (!history.length) {
     return (
       <div id="timeline-scan-container" className="space-y-4">
-        <div className="text-center py-7 text-gray-400">
+        <div className="text-center py-10 text-[#6F686B]">
           <div className="profile-empty-illustration mx-auto" aria-hidden="true">
             <span className="profile-empty-illustration__face"></span>
             <span className="profile-empty-illustration__spark profile-empty-illustration__spark--one">✦</span>
             <span className="profile-empty-illustration__spark profile-empty-illustration__spark--two">✦</span>
           </div>
-          <p className="font-bold text-sm text-gray-700">Chưa có dữ liệu phiên soi da nào</p>
-          <p className="text-xs text-gray-400 mt-1 mb-4">Hãy thực hiện soi da AI 3 góc để nhận phác đồ chăm sóc cá nhân hóa đầu tiên!</p>
+          <p className="font-extrabold text-base text-[#282326] mt-4">Chưa có dữ liệu phiên soi da nào</p>
+          <p className="text-xs text-[#6F686B] mt-1.5 mb-6 max-w-sm mx-auto leading-relaxed">
+            Thực hiện soi da 3 góc với công nghệ AI thị giác để khám phá 12 chỉ số cấu trúc và routine dược mỹ phẩm cá nhân hóa.
+          </p>
           <a href="/skin-analysis" className="profile-btn profile-btn--primary">Bắt đầu Soi Da AI Ngay</a>
         </div>
       </div>
@@ -48,51 +50,86 @@ export default function ProfileHistoryTimeline({ history = [] }) {
         const scanId = scan.id ?? index;
         const theme = scoreTheme(score);
         const open = () => openScanDetail(scanId, index);
+        const sessionNumber = history.length - index;
+
         return (
           <article
             key={scan.id || `${scan.dateFormatted || 'scan'}-${index}`}
-            className={`p-5 sm:p-6 rounded-2xl border ${theme.card} transition-all bg-white shadow-sm hover:shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-4 cursor-pointer group`}
+            className="profile-history-card p-6 sm:p-7 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 cursor-pointer group"
             onClick={open}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                open();
+              }
+            }}
+            role="button"
+            tabIndex={0}
+            aria-label={`Mở chi tiết phiên soi da ${sessionNumber}`}
           >
-            <div className="flex items-center gap-4 min-w-0">
-              <div className={`${theme.score} w-14 h-14 rounded-2xl flex flex-col items-center justify-center font-black flex-shrink-0 shadow-md group-hover:scale-105 transition-transform`}>
-                <span className="text-xl leading-none font-black">{score}</span>
-                <span className="text-[9px] font-semibold tracking-wider opacity-90">ĐIỂM</span>
+            <div className="flex items-center gap-5 min-w-0">
+              {/* Score badge with squircle glow */}
+              <div className={`${theme.score} w-16 h-16 rounded-2xl flex flex-col items-center justify-center font-black flex-shrink-0 group-hover:scale-105 transition-transform duration-300`}>
+                <span className="text-2xl leading-none font-black">{score}</span>
+                <span className="text-[9px] font-extrabold tracking-widest uppercase opacity-90 mt-0.5">ĐIỂM</span>
               </div>
+
               <div className="min-w-0">
-                <div className="flex flex-wrap items-center gap-2 mb-1">
-                  <h4 className="font-bold text-gray-900 text-sm sm:text-base group-hover:text-brand-primary transition-colors">Phiên Soi Da #{history.length - index}</h4>
-                  {index === 0 && <span className="bg-rose-100/90 text-brand-primary text-[10px] font-black px-2 py-0.5 rounded-full border border-rose-200 uppercase tracking-wider">Mới nhất</span>}
-                  <span className="text-xs font-bold text-brand-primary bg-brand-blush px-2.5 py-0.5 rounded-full">{scan.skinType || 'Chưa xác định'}</span>
+                <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                  <h4 className="font-extrabold text-[#282326] text-base group-hover:text-[#E06D81] transition-colors">
+                    Phiên Soi Da #{sessionNumber}
+                  </h4>
+                  {index === 0 && (
+                    <span className="bg-[#FFF0F4] text-[#E06D81] text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#E06D81]"></span>
+                      Mới nhất
+                    </span>
+                  )}
+                  <span className={`text-xs font-bold px-3 py-0.5 rounded-full ${theme.chip}`}>
+                    {scan.skinType || 'Chưa xác định'}
+                  </span>
                 </div>
-                <p className="text-xs text-gray-400 truncate">{scan.dateFormatted || 'Gần đây'} • Tuổi da AI: <strong className="text-gray-700">{scan.skinAge || '--'} tuổi</strong></p>
+
+                <p className="text-xs text-[#6F686B] flex items-center gap-2 flex-wrap">
+                  <span>{scan.dateFormatted || 'Gần đây'}</span>
+                  <span>·</span>
+                  <span>Tuổi da AI: <strong className="text-[#282326] font-bold">{scan.skinAge || '--'} tuổi</strong></span>
+                </p>
               </div>
             </div>
 
-            <div className="action-group flex items-center justify-between md:justify-end gap-2.5 w-full md:w-auto pt-2 md:pt-0 border-t md:border-t-0 border-gray-100 flex-shrink-0" onClick={(event) => event.stopPropagation()}>
+            {/* Quick action pill buttons */}
+            <div
+              className="action-group flex items-center justify-between md:justify-end gap-2.5 w-full md:w-auto pt-3 md:pt-0 border-t md:border-t-0 border-[#F0ECEE] flex-shrink-0"
+              onClick={(event) => event.stopPropagation()}
+            >
               <button
                 type="button"
                 onClick={() => exportUserPdfReport({ scan })}
-                className="px-3 py-2 text-xs font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+                className="px-4 py-2 text-xs font-bold text-[#6F686B] hover:text-[#282326] bg-[#FFFFFF] hover:bg-[#FFF5F7] rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shadow-xs"
                 title="Xuất báo cáo PDF phiên này"
               >
-                <svg className="w-3.5 h-3.5 text-rose-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                <svg className="w-3.5 h-3.5 text-[#E06D81]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
                 <span>Xuất PDF</span>
               </button>
+
               <a
                 href="https://zalo.me/0924093461"
                 target="_blank"
                 rel="noreferrer"
-                className="btn-gui-duoc-si px-3 py-2 text-xs font-semibold flex items-center gap-1.5 cursor-pointer whitespace-nowrap shadow-sm"
+                className="btn-gui-duoc-si px-4 py-2 text-xs font-bold flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
               >
-                Gửi Dược Sĩ
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+                <span>Gửi Dược Sĩ</span>
               </a>
+
               <button
                 type="button"
                 onClick={open}
-                className="btn-xem-chi-tiet px-4 py-2 text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap"
+                className="btn-xem-chi-tiet px-4 py-2 text-xs font-extrabold text-white bg-gradient-to-r from-[#FF7893] to-[#E06D81] hover:from-[#E06D81] hover:to-[#BD3F5B] rounded-full shadow-[0_6px_16px_rgba(224,62,98,0.25)] transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap"
               >
-                Xem Phác Đồ Chi Tiết →
+                <span>Chi tiết</span>
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
               </button>
             </div>
           </article>

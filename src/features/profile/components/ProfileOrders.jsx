@@ -5,12 +5,12 @@ import { useCart } from '../../cart/index.js';
 import { getProductById } from '../../catalog/index.js';
 
 const statusStyles = {
-  pending: { label: 'Chờ xác nhận', className: 'bg-amber-50 text-amber-700 border-amber-200' },
-  confirmed: { label: 'Đã xác nhận', className: 'bg-teal-50 text-teal-700 border-teal-200' },
-  shipping: { label: 'Đang giao hàng', className: 'bg-blue-50 text-blue-700 border-blue-200' },
-  delivered: { label: 'Đã giao thành công', className: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-  completed: { label: 'Hoàn tất', className: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-  cancelled: { label: 'Đã hủy', className: 'bg-rose-50 text-rose-700 border-rose-200' }
+  pending: { label: 'Chờ xác nhận', className: 'bg-[#FEF3C7] text-[#92400E] border-0' },
+  confirmed: { label: 'Đã xác nhận', className: 'bg-[#CCFBF1] text-[#115E59] border-0' },
+  shipping: { label: 'Đang giao hàng', className: 'bg-[#DBEAFE] text-[#1E40AF] border-0' },
+  delivered: { label: 'Đã giao thành công', className: 'bg-[#D1FAE5] text-[#065F46] border-0' },
+  completed: { label: 'Hoàn tất', className: 'bg-[#D1FAE5] text-[#065F46] border-0' },
+  cancelled: { label: 'Đã hủy', className: 'bg-[#FEE2E2] text-[#991B1B] border-0' }
 };
 
 const formatPrice = (value) => new Intl.NumberFormat('vi-VN', {
@@ -66,7 +66,7 @@ function OrderCard({ order, onCancel, onReorder, cancellingId }) {
   const isCancelling = cancellingId === order.id;
 
   return (
-    <article className="rounded-3xl border border-gray-200 bg-white p-5 sm:p-6 shadow-sm hover:border-brand-primary/40 transition-all space-y-4">
+    <article className="profile-order-card p-5 sm:p-6 space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-gray-100">
         <div>
           <div className="flex items-center gap-2">
@@ -96,14 +96,14 @@ function OrderCard({ order, onCancel, onReorder, cancellingId }) {
       <div className="pt-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-3">
         <span className="text-xs text-gray-400">Phí vận chuyển: {Number(order.shippingFee) === 0 ? <strong className="text-teal-600">Miễn phí</strong> : formatPrice(order.shippingFee)}</span>
         <div className="flex flex-wrap items-center justify-end gap-2">
-          <button type="button" onClick={() => onReorder(order)} className="px-3.5 py-1.5 rounded-xl border border-gray-200 text-gray-700 hover:bg-gray-50 text-xs font-bold transition-colors cursor-pointer">Mua lại</button>
+          <button type="button" onClick={() => onReorder(order)} className="px-4 py-2 rounded-full bg-white text-[#282326] hover:bg-[#FFF5F7] hover:text-[#BD3F5B] text-xs font-bold transition-all shadow-xs cursor-pointer">Mua lại</button>
           {canCancel && !confirming && (
-            <button type="button" onClick={() => setConfirming(true)} className="px-3.5 py-1.5 rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-100 text-xs font-bold transition-colors cursor-pointer">Hủy đơn</button>
+            <button type="button" onClick={() => setConfirming(true)} className="px-4 py-2 rounded-full bg-[#FFF0F0] text-[#B42318] hover:bg-[#FEE4E2] text-xs font-bold transition-all cursor-pointer">Hủy đơn</button>
           )}
           {canCancel && confirming && (
             <>
-              <button type="button" onClick={() => setConfirming(false)} disabled={isCancelling} className="px-3.5 py-1.5 rounded-xl border border-gray-200 text-gray-600 text-xs font-bold disabled:opacity-50">Không</button>
-              <button type="button" onClick={() => onCancel(order.id)} disabled={isCancelling} className="px-3.5 py-1.5 rounded-xl bg-rose-600 text-white text-xs font-bold disabled:opacity-50">{isCancelling ? 'Đang hủy…' : 'Xác nhận hủy'}</button>
+              <button type="button" onClick={() => setConfirming(false)} disabled={isCancelling} className="px-4 py-2 rounded-full bg-white text-[#6F686B] text-xs font-bold shadow-xs disabled:opacity-50">Không</button>
+              <button type="button" onClick={() => onCancel(order.id)} disabled={isCancelling} className="px-4 py-2 rounded-full bg-[#B42318] text-white text-xs font-bold disabled:opacity-50">{isCancelling ? 'Đang hủy…' : 'Xác nhận hủy'}</button>
             </>
           )}
         </div>
@@ -157,7 +157,7 @@ export default function ProfileOrders({ orders = [], isLoading = false, onCancel
       )}
       {error && <div role="alert" className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-xs font-semibold text-rose-700">{error}</div>}
       {!orders.length ? (
-        <div className="text-center py-12 px-4 rounded-3xl bg-gray-50/50 border border-gray-100">
+        <div className="profile-empty-panel text-center py-12 px-4">
           <div className="w-16 h-16 mx-auto mb-4 rounded-3xl bg-brand-blush/60 text-brand-primary flex items-center justify-center shadow-sm text-3xl" aria-hidden="true">▣</div>
           <h4 className="font-black text-gray-800 text-base mb-1">Chưa Có Đơn Hàng Nào</h4>
           <p className="text-xs text-gray-400 max-w-sm mx-auto mb-6">Bạn chưa thực hiện đơn đặt hàng nào tại SkinID. Khám phá các sản phẩm dược mỹ phẩm chính hãng ngay!</p>

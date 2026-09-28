@@ -10,7 +10,7 @@ import {
 import { SERVER_CATALOG } from './catalog.generated.js';
 import { ApiError } from './app/errors.js';
 import { json, corsHeaders } from './app/http.js';
-import { requiredFirebaseEnv } from './app/env.js';
+import { isValidFirebasePrivateKey, requiredFirebaseEnv } from './app/env.js';
 import { authenticate } from './infrastructure/firebase/auth.js';
 
 const bundledProducts = new Map(SERVER_CATALOG.map(product => [product.id, product]));
@@ -49,7 +49,7 @@ function updateWrite(env, path, value, fieldPaths, precondition) {
 const devOrdersStore = new Map();
 
 function isFirestoreConfigured(env) {
-  return Boolean(env.FIREBASE_PROJECT_ID && env.FIREBASE_CLIENT_EMAIL && env.FIREBASE_PRIVATE_KEY);
+  return Boolean(env.FIREBASE_PROJECT_ID && env.FIREBASE_CLIENT_EMAIL && isValidFirebasePrivateKey(env.FIREBASE_PRIVATE_KEY));
 }
 
 async function createOrder(request, env, user) {
@@ -73,6 +73,9 @@ async function createOrder(request, env, user) {
 
   const productIds = [...quantities.keys()];
   const products = await Promise.all(productIds.map(async id => {
+    // Local Vite development intentionally runs without a Firebase service-account
+    // key. Use the bundled catalog there; production still re-reads Firestore prices.
+    if (!hasFirestore) return bundledProducts.get(id) || null;
     const remoteProduct = await getDocument(env, `products/${id}`);
     return remoteProduct || bundledProducts.get(id) || null;
   }));

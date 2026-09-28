@@ -1,0 +1,542 @@
+/* ===================================================================
+   SkinID Scan Journey & Post-Scan Result Style System
+   Adheres to docs/home-style-system.md — Borderless, Floating, Editorial
+   =================================================================== */
+
+:root {
+  --skinid-primary: #E06D81;
+  --skinid-accent: #FF6B8B;
+  --skinid-blush: #FFF2F4;
+  --skinid-petal: #FFD6DE;
+  --skinid-soft-bg: #FFFAFB;
+  --skinid-dark: #282326;
+  --skinid-light: #FFF8F9;
+  --skinid-muted: #6F686B;
+  --skinid-border: #F0ECEE;
+  --skinid-rose-dark: #BD3F5B;
+  --skinid-cta-start: #FF7893;
+  --skinid-cta-mid: #F25576;
+  --skinid-cta-end: #DC3E63;
+  --skinid-cta-shadow: rgba(224, 62, 98, .30);
+
+  --scan-rose: #E06D81;
+  --scan-rose-deep: #BD3F5B;
+  --scan-ink: #282326;
+  --scan-muted: #6F686B;
+}
+
+.scan-page-body {
+  color: var(--skinid-dark);
+  font-family: "Be Vietnam Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background:
+    radial-gradient(circle at 6% 12%, rgba(255, 220, 229, 0.65), transparent 26%),
+    radial-gradient(circle at 94% 38%, rgba(218, 241, 255, 0.68), transparent 28%),
+    linear-gradient(180deg, #FFFAFB 0%, #FFFFFF 42%, #FFF9F6 100%);
+}
+
+/* ===================================================================
+   Welcome / Pre-Scan Hero
+   =================================================================== */
+.scan-page-body .scan-page-welcome {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 88px 0 94px;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(221, 242, 255, 0.84), transparent 28%),
+    radial-gradient(circle at 5% 88%, rgba(255, 226, 233, 0.78), transparent 26%),
+    linear-gradient(180deg, #FFFAFB, #FFFFFF 90%);
+}
+
+.scan-page-body .scan-page-welcome::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 470px;
+  height: 470px;
+  right: -260px;
+  bottom: -230px;
+  border: 1px solid rgba(233, 102, 130, 0.11);
+  border-radius: 50%;
+  box-shadow: 0 0 0 65px rgba(255, 255, 255, 0.34), 0 0 0 130px rgba(233, 102, 130, 0.025);
+}
+
+.scan-page-body .scan-page-welcome__grid {
+  grid-template-columns: 1.08fr 0.92fr;
+  gap: 92px;
+}
+
+.scan-page-body .scan-page-welcome__copy h1 {
+  max-width: 650px;
+  font-size: clamp(2.8rem, 5vw, 5.1rem);
+  font-weight: 800;
+  line-height: 1.01;
+  letter-spacing: -0.055em;
+  color: var(--skinid-dark);
+}
+
+.scan-page-body .scan-page-welcome__copy > p {
+  max-width: 620px;
+  color: var(--skinid-muted);
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.scan-page-body .scan-page-back {
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 8px 22px rgba(61, 40, 48, 0.06);
+  padding: 8px 18px;
+  font-weight: 700;
+}
+
+.scan-page-body .scan-page-actions .btn {
+  border-radius: 999px;
+  font-weight: 800;
+  min-height: 48px;
+  padding-inline: 26px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.scan-page-body .scan-page-actions .btn--primary {
+  background: linear-gradient(135deg, var(--skinid-cta-start), var(--skinid-cta-end));
+  box-shadow: 0 13px 28px var(--skinid-cta-shadow);
+  border: 0;
+}
+
+.scan-page-body .scan-page-actions .btn--primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 17px 34px rgba(224, 62, 98, 0.38);
+}
+
+.scan-page-body .scan-page-actions .btn--primary:disabled {
+  opacity: 0.58;
+  cursor: wait;
+  transform: none;
+  box-shadow: none;
+}
+
+.scan-start-message {
+  margin: 14px 0 0;
+  color: var(--skinid-rose-dark);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.scan-page-body .scan-page-guide {
+  gap: 14px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.scan-page-body .scan-page-guide span {
+  min-height: 112px;
+  padding: 22px 26px;
+  border: 0;
+  border-radius: 28px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(255, 239, 244, 0.86));
+  box-shadow: 0 18px 42px rgba(61, 40, 48, 0.065);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.scan-page-body .scan-page-guide span:nth-child(2) {
+  margin-left: 34px;
+  background: linear-gradient(145deg, #E9F6FF, #F7FBFF);
+}
+
+.scan-page-body .scan-page-guide span:nth-child(3) {
+  background: linear-gradient(145deg, #ECF8F2, #F8FCFA);
+}
+
+.scan-page-body .scan-page-guide span:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 50px rgba(61, 40, 48, 0.095);
+}
+
+.scan-page-body .scan-page-guide b {
+  background: linear-gradient(135deg, var(--skinid-cta-start), var(--skinid-cta-end));
+  box-shadow: 0 8px 18px rgba(224, 62, 98, 0.28);
+}
+
+/* ===================================================================
+   Capture & Analysis Modal Flow
+   =================================================================== */
+.scan-page-body #ai-modal {
+  padding: 56px 20px 100px;
+  background: linear-gradient(180deg, #FFFFFF, #FFFAF7) !important;
+}
+
+.scan-page-body #ai-modal > .sticky {
+  width: min(100%, 1020px);
+  margin-bottom: 16px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 16px 40px rgba(61, 40, 48, 0.075);
+  backdrop-filter: blur(20px);
+}
+
+.scan-page-body #modal-content-area {
+  width: min(100%, 1020px);
+  max-width: 1020px;
+  padding: 40px 48px 56px;
+  border: 0;
+  border-radius: 34px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 28px 72px rgba(61, 40, 48, 0.08);
+  backdrop-filter: blur(16px);
+}
+
+.scan-page-body #setup-form {
+  border: 0 !important;
+  border-radius: 28px;
+  background: linear-gradient(135deg, #FFF0F4, #F0F8FF) !important;
+  box-shadow: 0 12px 30px rgba(61, 40, 48, 0.04);
+}
+
+.scan-page-body #setup-form select {
+  border: 0;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 4px 14px rgba(61, 40, 48, 0.04);
+}
+
+.scan-page-body .budget-btn {
+  border: 0;
+  border-radius: 999px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scan-page-body #capture-flow > .relative.max-w-md {
+  border-radius: 38px;
+  box-shadow: 0 28px 64px rgba(38, 26, 31, 0.2);
+}
+
+.scan-page-body .scan-upload-button {
+  border: 0;
+  border-radius: 999px;
+  background: #FFFFFF;
+  box-shadow: 0 10px 26px rgba(61, 40, 48, 0.07);
+  padding: 10px 22px;
+  font-weight: 700;
+  transition: transform 0.25s ease;
+}
+
+.scan-page-body .scan-upload-button:hover {
+  transform: translateY(-2px);
+}
+
+.scan-page-body #thumbnails-container > div {
+  border: 0;
+  border-radius: 20px;
+  background: #F8F5F6;
+  box-shadow: 0 4px 12px rgba(61, 40, 48, 0.04);
+}
+
+.scan-page-body #analysis-progress {
+  background: linear-gradient(90deg, #FF7893, #76B8DE, #10B981) !important;
+}
+
+/* ===================================================================
+   TRANG SAU KHI SOI DA (RESULTS REPORT FLOW)
+   Borderless, Floating, Editorial, Luxury Skincare Atmosphere
+   =================================================================== */
+.scan-page-body #results-flow {
+  gap: 36px;
+}
+
+.scan-page-body #results-flow > div,
+.scan-page-body #results-flow > details,
+.scan-page-body #results-flow #routine-section > div:last-child {
+  border: 0 !important;
+  box-shadow: 0 22px 56px rgba(61, 40, 48, 0.07) !important;
+}
+
+/* 1. Skin ID Summary Card */
+.scan-page-body .scan-result-summary {
+  border: 0 !important;
+  border-radius: 34px !important;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(219, 241, 255, 0.9), transparent 32%),
+    linear-gradient(135deg, #FFF0F4 0%, #FFFFFF 60%, #FFF8FA 100%) !important;
+  box-shadow: 0 24px 62px rgba(61, 40, 48, 0.075) !important;
+}
+
+/* 2. Priority Concerns & Assessment */
+.scan-page-body .scan-result-priorities > div {
+  border: 0 !important;
+  border-radius: 28px !important;
+  box-shadow: 0 18px 44px rgba(61, 40, 48, 0.055) !important;
+}
+
+.scan-page-body .scan-result-priorities > div:nth-child(1) {
+  background: linear-gradient(145deg, #FFF0F3, #FFF9FA) !important;
+}
+
+.scan-page-body .scan-result-priorities > div:nth-child(2),
+.scan-page-body .scan-result-priorities > div:nth-child(3) {
+  background: rgba(255, 255, 255, 0.94) !important;
+}
+
+/* 3. Routine 6-step Day & Night */
+.scan-page-body .scan-result-routine > .grid > div {
+  border: 0 !important;
+  border-radius: 30px !important;
+  box-shadow: 0 20px 48px rgba(61, 40, 48, 0.06) !important;
+}
+
+.scan-page-body:has(#results-flow.flex) .scan-result-routine .product-card--horizontal {
+  gap: 14px;
+  min-height: 126px;
+  padding: 14px;
+  border: 0 !important;
+  border-radius: 22px !important;
+  background: #FFFFFF !important;
+  box-shadow: 0 10px 28px rgba(61, 40, 48, 0.045);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.scan-page-body:has(#results-flow.flex) .scan-result-routine .product-card--horizontal:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px rgba(61, 40, 48, 0.08);
+}
+
+.scan-page-body:has(#results-flow.flex) .scan-result-routine .product-card--horizontal .product-card__media {
+  flex-basis: 76px;
+  width: 76px;
+  height: 96px;
+  border-radius: 16px;
+  background: #FFF8FA;
+}
+
+/* 4. Products Section */
+.scan-page-body .scan-result-products {
+  border: 0 !important;
+  border-radius: 34px !important;
+  background: linear-gradient(155deg, #FFFFFF, #FFF9FA) !important;
+  box-shadow: 0 24px 62px rgba(61, 40, 48, 0.075) !important;
+}
+
+/* 5. Deep Dive Accordion */
+.scan-page-body .scan-result-deep-dive {
+  border: 0 !important;
+  border-radius: 32px !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+}
+
+.scan-page-body .scan-result-deep-dive > summary {
+  min-height: 94px;
+  border-radius: 32px;
+  transition: background 0.25s ease;
+}
+
+.scan-page-body .scan-result-deep-dive > summary:hover {
+  background: #FFF9FA;
+}
+
+/* 6. Follow-up 28 Days Banner */
+.scan-page-body .scan-result-followup {
+  border: 0 !important;
+  border-radius: 34px !important;
+  background:
+    radial-gradient(circle at 92% 12%, rgba(224, 109, 129, 0.32), transparent 32%),
+    linear-gradient(135deg, #2D1B23, #1F1016) !important;
+  box-shadow: 0 24px 64px rgba(45, 27, 35, 0.32) !important;
+}
+
+/* Full-bleed Completed Scan Landing Page State */
+.scan-page-body:has(#results-flow.flex) .scan-page-welcome {
+  display: none;
+}
+
+.scan-page-body:has(#results-flow.flex) #ai-modal {
+  min-height: calc(100vh - 76px);
+  padding: 44px 28px 120px;
+  background:
+    radial-gradient(circle at 92% 4%, rgba(220, 242, 255, 0.78), transparent 24%),
+    radial-gradient(circle at 5% 18%, rgba(255, 226, 234, 0.76), transparent 25%),
+    linear-gradient(180deg, #FFFAFB 0%, #FFFFFF 38%, #FFF8FA 100%) !important;
+}
+
+.scan-page-body:has(#results-flow.flex) #ai-modal > .sticky {
+  display: none;
+}
+
+.scan-page-body:has(#results-flow.flex) #modal-content-area {
+  width: min(100%, 1240px);
+  max-width: 1240px;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.scan-page-body:has(#results-flow.flex) #results-flow {
+  width: 100%;
+  max-width: 1240px;
+  gap: 36px;
+  padding-bottom: 0;
+}
+
+.scan-page-body:has(#results-flow.flex) .scan-result-summary {
+  margin-top: 0 !important;
+}
+
+.scan-page-body:has(#results-flow.flex) .scan-result-summary > div {
+  padding: 48px 56px !important;
+  gap: 48px !important;
+}
+
+.scan-page-body:has(#results-flow.flex) .scan-result-summary .relative.w-36 {
+  width: 176px;
+  height: 176px;
+}
+
+.scan-page-body:has(#results-flow.flex) .scan-result-priorities {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  gap: 20px;
+}
+
+.scan-page-body:has(#results-flow.flex) .scan-result-priorities > div {
+  height: 100%;
+}
+
+.scan-page-body:has(#results-flow.flex) .scan-result-priorities > div:nth-child(3) {
+  grid-column: 1 / -1;
+}
+
+.scan-page-body:has(#results-flow.flex) .scan-result-routine > .grid {
+  gap: 20px;
+}
+
+.scan-page-body:has(#results-flow.flex) .scan-result-routine > .grid > div {
+  padding: 28px !important;
+}
+
+.scan-page-body:has(#results-flow.flex) #product-recommendations {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.scan-page-body:has(#results-flow.flex) .scan-result-products {
+  padding: 38px 42px !important;
+}
+
+/* ===================================================================
+   Animations & Entrance Rhythms for Report
+   =================================================================== */
+@keyframes scan-report-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scan-page-body:has(#results-flow.flex) #results-flow > :not(#confetti-canvas) {
+  animation: scan-report-rise 0.72s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.scan-page-body:has(#results-flow.flex) #results-flow > :nth-child(3) { animation-delay: 70ms; }
+.scan-page-body:has(#results-flow.flex) #results-flow > :nth-child(4) { animation-delay: 140ms; }
+.scan-page-body:has(#results-flow.flex) #results-flow > :nth-child(5) { animation-delay: 210ms; }
+.scan-page-body:has(#results-flow.flex) #results-flow > :nth-child(6) { animation-delay: 280ms; }
+.scan-page-body:has(#results-flow.flex) #results-flow > :nth-child(7) { animation-delay: 350ms; }
+
+/* Focus Visible */
+.scan-page-body #results-flow :focus-visible {
+  outline: 3px solid rgba(224, 109, 129, 0.35);
+  outline-offset: 3px;
+}
+
+/* ===================================================================
+   Responsive Breakpoints
+   =================================================================== */
+@media (max-width: 1080px) {
+  .scan-page-body:has(#results-flow.flex) #product-recommendations {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .scan-page-body .scan-page-welcome {
+    padding: 52px 0 76px;
+  }
+  .scan-page-body .scan-page-welcome__grid {
+    grid-template-columns: 1fr;
+    gap: 42px;
+  }
+  .scan-page-body .scan-page-welcome__copy h1 {
+    font-size: clamp(2.55rem, 12vw, 3.7rem);
+  }
+  .scan-page-body .scan-page-guide span:nth-child(2) {
+    margin-left: 0;
+  }
+  .scan-page-body #ai-modal {
+    padding: 36px 12px 88px;
+  }
+  .scan-page-body #ai-modal > .sticky {
+    border-radius: 22px;
+    padding: 14px 18px;
+  }
+  .scan-page-body #modal-content-area {
+    padding: 24px 16px 36px;
+    border-radius: 26px;
+  }
+  .scan-page-body #results-flow {
+    gap: 28px;
+  }
+  .scan-page-body .scan-result-summary,
+  .scan-page-body .scan-result-products,
+  .scan-page-body .scan-result-deep-dive,
+  .scan-page-body .scan-result-followup {
+    border-radius: 26px !important;
+  }
+  .scan-page-body .scan-result-priorities > div,
+  .scan-page-body .scan-result-routine > .grid > div {
+    border-radius: 24px !important;
+  }
+  .scan-page-body .scan-result-deep-dive > summary {
+    padding: 20px !important;
+  }
+  .scan-page-body:has(#results-flow.flex) #ai-modal {
+    padding: 24px 12px 88px;
+  }
+  .scan-page-body:has(#results-flow.flex) .scan-result-summary > div {
+    padding: 28px 20px !important;
+    gap: 24px !important;
+  }
+  .scan-page-body:has(#results-flow.flex) .scan-result-summary .relative.w-36 {
+    width: 144px;
+    height: 144px;
+  }
+  .scan-page-body:has(#results-flow.flex) .scan-result-priorities {
+    grid-template-columns: 1fr;
+  }
+  .scan-page-body:has(#results-flow.flex) .scan-result-priorities > div:nth-child(3) {
+    grid-column: auto;
+  }
+  .scan-page-body:has(#results-flow.flex) #product-recommendations {
+    grid-template-columns: 1fr;
+  }
+  .scan-page-body:has(#results-flow.flex) .scan-result-products {
+    padding: 24px 18px !important;
+  }
+}
+
+/* Reduced Motion Fallback */
+@media (prefers-reduced-motion: reduce) {
+  .scan-page-body * {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
