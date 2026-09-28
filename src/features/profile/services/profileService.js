@@ -65,6 +65,8 @@ export function changeUserPassword(currentPassword, newPassword) {
   return authService.changePassword(currentPassword, newPassword);
 }
 
+export { exportUserPdfReport } from './profilePdfExport.js';
+
 export function exportUserData({ user, history, orders }) {
   if (!user) throw new Error('Không có dữ liệu người dùng để xuất.');
   const blob = new Blob([JSON.stringify({
@@ -80,3 +82,4 @@ export function exportUserData({ user, history, orders }) {
   anchor.click();
   URL.revokeObjectURL(url);
 }
+

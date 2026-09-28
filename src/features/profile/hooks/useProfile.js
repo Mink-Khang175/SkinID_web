@@ -4,6 +4,7 @@ import {
   cancelUserOrder,
   changeUserPassword,
   exportUserData,
+  exportUserPdfReport,
   fetchUserOrders,
   fetchUserSkinReports,
   updateUserProfile,
@@ -72,6 +73,7 @@ export function useProfile() {
   }, []);
 
   const downloadData = useCallback(() => exportUserData({ user, history, orders }), [user, history, orders]);
+  const downloadPdf = useCallback(() => exportUserPdfReport({ user, history, orders }), [user, history, orders]);
 
   const cancelOrder = useCallback(async (orderId) => {
     setIsSaving(true);
@@ -100,6 +102,7 @@ export function useProfile() {
     changeAvatar,
     updatePassword,
     downloadData,
+    downloadPdf,
     cancelOrder,
     clearHistory,
     logout,

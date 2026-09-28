@@ -1,3 +1,5 @@
+import { exportUserPdfReport } from '../services/profilePdfExport.js';
+
 function scoreTheme(score) {
   if (score < 60) {
     return {
@@ -67,10 +69,31 @@ export default function ProfileHistoryTimeline({ history = [] }) {
               </div>
             </div>
 
-            <div className="action-group flex items-center justify-between md:justify-end gap-3 w-full md:w-auto pt-2 md:pt-0 border-t md:border-t-0 border-gray-100 flex-shrink-0" onClick={(event) => event.stopPropagation()}>
-              <a href="/skin-analysis" className="btn-soi-lai px-3.5 py-2 text-xs font-semibold flex items-center gap-1.5 cursor-pointer whitespace-nowrap shadow-sm">Soi lại</a>
-              <a href="https://zalo.me/" target="_blank" rel="noreferrer" className="btn-gui-duoc-si px-3.5 py-2 text-xs font-semibold flex items-center gap-1.5 cursor-pointer whitespace-nowrap shadow-sm">Gửi Dược Sĩ</a>
-              <button type="button" onClick={open} className="btn-xem-chi-tiet px-4 py-2 text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap">Xem Chi Tiết →</button>
+            <div className="action-group flex items-center justify-between md:justify-end gap-2.5 w-full md:w-auto pt-2 md:pt-0 border-t md:border-t-0 border-gray-100 flex-shrink-0" onClick={(event) => event.stopPropagation()}>
+              <button
+                type="button"
+                onClick={() => exportUserPdfReport({ scan })}
+                className="px-3 py-2 text-xs font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+                title="Xuất báo cáo PDF phiên này"
+              >
+                <svg className="w-3.5 h-3.5 text-rose-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                <span>Xuất PDF</span>
+              </button>
+              <a
+                href="https://zalo.me/0924093461"
+                target="_blank"
+                rel="noreferrer"
+                className="btn-gui-duoc-si px-3 py-2 text-xs font-semibold flex items-center gap-1.5 cursor-pointer whitespace-nowrap shadow-sm"
+              >
+                Gửi Dược Sĩ
+              </a>
+              <button
+                type="button"
+                onClick={open}
+                className="btn-xem-chi-tiet px-4 py-2 text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap"
+              >
+                Xem Phác Đồ Chi Tiết →
+              </button>
             </div>
           </article>
         );

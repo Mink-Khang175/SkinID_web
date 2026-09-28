@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { assetUrl } from '../../../assets/index.js';
 import { useCart } from '../../cart/index.js';
+import { resolveScanRoutine } from '../services/routineResolver.js';
+import { exportUserPdfReport } from '../services/profilePdfExport.js';
+import { detailedMetricNames } from '../services/metricNames.js';
 
 const adviceByMetric = {
   moisture: {
@@ -34,11 +37,6 @@ const adviceByMetric = {
     avoid: 'Hạn chế thức khuya và chế độ ăn nhiều đường gây đường hóa collagen.'
   }
 };
-
-const detailedMetricNames = [
-  'Độ ẩm', 'Dầu thừa', 'Lỗ chân lông', 'Sắc tố UV', 'Sạm nám', 'Đàn hồi',
-  'Nhăn mắt', 'Rãnh cười', 'Đỏ da', 'Khuẩn mụn', 'Kết cấu', 'Quầng thâm'
-];
 
 const formatPrice = (value) => new Intl.NumberFormat('vi-VN', {
   style: 'currency',
@@ -130,47 +128,164 @@ function RadarChart({ values }) {
   );
 }
 
-function RoutineProducts({ products }) {
+function SkincareRoutineSection({ scan }) {
   const { addToCart, openCart } = useCart();
-  if (!products.length) {
-    return (
-      <div className="bg-gradient-to-br from-rose-50/50 via-white to-rose-50/20 border border-rose-100/80 rounded-2xl p-5 text-center space-y-3">
-        <h5 className="text-xs sm:text-sm font-bold text-gray-800">Chưa có phác đồ được gán cho phiên này</h5>
-        <p className="text-xs text-gray-500 max-w-md mx-auto leading-relaxed">Dữ liệu phiên đã được lưu. Gửi kết quả cho Dược sĩ SkinID để nhận phác đồ phục hồi cá nhân hóa.</p>
-        <div className="flex flex-wrap items-center justify-center gap-2.5">
-          <a href="https://zalo.me/" target="_blank" rel="noreferrer" className="btn-gui-duoc-si px-4 py-2 text-xs font-bold">Gửi Dược Sĩ Tư Vấn</a>
-          <a href="/products" className="px-4 py-2 bg-white text-gray-700 border border-gray-200 rounded-xl text-xs font-semibold">Khám Phá Sản Phẩm</a>
-        </div>
-      </div>
-    );
-  }
+  const [activeTab, setActiveTab] = useState('all');
+  const [addedAll, setAddedAll] = useState(false);
+  const routine = useMemo(() => resolveScanRoutine(scan), [scan]);
+  const { products, morningSteps, eveningSteps } = routine;
 
   const buy = (product) => {
-    if (!product.id) return;
+    if (!product?.id) return;
     addToCart(product.id, 1);
     openCart();
   };
 
+  const buyAll = () => {
+    products.forEach((p) => {
+      if (p?.id) addToCart(p.id, 1);
+    });
+    setAddedAll(true);
+    setTimeout(() => setAddedAll(false), 2000);
+    openCart();
+  };
+
+  const totalPrice = products.reduce((sum, p) => sum + (Number(p.price) || 0), 0);
+
   return (
-    <div className="space-y-3">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
-        {products.slice(0, 3).map((product, index) => (
-          <div key={product.id || `${product.name}-${index}`} className="flex items-center gap-3 p-3 rounded-2xl border border-gray-100 bg-gray-50/50">
-            <img src={assetUrl(product.image || '/images/products/placeholder.jpg', product.brandSlug)} alt={product.name || 'Sản phẩm'} className="w-12 h-12 rounded-xl object-contain bg-white p-1 flex-shrink-0 border border-gray-100" />
-            <div className="flex-1 min-w-0">
-              <p className="text-[10px] font-bold text-brand-primary uppercase truncate">{product.brand || 'Dược mỹ phẩm'}</p>
-              <h5 className="text-xs font-bold text-gray-900 truncate">{product.name || 'Sản phẩm gợi ý'}</h5>
-              <p className="text-xs font-black text-brand-dark mt-0.5">{formatPrice(product.price)}</p>
+    <section className="bg-white rounded-2xl border border-gray-200 p-5 sm:p-6 shadow-sm space-y-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-100">
+        <div>
+          <h4 className="font-black text-gray-900 text-base sm:text-lg flex items-center gap-2">
+            <span>Phác Đồ Chăm Sóc Da Cá Nhân Hóa</span>
+            <span className="text-[10px] uppercase font-bold px-2.5 py-0.5 rounded-full bg-brand-blush text-brand-primary border border-brand-petal">Chuẩn Y Khoa</span>
+          </h4>
+          <p className="text-xs text-gray-500 mt-0.5">Phác đồ 6 bước (Sáng & Tối) được thiết kế riêng theo kết quả phân tích làn da của phiên này.</p>
+        </div>
+
+        <div className="flex items-center gap-1.5 bg-gray-100/90 p-1 rounded-xl self-start sm:self-auto">
+          <button
+            type="button"
+            onClick={() => setActiveTab('all')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${activeTab === 'all' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-500 hover:text-gray-900'}`}
+          >
+            Tất cả 6 bước
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('morning')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${activeTab === 'morning' ? 'bg-white text-[#C45E28] shadow-xs' : 'text-gray-500 hover:text-[#C45E28]'}`}
+          >
+            ☀️ Buổi sáng
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('evening')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${activeTab === 'evening' ? 'bg-white text-[#8B3D59] shadow-xs' : 'text-gray-500 hover:text-[#8B3D59]'}`}
+          >
+            🌙 Buổi tối
+          </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        {(activeTab === 'all' || activeTab === 'morning') && (
+          <div className="bg-gradient-to-br from-[#FFF9F6] via-[#FFFAF7] to-white border border-[#FFE6D9] rounded-2xl p-4 sm:p-5 shadow-2xs space-y-3.5">
+            <div className="flex items-center justify-between border-b border-[#FFE2D1] pb-2.5">
+              <div className="flex items-center gap-2">
+                <span className="w-6 h-6 rounded-lg bg-[#FFEADF] text-[#C45E28] flex items-center justify-center text-xs">☀️</span>
+                <h5 className="font-bold text-[#C45E28] text-xs sm:text-sm uppercase tracking-wide">Buổi Sáng · Bảo Vệ & Cấp Ẩm</h5>
+              </div>
+              <span className="text-[11px] font-semibold text-[#D17646]">3 bước</span>
             </div>
-            <button type="button" onClick={() => buy(product)} disabled={!product.id} className="px-2.5 py-1.5 bg-brand-primary text-white text-[11px] font-bold rounded-lg disabled:opacity-50">+ Mua</button>
+
+            <div className="space-y-3">
+              {morningSteps.map((s) => (
+                <div key={`m-${s.step}`} className="bg-white rounded-xl p-3 border border-[#FFE9DE] shadow-2xs hover:border-[#FFD0BC] transition-all">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="w-5 h-5 rounded-full bg-[#FFEAE0] text-[#C45E28] font-black text-[10px] flex items-center justify-center flex-shrink-0">{s.step}</span>
+                    <strong className="text-xs font-bold text-gray-800">{s.title}</strong>
+                  </div>
+                  <p className="text-[11px] text-gray-500 mb-2 pl-7 leading-relaxed">{s.desc}</p>
+                  {s.product && (
+                    <div className="flex items-center gap-3 p-2 rounded-xl bg-[#FFF9F7] border border-[#FFEADA] ml-7">
+                      <img src={assetUrl(s.product.image || '/images/products/placeholder.jpg', s.product.brandSlug)} alt="" className="w-11 h-11 rounded-lg object-contain bg-white p-1 border border-gray-100 flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <span className="text-[9px] font-bold text-[#C45E28] uppercase">{s.product.brand || 'Rilastil'}</span>
+                        <h6 className="text-[11px] font-bold text-gray-900 truncate">{s.product.name}</h6>
+                        <span className="text-xs font-black text-[#C45E28]">{formatPrice(s.product.price)}</span>
+                      </div>
+                      <button type="button" onClick={() => buy(s.product)} className="px-2.5 py-1.5 bg-[#C45E28] hover:bg-[#A84A1A] text-white text-[11px] font-bold rounded-lg transition-colors flex-shrink-0 cursor-pointer">+ Thêm giỏ</button>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
+        )}
+
+        {(activeTab === 'all' || activeTab === 'evening') && (
+          <div className="bg-gradient-to-br from-[#FDF8FB] via-[#FCF5F8] to-white border border-[#F3DCE5] rounded-2xl p-4 sm:p-5 shadow-2xs space-y-3.5">
+            <div className="flex items-center justify-between border-b border-[#F2D7E2] pb-2.5">
+              <div className="flex items-center gap-2">
+                <span className="w-6 h-6 rounded-lg bg-[#F9E6EE] text-[#8B3D59] flex items-center justify-center text-xs">🌙</span>
+                <h5 className="font-bold text-[#8B3D59] text-xs sm:text-sm uppercase tracking-wide">Buổi Tối · Phục Hồi & Tái Tạo</h5>
+              </div>
+              <span className="text-[11px] font-semibold text-[#9D4D6B]">3 bước</span>
+            </div>
+
+            <div className="space-y-3">
+              {eveningSteps.map((s) => (
+                <div key={`e-${s.step}`} className="bg-white rounded-xl p-3 border border-[#F6E1EB] shadow-2xs hover:border-[#EDB8CE] transition-all">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="w-5 h-5 rounded-full bg-[#FCE8F1] text-[#8B3D59] font-black text-[10px] flex items-center justify-center flex-shrink-0">{s.step}</span>
+                    <strong className="text-xs font-bold text-gray-800">{s.title}</strong>
+                  </div>
+                  <p className="text-[11px] text-gray-500 mb-2 pl-7 leading-relaxed">{s.desc}</p>
+                  {s.product && (
+                    <div className="flex items-center gap-3 p-2 rounded-xl bg-[#FDF7FA] border border-[#F4DEE7] ml-7">
+                      <img src={assetUrl(s.product.image || '/images/products/placeholder.jpg', s.product.brandSlug)} alt="" className="w-11 h-11 rounded-lg object-contain bg-white p-1 border border-gray-100 flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <span className="text-[9px] font-bold text-[#8B3D59] uppercase">{s.product.brand || 'Rilastil'}</span>
+                        <h6 className="text-[11px] font-bold text-gray-900 truncate">{s.product.name}</h6>
+                        <span className="text-xs font-black text-[#8B3D59]">{formatPrice(s.product.price)}</span>
+                      </div>
+                      <button type="button" onClick={() => buy(s.product)} className="px-2.5 py-1.5 bg-[#8B3D59] hover:bg-[#722F47] text-white text-[11px] font-bold rounded-lg transition-colors flex-shrink-0 cursor-pointer">+ Thêm giỏ</button>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
-      <div className="pt-3 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <p className="text-xs text-gray-500">Phác đồ tham khảo được cá nhân hóa theo kết quả phiên soi da.</p>
-        <a href="/skin-analysis" className="btn-xem-phac-do px-5 py-2.5 rounded-xl font-bold text-xs text-white w-full sm:w-auto text-center">Xem Phác Đồ Chi Tiết →</a>
+
+      <div className="bg-gradient-to-br from-[#FFF1F4] via-[#FFF8F9] to-white border border-[#FFD0DB] rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>
+          <span className="text-[10px] font-bold text-brand-primary uppercase tracking-wider block mb-0.5">Hiệu quả tái tạo tối ưu sau 28 ngày</span>
+          <h5 className="font-bold text-sm text-gray-900">Trọn bộ {products.length} sản phẩm theo phác đồ</h5>
+          <p className="text-xs font-bold text-brand-primary mt-0.5">Tổng phác đồ: <strong className="text-base font-black text-brand-dark">{formatPrice(totalPrice)}</strong></p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+          <button
+            type="button"
+            onClick={buyAll}
+            className="w-full sm:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-[#E06D81] to-[#C84564] hover:from-[#C84564] hover:to-[#B33553] text-white text-xs font-bold shadow-md shadow-rose-300/40 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+            <span>{addedAll ? 'Đã thêm trọn bộ vào giỏ!' : 'Thêm trọn bộ vào giỏ hàng'}</span>
+          </button>
+          <a
+            href="https://zalo.me/0924093461"
+            target="_blank"
+            rel="noreferrer"
+            className="w-full sm:w-auto px-4 py-3 rounded-xl bg-white border border-[#FFCCD5] text-[#8C4E5C] hover:bg-[#FFF5F7] text-xs font-bold transition-all text-center flex items-center justify-center gap-1.5"
+          >
+            Gửi Dược Sĩ Tư Vấn
+          </a>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -262,10 +377,25 @@ export default function ProfileScanDetailModal({ history = [] }) {
             <div className="space-y-3">{metrics.core.map((metric) => { const preset = adviceByMetric[metric.id]; const custom = analysis.detailedAdvice?.[metric.id] || {}; const theme = metricTheme(metric.healthScore); return <details key={metric.id} className="border border-gray-100 rounded-2xl overflow-hidden bg-gray-50/50"><summary className="p-3.5 cursor-pointer list-none flex items-center justify-between"><div><p className="font-bold text-gray-800 text-xs sm:text-sm">{preset.name}</p><p className={`${theme.text} text-[11px] font-semibold`}>{metric.rawScore}% · {theme.label}</p></div><span aria-hidden="true">⌄</span></summary><div className="border-t border-gray-100 bg-white p-3.5 text-xs space-y-2"><p><strong>Vì sao? </strong>{custom.why || preset.why}</p><p><strong>Nên làm: </strong>{custom.shouldDo || preset.shouldDo}</p><p><strong>Cần tránh: </strong>{custom.avoid || preset.avoid}</p></div></details>; })}</div>
           </section>
 
-          <section className="bg-white rounded-2xl border border-gray-200 p-5 sm:p-6 shadow-sm"><h4 className="font-bold text-gray-900 text-base mb-4">Phác Đồ & Sản Phẩm Gợi Ý Cho Phiên Này</h4><RoutineProducts products={products} /></section>
+          <SkincareRoutineSection scan={scan} />
         </div>
 
-        <div className="sticky bottom-0 bg-white/95 backdrop-blur-md px-6 py-4 border-t border-gray-100 flex items-center justify-between z-20"><a href="/skin-analysis" className="btn-soi-lai px-4 py-2.5 text-xs font-semibold rounded-xl">Soi Da Lại</a><button type="button" onClick={close} className="px-5 py-2.5 border border-gray-200 hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-xl">Đóng</button></div>
+        <div className="sticky bottom-0 bg-white/95 backdrop-blur-md px-6 py-4 border-t border-gray-100 flex flex-wrap items-center justify-between gap-3 z-20">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => exportUserPdfReport({ scan })}
+              className="px-4 py-2.5 bg-gray-900 hover:bg-black text-white text-xs font-bold rounded-xl transition-all shadow-sm flex items-center gap-2 cursor-pointer"
+            >
+              <svg className="w-4 h-4 text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+              <span>Xuất Báo Cáo PDF</span>
+            </button>
+            <a href="/skin-analysis" className="px-3 py-2 text-xs font-medium text-gray-500 hover:text-brand-primary rounded-xl transition-colors">
+              + Soi da mới
+            </a>
+          </div>
+          <button type="button" onClick={close} className="px-5 py-2.5 border border-gray-200 hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-xl cursor-pointer">Đóng</button>
+        </div>
       </div>
     </div>
   );
