@@ -23,14 +23,15 @@ export function loadProductCatalog() {
       const snapshot = await getDocs(collection(firebaseServices.db, 'products'));
       if (snapshot.empty) throw new Error('Collection products đang trống.');
       const remote = new Map(snapshot.docs.map((snapshotDocument) => [snapshotDocument.id, snapshotDocument.data()]));
-      const products = fallback.map((local) => applyStorefrontPrice({
-        ...local,
-        ...(remote.get(local.id) || {}),
-        id: local.id
-      }));
-      for (const [id, data] of remote) {
-        if (!products.some((product) => product.id === id)) products.push(applyStorefrontPrice({ ...data, id }));
-      }
+      const products = fallback.map((local) => {
+        const remoteData = remote.get(local.id);
+        if (!remoteData) return local;
+        return applyStorefrontPrice({
+          ...remoteData,
+          ...local,
+          id: local.id
+        });
+      });
       return setAvailableProducts(products);
     } catch (error) {
       console.warn('[SkinID Catalog] Dùng catalog đóng gói:', error.message);

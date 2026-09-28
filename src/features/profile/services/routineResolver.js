@@ -18,26 +18,26 @@ export function resolveScanRoutine(scan = {}) {
     const isDry = skinTypeLower.includes('khô') || skinTypeLower.includes('căng');
     const isAging = skinTypeLower.includes('lão') || skinTypeLower.includes('nám') || (Number(scan.skinAge) >= 30);
 
-    let cleanserId = 'rilastil-2109';
-    let serumId = 'rilastil-1774';
-    let sunId = 'rilastil-1830';
-    let nightCreamId = 'rilastil-1775';
+    let cleanserId = 'rilastil-1774';
+    let serumId = 'rilastil-525';
+    let sunId = 'rilastil-1857';
+    let nightCreamId = 'rilastil-2067';
 
     if (isOilyOrAcne) {
-      cleanserId = 'rilastil-1857';
-      serumId = 'rilastil-1860';
-      sunId = 'rilastil-1829';
-      nightCreamId = 'rilastil-1858';
+      cleanserId = 'rilastil-1805';
+      serumId = 'rilastil-1831';
+      sunId = 'rilastil-1856';
+      nightCreamId = 'rilastil-1528';
     } else if (isAging) {
       cleanserId = 'rilastil-2098';
       serumId = 'rilastil-2101';
-      sunId = 'rilastil-1830';
-      nightCreamId = 'rilastil-1845';
+      sunId = 'rilastil-1562';
+      nightCreamId = 'rilastil-1564';
     } else if (isDry) {
-      cleanserId = 'rilastil-2109';
-      serumId = 'rilastil-1774';
-      sunId = 'rilastil-1830';
-      nightCreamId = 'rilastil-1775';
+      cleanserId = 'rilastil-1774';
+      serumId = 'rilastil-525';
+      sunId = 'rilastil-1860';
+      nightCreamId = 'rilastil-2067';
     }
 
     const fallbackIds = [cleanserId, serumId, sunId, nightCreamId];

@@ -6,7 +6,7 @@ const source = fs.readFileSync(path.join(__dirname, '../src/data/products.js'), 
 const products = JSON.parse(source.match(/window\.LOCAL_PRODUCTS = (\[[\s\S]*?\]);/)[1]);
 const ids = results => results.map(p => p.id);
 assert.equal(new Set(ids(products)).size, products.length);
-assert.equal(filterProducts(products).length, 55);
+assert.equal(filterProducts(products).length, 53);
 for (const brand of ['all', 'rilastil', 'twon', 'dvah', "D'VAH", ' D’VAH ']) {
     for (const step of ['all', 'cleanser', 'toner', 'treatment', 'moisturizer', 'sunscreen', 'special']) {
         for (const query of ['', 'gel', 'niacinamide', 'khong-co-san-pham']) {
@@ -27,7 +27,7 @@ for (const id of ['rilastil-2085', 'rilastil-1125']) {
     assert(ids(filterProducts(products, { step: 'moisturizer' })).includes(id));
     assert(!ids(filterProducts(products, { step: 'special' })).includes(id));
 }
-for (const id of ['rilastil-1939', 'rilastil-1936', 'rilastil-1872']) {
+for (const id of ['rilastil-1939', 'rilastil-1872']) {
     assert(ids(filterProducts(products, { step: 'special' })).includes(id));
 }
 assert(filterProducts(products, { query: 'sua rua mat' }).length > 0);

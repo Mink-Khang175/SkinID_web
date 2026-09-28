@@ -91,6 +91,21 @@ async function main() {
 
   const app = await createAdminApp();
   const db = getFirestore(app);
+
+  const existingDocs = await db.collection('products').get();
+  const validDocIds = new Set(products.map(p => p.id));
+  let deletedCount = 0;
+  for (const doc of existingDocs.docs) {
+    if (!validDocIds.has(doc.id)) {
+      await doc.ref.delete();
+      deletedCount++;
+      console.log(`Đã xóa sản phẩm thừa khỏi Firestore: ${doc.id}`);
+    }
+  }
+  if (deletedCount > 0) {
+    console.log(`Đã dọn dẹp ${deletedCount} sản phẩm cũ không còn trong catalog.`);
+  }
+
   const batch = db.batch();
   const syncedAt = Timestamp.now();
 
@@ -99,7 +114,7 @@ async function main() {
       ...product,
       syncedAt,
       source: 'local-catalog'
-    }, { merge: true });
+    });
   }
 
   await batch.commit();

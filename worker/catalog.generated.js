@@ -1,15 +1,6 @@
 // Generated from src/data/products.js. Do not edit manually.
 export const SERVER_CATALOG = [
   {
-    "id": "rilastil-2109",
-    "brand": "Rilastil",
-    "brandSlug": "rilastil",
-    "name": "SỮA RỬA MẶT DƯỠNG ẨM RILASTIL AQUA FACE CLEANSER 50ML",
-    "image": "/images/products/rilastil-sua-rua-mat-duong-am-rilastil-aqua-face-cleanser-50ml.avif",
-    "volume": "50 ml",
-    "price": 199500
-  },
-  {
     "id": "rilastil-2103",
     "brand": "Rilastil",
     "brandSlug": "rilastil",
@@ -25,7 +16,7 @@ export const SERVER_CATALOG = [
     "name": "SERUM TÁI TẠO VÀ CHỐNG LÃO HÓA 30ML – RILASTIL MULTIREPAIR RETINOL TECH 30ML",
     "image": "/images/products/rilastil-serum-tai-tao-va-chong-lao-hoa-30ml-rilastil-multirepair-retinol-tech.avif",
     "volume": "30ML",
-    "price": 1325250
+    "price": 1425000
   },
   {
     "id": "rilastil-2098",
@@ -61,7 +52,7 @@ export const SERVER_CATALOG = [
     "name": "KEM DƯỠNG ẨM GIÚP CÂN BẰNG VI SINH HỖ TRỢ PHỤC HỒI DA MỤN 40ML – RILASTIL ACNESTIL H-BIOME CREAM 40ML",
     "image": "/images/products/rilastil-kem-duong-am-giup-can-bang-vi-sinh-ho-tro-phuc-hoi-da-mun-rilastil-acnestil-h-biome-cream.png",
     "volume": "40ML",
-    "price": 522500
+    "price": 646000
   },
   {
     "id": "rilastil-2093",
@@ -69,7 +60,7 @@ export const SERVER_CATALOG = [
     "brandSlug": "rilastil",
     "name": "KEM DƯỠNG ẨM VÀ HỖ TRỢ LÀM MỜ CÁC VÙNG DA BỊ SẠM MÀU – RILASTIL D-CLAR DAILY DEPIGMENTING CREAM",
     "image": "/images/products/rilastil-kem-duong-am-va-ho-tro-lam-mo-cac-vung-da-bi-sam-mau-rilastil-d-clar-daily-depigmenting-cream.avif",
-    "volume": "Tiêu chuẩn",
+    "volume": "40ML",
     "price": 1325250
   },
   {
@@ -87,7 +78,7 @@ export const SERVER_CATALOG = [
     "brandSlug": "rilastil",
     "name": "TẨY TRANG – RILASTIL DAILY CARE MICELLAR SOLUTION 100ML",
     "image": "/images/products/rilastil-tay-trang-rilastil-daily-care-micellar-solution-100ml-sao-chep.avif",
-    "volume": "100ml",
+    "volume": "100ML",
     "price": 190000
   },
   {
@@ -103,9 +94,9 @@ export const SERVER_CATALOG = [
     "id": "rilastil-2085",
     "brand": "Rilastil",
     "brandSlug": "rilastil",
-    "name": "MẶT NẠ CẤP ẨM RILASTIL AQUA MOISTURIZING MASK 30ML",
+    "name": "MẶT NẠ CẤP ẨM RILASTIL AQUA MOISTURIZING MASK 75ML",
     "image": "/images/products/rilastil-mat-na-cap-am-rilastil-aqua-moisturizing-mask-30ml-sao-chep.avif",
-    "volume": "30ml",
+    "volume": "75ML",
     "price": 750500
   },
   {
@@ -145,22 +136,13 @@ export const SERVER_CATALOG = [
     "price": 1197000
   },
   {
-    "id": "rilastil-1936",
-    "brand": "Rilastil",
-    "brandSlug": "rilastil",
-    "name": "KEM NGĂN NGỪA RẠN DA – RILASTIL STRETCH MARKS CREAM 75ml",
-    "image": "/images/products/rilastil-kem-ngan-ngua-ran-da-rilastil-stretch-marks-cream-75ml.png",
-    "volume": "75 ml",
-    "price": 755250
-  },
-  {
     "id": "rilastil-1876",
     "brand": "Rilastil",
     "brandSlug": "rilastil",
     "name": "KEM CẤP ẨM CHỐNG MẨN NGỨA – RILASTIL XEROLACT PB BALM LIPID REPLENISHING ANTI-IRRITATION 400ML",
     "image": "/images/products/rilastil-kem-cap-am-chong-man-ngua-rilastil-xerolact-pb-balm-lipid-replenishing-anti-irritation-400ml.png",
     "volume": "400 ml",
-    "price": 494000
+    "price": 712500
   },
   {
     "id": "rilastil-1872",
@@ -187,7 +169,7 @@ export const SERVER_CATALOG = [
     "name": "KEM CẤP ẨM CHỐNG MẨN NGỨA – RILASTIL XEROLACT PB BALM LIPID REPLENISHING ANTI-IRRITATION 200ML",
     "image": "/images/products/rilastil-kem-cap-am-chong-man-ngua-rilastil-xerolact-pb-balm-lipid-replenishing-anti-irritation-200ml.png",
     "volume": "200 ml",
-    "price": 712500
+    "price": 494000
   },
   {
     "id": "rilastil-1867",
@@ -205,7 +187,7 @@ export const SERVER_CATALOG = [
     "name": "KEM CHỐNG NẮNG DÀNH CHO DA NHẠY CẢM – RILASTIL ALLERGY PROTECTIVE FLUID SPF 50+ 50ML",
     "image": "/images/products/rilastil-kem-chong-nang-danh-cho-da-nhay-cam-rilastil-allergy-protective-fluid-spf-50-50ml.png",
     "volume": "50ml",
-    "price": 551000
+    "price": 565250
   },
   {
     "id": "rilastil-1860",
@@ -241,7 +223,7 @@ export const SERVER_CATALOG = [
     "name": "DUNG DỊCH TẨY DA CHẾT NGỪA MỤN MỜ THÂM NÁM – RILASTIL ACNESTIL MICROPEELING 100ML",
     "image": "/images/products/rilastil-dung-dich-tay-da-chet-ngua-mun-mo-tham-nam-rilastil-acnestil-micropeeling-100ml.png",
     "volume": "100ML",
-    "price": 361000
+    "price": 855000
   },
   {
     "id": "rilastil-1844",
@@ -250,7 +232,7 @@ export const SERVER_CATALOG = [
     "name": "DUNG DỊCH TẨY DA CHẾT NGỪA MỤN MỜ THÂM NÁM – RILASTIL ACNESTIL MICROPEELING 30ML",
     "image": "/images/products/rilastil-dung-dich-tay-da-chet-ngua-mun-mo-tham-nam-rilastil-acnestil-micropeeling-30ml.png",
     "volume": "30ML",
-    "price": 855000
+    "price": 361000
   },
   {
     "id": "rilastil-1831",
@@ -276,8 +258,8 @@ export const SERVER_CATALOG = [
     "brandSlug": "rilastil",
     "name": "GEL RỬA MẶT DÀNH CHO DA MỤN – RILASTIL ACNESTIL CLEANSING GEL 200ML",
     "image": "/images/products/rilastil-gel-rua-mat-danh-cho-da-mun-rilastil-acnestil-cleansing-gel-200ml.png",
-    "volume": "400 ml",
-    "price": 646000
+    "volume": "200 ml",
+    "price": 503500
   },
   {
     "id": "rilastil-1774",
@@ -313,7 +295,7 @@ export const SERVER_CATALOG = [
     "name": "KEM CHỐNG NẮNG NGĂN NGỪA LÃO HÓA DA RILASTIL AGE REPAIR ANTI – AGE PROTECTIVE CREAM SPF 50+ 40ML",
     "image": "/images/products/rilastil-rilastil-age-repair-anti-age-protective-cream-spf-50.png",
     "volume": "40ml",
-    "price": 565250
+    "price": 551000
   },
   {
     "id": "rilastil-1122",
@@ -340,7 +322,7 @@ export const SERVER_CATALOG = [
     "name": "BỌT RỬA MẶT DÀNH CHO DA MỤN – RILASTIL ACNESTIL CLEANSING MOUSSE 165ML",
     "image": "/images/products/rilastil-rilastil-acnestil-cleansing-mousse.png",
     "volume": "165 ml",
-    "price": 503500
+    "price": 522500
   },
   {
     "id": "rilastil-1128",
@@ -355,9 +337,9 @@ export const SERVER_CATALOG = [
     "id": "rilastil-1125",
     "brand": "Rilastil",
     "brandSlug": "rilastil",
-    "name": "MẶT NẠ CẤP ẨM RILASTIL AQUA MOISTURIZING MASK 75ML",
+    "name": "MẶT NẠ CẤP ẨM RILASTIL AQUA MOISTURIZING MASK 30ML",
     "image": "/images/products/rilastil-aqua-moisturizing-mask.png",
-    "volume": "75ml",
+    "volume": "30ML",
     "price": 313500
   },
   {
@@ -394,7 +376,7 @@ export const SERVER_CATALOG = [
     "name": "TINH CHẤT VITAMIN C – RILASTIL INTENSE C GEL SERUM BRIGHTENING AND ANTIOX 30ML",
     "image": "/images/products/rilastil-gel-serum.png",
     "volume": "30ML",
-    "price": 1425000
+    "price": 1325250
   },
   {
     "id": "rilastil-499",
@@ -402,7 +384,7 @@ export const SERVER_CATALOG = [
     "brandSlug": "rilastil",
     "name": "D-CLAR DEPIGMENTING CONCENTRATE DROP",
     "image": "/images/products/rilastil-rilastil-d-clar-depigmenting-concentrate-drops-30ml.png",
-    "volume": "Tiêu chuẩn",
+    "volume": "30ML",
     "price": 1325250
   },
   {
