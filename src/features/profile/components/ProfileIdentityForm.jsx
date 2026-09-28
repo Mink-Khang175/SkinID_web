@@ -91,7 +91,17 @@ export default function ProfileIdentityForm({ user, isSaving, onSave }) {
       <form id="form-edit-profile" onSubmit={submit} className="space-y-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div><label className="block text-xs font-bold text-gray-700 mb-1.5">Họ và tên *</label><input type="text" id="prof-name" required value={form.name} onChange={update('name')} className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:bg-white transition-all" /></div>
-          <div><label className="block text-xs font-bold text-gray-700 mb-1.5">Địa chỉ Email</label><div className="profile-readonly-field"><span aria-hidden="true">🔒</span><input type="email" id="prof-email" value={form.email} readOnly aria-readonly="true" title="Email đăng nhập không thể thay đổi tại đây" /></div><p className="profile-field-note">Đã xác thực · Không thể chỉnh sửa tại trang hồ sơ</p></div>
+          <div>
+            <label className="block text-xs font-bold text-gray-700 mb-1.5">Địa chỉ Email</label>
+            <div className="profile-readonly-field">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <input type="email" id="prof-email" value={form.email} readOnly aria-readonly="true" title="Email đăng nhập không thể thay đổi tại đây" />
+            </div>
+            <p className="profile-field-note">Đã xác thực qua tài khoản · Không thể chỉnh sửa tại trang hồ sơ</p>
+          </div>
           <div><label className="block text-xs font-bold text-gray-700 mb-1.5">Số điện thoại liên hệ</label><input type="tel" id="prof-phone" value={form.phone} onChange={update('phone')} placeholder="0901234567" className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:bg-white transition-all" /></div>
           <div><label className="block text-xs font-bold text-gray-700 mb-1.5">Ngày sinh</label><input type="date" id="prof-birthday" value={form.birthday} onChange={update('birthday')} className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:bg-white transition-all" /></div>
           <div><label className="block text-xs font-bold text-gray-700 mb-1.5">Giới tính</label><select id="prof-gender" value={form.gender} onChange={update('gender')} className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:bg-white transition-all"><option value="Nữ">Nữ</option><option value="Nam">Nam</option><option value="Khác">Khác</option></select></div>
