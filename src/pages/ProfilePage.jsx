@@ -167,7 +167,7 @@ export default function ProfilePage() {
                 <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
                     <div>
                         <h2 className="text-lg font-black text-gray-900">Nhật Ký Các Phiên Soi Da Chi Tiết</h2>
-                        <p className="text-xs text-gray-500">Toàn bộ hồ sơ báo cáo và phác đồ y khoa đã được AI phân tích</p>
+                        <p className="text-xs text-gray-500">Toàn bộ hồ sơ báo cáo và chu trình chăm sóc da đã được AI phân tích tham khảo</p>
                     </div>
                     <a href="/" className="text-xs font-bold text-brand-primary hover:underline flex items-center gap-1">
                         + Soi da mới
@@ -242,7 +242,7 @@ export default function ProfilePage() {
                                 </svg>
                                 Xuất Báo Cáo PDF (Export PDF)
                             </div>
-                            <p className="text-xs text-gray-600 mb-4 leading-relaxed">Tải về báo cáo hồ sơ cá nhân, 12 chỉ số cấu trúc da và phác đồ điều trị ở định dạng PDF rõ ràng, chuẩn Y khoa.</p>
+                            <p className="text-xs text-gray-600 mb-4 leading-relaxed">Tải về báo cáo hồ sơ cá nhân, 12 chỉ số cấu trúc da và chu trình chăm sóc gợi ý ở định dạng PDF rõ ràng, khoa học.</p>
                         </div>
                         <button type="button" onClick={downloadPdf} className="profile-btn profile-btn--primary self-start flex items-center gap-2 shadow-sm">
                             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

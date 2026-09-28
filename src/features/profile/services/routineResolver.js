@@ -60,7 +60,7 @@ export function resolveScanRoutine(scan = {}) {
     },
     {
       step: 2,
-      title: 'Tinh chất điều trị & Cấp ẩm',
+      title: 'Tinh chất chuyên sâu & Cấp ẩm',
       desc: 'Thẩm thấu sâu vào tầng trung bì, phục hồi cấu trúc và cấp nước tế bào.',
       product: p2
     },
@@ -81,7 +81,7 @@ export function resolveScanRoutine(scan = {}) {
     },
     {
       step: 2,
-      title: 'Đặc trị & Phục hồi liên kết',
+      title: 'Phục hồi chuyên sâu & Tái tạo',
       desc: 'Tăng sinh collagen, phục hồi hàng rào sinh học và tái tạo tế bào trong giấc ngủ.',
       product: p2
     },

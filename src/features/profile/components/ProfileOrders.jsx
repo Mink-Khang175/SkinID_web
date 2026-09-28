@@ -160,7 +160,7 @@ export default function ProfileOrders({ orders = [], isLoading = false, onCancel
         <div className="text-center py-12 px-4 rounded-3xl bg-gray-50/50 border border-gray-100">
           <div className="w-16 h-16 mx-auto mb-4 rounded-3xl bg-brand-blush/60 text-brand-primary flex items-center justify-center shadow-sm text-3xl" aria-hidden="true">▣</div>
           <h4 className="font-black text-gray-800 text-base mb-1">Chưa Có Đơn Hàng Nào</h4>
-          <p className="text-xs text-gray-400 max-w-sm mx-auto mb-6">Bạn chưa thực hiện đơn đặt hàng nào tại SkinID. Khám phá các sản phẩm dược mỹ phẩm chuẩn y khoa ngay!</p>
+          <p className="text-xs text-gray-400 max-w-sm mx-auto mb-6">Bạn chưa thực hiện đơn đặt hàng nào tại SkinID. Khám phá các sản phẩm dược mỹ phẩm chính hãng ngay!</p>
           <a href="/products" className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#D96B82] to-[#C8526B] hover:from-[#C8526B] hover:to-[#B24058] text-white text-xs font-bold rounded-xl shadow-md shadow-rose-200/40 transition-all">Khám phá sản phẩm ngay →</a>
         </div>
       ) : orders.map((order) => (

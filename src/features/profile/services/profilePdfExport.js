@@ -29,7 +29,7 @@ export function generateReportHtml({ user = {}, history = [], orders = [] }) {
   const gradeComment = latestScan.overallGradeComment || (grade === 'A'
     ? 'Làn da khỏe mạnh, cấu trúc ổn định'
     : grade === 'B' ? 'Làn da ở mức ổn định, cần duy trì chu trình' : 'Cần phác đồ phục hồi hàng rào bảo vệ');
-  const assessment = latestScan.analysis3Angles || latestScan.fullAnalysis?.analysis3Angles || 'Chỉ số sức khỏe đạt mức ổn định. Khuyên dùng chu trình dưỡng ẩm và phục hồi chuẩn Y khoa.';
+  const assessment = latestScan.analysis3Angles || latestScan.fullAnalysis?.analysis3Angles || 'Chỉ số sức khỏe đạt mức ổn định. Khuyên dùng chu trình dưỡng ẩm và phục hồi chuyên sâu.';
   
   const rawMetrics = latestScan.metrics || {};
   const metricValues = [
@@ -411,7 +411,7 @@ export function generateReportHtml({ user = {}, history = [], orders = [] }) {
 
   <div class="no-print">
     <div>
-      <strong>Xem Trước Báo Cáo Y Khoa SkinID</strong>
+      <strong>Xem Trước Báo Cáo Phân Tích Da SkinID</strong>
       <span style="font-size: 11px; opacity: 0.8; margin-left: 8px;">(Sử dụng chức năng In của trình duyệt để lưu tệp PDF chất lượng cao)</span>
     </div>
     <div>
@@ -425,7 +425,7 @@ export function generateReportHtml({ user = {}, history = [], orders = [] }) {
     <header class="report-header">
       <div>
         <h1 class="brand-title">SkinID<span>.vn</span></h1>
-        <div class="brand-subtitle">Hệ Thống Phân Tích Da AI & Dược Mỹ Phẩm Chuẩn Y Khoa</div>
+        <div class="brand-subtitle">Hệ Thống Phân Tích Da Bằng Trí Tuệ Nhân Tạo & Dược Mỹ Phẩm Chính Hãng</div>
       </div>
       <div class="meta-box">
         <div>Mã hồ sơ: <strong>${reportId}</strong></div>
@@ -490,7 +490,7 @@ export function generateReportHtml({ user = {}, history = [], orders = [] }) {
       </div>
 
       <div class="assessment-box">
-        <strong>Nhận định chuyên khoa từ AI 3 góc chụp: </strong>
+        <strong>Đánh giá khoa học từ AI 3 góc chụp: </strong>
         <span>${gradeComment}. ${assessment}</span>
       </div>
     </section>
@@ -504,7 +504,7 @@ export function generateReportHtml({ user = {}, history = [], orders = [] }) {
             <th style="width: 25%;">Chỉ Số Cấu Trúc</th>
             <th style="width: 15%;">Điểm Số</th>
             <th style="width: 35%;">Thanh Đo Sinh Học</th>
-            <th style="width: 25%;">Đánh Giá Lâm Sàng</th>
+            <th style="width: 25%;">Đánh Giá Tham Khảo</th>
           </tr>
         </thead>
         <tbody>
@@ -529,7 +529,7 @@ export function generateReportHtml({ user = {}, history = [], orders = [] }) {
 
     <!-- 4. Phác Đồ Chăm Sóc Sáng & Tối -->
     <section class="section">
-      <div class="section-title">4. Phác Đồ Điều Trị & Chăm Sóc Cá Nhân Hóa (Chu Kỳ 28 Ngày)</div>
+      <div class="section-title">4. Chu Trình Chăm Sóc Da Gợi Ý (Tham Khảo Chu Kỳ 28 Ngày)</div>
       <div class="routine-grid">
         <div class="routine-box">
           <h4>☀️ Buổi Sáng · Bảo Vệ & Cấp Ẩm</h4>
@@ -538,7 +538,7 @@ export function generateReportHtml({ user = {}, history = [], orders = [] }) {
             <span class="step-desc">Loại bỏ dầu thừa đêm qua, giữ màng ẩm tự nhiên mềm mịn.</span>
           </div>
           <div class="step-item">
-            <span class="step-num">2</span><span class="step-name">Tinh chất điều trị chuyên sâu</span>
+            <span class="step-num">2</span><span class="step-name">Tinh chất chuyên sâu & Cấp ẩm</span>
             <span class="step-desc">Thẩm thấu sâu khắc phục vấn đề da hàng đầu (HA, Niacinamide).</span>
           </div>
           <div class="step-item">
@@ -554,7 +554,7 @@ export function generateReportHtml({ user = {}, history = [], orders = [] }) {
             <span class="step-desc">Hút sạch bụi mịn PM2.5, bã nhờn và cặn kem chống nắng tích tụ.</span>
           </div>
           <div class="step-item">
-            <span class="step-num">2</span><span class="step-name">Đặc trị & Phục hồi liên kết</span>
+            <span class="step-num">2</span><span class="step-name">Tinh chất phục hồi & Tái tạo</span>
             <span class="step-desc">Kích thích tái tạo tế bào biểu bì mới trong giấc ngủ.</span>
           </div>
           <div class="step-item">
@@ -568,7 +568,7 @@ export function generateReportHtml({ user = {}, history = [], orders = [] }) {
     <!-- 5. Sản Phẩm Khuyên Dùng -->
     ${products.length ? `
     <section class="section">
-      <div class="section-title">5. Danh Mục Dược Mỹ Phẩm Chuẩn Y Khoa Khuyên Dùng</div>
+      <div class="section-title">5. Danh Mục Dược Mỹ Phẩm Gợi Ý Cho Làn Da</div>
       <table class="products-table">
         <thead>
           <tr>
@@ -623,11 +623,11 @@ export function generateReportHtml({ user = {}, history = [], orders = [] }) {
         <div><strong>Hệ thống Phân tích Da & Dược Mỹ Phẩm SkinID.vn</strong></div>
         <div>Phân phối chính hãng Rilastil & TWON (Công ty TNHH FieldMan)</div>
         <div>Tư vấn Dược sĩ 1:1 qua Zalo: <strong>0924 093 461</strong> · Website: <strong>https://skinid.vn</strong></div>
-        <div style="margin-top: 4px; font-size: 10px; color: #9A8E95;">* Kết quả phân tích mang tính chất tham khảo y khoa, đồng hành cải thiện làn da theo chu kỳ 28 ngày.</div>
+        <div style="margin-top: 4px; font-size: 10px; color: #9A8E95;">* Lưu ý quan trọng: Kết quả phân tích từ AI mang tính chất khoa học tham khảo, không phải chẩn đoán y khoa và không thay thế phác đồ điều trị của bác sĩ da liễu.</div>
       </div>
       <div class="footer-stamp">
         <div>SkinID.vn</div>
-        <div style="font-size: 8.5px; opacity: 0.85;">CHỨNG THỰC AI</div>
+        <div style="font-size: 8.5px; opacity: 0.85;">PHÂN TÍCH AI</div>
       </div>
     </footer>
   </div>

@@ -379,7 +379,7 @@ export const CATALOG_FIXTURE = [
       "4-BUTYLRESORCINOL: Hoạt chất ức chế mạnh mẽ enzym Tyrosinase, chặn đứng gốc rễ sắc tố Melanin.",
       "TETRAPEPTIDE-30: Làm mờ các đốm nâu cứng đầu, cân bằng sắc tố và làm đều màu da.",
       "MANDELIC ACID: Tẩy da chết hóa học nhẹ dịu, loại bỏ lớp sừng xỉn màu.",
-      "CLARI-TECH COMPLEX: Phức hợp dưỡng sáng y khoa độc quyền từ Rilastil."
+      "CLARI-TECH COMPLEX: Phức hợp dưỡng sáng chuyên sâu độc quyền từ Rilastil."
     ],
     "mainActives": [
       "4-BUTYLRESORCINOL",
@@ -2280,7 +2280,7 @@ export const CATALOG_FIXTURE = [
       "4-BUTYLRESORCINOL: Hoạt chất ức chế mạnh mẽ enzym Tyrosinase, chặn đứng gốc rễ sắc tố Melanin.",
       "TETRAPEPTIDE-30: Làm mờ các đốm nâu cứng đầu, cân bằng sắc tố và làm đều màu da.",
       "MANDELIC ACID: Tẩy da chết hóa học nhẹ dịu, loại bỏ lớp sừng xỉn màu.",
-      "CLARI-TECH COMPLEX: Phức hợp dưỡng sáng y khoa độc quyền từ Rilastil."
+      "CLARI-TECH COMPLEX: Phức hợp dưỡng sáng chuyên sâu độc quyền từ Rilastil."
     ],
     "mainActives": [
       "4-BUTYLRESORCINOL",

@@ -157,10 +157,10 @@ function SkincareRoutineSection({ scan }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-100">
         <div>
           <h4 className="font-black text-gray-900 text-base sm:text-lg flex items-center gap-2">
-            <span>Phác Đồ Chăm Sóc Da Cá Nhân Hóa</span>
-            <span className="text-[10px] uppercase font-bold px-2.5 py-0.5 rounded-full bg-brand-blush text-brand-primary border border-brand-petal">Chuẩn Y Khoa</span>
+            <span>Gợi Ý Chu Trình Chăm Sóc Da Cá Nhân Hóa</span>
+            <span className="text-[10px] uppercase font-bold px-2.5 py-0.5 rounded-full bg-brand-blush text-brand-primary border border-brand-petal">Gợi Ý Tham Khảo Từ AI</span>
           </h4>
-          <p className="text-xs text-gray-500 mt-0.5">Phác đồ 6 bước (Sáng & Tối) được thiết kế riêng theo kết quả phân tích làn da của phiên này.</p>
+          <p className="text-xs text-gray-500 mt-0.5">Chu trình gợi ý 6 bước (Sáng & Tối) được thiết kế tham khảo theo kết quả phân tích làn da của phiên này.</p>
         </div>
 
         <div className="flex items-center gap-1.5 bg-gray-100/90 p-1 rounded-xl self-start sm:self-auto">

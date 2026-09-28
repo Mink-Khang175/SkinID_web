@@ -145,7 +145,7 @@ function renderCatalog() {
                     </svg>
                 </div>
                 <h3 class="text-base font-semibold text-[#181517]">Không tìm thấy sản phẩm Dược mỹ phẩm phù hợp</h3>
-                <p class="text-xs text-[#6C757D] mt-1.5 max-w-md leading-relaxed">Bộ lọc hiện tại không có kết quả khớp. Bạn có thể xóa tiêu chí lọc để duyệt toàn bộ danh mục sản phẩm chuẩn Y khoa.</p>
+                <p class="text-xs text-[#6C757D] mt-1.5 max-w-md leading-relaxed">Bộ lọc hiện tại không có kết quả khớp. Bạn có thể xóa tiêu chí lọc để duyệt toàn bộ danh mục sản phẩm chính hãng.</p>
                 <button
                     type="button"
                     onclick="window.resetAllFilters && window.resetAllFilters()"

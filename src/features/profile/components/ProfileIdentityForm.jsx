@@ -87,7 +87,7 @@ export default function ProfileIdentityForm({ user, isSaving, onSave }) {
 
   return (
     <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-200 shadow-sm">
-      <div className="pb-4 mb-6 border-b border-gray-100"><h2 className="text-lg font-black text-gray-900">Thông Tin Định Danh</h2><p className="text-xs text-gray-500">Cập nhật thông tin để SkinID cá nhân hóa kết quả tư vấn y khoa</p></div>
+      <div className="pb-4 mb-6 border-b border-gray-100"><h2 className="text-lg font-black text-gray-900">Thông Tin Định Danh</h2><p className="text-xs text-gray-500">Cập nhật thông tin để SkinID cá nhân hóa gợi ý chu trình chăm sóc da</p></div>
       <form id="form-edit-profile" onSubmit={submit} className="space-y-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div><label className="block text-xs font-bold text-gray-700 mb-1.5">Họ và tên *</label><input type="text" id="prof-name" required value={form.name} onChange={update('name')} className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:bg-white transition-all" /></div>

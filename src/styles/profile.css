@@ -275,7 +275,7 @@
   padding-top: 24px !important; /* Tránh lẹm mép trên */
 }
 
-/* Màu chỉ số y khoa chuẩn */
+/* Màu chỉ số phân tích làn da */
 .status-good { color: #10B981 !important; }    /* Khá / Tốt -> Xanh lá */
 .status-warning { color: #F59E0B !important; } /* Cần chú ý -> Cam */
 .status-danger { color: #E11D48 !important; }  /* Cần cải thiện -> Đỏ */

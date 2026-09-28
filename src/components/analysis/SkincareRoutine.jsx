@@ -404,12 +404,12 @@ export default function SkincareRoutine() {
                 {/* TẦNG 4: BỘ SẢN PHẨM KHUYÊN DÙNG & CHECKOUT */}
                 <div className="bg-white border border-[#FFE8ED] shadow-sm rounded-3xl p-6 md:p-8">
                     <div className="mb-6">
-                        <span className="text-xs font-bold text-brand-primary uppercase tracking-wider block mb-1">Kê đơn phác đồ</span>
+                        <span className="text-xs font-bold text-brand-primary uppercase tracking-wider block mb-1">Gợi ý chu trình</span>
                         <h3 className="font-bold text-xl md:text-2xl text-brand-dark flex items-center gap-2">
                             <i data-feather="shopping-bag" className="text-brand-primary w-5 h-5"></i>
                             Routine Dược Mỹ Phẩm Khuyên Dùng
                         </h3>
-                        <p className="text-gray-500 text-xs md:text-sm mt-1">Các sản phẩm chuẩn Y khoa Rilastil & TWON được AI đề xuất chính xác theo nhu cầu da của bạn.</p>
+                        <p className="text-gray-500 text-xs md:text-sm mt-1">Các sản phẩm dược mỹ phẩm chính hãng Rilastil & TWON được AI gợi ý phù hợp theo nhu cầu da của bạn.</p>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="product-recommendations">
