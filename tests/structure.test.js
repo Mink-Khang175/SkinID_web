@@ -17,9 +17,15 @@ assert.match(read('index.html'), /<meta name="viewport" content="width=device-wi
 assert.match(read('index.html'), /<div id="root"><\/div>/);
 assert.match(read('index.html'), /<script type="module" src="\/src\/main\.jsx"><\/script>/);
 assert.match(read('src/main.jsx'), /import '\.\/styles\/site\.css'/);
-assert.match(read('src/App.jsx'), /path === '\/profile'/);
-assert.match(read('src/App.jsx'), /path === '\/skin-analysis'/);
-assert.match(read('src/App.jsx'), /path === '\/admin'/);
+const router = read('src/app/router.jsx');
+assert.match(router, /createBrowserRouter/);
+for (const route of ['products', 'profile', 'skin-analysis', 'admin', 'acie', 'tra-cuu-cong-bo']) {
+    assert.match(router, new RegExp(`path: '${route}'`), `router must define /${route}`);
+}
+assert.match(router, /path: '\*'/);
+assert.match(router, /import\('\.\.\/pages\/HomePage\.jsx'\)/);
+assert.match(read('src/App.jsx'), /<RouterProvider/);
+assert.match(read('src/App.jsx'), /<AppProviders>/);
 assert(!fs.existsSync(path.join(root, 'profile.html')));
 assert(!fs.existsSync(path.join(root, 'skin-analysis.html')));
 const stylesheet = read('src/styles/site.css');
@@ -41,7 +47,7 @@ const reactComponents = [
     'src/components/layout/Header.jsx',
     'src/components/home/HeroBanner.jsx',
     'src/components/home/CategorySection.jsx',
-    'src/components/home/ProductList.jsx',
+    'src/features/catalog/ProductCatalog.jsx',
     'src/components/home/BrandShowcase.jsx',
     'src/components/analysis/SkincareRoutine.jsx',
     'src/components/layout/Footer.jsx'
@@ -59,7 +65,7 @@ for (const component of ['Header', 'HeroBanner', 'FeaturedProducts', 'BrandShowc
 assert(reactApp.indexOf('<FeaturedProducts />') < reactApp.indexOf('<HelpSection />'));
 assert(reactApp.indexOf('<HelpSection />') < reactApp.indexOf('<BrandShowcase />'));
 assert(!reactApp.includes('<ProductList />'));
-assert(read('src/pages/ProductsPage.jsx').includes('<ProductList />'));
+assert(read('src/pages/ProductsPage.jsx').includes('<ProductCatalog />'));
 const analysisApp = read('src/pages/SkinAnalysisPage.jsx');
 for (const component of ['Header', 'SkincareRoutine', 'Footer', 'MobileNav', 'StorefrontModals', 'ProductDetailModal']) {
     assert.match(analysisApp, new RegExp(`<${component} \/>`), `SkinAnalysisPage must render ${component}`);
@@ -70,8 +76,10 @@ assert.match(storefront, /Math\.floor\(Date\.now\(\) \/ carouselRotationMs\) % s
 assert.doesNotMatch(storefront, /setInterval\(\(\) => showSlide\(activeIndex \+ 1\), 5500\)/);
 const bootstrap = read('src/js/app/bootstrap.js');
 const scripts = [...bootstrap.matchAll(/'(src\/[^']+\.js)'/g)].map(m => m[1]);
-assert(scripts.indexOf('src/js/app/runtime-config.js') < scripts.indexOf('src/js/app/firebase-init.js'));
-assert(scripts.indexOf('src/js/app/firebase-init.js') < scripts.indexOf('src/js/account/auth-firebase.js'));
+assert(!scripts.includes('src/js/app/runtime-config.js'));
+assert(!scripts.includes('src/js/app/firebase-init.js'));
+assert.match(read('src/main.jsx'), /installLegacyRuntimeConfig/);
+assert.match(read('src/main.jsx'), /from '\.\/infrastructure\/firebase\/index\.js'/);
 assert(scripts.indexOf('src/data/products.js') < scripts.indexOf('src/js/catalog/catalog-loader.js'));
 assert(scripts.indexOf('src/data/products.js') < scripts.indexOf('src/js/analysis/skin-analysis.js'));
 assert(scripts.indexOf('src/js/catalog/product-filters.js') < scripts.indexOf('src/js/analysis/skin-analysis.js'));
@@ -86,44 +94,57 @@ const app = read('src/js/analysis/skin-analysis.js');
 assert(!/AIza[\w-]{30,}/.test(app));
 assert(!app.includes('generativelanguage.googleapis.com'));
 assert(!app.includes('createLocalSkinAnalysis'));
-assert.match(app, /apiRequest\('\/analyze-skin'/);
+assert.match(app, /skinid:analysis-request/);
+const skinAnalysisService = read('src/features/skin-analysis/services/skinAnalysisService.js');
+assert.match(skinAnalysisService, /apiRequest\('\/analyze-skin'/);
 assert.doesNotMatch(app, /analysisEndpoint|netlify/i);
-const runtimeConfig = read('src/js/app/runtime-config.js');
+const runtimeConfig = read('src/shared/config/runtime.js');
 assert.match(runtimeConfig, /projectId: 'skinid-df273'/);
 assert.match(runtimeConfig, /measurementId: 'G-425CLMQ7YP'/);
 assert(!runtimeConfig.includes('geminiApiKey'));
 assert.doesNotMatch(runtimeConfig, /netlify|analysisEndpoint/i);
-assert.match(bootstrap, /src\/js\/account\/profile-dashboard\.js/);
-assert.match(bootstrap, /src\/js\/admin\/admin-dashboard\.js/);
-assert.match(read('src/pages/ProfilePage.jsx'), /useLegacyApplication\('profile'\)/);
-assert.match(read('src/pages/ProfilePage.jsx'), /id="profile-save-bar"/);
-assert.match(read('src/pages/ProfilePage.jsx'), /id="profile-avatar-input"/);
-assert.match(read('src/pages/ProfilePage.jsx'), /id="prof-province"/);
-assert.match(read('src/pages/ProfilePage.jsx'), /id="prof-ward"/);
+assert(!fs.existsSync(path.join(root, 'src/js/app/runtime-config.js')));
+assert(!fs.existsSync(path.join(root, 'src/js/app/firebase-init.js')));
+assert.doesNotMatch(bootstrap, /src\/js\/account\/profile-dashboard\.js/);
+assert(!fs.existsSync(path.join(root, 'src/js/account/profile-dashboard.js')));
+assert.doesNotMatch(bootstrap, /src\/js\/admin\/admin-dashboard\.js/);
+assert.doesNotMatch(read('src/pages/ProfilePage.jsx'), /useLegacyApplication|data-feather/);
+assert.match(read('src/features/profile/components/ProfileIdentityForm.jsx'), /id="profile-save-bar"/);
+assert.match(read('src/features/profile/components/ProfileHero.jsx'), /id="profile-avatar-input"/);
+assert.match(read('src/features/profile/components/ProfileIdentityForm.jsx'), /id="prof-province"/);
+assert.match(read('src/features/profile/components/ProfileIdentityForm.jsx'), /id="prof-ward"/);
 assert.match(read('src/styles/profile.css'), /\.profile-page \.tab-btn\.active/);
-assert.match(read('src/pages/AdminPage.jsx'), /useLegacyApplication\('admin'\)/);
+assert.doesNotMatch(read('src/pages/AdminPage.jsx'), /useLegacyApplication|innerHTML/);
+const compliancePage = read('src/pages/CompliancePage.jsx');
+assert.doesNotMatch(compliancePage, /useLegacyApplication|window\.LOCAL_PRODUCTS|setInterval/);
+assert.match(compliancePage, /useCatalog/);
+const featuredProducts = read('src/components/home/FeaturedProducts.jsx');
+assert(featuredProducts.indexOf('const featuredProducts =') < featuredProducts.indexOf('featuredProducts.forEach'));
 assert.match(read('firestore.rules'), /match \/orders\/\{orderId\}/);
 assert.match(read('firestore.rules'), /match \/commerce\/\{documentId\}/);
 assert.match(read('firestore.rules'), /allow create: if false/);
-const cart = read('src/js/cart/cart.js');
-assert.match(cart, /async submitCheckout/);
-assert.match(cart, /checkout-province/);
-assert.match(cart, /checkout-ward/);
-assert.doesNotMatch(cart, /localStorage|sessionStorage/);
-assert.match(bootstrap, /src\/js\/services\/vietnam-address\.js/);
+assert(!fs.existsSync(path.join(root, 'src/js/cart/cart.js')));
+const cartContext = read('src/features/cart/context/CartContext.jsx');
+const checkout = read('src/features/cart/components/CheckoutModal.jsx');
+assert.match(checkout, /createOrder/);
+assert.match(cartContext, /skinid:cart-add/);
+assert.doesNotMatch(cartContext, /setInterval|localStorage|sessionStorage/);
+assert.match(checkout, /provinceCode/);
+assert.match(checkout, /wardCode/);
+assert.doesNotMatch(bootstrap, /src\/js\/(?:cart\/cart|services\/vietnam-address)\.js/);
 assert.match(bootstrap, /src\/js\/app\/scroll-lock\.js/);
 assert.match(read('src/js/app/scroll-lock.js'), /classList\.toggle\('no-scroll', locks\.size > 0\)/);
 assert.match(read('src/js/app/scroll-lock.js'), /site-header.*is-scrolled/);
 assert.doesNotMatch(read('src/js/analysis/skin-analysis.js'), /body\.style\.overflow/);
-assert.match(cart, /SkinIDScrollLock\?\.lock\('cart'\)/);
-assert.match(cart, /SkinIDScrollLock\?\.unlock\('checkout'\)/);
+assert.match(read('src/shared/hooks/useBodyScrollLock.js'), /activeLocks/);
 assert.match(read('worker/index.js'), /async function createOrder/);
 assert.match(read('worker/index.js'), /env\.GEMINI_API_KEY/);
 assert.match(read('worker/index.js'), /validateAddress/);
 assert.match(read('worker/index.js'), /users\/\$\{user\.sub\}\/addresses\/default/);
 assert.match(read('worker/index.js'), /async function deleteUser/);
-assert.match(read('src/js/admin/admin-dashboard.js'), /data-edit-product/);
-assert.match(read('src/js/admin/admin-dashboard.js'), /apiRequest\(`\/admin\/users\//);
+assert(!fs.existsSync(path.join(root, 'src/js/admin/admin-dashboard.js')));
+assert.match(read('src/features/admin/services/adminService.js'), /saveAdminProduct/);
+assert.match(read('src/features/admin/services/adminService.js'), /apiRequest\(`\/admin\/users\//);
 assert.match(read('src/assets/index.js'), /import\.meta\.env\.DEV/);
 assert(!fs.existsSync(path.join(root, 'netlify.toml')));
 assert(!fs.existsSync(path.join(root, 'netlify/functions/analyze-skin.mjs')));

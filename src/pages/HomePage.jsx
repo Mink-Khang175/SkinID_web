@@ -1,5 +1,5 @@
 import SkincareRoutine from '../components/analysis/SkincareRoutine.jsx';
-import ProductDetailModal from '../components/dialogs/ProductDetailModal.jsx';
+import ProductDetailModal from '../features/catalog/ProductDetailModal.jsx';
 import StorefrontModals from '../components/dialogs/StorefrontModals.jsx';
 import AcieTeaser from '../components/home/AcieTeaser.jsx';
 import BrandShowcase from '../components/home/BrandShowcase.jsx';

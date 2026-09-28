@@ -1,148 +1,168 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { firebaseServices } from '../../../infrastructure/firebase/index.js';
+import {
+  authErrorMessage,
+  clearUserHistory,
+  fetchHistory,
+  loadAuthSession,
+  loginWithEmail as loginWithEmailService,
+  loginWithGoogle as loginWithGoogleService,
+  logout as logoutService,
+  registerWithEmail as registerWithEmailService,
+  resetPassword as resetPasswordService,
+  subscribeToAuthSession,
+  updateUserProfile
+} from '../services/authService.js';
 
 const AuthContext = createContext(null);
+const emptySession = { user: null, history: [], orders: [] };
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(() => (typeof window !== 'undefined' ? window.authManager?.getCurrentUser?.() || null : null));
+  const [session, setSession] = useState(emptySession);
   const [isLoading, setIsLoading] = useState(true);
-  const [history, setHistory] = useState([]);
-  const [orders, setOrders] = useState([]);
 
-  const syncAuth = useCallback(() => {
-    if (typeof window !== 'undefined' && window.authManager) {
-      const current = window.authManager.getCurrentUser?.() || null;
-      setUser(current);
-      setHistory(window.authManager.history || []);
-      setOrders(window.authManager.orders || []);
-      setIsLoading(false);
-    }
+  const applySession = useCallback((nextSession) => {
+    setSession(nextSession);
+    setIsLoading(false);
   }, []);
+
+  const refreshSession = useCallback(async () => {
+    const firebaseUser = firebaseServices.auth.currentUser;
+    if (!firebaseUser) {
+      applySession(emptySession);
+      return emptySession;
+    }
+    const nextSession = await loadAuthSession(firebaseUser);
+    applySession(nextSession);
+    return nextSession;
+  }, [applySession]);
 
   useEffect(() => {
-    syncAuth();
-
-    // Check if SKINID_AUTH_READY is a promise
-    if (typeof window !== 'undefined' && window.SKINID_AUTH_READY?.then) {
-      window.SKINID_AUTH_READY.then(() => syncAuth());
-    }
-
-    const handleAuthChanged = (e) => {
-      setUser(e.detail || null);
-      if (typeof window !== 'undefined' && window.authManager) {
-        setHistory(window.authManager.history || []);
-        setOrders(window.authManager.orders || []);
-      }
-      setIsLoading(false);
+    const unsubscribe = subscribeToAuthSession(applySession, (error) => {
+      console.error('[SkinID Auth] Không thể tải phiên người dùng:', error);
+      applySession(emptySession);
+    });
+    const refreshHistory = async () => {
+      const userId = firebaseServices.auth.currentUser?.uid;
+      if (!userId) return;
+      const history = await fetchHistory(userId).catch(() => []);
+      setSession((current) => ({ ...current, history }));
     };
-
-    const handleDataLoaded = (e) => {
-      setUser(e.detail || null);
-      if (typeof window !== 'undefined' && window.authManager) {
-        setHistory(window.authManager.history || []);
-        setOrders(window.authManager.orders || []);
-      }
-    };
-
-    document.addEventListener('skinid:auth-changed', handleAuthChanged);
-    document.addEventListener('skinid:data-loaded', handleDataLoaded);
-    document.addEventListener('skinid:ready', syncAuth);
-
+    document.addEventListener('skinid:history-changed', refreshHistory);
     return () => {
-      document.removeEventListener('skinid:auth-changed', handleAuthChanged);
-      document.removeEventListener('skinid:data-loaded', handleDataLoaded);
-      document.removeEventListener('skinid:ready', syncAuth);
+      unsubscribe();
+      document.removeEventListener('skinid:history-changed', refreshHistory);
     };
-  }, [syncAuth]);
+  }, [applySession]);
 
-  const loginWithEmail = useCallback(async (email, password) => {
-    if (!window.authManager?.loginWithEmail) throw new Error('Auth manager chưa sẵn sàng');
-    const result = await window.authManager.loginWithEmail(email, password);
-    syncAuth();
-    return result;
-  }, [syncAuth]);
-
-  const registerWithEmail = useCallback(async (email, password, displayName) => {
-    if (!window.authManager?.registerWithEmail) throw new Error('Auth manager chưa sẵn sàng');
-    const result = await window.authManager.registerWithEmail(email, password, displayName);
-    syncAuth();
-    return result;
-  }, [syncAuth]);
-
-  const loginWithGoogle = useCallback(async () => {
-    if (!window.authManager?.loginWithGoogle) throw new Error('Auth manager chưa sẵn sàng');
-    const result = await window.authManager.loginWithGoogle();
-    syncAuth();
-    return result;
-  }, [syncAuth]);
-
-  const logout = useCallback(async () => {
-    if (window.authManager?.logout) {
-      await window.authManager.logout();
+  const loginWithEmail = useCallback(async (email, password, remember = true) => {
+    try {
+      const user = await loginWithEmailService(email, password, remember);
+      return { success: true, user };
+    } catch (error) {
+      return { success: false, message: authErrorMessage(error) };
     }
-    setUser(null);
-    setHistory([]);
-    setOrders([]);
   }, []);
 
-  const openAuthModal = useCallback((message) => {
-    window.authManager?.openAuthModal?.(message);
+  const registerWithEmail = useCallback(async (form) => {
+    try {
+      const user = await registerWithEmailService(form);
+      return { success: true, user };
+    } catch (error) {
+      return { success: false, message: authErrorMessage(error) };
+    }
+  }, []);
+
+  const loginWithGoogle = useCallback(async () => {
+    try {
+      const user = await loginWithGoogleService();
+      return { success: true, user };
+    } catch (error) {
+      return { success: false, message: authErrorMessage(error) };
+    }
+  }, []);
+
+  const logout = useCallback(async () => {
+    await logoutService();
+    applySession(emptySession);
+  }, [applySession]);
+
+  const openAuthModal = useCallback((message = '') => {
+    document.dispatchEvent(new CustomEvent('skinid:auth-dialog-open', { detail: { message } }));
   }, []);
 
   const closeAuthModal = useCallback(() => {
-    window.authManager?.closeAuthModal?.();
+    document.dispatchEvent(new CustomEvent('skinid:auth-dialog-close'));
   }, []);
 
   const updateProfile = useCallback(async (data) => {
-    if (!window.authManager?.updateProfile) throw new Error('Auth manager chưa sẵn sàng');
-    const updated = await window.authManager.updateProfile(data);
-    syncAuth();
-    return updated;
-  }, [syncAuth]);
+    if (!session.user?.uid) return { success: false, message: 'Chưa đăng nhập.' };
+    try {
+      const user = await updateUserProfile(session.user.uid, data);
+      setSession((current) => ({ ...current, user }));
+      return { success: true, user };
+    } catch (error) {
+      return { success: false, message: authErrorMessage(error) };
+    }
+  }, [session.user?.uid]);
 
-  const isAuthenticated = Boolean(user?.uid || user?.id);
-  const isAdmin = Boolean(user?.isAdmin || user?.customClaims?.admin);
+  const resetPassword = useCallback(async (email) => {
+    try {
+      await resetPasswordService(email);
+      return { success: true, message: 'Đã gửi email đặt lại mật khẩu.' };
+    } catch (error) {
+      return { success: false, message: authErrorMessage(error) };
+    }
+  }, []);
 
+  const clearHistory = useCallback(async () => {
+    if (!session.user?.uid) return false;
+    if (!window.confirm('Bạn có chắc muốn xóa toàn bộ lịch sử soi da?')) return false;
+    await clearUserHistory(session.user.uid);
+    setSession((current) => ({ ...current, history: [] }));
+    document.dispatchEvent(new CustomEvent('skinid:history-changed'));
+    return true;
+  }, [session.user?.uid]);
+
+  const isAuthenticated = Boolean(session.user?.uid);
+  const isAdmin = Boolean(session.user?.isAdmin || session.user?.customClaims?.admin);
   const value = useMemo(() => ({
-    user,
+    ...session,
     isAuthenticated,
     isAdmin,
     isLoading,
-    history,
-    orders,
     loginWithEmail,
     registerWithEmail,
     loginWithGoogle,
     logout,
     openAuthModal,
     closeAuthModal,
-    updateProfile
-  }), [user, isAuthenticated, isAdmin, isLoading, history, orders, loginWithEmail, registerWithEmail, loginWithGoogle, logout, openAuthModal, closeAuthModal, updateProfile]);
+    updateProfile,
+    resetPassword,
+    clearHistory,
+    refreshSession
+  }), [session, isAuthenticated, isAdmin, isLoading, loginWithEmail, registerWithEmail, loginWithGoogle, logout, openAuthModal, closeAuthModal, updateProfile, resetPassword, clearHistory, refreshSession]);
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
   const context = useContext(AuthContext);
-  if (!context) {
-    return {
-      user: null,
-      isAuthenticated: false,
-      isAdmin: false,
-      isLoading: false,
-      history: [],
-      orders: [],
-      loginWithEmail: async () => {},
-      registerWithEmail: async () => {},
-      loginWithGoogle: async () => {},
-      logout: async () => {},
-      openAuthModal: () => {},
-      closeAuthModal: () => {},
-      updateProfile: async () => {}
-    };
-  }
-  return context;
+  if (context) return context;
+  return {
+    ...emptySession,
+    isAuthenticated: false,
+    isAdmin: false,
+    isLoading: false,
+    loginWithEmail: async () => ({ success: false }),
+    registerWithEmail: async () => ({ success: false }),
+    loginWithGoogle: async () => ({ success: false }),
+    logout: async () => {},
+    openAuthModal: () => {},
+    closeAuthModal: () => {},
+    updateProfile: async () => ({ success: false }),
+    resetPassword: async () => ({ success: false }),
+    clearHistory: async () => false,
+    refreshSession: async () => emptySession
+  };
 }

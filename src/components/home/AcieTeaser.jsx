@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { assetUrl } from '../../assets/index.js';
+import { openConsultationDialog } from '../../shared/events/storefrontDialogs.js';
 
 export default function AcieTeaser() {
   const sectionRef = useRef(null);
@@ -63,10 +64,7 @@ export default function AcieTeaser() {
             <button
               className="btn btn--outline btn--pill acie-secondary-btn"
               type="button"
-              onClick={() => {
-                if (window.openConsultation) window.openConsultation();
-                else window.showToast?.('Cảm ơn bạn! Hệ thống đã ghi nhận quan tâm thiết bị Acie.');
-              }}
+              onClick={openConsultationDialog}
             >
               <span>Đăng ký tại Store</span>
             </button>

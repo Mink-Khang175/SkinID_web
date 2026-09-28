@@ -11,6 +11,24 @@ window.webcamStream = null;
 window.currentRoutineIds = [];
     window.excludedRoutineIds = new Set();
 
+function readModernAuth(message = '') {
+    const detail = { isAuthenticated: false, user: null, message };
+    document.dispatchEvent(new CustomEvent('skinid:analysis-auth-check', { detail }));
+    return detail;
+}
+
+function requestModernAnalysis(payload) {
+    return new Promise((resolve, reject) => {
+        document.dispatchEvent(new CustomEvent('skinid:analysis-request', { detail: { payload, resolve, reject } }));
+    });
+}
+
+function saveModernSkinReport(report, emailReport) {
+    return new Promise((resolve, reject) => {
+        document.dispatchEvent(new CustomEvent('skinid:analysis-save-report', { detail: { report, emailReport, resolve, reject } }));
+    });
+}
+
 // Gemini credentials live only in the authenticated Cloud Function.
 
 // UTILS
@@ -19,15 +37,13 @@ function formatPrice(price) {
 }
 
 function addToCart(productId) {
-    cartManager.addItem(productId, 1);
+    document.dispatchEvent(new CustomEvent('skinid:cart-add', { detail: { productId, quantity: 1 } }));
     showToast('Đã thêm sản phẩm vào giỏ hàng!');
 }
 
 function addAllToCart() {
     if (window.currentRoutineIds && window.currentRoutineIds.length > 0) {
-        window.currentRoutineIds.forEach(id => {
-            cartManager.addItem(id, 1);
-        });
+        document.dispatchEvent(new CustomEvent('skinid:cart-add-many', { detail: { productIds: window.currentRoutineIds } }));
         showToast(`Đã thêm toàn bộ phác đồ (${window.currentRoutineIds.length} sản phẩm) vào giỏ hàng!`);
     } else {
         showToast('Không có sản phẩm nào trong phác đồ để thêm!');
@@ -318,7 +334,7 @@ function initCatalog() {
 }
 
 // PRODUCT DETAIL MODAL (Matching Rilastil Training & Product Spec)
-window.openProductDetailModal = function(productId) {
+window.openProductDetailModal ||= function(productId) {
     const catalog = (Array.isArray(window.PRODUCTS) && window.PRODUCTS.length > 0)
         ? window.PRODUCTS
         : (Array.isArray(window.LOCAL_PRODUCTS) ? window.LOCAL_PRODUCTS : (typeof PRODUCTS !== 'undefined' ? PRODUCTS : []));
@@ -411,9 +427,7 @@ window.openProductDetailModal = function(productId) {
     const addBtn = document.getElementById('pmodal-add-cart-btn');
     if (addBtn) {
         addBtn.onclick = () => {
-            if (window.cartManager) {
-                window.cartManager.addItem(p.id);
-            }
+            document.dispatchEvent(new CustomEvent('skinid:cart-add', { detail: { productId: p.id, quantity: 1 } }));
             if (typeof showToast === 'function') {
                 showToast('Đã thêm sản phẩm vào giỏ hàng!');
             }
@@ -474,7 +488,7 @@ window.closeLicenseModal = function() {
     }
 };
 
-window.closeProductDetailModal = function() {
+window.closeProductDetailModal ||= function() {
     window.closeLicenseModal?.();
     const modal = document.getElementById('product-detail-modal');
     if (!modal) return;
@@ -534,10 +548,7 @@ function matchProductForStep(stepType, targetConcerns, activeIngredients, budget
 
 // PRIVACY MODAL FLOW
 function openPrivacyModal() {
-    if (window.authManager && !window.authManager.getCurrentUser()) {
-        window.authManager.openAuthModal('Đăng nhập để bắt đầu Soi Da AI và lưu phác đồ riêng của bạn nhé ✨');
-        return;
-    }
+    if (!readModernAuth('Đăng nhập để bắt đầu Soi Da AI và lưu phác đồ riêng của bạn nhé ✨').isAuthenticated) return;
     const modal = document.getElementById('privacy-modal');
     if (!modal) return;
     modal.classList.remove('hidden');
@@ -1105,19 +1116,12 @@ async function startAnalysis() {
     const skinType = document.getElementById('user-skin-type')?.value || 'Da hỗn hợp';
     
     try {
-        if (!window.authManager?.getCurrentUser()) throw new Error('Bạn cần đăng nhập trước khi phân tích da.');
-        await window.SKINID_FIREBASE_READY;
-        const [response, weatherData] = await Promise.all([
-            window.authManager.apiRequest('/analyze-skin', {
-                method: 'POST',
-                body: JSON.stringify({ images: window.capturedImages, skinType }),
-                timeoutMs: 60000
-            }),
+        if (!readModernAuth().isAuthenticated) throw new Error('Bạn cần đăng nhập trước khi phân tích da.');
+        const [resultJson, weatherData] = await Promise.all([
+            requestModernAnalysis({ images: window.capturedImages, skinType }),
             fetchWeatherData()
         ]);
         stepTimers.forEach(clearTimeout);
-
-        const resultJson = response?.analysis;
         if (resultJson?.isNotFace) {
             showAnalysisError('Không nhận diện được khuôn mặt người rõ ràng trong đủ 3 ảnh. Vui lòng chụp lại ở nơi đủ sáng.', true);
             return;
@@ -1129,8 +1133,7 @@ async function startAnalysis() {
     } catch (error) {
         stepTimers.forEach(clearTimeout);
         console.error('[SkinID AI]', error);
-        const message = window.authManager?.errorMessage?.(error)
-            || error.message
+        const message = error.message
             || 'Không thể hoàn tất phân tích da. Vui lòng thử lại.';
         showAnalysisError(message, false);
     }
@@ -1403,13 +1406,14 @@ function renderResults(data, weatherData) {
         scrollScanWorkspaceToTop();
 
         // Automatically Save Scan History & Dispatch Email Report to Logged-in User
-        if (window.authManager && window.authManager.getCurrentUser()) {
-            const currentUser = window.authManager.getCurrentUser();
+        const authState = readModernAuth();
+        if (authState.isAuthenticated) {
+            const currentUser = authState.user || {};
             const routineProducts = (window.currentRoutineProducts && window.currentRoutineProducts.length > 0) 
                 ? window.currentRoutineProducts 
                 : (window.currentRoutineIds ? PRODUCTS.filter(p => window.currentRoutineIds.includes(p.id)) : []);
 
-            window.authManager.saveScanHistory({
+            const report = {
                 userName: currentUser.name,
                 healthScore: targetScore,
                 skinType: data.skinTypeSummary || 'Da hỗn hợp',
@@ -1435,15 +1439,13 @@ function renderResults(data, weatherData) {
                 },
                 recommendedRoutine: window.currentRoutineIds || [],
                 recommendedRoutineProducts: routineProducts
-            }).then((savedRecord) => {
-                if (!savedRecord || !window.emailService || !currentUser.email) return;
-                window.emailService.sendSkinReportEmail(currentUser.email, {
+            };
+            saveModernSkinReport(report, {
                     userName: currentUser.name,
                     healthScore: targetScore,
                     skinType: data.skinTypeSummary || 'Da hỗn hợp',
                     skinAge: parseInt(data.skinAge) || 25,
                     recommendedRoutineProducts: routineProducts
-                });
             }).catch(error => console.error('[SkinID history]', error));
         }
         
@@ -1748,11 +1750,7 @@ function addAllToCart() {
         showToast('Vui lòng chọn ít nhất một sản phẩm trong phác đồ.');
         return;
     }
-    uniqueIds.forEach(id => {
-        if(window.cartManager) {
-            cartManager.addItem(id, 1);
-        }
-    });
+    document.dispatchEvent(new CustomEvent('skinid:cart-add-many', { detail: { productIds: uniqueIds } }));
     showToast(`Đã thêm ${uniqueIds.length} sản phẩm vào giỏ hàng!`);
 }
 

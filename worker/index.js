@@ -1,4 +1,3 @@
-import { createRemoteJWKSet, jwtVerify } from 'jose';
 import {
   commitWrites,
   deleteFirebaseUser,
@@ -9,70 +8,12 @@ import {
   runQuery
 } from './firestore.js';
 import { SERVER_CATALOG } from './catalog.generated.js';
+import { ApiError } from './app/errors.js';
+import { json, corsHeaders } from './app/http.js';
+import { requiredFirebaseEnv } from './app/env.js';
+import { authenticate } from './infrastructure/firebase/auth.js';
 
-const jwksByProject = new Map();
 const bundledProducts = new Map(SERVER_CATALOG.map(product => [product.id, product]));
-
-class ApiError extends Error {
-  constructor(status, code, message) {
-    super(message);
-    this.status = status;
-    this.code = code;
-  }
-}
-
-function requiredEnv(env) {
-  for (const key of ['FIREBASE_PROJECT_ID', 'FIREBASE_CLIENT_EMAIL', 'FIREBASE_PRIVATE_KEY']) {
-    if (!env[key]) throw new ApiError(503, 'server_not_configured', 'Hệ thống đặt hàng đang được bảo trì. Vui lòng thử lại sau ít phút.');
-  }
-}
-
-function corsHeaders(request, env) {
-  const origin = request.headers.get('origin') || '';
-  const configured = String(env.ALLOWED_ORIGINS || '')
-    .split(',')
-    .map(value => value.trim().replace(/\/$/, ''))
-    .filter(Boolean);
-  const normalizedOrigin = origin.replace(/\/$/, '');
-  const local = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
-  const domainMatch = /^https?:\/\/([a-z0-9-]+\.)*(skinid\.vn|pages\.dev)$/i.test(normalizedOrigin);
-  const allowed = !origin || origin === new URL(request.url).origin || local || domainMatch || configured.includes('*') || configured.includes(normalizedOrigin);
-  return {
-    'access-control-allow-origin': allowed && origin ? origin : new URL(request.url).origin,
-    'access-control-allow-headers': 'authorization, content-type, idempotency-key',
-    'access-control-allow-methods': 'GET, POST, PATCH, DELETE, OPTIONS',
-    'access-control-max-age': '86400',
-    vary: 'Origin'
-  };
-}
-
-function json(request, env, data, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', ...corsHeaders(request, env) }
-  });
-}
-
-async function authenticate(request, env) {
-  const projectId = env.FIREBASE_PROJECT_ID || 'skinid-df273';
-  const token = request.headers.get('authorization')?.match(/^Bearer\s+(.+)$/i)?.[1];
-  if (!token) throw new ApiError(401, 'unauthenticated', 'Bạn cần đăng nhập trước khi thực hiện thao tác này.');
-  let jwks = jwksByProject.get(projectId);
-  if (!jwks) {
-    jwks = createRemoteJWKSet(new URL('https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com'));
-    jwksByProject.set(projectId, jwks);
-  }
-  try {
-    const result = await jwtVerify(token, jwks, {
-      issuer: `https://securetoken.google.com/${projectId}`,
-      audience: projectId,
-      algorithms: ['RS256']
-    });
-    return result.payload;
-  } catch {
-    throw new ApiError(401, 'invalid_token', 'Phiên đăng nhập không hợp lệ hoặc đã hết hạn.');
-  }
-}
 
 function text(value, label, maxLength = 500) {
   const normalized = String(value || '').trim();
@@ -114,7 +55,7 @@ function isFirestoreConfigured(env) {
 async function createOrder(request, env, user) {
   const hasFirestore = isFirestoreConfigured(env);
   if (!hasFirestore && !env.IS_LOCAL_DEV) {
-    requiredEnv(env);
+    requiredFirebaseEnv(env);
   }
   const payload = await request.json().catch(() => { throw new ApiError(400, 'invalid_json', 'Dữ liệu gửi lên không hợp lệ.'); });
   const requestedItems = Array.isArray(payload.items) ? payload.items : [];

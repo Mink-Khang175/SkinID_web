@@ -25,10 +25,10 @@ window.LOCAL_PRODUCTS = [
             "combination",
             "sensitive"
         ],
-        "uses": "Sữa rửa mặt dưỡng ẩm RIlastil Aqua face cleanser giúp loại bỏ các tạp chất trên da một cách dịu nhẹ . Làm sạch sâu nhưng vẫn giữ được độ ẩm trên da giúp da luôn mềm mịn",
-        "usage": "1-2 lần/ngày",
+        "uses": "Sữa rửa mặt dưỡng ẩm Rilastil Aqua Face Cleanser giúp loại bỏ các tạp chất trên da một cách dịu nhẹ. Công thức làm sạch sâu nhưng vẫn giữ được độ ẩm tự nhiên, giúp làn da luôn mềm mại, mịn màng và tươi tắn.",
+        "usage": "Sử dụng 1-2 lần/ngày vào buổi sáng và buổi tối.",
         "keyActives": [
-            "SODIUM HYALURONATE HYDROLYZED HYALURONIC ACID: Acid hyaluronic trọng lượng phân tử cao và thấp giúp thẩm thấu vào các lớp nông, sâu của da, hút ẩm giúp cho da mềm, mịn"
+            "SODIUM HYALURONATE & HYDROLYZED HYALURONIC ACID: Acid Hyaluronic trọng lượng phân tử cao và thấp giúp thẩm thấu vào các lớp nông và sâu của da, hút ẩm và duy trì độ mềm mịn tự nhiên."
         ],
         "mainActives": [
             "SODIUM HYALURONATE HYDROLYZED HYALURONIC ACID"
@@ -41,13 +41,17 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "cap-am-chuyen-sau"
         ],
-        "benefitName": "Cấp ẩm sâu"
+        "benefitName": "Cấp ẩm sâu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-2103",
         "brand": "Rilastil",
         "brandSlug": "rilastil",
-        "line": "ACNES",
+        "line": "ACNESTIL",
         "name": "XỊT CƠ THỂ DÀNH CHO DA MỤN 150ML – RILASTIL ACNESTIL BODY SPRAY 150ML",
         "slug": "xit-co-the-danh-cho-da-mun-150ml-rilastil-acnestil-body-spray-150ml",
         "price": 817000,
@@ -67,12 +71,12 @@ window.LOCAL_PRODUCTS = [
             "combination",
             "acne-prone"
         ],
-        "uses": "Giải pháp lý tưởng dành cho làn da cơ thể dễ nổi mụn như lưng, ngực, cánh tay, với kết cấu xịt thanh lọc, khô nhanh, giúp làm sạch da, giảm bã nhờn và mụn hiệu quả mà không gây kích ứng. Công dụng nổi bật của RILASTIL ACNESTIL BODY SPRAY: Làm sạch sâu và tẩy tế bào chết nhẹ nhàng cho da cơ thể Giảm ",
-        "usage": "Sử dụng hàng ngày vào sáng và tối",
+        "uses": "Giải pháp lý tưởng dành cho làn da cơ thể dễ nổi mụn như lưng, ngực, cánh tay, với kết cấu xịt thanh lọc và khô thoáng nhanh chóng. Sản phẩm giúp làm sạch sâu, nhẹ nhàng tẩy tế bào chết cho da cơ thể, giảm bã nhờn và hỗ trợ ngăn ngừa mụn hiệu quả mà không gây kích ứng.",
+        "usage": "Sử dụng hàng ngày vào sáng và tối sau khi tắm sạch. Xịt trực tiếp lên vùng da cơ thể cần chăm sóc từ khoảng cách 15-20cm.",
         "keyActives": [
             "SODIUM SALICYLATE / SALICYLIC ACID (BHA): Bạt sừng nhẹ, kháng viêm, làm thông thoáng cổ nang lông.",
             "NIACINAMIDE: Kháng viêm, giảm đỏ, kiểm soát bã nhờn và phục hồi hàng rào bảo vệ da.",
-            "ZINC PCA: Kiềm dầu sinh học, ức chế vi khuẩn mụn P.acnes phát triển.",
+            "ZINC PCA: Kiềm dầu sinh học, ức chế vi khuẩn mụn P. acnes phát triển.",
             "OLIGOPEPTIDE-10 & CHLORHEXIDINE: Kháng khuẩn chuyên sâu và ngăn ngừa mụn tái phát."
         ],
         "mainActives": [
@@ -90,7 +94,11 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "tri-mun-kiem-dau"
         ],
-        "benefitName": "Trị mụn & Kiềm dầu"
+        "benefitName": "Trị mụn & Kiềm dầu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-2101",
@@ -118,8 +126,8 @@ window.LOCAL_PRODUCTS = [
             "normal",
             "combination"
         ],
-        "uses": "RILASTIL MULTIREPAIR RETINOL TECH – giải pháp tiên tiến tái tạo da & ngăn ngừa lão hoá sớm, được kiểm nghiệm da liễu và không gây kích ứng. Retinol là hoạt chất vàng trong chống lão hoá, nhưng dạng thông thường dễ gây bong tróc, đỏ rát – đặc biệt ở làn da nhạy cảm. Rilastil khắc phục hoàn toàn nhược",
-        "usage": "Sử dụng hàng ngày vào sáng và tối",
+        "uses": "Rilastil Multirepair Retinol Tech là giải pháp tiên tiến tái tạo da và ngăn ngừa lão hoá sớm, được kiểm nghiệm da liễu nghiêm ngặt. Sản phẩm ứng dụng dẫn xuất Retinoid thế hệ mới kết hợp hoạt chất sinh học, giúp làm mờ nếp nhăn, tăng độ đàn hồi và tái tạo bề mặt da mịn màng mà không gây kích ứng hay bong tróc.",
+        "usage": "Sử dụng vào buổi tối sau bước làm sạch và cân bằng da. Thoa đều một lượng vừa đủ lên mặt và cổ, massage nhẹ nhàng.",
         "keyActives": [
             "RETINOID HPR (HYDROXYPINACOLONE RETINOATE): Dẫn xuất Retinoid thế hệ mới, tái sinh tế bào mà không gây kích ứng hay bong tróc.",
             "PREBIOTICS & SODIUM DNA: Tăng cường hệ miễn dịch da, kích thích sửa chữa mô tổn thương.",
@@ -140,7 +148,11 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "chong-lao-hoa"
         ],
-        "benefitName": "Chống lão hóa"
+        "benefitName": "Chống lão hóa",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-2098",
@@ -163,8 +175,8 @@ window.LOCAL_PRODUCTS = [
         "skinTypes": [
             "all"
         ],
-        "uses": "Sản phẩm dược mỹ phẩm cao cấp từ Viện nghiên cứu Ganassini Milan - Ý giúp chăm sóc và phục hồi chuyên sâu cấu trúc da.",
-        "usage": "Sử dụng hàng ngày vào sáng và tối",
+        "uses": "Sữa rửa mặt tẩy trang 2 trong 1 giúp làm sạch sâu, nhẹ nhàng loại bỏ lớp trang điểm và tạp chất trên da mà không gây khô căng. Sản phẩm đồng thời nuôi dưỡng và duy trì độ ẩm mịn màng cho mọi loại da.",
+        "usage": "Sử dụng hàng ngày vào sáng và tối. Thoa một lượng vừa đủ lên da khô, massage nhẹ nhàng rồi lau sạch bằng bông cotton hoặc rửa lại với nước.",
         "keyActives": [
             "SODIUM DNA: Thúc đẩy tái tạo tế bào và phục hồi độ săn chắc tự nhiên.",
             "VITAMIN E & DƯỢC LIỆU THIÊN NHIÊN: Bảo vệ và nuôi dưỡng làn da khỏe khoắn."
@@ -183,7 +195,11 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "tri-mun-kiem-dau"
         ],
-        "benefitName": "Trị mụn & Kiềm dầu"
+        "benefitName": "Trị mụn & Kiềm dầu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-2097",
@@ -206,8 +222,8 @@ window.LOCAL_PRODUCTS = [
         "skinTypes": [
             "all"
         ],
-        "uses": "Sản phẩm dược mỹ phẩm cao cấp từ Viện nghiên cứu Ganassini Milan - Ý giúp chăm sóc và phục hồi chuyên sâu cấu trúc da.",
-        "usage": "Sử dụng hàng ngày vào sáng và tối",
+        "uses": "Nước hoa hồng cân bằng và làm dịu da dịu nhẹ, giúp phục hồi độ pH sinh lý, dưỡng ẩm và tăng cường sự tươi tắn, mềm mại cho mọi loại da sau bước làm sạch.",
+        "usage": "Sử dụng hàng ngày vào sáng và tối sau khi rửa mặt. Thấm dung dịch ra bông tẩy trang và nhẹ nhàng thoa đều khắp mặt và cổ.",
         "keyActives": [
             "SODIUM DNA: Thúc đẩy tái tạo tế bào và phục hồi độ săn chắc tự nhiên.",
             "VITAMIN E & DƯỢC LIỆU THIÊN NHIÊN: Bảo vệ và nuôi dưỡng làn da khỏe khoắn."
@@ -226,7 +242,11 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "tri-mun-kiem-dau"
         ],
-        "benefitName": "Trị mụn & Kiềm dầu"
+        "benefitName": "Trị mụn & Kiềm dầu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-2096",
@@ -249,8 +269,8 @@ window.LOCAL_PRODUCTS = [
         "skinTypes": [
             "all"
         ],
-        "uses": "Sản phẩm dược mỹ phẩm cao cấp từ Viện nghiên cứu Ganassini Milan - Ý giúp chăm sóc và phục hồi chuyên sâu cấu trúc da.",
-        "usage": "Sử dụng hàng ngày vào sáng và tối",
+        "uses": "Nước cân bằng kiềm dầu và se khít lỗ chân lông dành riêng cho da dầu mụn. Sản phẩm giúp kiểm soát bã nhờn dư thừa, làm thông thoáng bề mặt da và mang lại cảm giác thanh khiết, khô thoáng.",
+        "usage": "Sử dụng hàng ngày vào sáng và tối sau bước rửa mặt. Thấm một lượng vừa đủ lên bông cotton rồi lau nhẹ nhàng trên toàn mặt, tập trung vùng chữ T.",
         "keyActives": [
             "SODIUM DNA: Thúc đẩy tái tạo tế bào và phục hồi độ săn chắc tự nhiên.",
             "VITAMIN E & DƯỢC LIỆU THIÊN NHIÊN: Bảo vệ và nuôi dưỡng làn da khỏe khoắn."
@@ -269,13 +289,17 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "tri-mun-kiem-dau"
         ],
-        "benefitName": "Trị mụn & Kiềm dầu"
+        "benefitName": "Trị mụn & Kiềm dầu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-2095",
         "brand": "Rilastil",
         "brandSlug": "rilastil",
-        "line": "ACNES",
+        "line": "ACNESTIL",
         "name": "KEM DƯỠNG ẨM GIÚP CÂN BẰNG VI SINH HỖ TRỢ PHỤC HỒI DA MỤN 40ML – RILASTIL ACNESTIL H-BIOME CREAM 40ML",
         "slug": "kem-duong-am-giup-can-bang-vi-sinh-ho-tro-phuc-hoi-da-mun-rilastil-acnestil-h-biome-cream",
         "price": 522500,
@@ -295,12 +319,12 @@ window.LOCAL_PRODUCTS = [
             "combination",
             "acne-prone"
         ],
-        "uses": "Sản phẩm được nghiên cứu và phát triển bởi Rilastil – Thương hiệu dược mỹ phẩm cao cấp từ Ý, trực thuộc Tập đoàn GANASSINI với hơn 150 năm kinh nghiệm, mang đến giải pháp chăm sóc da chuyên sâu, an toàn và hiệu quả. Công dụng : Sản phẩm sử dụng công nghệ H-BIOME tiên tiến chứa lợi khuẩn pre-postbiot",
-        "usage": "Sử dụng hàng ngày vào sáng và tối",
+        "uses": "Kem dưỡng ẩm phục hồi và cân bằng hệ vi sinh dành riêng cho da mụn. Ứng dụng công nghệ H-BIOME tiên tiến chứa phức hợp lợi khuẩn pre-postbiotics giúp làm dịu kích ứng, củng cố hàng rào bảo vệ tự nhiên và hạn chế tối đa nguy cơ hình thành mụn mới.",
+        "usage": "Sử dụng 1-2 lần/ngày vào sáng và tối sau bước làm sạch. Thoa đều một lượng vừa đủ lên toàn mặt và vỗ nhẹ để dưỡng chất thẩm thấu.",
         "keyActives": [
             "SODIUM SALICYLATE / SALICYLIC ACID (BHA): Bạt sừng nhẹ, kháng viêm, làm thông thoáng cổ nang lông.",
             "NIACINAMIDE: Kháng viêm, giảm đỏ, kiểm soát bã nhờn và phục hồi hàng rào bảo vệ da.",
-            "ZINC PCA: Kiềm dầu sinh học, ức chế vi khuẩn mụn P.acnes phát triển.",
+            "ZINC PCA: Kiềm dầu sinh học, ức chế vi khuẩn mụn P. acnes phát triển.",
             "OLIGOPEPTIDE-10 & CHLORHEXIDINE: Kháng khuẩn chuyên sâu và ngăn ngừa mụn tái phát."
         ],
         "mainActives": [
@@ -320,7 +344,11 @@ window.LOCAL_PRODUCTS = [
             "phuc-hoi-diu-da",
             "cap-am-chuyen-sau"
         ],
-        "benefitName": "Trị mụn & Kiềm dầu"
+        "benefitName": "Trị mụn & Kiềm dầu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-2093",
@@ -345,8 +373,8 @@ window.LOCAL_PRODUCTS = [
             "all",
             "hyperpigmentation"
         ],
-        "uses": "Rilastil D-Clar Daily Depigmenting Cream là dòng kem dưỡng được nghiên cứu dành riêng cho làn da bị nám, sạm màu và không đều màu. Sản phẩm hỗ trợ làm mờ các vùng da sạm màu, giúp cải thiện tình trạng da không đều màu, giúp làm sáng da và hỗ trợ cải thiện sắc tố Công dụng chính: Ức chế sắc tố melani",
-        "usage": "Sử dụng hàng ngày vào sáng và tối",
+        "uses": "Kem dưỡng chuyên sâu dành cho làn da bị nám, tàn nhang và không đều màu. Sản phẩm hỗ trợ ức chế sản sinh hắc tố melanin, làm mờ rõ rệt các vết thâm nám, đốm nâu và nuôi dưỡng làn da tươi sáng rạng rỡ.",
+        "usage": "Sử dụng hàng ngày vào buổi sáng và buổi tối sau bước tinh chất. Thoa đều lên mặt, cổ và vùng da xuất hiện sắc tố không đều.",
         "keyActives": [
             "4-BUTYLRESORCINOL: Hoạt chất ức chế mạnh mẽ enzym Tyrosinase, chặn đứng gốc rễ sắc tố Melanin.",
             "TETRAPEPTIDE-30: Làm mờ các đốm nâu cứng đầu, cân bằng sắc tố và làm đều màu da.",
@@ -369,7 +397,11 @@ window.LOCAL_PRODUCTS = [
             "sang-da-mo-tham",
             "cap-am-chuyen-sau"
         ],
-        "benefitName": "Sáng da & Mờ thâm"
+        "benefitName": "Sáng da & Mờ thâm",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-2092",
@@ -395,8 +427,8 @@ window.LOCAL_PRODUCTS = [
             "sensitive",
             "atopic"
         ],
-        "uses": "Kem dưỡng ẩm giúp phục hồi hàng rào bảo vệ da và hệ vi sinh vật trên da làm dịu da, giảm mẩn đỏ, giảm ngứa. Phù hợp với tình trạng da khô và rất khô ở trẻ sơ sinh, trẻ em và người lớn.",
-        "usage": "Sử dụng hàng ngày vào sáng và tối.",
+        "uses": "Kem dưỡng ẩm giúp phục hồi hàng rào bảo vệ da và hệ vi sinh vật trên da, làm dịu da, giảm mẩn đỏ và ngứa rát tức thì. Phù hợp cho tình trạng da khô, rất khô và viêm da cơ địa ở cả trẻ sơ sinh, trẻ em và người lớn.",
+        "usage": "Sử dụng hàng ngày vào sáng và tối lên vùng da cần dưỡng ẩm và phục hồi.",
         "keyActives": [
             "SODIUM LACTATE & DNA SODIUM: Cấp ẩm chuyên sâu, phục hồi màng biểu bì bị tổn thương.",
             "PRE/POSTBIOTICS: Tái lập cân bằng hệ vi sinh da, cắt cơn ngứa rát mẩn đỏ.",
@@ -418,7 +450,11 @@ window.LOCAL_PRODUCTS = [
             "phuc-hoi-diu-da",
             "cap-am-chuyen-sau"
         ],
-        "benefitName": "Phục hồi & Dịu da"
+        "benefitName": "Phục hồi & Dịu da",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-2089",
@@ -441,8 +477,8 @@ window.LOCAL_PRODUCTS = [
         "skinTypes": [
             "all"
         ],
-        "uses": "Công dụng: L àm sạch sâu, loại bỏ bụi bẩn và lớp trang điểm một cách nhanh chóng, an toàn cho làn da. Độ PH trung tính giống như nước mắt, phù hợp với mọi loại da, kể cả da nhạy cảm. Dung tích: 100ml Sử dụng: Thấm ra bông tẩy trang rồi lau mặt nhẹ nhàng. Dùng trước khi rửa mặt vào buổi tối hoặc dùng",
-        "usage": "Thấm ra bông tẩy trang rồi lau mặt nhẹ nhàng. Dùng trước khi rửa mặt vào buổi tối hoặc dùng để làm sạch mặt trước khi bôi nhắc lại kem chống nắng, không cần rửa lại bằng nước.",
+        "uses": "Nước tẩy trang dịu nhẹ với độ pH sinh lý, giúp làm sạch sâu và loại bỏ hoàn toàn bụi bẩn cùng lớp trang điểm mà không làm tổn thương màng ẩm tự nhiên. Phù hợp cho mọi loại da, kể cả da nhạy cảm nhất và vùng da quanh mắt.",
+        "usage": "Thấm dung dịch ra bông tẩy trang rồi lau nhẹ nhàng khắp mặt và mắt. Không cần rửa lại với nước.",
         "keyActives": [
             "SODIUM DNA: Thúc đẩy tái tạo tế bào và phục hồi độ săn chắc tự nhiên.",
             "VITAMIN E & DƯỢC LIỆU THIÊN NHIÊN: Bảo vệ và nuôi dưỡng làn da khỏe khoắn."
@@ -460,7 +496,11 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "tri-mun-kiem-dau"
         ],
-        "benefitName": "Trị mụn & Kiềm dầu"
+        "benefitName": "Trị mụn & Kiềm dầu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-2087",
@@ -483,8 +523,8 @@ window.LOCAL_PRODUCTS = [
         "skinTypes": [
             "all"
         ],
-        "uses": "Công dụng: L àm sạch sâu, loại bỏ bụi bẩn và lớp trang điểm một cách nhanh chóng, an toàn cho làn da. Độ PH trung tính giống như nước mắt, phù hợp với mọi loại da, kể cả da nhạy cảm. Dung tích: 250ml Sử dụng: Thấm ra bông tẩy trang rồi lau mặt nhẹ nhàng. Dùng trước khi rửa mặt vào buổi tối hoặc dùng",
-        "usage": "Thấm ra bông tẩy trang rồi lau mặt nhẹ nhàng. Dùng trước khi rửa mặt vào buổi tối hoặc dùng để làm sạch mặt trước khi bôi nhắc lại kem chống nắng, không cần rửa lại bằng nước.",
+        "uses": "Nước tẩy trang dịu nhẹ với độ pH sinh lý, giúp làm sạch sâu và loại bỏ hoàn toàn bụi bẩn cùng lớp trang điểm mà không làm tổn thương màng ẩm tự nhiên. Phù hợp cho mọi loại da, kể cả da nhạy cảm nhất và vùng da quanh mắt.",
+        "usage": "Thấm dung dịch ra bông tẩy trang rồi lau nhẹ nhàng khắp mặt và mắt. Không cần rửa lại với nước.",
         "keyActives": [
             "SODIUM DNA: Thúc đẩy tái tạo tế bào và phục hồi độ săn chắc tự nhiên.",
             "VITAMIN E & DƯỢC LIỆU THIÊN NHIÊN: Bảo vệ và nuôi dưỡng làn da khỏe khoắn."
@@ -503,7 +543,11 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "tri-mun-kiem-dau"
         ],
-        "benefitName": "Trị mụn & Kiềm dầu"
+        "benefitName": "Trị mụn & Kiềm dầu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-2085",
@@ -530,8 +574,8 @@ window.LOCAL_PRODUCTS = [
             "combination",
             "sensitive"
         ],
-        "uses": "Giúp phục hồi, làm dịu và dưỡng ẩm chuyên sâu cho da. Đồng thời bổ sung hàng rào bảo vệ da, ngăn ngừa khả năng mất nước. Sản phẩm phù hợp với mọi loại da, kể cả da nhạy cảm nhất.",
-        "usage": "1-2 lần/ ngày . Phù hợp cho mọi loại da.",
+        "uses": "Mặt nạ dưỡng ẩm chuyên sâu giúp cấp nước đa tầng, làm dịu tức thì làn da khô căng và củng cố hàng rào bảo vệ da ngăn ngừa mất nước. Sản phẩm phù hợp cho mọi loại da, đặc biệt là da thiếu ẩm và nhạy cảm.",
+        "usage": "Sử dụng 1-2 lần/tuần. Thoa một lớp dày vừa đủ lên mặt và cổ, thư giãn trong 5-15 phút rồi lau sạch bằng bông cotton hoặc rửa lại với nước.",
         "keyActives": [
             "SODIUM HYALURONATE & HYDROLYZED HYALURONIC ACID: Cấp ẩm kép giúp da ngậm nước đa tầng tế bào.",
             "CERAMIDES & OMEGA 6/9: Khôi phục màng lipid tự nhiên, bảo vệ da khỏi mất nước.",
@@ -553,7 +597,11 @@ window.LOCAL_PRODUCTS = [
             "phuc-hoi-diu-da",
             "cap-am-chuyen-sau"
         ],
-        "benefitName": "Phục hồi & Dịu da"
+        "benefitName": "Phục hồi & Dịu da",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-2070",
@@ -580,8 +628,8 @@ window.LOCAL_PRODUCTS = [
             "combination",
             "sensitive"
         ],
-        "uses": "Sản phẩm dược mỹ phẩm cao cấp từ Viện nghiên cứu Ganassini Milan - Ý giúp chăm sóc và phục hồi chuyên sâu cấu trúc da.",
-        "usage": "Sử dụng hàng ngày",
+        "uses": "Kem dưỡng ẩm chuyên sâu dạng gel-cream mỏng nhẹ, mang lại hiệu quả giữ nước và cấp ẩm liên tục suốt 72 giờ. Giúp làn da luôn ngậm nước, mềm mại, căng tràn sức sống và bảo vệ da trước các tác nhân ô nhiễm môi trường.",
+        "usage": "Sử dụng hàng ngày vào sáng và tối sau bước làm sạch, thoa đều lên vùng da mặt và cổ.",
         "keyActives": [
             "SODIUM HYALURONATE & HYDROLYZED HYALURONIC ACID: Cấp ẩm kép giúp da ngậm nước đa tầng tế bào.",
             "CERAMIDES & OMEGA 6/9: Khôi phục màng lipid tự nhiên, bảo vệ da khỏi mất nước.",
@@ -602,7 +650,11 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "cap-am-chuyen-sau"
         ],
-        "benefitName": "Cấp ẩm sâu"
+        "benefitName": "Cấp ẩm sâu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-2067",
@@ -629,8 +681,8 @@ window.LOCAL_PRODUCTS = [
             "combination",
             "sensitive"
         ],
-        "uses": "Sản phẩm dược mỹ phẩm cao cấp từ Viện nghiên cứu Ganassini Milan - Ý giúp chăm sóc và phục hồi chuyên sâu cấu trúc da.",
-        "usage": "Sử dụng hàng ngày",
+        "uses": "Kem dưỡng ẩm chuyên sâu dạng gel-cream mỏng nhẹ, mang lại hiệu quả giữ nước và cấp ẩm liên tục suốt 72 giờ. Giúp làn da luôn ngậm nước, mềm mại, căng tràn sức sống và bảo vệ da trước các tác nhân ô nhiễm môi trường.",
+        "usage": "Sử dụng hàng ngày vào sáng và tối sau bước làm sạch, thoa đều lên vùng da mặt và cổ.",
         "keyActives": [
             "SODIUM HYALURONATE & HYDROLYZED HYALURONIC ACID: Cấp ẩm kép giúp da ngậm nước đa tầng tế bào.",
             "CERAMIDES & OMEGA 6/9: Khôi phục màng lipid tự nhiên, bảo vệ da khỏi mất nước.",
@@ -651,7 +703,11 @@ window.LOCAL_PRODUCTS = [
         "benefitName": "Cấp ẩm sâu",
         "barcode": "8055510241919",
         "dimensions": "5x5x10",
-        "licenseImageUrl": "/images/licenses/1qyxthlBqAECzijHH_wdyoY7qRgIpUQ9s.webp"
+        "licenseImageUrl": "/images/licenses/1qyxthlBqAECzijHH_wdyoY7qRgIpUQ9s.webp",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1942",
@@ -678,8 +734,8 @@ window.LOCAL_PRODUCTS = [
             "combination",
             "sensitive"
         ],
-        "uses": "Sản phẩm dưỡng ẩm sâu dành cho vùng mắt Rilastil Aqua Eye Contour Cream sẽ giúp chăm sóc làn da mỏng manh xung quanh vùng mắt, cấp ẩm cho da, da được cấp đủ ẩm sẽ tươi tắn, trẻ hóa, giảm bọng mắt và quầng thâm, giúp đôi mắt trở nên thu hút hơn.",
-        "usage": "Sử dụng hàng ngày",
+        "uses": "Kem dưỡng ẩm chuyên sâu dành riêng cho vùng mắt mỏng manh, giúp cấp nước, cải thiện độ đàn hồi, làm mờ các nếp nhăn li ti và giảm bọng mắt cùng quầng thâm hiệu quả.",
+        "usage": "Sử dụng hàng ngày vào sáng và tối. Lấy một lượng nhỏ thoa nhẹ nhàng quanh hốc mắt và vỗ nhẹ cho dưỡng chất thẩm thấu.",
         "keyActives": [
             "SODIUM HYALURONATE & HYDROLYZED HYALURONIC ACID: Cấp ẩm kép giúp da ngậm nước đa tầng tế bào.",
             "CERAMIDES & OMEGA 6/9: Khôi phục màng lipid tự nhiên, bảo vệ da khỏi mất nước.",
@@ -700,7 +756,11 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "cap-am-chuyen-sau"
         ],
-        "benefitName": "Cấp ẩm sâu"
+        "benefitName": "Cấp ẩm sâu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1939",
@@ -723,8 +783,8 @@ window.LOCAL_PRODUCTS = [
         "skinTypes": [
             "all"
         ],
-        "uses": "ngăn ngừa và khắc phục các vết rạn da trong thời gian mang thai hoặc do thay đổi cân nặng, chiều cao đột ngột.",
-        "usage": "Sử dụng 2 lần/ ngày",
+        "uses": "Ngăn ngừa và cải thiện rõ rệt các vết rạn da trong thời gian mang thai, dậy thì hoặc do thay đổi cân nặng đột ngột. Sản phẩm giàu dưỡng chất giúp tăng cường độ đàn hồi, nuôi dưỡng các mô liên kết và làm mềm mịn bề mặt da.",
+        "usage": "Sử dụng 2 lần/ngày (sáng và tối), thoa đều và massage kỹ lên các vùng da dễ bị rạn như bụng, đùi, hông và ngực.",
         "keyActives": [
             "SODIUM DNA: Thúc đẩy tái tạo tế bào và phục hồi độ săn chắc tự nhiên.",
             "VITAMIN E & DƯỢC LIỆU THIÊN NHIÊN: Bảo vệ và nuôi dưỡng làn da khỏe khoắn."
@@ -743,7 +803,11 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "cap-am-chuyen-sau"
         ],
-        "benefitName": "Cấp ẩm sâu"
+        "benefitName": "Cấp ẩm sâu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1936",
@@ -766,8 +830,8 @@ window.LOCAL_PRODUCTS = [
         "skinTypes": [
             "all"
         ],
-        "uses": "ngăn ngừa và khắc phục các vết rạn da trong thời gian mang thai hoặc do thay đổi cân nặng, chiều cao đột ngột.",
-        "usage": "Sử dụng 2 lần/ ngày",
+        "uses": "Ngăn ngừa và cải thiện rõ rệt các vết rạn da trong thời gian mang thai, dậy thì hoặc do thay đổi cân nặng đột ngột. Sản phẩm giàu dưỡng chất giúp tăng cường độ đàn hồi, nuôi dưỡng các mô liên kết và làm mềm mịn bề mặt da.",
+        "usage": "Sử dụng 2 lần/ngày (sáng và tối), thoa đều và massage kỹ lên các vùng da dễ bị rạn như bụng, đùi, hông và ngực.",
         "keyActives": [
             "SODIUM DNA: Thúc đẩy tái tạo tế bào và phục hồi độ săn chắc tự nhiên.",
             "VITAMIN E & DƯỢC LIỆU THIÊN NHIÊN: Bảo vệ và nuôi dưỡng làn da khỏe khoắn."
@@ -784,7 +848,11 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "cap-am-chuyen-sau"
         ],
-        "benefitName": "Cấp ẩm sâu"
+        "benefitName": "Cấp ẩm sâu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1876",
@@ -810,8 +878,8 @@ window.LOCAL_PRODUCTS = [
             "sensitive",
             "atopic"
         ],
-        "uses": "Kem dưỡng ẩm giúp phục hồi hàng rào bảo vệ da và hệ vi sinh vật trên da làm dịu da, giảm mẩn đỏ, giảm ngứa. Phù hợp với tình trạng da khô và rất khô ở trẻ sơ sinh, trẻ em và người lớn.",
-        "usage": "Sử dụng hàng ngày vào sáng và tối.",
+        "uses": "Kem dưỡng ẩm chuyên sâu giúp tái lập hệ vi sinh vật và phục hồi hàng rào bảo vệ biểu bì, làm dịu da nhanh chóng, giảm mẩn đỏ và ngứa rát kéo dài. Phù hợp cho da khô, rất khô và da viêm cơ địa ở cả trẻ sơ sinh, trẻ em và người lớn.",
+        "usage": "Sử dụng 1-2 lần/ngày (sáng và tối) lên vùng da khô ráp, ngứa ngáy cần chăm sóc phục hồi.",
         "keyActives": [
             "SODIUM LACTATE & DNA SODIUM: Cấp ẩm chuyên sâu, phục hồi màng biểu bì bị tổn thương.",
             "PRE/POSTBIOTICS: Tái lập cân bằng hệ vi sinh da, cắt cơn ngứa rát mẩn đỏ.",
@@ -833,7 +901,11 @@ window.LOCAL_PRODUCTS = [
             "phuc-hoi-diu-da",
             "cap-am-chuyen-sau"
         ],
-        "benefitName": "Phục hồi & Dịu da"
+        "benefitName": "Phục hồi & Dịu da",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1872",
@@ -859,8 +931,8 @@ window.LOCAL_PRODUCTS = [
             "sensitive",
             "atopic"
         ],
-        "uses": "Sữa tắm dịu nhẹ làm sạch sâu mà không gây khô da. Phù hợp với da khô, da rất khô, da nhạy cảm.",
-        "usage": "Sử dụng hàng ngày",
+        "uses": "Gel rửa mặt và tắm toàn thân dịu nhẹ với công thức làm sạch không xà phòng, giúp loại bỏ bụi bẩn mà vẫn duy trì độ ẩm tự nhiên của da. Thích hợp cho da khô, rất khô và làn da nhạy cảm dễ kích ứng.",
+        "usage": "Sử dụng hàng ngày khi tắm hoặc rửa mặt. Tạo bọt nhẹ trên da ướt rồi massage nhẹ nhàng và rửa sạch lại với nước.",
         "keyActives": [
             "SODIUM LACTATE & DNA SODIUM: Cấp ẩm chuyên sâu, phục hồi màng biểu bì bị tổn thương.",
             "PRE/POSTBIOTICS: Tái lập cân bằng hệ vi sinh da, cắt cơn ngứa rát mẩn đỏ.",
@@ -881,7 +953,11 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "cap-am-chuyen-sau"
         ],
-        "benefitName": "Cấp ẩm sâu"
+        "benefitName": "Cấp ẩm sâu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1871",
@@ -907,8 +983,8 @@ window.LOCAL_PRODUCTS = [
             "sensitive",
             "atopic"
         ],
-        "uses": "Sữa tắm dịu nhẹ làm sạch sâu mà không gây khô da. Phù hợp với da khô, da rất khô, da nhạy cảm.",
-        "usage": "Sử dụng hàng ngày",
+        "uses": "Gel rửa mặt và tắm toàn thân dịu nhẹ với công thức làm sạch không xà phòng, giúp loại bỏ bụi bẩn mà vẫn duy trì độ ẩm tự nhiên của da. Thích hợp cho da khô, rất khô và làn da nhạy cảm dễ kích ứng.",
+        "usage": "Sử dụng hàng ngày khi tắm hoặc rửa mặt. Tạo bọt nhẹ trên da ướt rồi massage nhẹ nhàng và rửa sạch lại với nước.",
         "keyActives": [
             "SODIUM LACTATE & DNA SODIUM: Cấp ẩm chuyên sâu, phục hồi màng biểu bì bị tổn thương.",
             "PRE/POSTBIOTICS: Tái lập cân bằng hệ vi sinh da, cắt cơn ngứa rát mẩn đỏ.",
@@ -929,7 +1005,11 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "cap-am-chuyen-sau"
         ],
-        "benefitName": "Cấp ẩm sâu"
+        "benefitName": "Cấp ẩm sâu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1868",
@@ -955,8 +1035,8 @@ window.LOCAL_PRODUCTS = [
             "sensitive",
             "atopic"
         ],
-        "uses": "Kem dưỡng ẩm giúp phục hồi hàng rào bảo vệ da và hệ vi sinh vật trên da làm dịu da, giảm mẩn đỏ, giảm ngứa. Phù hợp với tình trạng da khô và rất khô ở trẻ sơ sinh, trẻ em và người lớn.",
-        "usage": "Sử dụng hàng ngày vào sáng và tối.",
+        "uses": "Kem dưỡng ẩm chuyên sâu giúp tái lập hệ vi sinh vật và phục hồi hàng rào bảo vệ biểu bì, làm dịu da nhanh chóng, giảm mẩn đỏ và ngứa rát kéo dài. Phù hợp cho da khô, rất khô và da viêm cơ địa ở cả trẻ sơ sinh, trẻ em và người lớn.",
+        "usage": "Sử dụng 1-2 lần/ngày (sáng và tối) lên vùng da khô ráp, ngứa ngáy cần chăm sóc phục hồi.",
         "keyActives": [
             "SODIUM LACTATE & DNA SODIUM: Cấp ẩm chuyên sâu, phục hồi màng biểu bì bị tổn thương.",
             "PRE/POSTBIOTICS: Tái lập cân bằng hệ vi sinh da, cắt cơn ngứa rát mẩn đỏ.",
@@ -978,7 +1058,11 @@ window.LOCAL_PRODUCTS = [
             "phuc-hoi-diu-da",
             "cap-am-chuyen-sau"
         ],
-        "benefitName": "Phục hồi & Dịu da"
+        "benefitName": "Phục hồi & Dịu da",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1867",
@@ -1004,8 +1088,8 @@ window.LOCAL_PRODUCTS = [
             "sensitive",
             "atopic"
         ],
-        "uses": "Sữa tắm dịu nhẹ làm sạch sâu mà không gây khô da. Phù hợp với da khô, da rất khô, da nhạy cảm.",
-        "usage": "Sử dụng hàng ngày",
+        "uses": "Gel rửa mặt và tắm toàn thân dịu nhẹ với công thức làm sạch không xà phòng, giúp loại bỏ bụi bẩn mà vẫn duy trì độ ẩm tự nhiên của da. Thích hợp cho da khô, rất khô và làn da nhạy cảm dễ kích ứng.",
+        "usage": "Sử dụng hàng ngày khi tắm hoặc rửa mặt. Tạo bọt nhẹ trên da ướt rồi massage nhẹ nhàng và rửa sạch lại với nước.",
         "keyActives": [
             "SODIUM LACTATE & DNA SODIUM: Cấp ẩm chuyên sâu, phục hồi màng biểu bì bị tổn thương.",
             "PRE/POSTBIOTICS: Tái lập cân bằng hệ vi sinh da, cắt cơn ngứa rát mẩn đỏ.",
@@ -1026,7 +1110,11 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "cap-am-chuyen-sau"
         ],
-        "benefitName": "Cấp ẩm sâu"
+        "benefitName": "Cấp ẩm sâu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1864",
@@ -1050,11 +1138,12 @@ window.LOCAL_PRODUCTS = [
         "skinTypes": [
             "all"
         ],
-        "uses": "Công dụng : Kem chống nắng quang phổ rộng, có thành phần chống lão hoá, kháng viêm, giảm gốc tự do, dày thượng bì. Dung tích : 50ml Sử dụng : Dùng hàng ngày, bôi nhắc lại 2-3h Thành phần chính: UVA, UVB FILTERS: Hệ thống màng lọc hữu cơ chống lại tia UVA và UVB. NIACINAMIDE 1% : Kháng viêm, giảm đỏ,",
-        "usage": "Sử dụng hàng ngày vào sáng và tối",
+        "uses": "Kem chống nắng bảo vệ toàn diện với quang phổ rộng UVA/UVB SPF 50+, thiết kế chuyên biệt cho làn da siêu nhạy cảm và dễ kích ứng. Công thức dịu nhẹ chứa hoạt chất kháng viêm, giảm đỏ, chống oxy hóa và bảo vệ cấu trúc tế bào da tối ưu.",
+        "usage": "Thoa đều kem chống nắng lên mặt và cổ trước khi ra ngoài 20 phút. Thoa lại sau mỗi 2-3 giờ hoặc sau khi bơi lội, đổ nhiều mồ hôi.",
         "keyActives": [
-            "UVA, UVB FILTERS: Hệ thống màng lọc hữu cơ chống lại tia UVA và UVB.",
-            "1% : Kháng viêm, giảm đỏ, làm sáng da. Dưỡng ẩm."
+            "MÀNG LỌC HỮU CƠ QUANG PHỔ RỘNG UVA/UVB: Bảo vệ da an toàn trước tác hại của tia cực tím.",
+            "NIACINAMIDE 1%: Kháng viêm, làm dịu da nhạy cảm, giảm đỏ rát và củng cố hàng rào bảo vệ.",
+            "PRO-DNA COMPLEX: Bảo vệ cấu trúc DNA tế bào và ngăn ngừa lão hóa sớm do ánh nắng."
         ],
         "mainActives": [
             "UVA, UVB FILTERS",
@@ -1071,7 +1160,11 @@ window.LOCAL_PRODUCTS = [
             "chong-nang",
             "chong-lao-hoa"
         ],
-        "benefitName": "Chống nắng"
+        "benefitName": "Chống nắng",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1860",
@@ -1095,12 +1188,12 @@ window.LOCAL_PRODUCTS = [
         "skinTypes": [
             "all"
         ],
-        "uses": "Công dụng : Kem chống nắng quang phổ rộng, kiềm dầu, kháng viêm, phù hợp cho da dầu, da mụn Dung tích : 50ml Sử dụng : Dùng hàng ngày, bôi nhắc lại 2-3h Thành phần chính UVA, UVB FILTERS: Hệ thống màng lọc hữu cơ chống lại tia UVA và UVB. ALPHA-BISABOLOL (VITAMIN B5): Giảm kích ứng, kháng viêm, khán",
-        "usage": "Sử dụng hàng ngày vào sáng và tối",
+        "uses": "Kem chống nắng quang phổ rộng SPF 50+ với kết cấu mịn mượt như nhung (velvet touch), cấp ẩm sâu và chống thấm nước hiệu quả. Giúp bảo vệ làn da tối ưu trước tia UVA/UVB mà không để lại vệt trắng hay cảm giác nhờn rít.",
+        "usage": "Thoa đều kem chống nắng lên mặt và cổ trước khi ra ngoài 20 phút. Thoa lại sau mỗi 2-3 giờ khi hoạt động ngoài trời.",
         "keyActives": [
-            "MÀNG LỌC QUANG PHỔ RỘNG UVA/UVB/HEV/IR: Bảo vệ tối đa cấu trúc DNA tế bào trước mọi bức xạ có hại.",
-            "PRO-DNA COMPLEX: Phức hợp chống lão hóa do ánh nắng độc quyền.",
-            "SCHISANDRA CHINENSIS EXTRACT & VITAMIN E: Chống oxy hóa và làm dịu da nhạy cảm."
+            "MÀNG LỌC QUANG PHỔ RỘNG UVA/UVB: Chống nắng toàn diện, ngăn ngừa sạm nám và cháy nắng.",
+            "ALPHA-BISABOLOL & PANTHENOL: Làm dịu mát da tức thì, giảm kích ứng và giữ ẩm dài lâu.",
+            "PRO-DNA COMPLEX & VITAMIN E: Chống oxy hóa tế bào và ngăn chặn quá trình lão hóa quang hóa."
         ],
         "mainActives": [
             "MÀNG LỌC QUANG PHỔ RỘNG UVA/UVB/HEV/IR",
@@ -1119,7 +1212,11 @@ window.LOCAL_PRODUCTS = [
             "chong-lao-hoa",
             "cap-am-chuyen-sau"
         ],
-        "benefitName": "Chống nắng"
+        "benefitName": "Chống nắng",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1857",
@@ -1143,12 +1240,12 @@ window.LOCAL_PRODUCTS = [
         "skinTypes": [
             "all"
         ],
-        "uses": "Công dụng : Kem chống nắng quang phổ rộng, cấp ẩm, . Phù hợp mọi loại da. Dung tích : 50ml Sử dụng : Dùng hàng ngày, bôi nhắc lại 2-3h Thành phần chính UVA, UVB FILTERS: Hệ thống màng lọc hữu cơ chống lại tia UVA và UVB. SODIUM HYALURONATE: Dưỡng ẩm. ECTOIN: Dưỡng ẩm. dịu da, chống oxy hóa, chống vi",
-        "usage": "Sử dụng hàng ngày vào sáng và tối",
+        "uses": "Sữa chống nắng cấp ẩm quang phổ rộng SPF 50+ với công thức gốc nước siêu mỏng nhẹ, thẩm thấu tức thì và kiểm soát bóng nhờn. Sản phẩm bảo vệ làn da toàn diện trước tia cực tím, bổ sung độ ẩm mọng nước và không gây cay mắt.",
+        "usage": "Lắc đều trước khi sử dụng. Thoa đều lên mặt và cổ trước khi tiếp xúc với ánh nắng 20 phút, thoa lại sau mỗi 2-3 giờ khi cần thiết.",
         "keyActives": [
-            "MÀNG LỌC QUANG PHỔ RỘNG UVA/UVB/HEV/IR: Bảo vệ tối đa cấu trúc DNA tế bào trước mọi bức xạ có hại.",
-            "PRO-DNA COMPLEX: Phức hợp chống lão hóa do ánh nắng độc quyền.",
-            "SCHISANDRA CHINENSIS EXTRACT & VITAMIN E: Chống oxy hóa và làm dịu da nhạy cảm."
+            "MÀNG LỌC QUANG PHỔ RỘNG UVA/UVB: Bảo vệ bề mặt và cấu trúc sâu của tế bào da trước tia cực tím.",
+            "SODIUM HYALURONATE & ECTOIN: Dưỡng ẩm tầng sâu, bảo vệ tế bào và chống lại stress oxy hóa.",
+            "PRO-DNA COMPLEX: Ngăn ngừa thương tổn DNA và lão hóa sớm."
         ],
         "mainActives": [
             "MÀNG LỌC QUANG PHỔ RỘNG UVA/UVB/HEV/IR",
@@ -1167,13 +1264,17 @@ window.LOCAL_PRODUCTS = [
             "chong-lao-hoa",
             "cap-am-chuyen-sau"
         ],
-        "benefitName": "Chống nắng"
+        "benefitName": "Chống nắng",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1856",
         "brand": "Rilastil",
         "brandSlug": "rilastil",
-        "line": "ACNES",
+        "line": "SUN SYSTEM",
         "name": "KEM CHỐNG NẮNG DÀNH CHO DA DẦU MỤN – RILASTIL ACNESTIL SEBUM-NORMALIZING CREAM SPF 50+ 40ML",
         "slug": "kem-chong-nang-danh-cho-da-dau-mun-rilastil-acnestil-sebum-normalizing-cream-spf-50-40ml",
         "price": 551000,
@@ -1193,14 +1294,12 @@ window.LOCAL_PRODUCTS = [
             "combination",
             "acne-prone"
         ],
-        "uses": "Công dụng : Kem chống nắng quang phổ rộng, kiềm dầu, kháng viêm, phù hợp cho da dầu, da mụn Dung tích : 40ml Sử dụng : Dùng hàng ngày, bôi nhắc lại 2-3h Thành phần chính UVA, UVB FILTERS: Hệ thống màng lọc hữu cơ chống lại tia UVA và UVB. NIACINAMIDE, POTASSIUM AZELOYL DIGLYCINATE : Kháng viêm, giảm",
-        "usage": "Sử dụng hàng ngày vào sáng và tối",
+        "uses": "Kem chống nắng phổ rộng kiềm dầu chuyên biệt cho da dầu và da có khuynh hướng nổi mụn. Sản phẩm giúp kiểm soát bã nhờn, làm thông thoáng lỗ chân lông, kháng viêm và bảo vệ da tối ưu dưới tác động của tia UVA/UVB mà không gây bít tắc.",
+        "usage": "Thoa đều lên toàn mặt trước khi ra nắng 20 phút. Thoa lại sau mỗi 2-3 giờ để duy trì hiệu quả bảo vệ tối ưu.",
         "keyActives": [
-            "UVA, UVB FILTERS: Hệ thống màng lọc hữu cơ chống lại tia UVA và UVB.",
-            "ECTOIN: Dưỡng ẩm. dịu da, chống oxy hóa, chống viêm,",
-            "TOCOPHERYL ACETATE (VITAMIN E): Ngăn ngừa quá trình lão hóa và tăng độ mềm mượt cho da.",
-            "BUDDLEJA DAVIDII LEAF EXTRACT, PEUCEDANUM OSTRUTHIUM LEAF EXTRACT, PINUS PINASTER BARK/BUD EXTRACT, ARTEMISIA UMBELLIFORMIS EXTRACT: Phức hợp các hoạt chất chiết xuất thực vật giàu chất chống oxy hóa và làm dịu da, bảo vệ DNA tế bào trước tác hại oxy hóa do tia UV gây ra. Chiết xuất BUDDLEJA DAVIDII LEAF bảo vệ DNA tế bào, ngăn chặn quá trình oxi hóa da, chiết xuất PEUCEDANUM OSTRUTHIUM LEAF tăng cường khả năng tái tạo của lớp biểu bì, chiết xuất PINUS PINASTER BARK/BUD chống oxy hóa và chống viêm, chiết xuất ARTEMISIA UMBELLIFORMIS phục hồi thương tổn làn da.",
-            "SCHISANDRA CHINENSIS FRUIT EXTRACT: Cải thiện độ đàn hồi của da."
+            "MÀNG LỌC QUANG PHỔ RỘNG UVA/UVB: Hệ thống màng lọc hữu cơ chống lại tia UVA và UVB hiệu quả.",
+            "NIACINAMIDE & POTASSIUM AZELOYL DIGLYCINATE: Kháng viêm, kiểm soát bã nhờn và hỗ trợ ngừa mụn.",
+            "CHIẾT XUẤT THẢO MỘC CHỐNG OXY HÓA (BUDDLEJA DAVIDII, PEUCEDANUM): Bảo vệ tế bào biểu bì và làm dịu da rạng rỡ."
         ],
         "mainActives": [
             "UVA, UVB FILTERS",
@@ -1218,13 +1317,17 @@ window.LOCAL_PRODUCTS = [
             "chong-nang",
             "tri-mun-kiem-dau"
         ],
-        "benefitName": "Chống nắng"
+        "benefitName": "Chống nắng",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1853",
         "brand": "Rilastil",
         "brandSlug": "rilastil",
-        "line": "ACNES",
+        "line": "ACNESTIL",
         "name": "DUNG DỊCH TẨY DA CHẾT NGỪA MỤN MỜ THÂM NÁM – RILASTIL ACNESTIL MICROPEELING 100ML",
         "slug": "dung-dich-tay-da-chet-ngua-mun-mo-tham-nam-rilastil-acnestil-micropeeling-100ml",
         "price": 361000,
@@ -1244,11 +1347,11 @@ window.LOCAL_PRODUCTS = [
             "combination",
             "acne-prone"
         ],
-        "uses": "Dung dịch tẩy da chết hóa học chứa mandelic acid và salicylic acid giúp ngừa mụn, kháng viêm, mờ thâm",
-        "usage": "Sử dụng hàng ngày vào sáng và tối",
+        "uses": "Dung dịch tẩy tế bào chết hóa học chuyên sâu chứa Mandelic Acid và Salicylic Acid, giúp bạt sừng nhẹ nhàng, kháng khuẩn, làm thông thoáng lỗ chân lông, giảm viêm mụn và làm mờ các vết thâm sau mụn hiệu quả.",
+        "usage": "Sử dụng 1-2 lần/ngày vào buổi tối sau bước làm sạch. Thấm dung dịch vào bông cotton rồi lau nhẹ nhàng lên vùng da mụn, không cần rửa lại.",
         "keyActives": [
-            "MANDELIC ACID 5%: Tẩy tế bào chết, làm sáng da, mờ thâm.",
-            "SALICYLIC ACID 2%: Tẩy tế bào chết, kháng viêm."
+            "MANDELIC ACID 5%: Tẩy tế bào chết nhẹ dịu, làm sáng da và mờ thâm mụn.",
+            "SALICYLIC ACID 2%: Tẩy tế bào chết sâu trong lỗ chân lông, kháng viêm và ngăn ngừa mụn hình thành."
         ],
         "mainActives": [
             "MANDELIC ACID 5%",
@@ -1265,13 +1368,17 @@ window.LOCAL_PRODUCTS = [
             "tri-mun-kiem-dau",
             "sang-da-mo-tham"
         ],
-        "benefitName": "Trị mụn & Kiềm dầu"
+        "benefitName": "Trị mụn & Kiềm dầu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1844",
         "brand": "Rilastil",
         "brandSlug": "rilastil",
-        "line": "ACNES",
+        "line": "ACNESTIL",
         "name": "DUNG DỊCH TẨY DA CHẾT NGỪA MỤN MỜ THÂM NÁM – RILASTIL ACNESTIL MICROPEELING 30ML",
         "slug": "dung-dich-tay-da-chet-ngua-mun-mo-tham-nam-rilastil-acnestil-micropeeling-30ml",
         "price": 855000,
@@ -1291,11 +1398,11 @@ window.LOCAL_PRODUCTS = [
             "combination",
             "acne-prone"
         ],
-        "uses": "Dung dịch tẩy da chết hóa học chứa mandelic acid và salicylic acid giúp ngừa mụn, kháng viêm, mờ thâm",
-        "usage": "Sử dụng hàng ngày vào sáng và tối",
+        "uses": "Dung dịch tẩy tế bào chết hóa học chuyên sâu chứa Mandelic Acid và Salicylic Acid, giúp bạt sừng nhẹ nhàng, kháng khuẩn, làm thông thoáng lỗ chân lông, giảm viêm mụn và làm mờ các vết thâm sau mụn hiệu quả.",
+        "usage": "Sử dụng 1-2 lần/ngày vào buổi tối sau bước làm sạch. Thấm dung dịch vào bông cotton rồi lau nhẹ nhàng lên vùng da mụn, không cần rửa lại.",
         "keyActives": [
-            "MANDELIC ACID 5%: Tẩy tế bào chết, làm sáng da, mờ thâm.",
-            "SALICYLIC ACID 2%: Tẩy tế bào chết, kháng viêm."
+            "MANDELIC ACID 5%: Tẩy tế bào chết nhẹ dịu, làm sáng da và mờ thâm mụn.",
+            "SALICYLIC ACID 2%: Tẩy tế bào chết sâu trong lỗ chân lông, kháng viêm và ngăn ngừa mụn hình thành."
         ],
         "mainActives": [
             "MANDELIC ACID 5%",
@@ -1312,13 +1419,17 @@ window.LOCAL_PRODUCTS = [
             "tri-mun-kiem-dau",
             "sang-da-mo-tham"
         ],
-        "benefitName": "Trị mụn & Kiềm dầu"
+        "benefitName": "Trị mụn & Kiềm dầu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1831",
         "brand": "Rilastil",
         "brandSlug": "rilastil",
-        "line": "ACNES",
+        "line": "ACNESTIL",
         "name": "SERUM CẤP ẨM DÀNH CHO DA MỤN – RILASTIL ACNESTIL PB SOOTHING SEBUM-NORMALISING GEL 30ML",
         "slug": "serum-cap-am-danh-cho-da-mun-rilastil-acnestil-pb-soothing-sebum-normalising-gel-30ml",
         "price": 712500,
@@ -1338,10 +1449,11 @@ window.LOCAL_PRODUCTS = [
             "combination",
             "acne-prone"
         ],
-        "uses": "ACNESTIL PB SOOTHING SEBUM-NORMALISING GEL chứa PREBIOTIC VÀ POSTBIOTIC giúp cân bằng môi trường nội môi vi sinh vật trên da, làm dịu và dưỡng ẩm cho da, giảm tải lượng vi khuẩn Cutibacterium Acnes trong 24 giờ, giúp làm dịu da. Phù hợp với da đang bị mụn trứng cá, đỏ da khô khi đang dùng isotretino",
-        "usage": "Sử dụng hàng ngày vào sáng và tối",
+        "uses": "Gel dưỡng ẩm làm dịu và cân bằng bã nhờn chứa Prebiotic và Postbiotic sinh học, giúp ổn định hệ vi sinh trên da, giảm sưng đỏ và ức chế vi khuẩn mụn trong 24 giờ. Sản phẩm đặc biệt thích hợp cho làn da đang bị mụn trứng cá, nhạy cảm hoặc đang khô tróc do điều trị da liễu.",
+        "usage": "Sử dụng 1-2 lần/ngày vào buổi sáng và buổi tối sau bước làm sạch và cân bằng da.",
         "keyActives": [
-            "ALPHA – GLUCAN OLIGOSACCHARIDE 0.5% : Tái cân bằng hệ vi sinh vật trên da."
+            "ALPHA-GLUCAN OLIGOSACCHARIDE 0. 5%: Tái lập và duy trì hệ vi sinh vật khỏe mạnh trên bề mặt da.",
+            "POSTBIOTICS SINH HỌC: Làm dịu cảm giác châm chích, giảm sưng đỏ và phục hồi hàng rào màng ẩm tự nhiên."
         ],
         "mainActives": [
             "ALPHA – GLUCAN OLIGOSACCHARIDE 0.5%"
@@ -1358,13 +1470,17 @@ window.LOCAL_PRODUCTS = [
             "phuc-hoi-diu-da",
             "cap-am-chuyen-sau"
         ],
-        "benefitName": "Trị mụn & Kiềm dầu"
+        "benefitName": "Trị mụn & Kiềm dầu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1810",
         "brand": "Rilastil",
         "brandSlug": "rilastil",
-        "line": "ACNES",
+        "line": "ACNESTIL",
         "name": "GEL RỬA MẶT DÀNH CHO DA MỤN – RILASTIL ACNESTIL CLEANSING GEL 400ML",
         "slug": "gel-rua-mat-danh-cho-da-mun-rilastil-acnestil-cleansing-gel-400ml",
         "price": 684000,
@@ -1384,13 +1500,13 @@ window.LOCAL_PRODUCTS = [
             "combination",
             "acne-prone"
         ],
-        "uses": "Rửa mặt dạng gel dành cho da dầu, mụn giúp làm sạch sâu nhưng vẫn giữ được độ ẩm cho da. Bên cạnh đó, sản phẩm còn giúp giảm mụn, giảm sưng viêm, làm dịu nhẹ da, trả lại cho bạn làn da mềm mịn.",
-        "usage": "Sử dụng hàng ngày vào sáng và tối.",
+        "uses": "Sữa rửa mặt dạng gel thanh lọc chuyên biệt cho da dầu và da mụn, giúp làm sạch sâu bã nhờn và cặn bẩn mà vẫn bảo toàn độ ẩm sinh lý của da. Hỗ trợ kháng khuẩn, làm se các nốt mụn sưng và mang lại làn da thông thoáng mềm mại.",
+        "usage": "Sử dụng hàng ngày vào buổi sáng và buổi tối. Tạo bọt với nước, nhẹ nhàng massage toàn mặt rồi rửa sạch lại với nước.",
         "keyActives": [
-            "SODIUM SALICYLATE: Bạt sừng nhẹ, kháng viêm.",
-            "NIACINAMIDE : Kháng viêm, giảm đỏ, giảm ngứa. Ức chế sản xuất bã nhờn, giảm mụn. Làm sáng da.",
-            "CHLORHEXINDINE DIGLUCONATE: Kháng khuẩn, chống viêm nhiễm.",
-            "TOCOPHERYL ACETATE (VITAMIN E) SODIUM HYALURONATE : Dưỡng ẩm, chống lão hóa và ngăn ngừa viêm, giảm đỏ."
+            "SODIUM SALICYLATE: Bạt sừng nhẹ, làm thông thoáng nang lông và kháng viêm.",
+            "NIACINAMIDE: Kháng viêm, giảm đỏ, giảm ngứa, ức chế bã nhờn và làm sáng đều màu da.",
+            "CHLORHEXIDINE DIGLUCONATE: Kháng khuẩn chuyên sâu, ngăn ngừa nhiễm khuẩn lan rộng.",
+            "TOCOPHERYL ACETATE (VITAMIN E) & SODIUM HYALURONATE: Cấp ẩm, chống oxy hóa và duy trì độ mềm mượt."
         ],
         "mainActives": [
             "SODIUM SALICYLATE",
@@ -1408,13 +1524,17 @@ window.LOCAL_PRODUCTS = [
             "tri-mun-kiem-dau",
             "phuc-hoi-diu-da"
         ],
-        "benefitName": "Trị mụn & Kiềm dầu"
+        "benefitName": "Trị mụn & Kiềm dầu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1805",
         "brand": "Rilastil",
         "brandSlug": "rilastil",
-        "line": "ACNES",
+        "line": "ACNESTIL",
         "name": "GEL RỬA MẶT DÀNH CHO DA MỤN – RILASTIL ACNESTIL CLEANSING GEL 200ML",
         "slug": "gel-rua-mat-danh-cho-da-mun-rilastil-acnestil-cleansing-gel-200ml",
         "price": 646000,
@@ -1434,12 +1554,12 @@ window.LOCAL_PRODUCTS = [
             "combination",
             "acne-prone"
         ],
-        "uses": "Rửa mặt dạng gel dành cho da dầu, mụn giúp làm sạch sâu nhưng vẫn giữ được độ ẩm cho da. Bên cạnh đó, sản phẩm còn giúp giảm mụn, giảm sưng viêm, làm dịu nhẹ da, trả lại cho bạn làn da mềm mịn.",
-        "usage": "Sử dụng hàng ngày vào sáng và tối.",
+        "uses": "Sữa rửa mặt dạng gel thanh lọc chuyên biệt cho da dầu và da mụn, giúp làm sạch sâu bã nhờn và cặn bẩn mà vẫn bảo toàn độ ẩm sinh lý của da. Hỗ trợ kháng khuẩn, làm se các nốt mụn sưng và mang lại làn da thông thoáng mềm mại.",
+        "usage": "Sử dụng hàng ngày vào buổi sáng và buổi tối. Tạo bọt với nước, nhẹ nhàng massage toàn mặt rồi rửa sạch lại với nước.",
         "keyActives": [
             "SODIUM SALICYLATE / SALICYLIC ACID (BHA): Bạt sừng nhẹ, kháng viêm, làm thông thoáng cổ nang lông.",
             "NIACINAMIDE: Kháng viêm, giảm đỏ, kiểm soát bã nhờn và phục hồi hàng rào bảo vệ da.",
-            "ZINC PCA: Kiềm dầu sinh học, ức chế vi khuẩn mụn P.acnes phát triển.",
+            "ZINC PCA: Kiềm dầu sinh học, ức chế vi khuẩn mụn P. acnes phát triển.",
             "OLIGOPEPTIDE-10 & CHLORHEXIDINE: Kháng khuẩn chuyên sâu và ngăn ngừa mụn tái phát."
         ],
         "mainActives": [
@@ -1458,7 +1578,11 @@ window.LOCAL_PRODUCTS = [
             "tri-mun-kiem-dau",
             "phuc-hoi-diu-da"
         ],
-        "benefitName": "Trị mụn & Kiềm dầu"
+        "benefitName": "Trị mụn & Kiềm dầu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1774",
@@ -1485,12 +1609,12 @@ window.LOCAL_PRODUCTS = [
             "combination",
             "sensitive"
         ],
-        "uses": "Sữa rửa mặt dưỡng ẩm RIlastil Aqua face cleanser giúp loại bỏ các tạp chất trên da một cách dịu nhẹ . Làm sạch sâu nhưng vẫn giữ được độ ẩm trên da giúp da luôn mềm mịn",
-        "usage": "1-2 lần/ngày",
+        "uses": "Sữa rửa mặt dưỡng ẩm Rilastil Aqua Face Cleanser giúp loại bỏ nhẹ nhàng bụi bẩn và tạp chất tích tụ trên da. Công thức làm sạch sâu nhưng không làm mất đi độ ẩm sinh lý, giữ cho làn da luôn mềm mịn, căng mọng tự nhiên.",
+        "usage": "Sử dụng 1-2 lần/ngày vào buổi sáng và buổi tối.",
         "keyActives": [
-            "SODIUM HYALURONATE HYDROLYZED HYALURONIC ACID: Acid hyaluronic trọng lượng phân tử cao và thấp giúp thẩm thấu vào các lớp nông, sâu của da, hút ẩm giúp cho da mềm, mịn",
-            "CERAMIDE NP, CERAMIDE AP, CERAMIDE EOP: Phục hồi hàng rào bảo vệ của da, giữ ẩm giúp cho da mềm, mịn.",
-            "OENOTHERA BIENNIS (EVENING PRIMROSE) OIL OLUS OIL (VEGETABLE OIL): Dưỡng ẩm, kháng viêm, giảm kích ứng."
+            "SODIUM HYALURONATE & HYDROLYZED HYALURONIC ACID: Acid hyaluronic trọng lượng phân tử cao và thấp giúp thẩm thấu vào các lớp nông và sâu của da, duy trì độ mềm mịn.",
+            "CERAMIDE NP, AP, EOP: Phục hồi hàng rào lipid bảo vệ da, giữ ẩm tối ưu.",
+            "OENOTHERA BIENNIS (EVENING PRIMROSE) OIL: Nuôi dưỡng, làm dịu da và giảm thiểu kích ứng."
         ],
         "mainActives": [
             "SODIUM HYALURONATE HYDROLYZED HYALURONIC ACID",
@@ -1507,7 +1631,11 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "cap-am-chuyen-sau"
         ],
-        "benefitName": "Cấp ẩm sâu"
+        "benefitName": "Cấp ẩm sâu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1566",
@@ -1535,10 +1663,10 @@ window.LOCAL_PRODUCTS = [
             "normal",
             "combination"
         ],
-        "uses": "Dưỡng ẩm da đa tầng và chuyên sâu, chống lão hóa da. Dành cho mọi loại da.",
-        "usage": "1-2 lần/ngày",
+        "uses": "Serum dưỡng ẩm đa tầng và chống lão hóa chuyên sâu, giúp kích thích tái tạo collagen, làm mờ các nếp nhăn biểu cảm và nâng cao độ đàn hồi, săn chắc của làn da.",
+        "usage": "Sử dụng 1-2 lần/ngày vào buổi sáng và buổi tối trước bước kem dưỡng.",
         "keyActives": [
-            "SODIUM HYALURONATE :Acid hyaluronic với 3 trọng lượng phân tử khác nhau từ thấp đến cao thẩm thấu vào da từ lớp nông đến sâu, giúp dưỡng ẩm đa tầng. Kích thích tổng hợp collagen, chống lão hóa, chống nhăn"
+            "SODIUM HYALURONATE 3D: Acid hyaluronic với 3 trọng lượng phân tử khác nhau thẩm thấu đa tầng từ nông đến sâu, kích thích tổng hợp collagen và chống nhăn."
         ],
         "mainActives": [
             "SODIUM HYALURONATE"
@@ -1554,7 +1682,11 @@ window.LOCAL_PRODUCTS = [
             "chong-lao-hoa",
             "cap-am-chuyen-sau"
         ],
-        "benefitName": "Chống lão hóa"
+        "benefitName": "Chống lão hóa",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1564",
@@ -1582,11 +1714,11 @@ window.LOCAL_PRODUCTS = [
             "normal",
             "combination"
         ],
-        "uses": "nuôi dưỡng làn da, tăng độ đàn hồi, cung cấp độ ẩm cân bằng cho da, từ đó làm giảm và loại trừ các nếp nhăn xuất hiện trên da. kết cấu dịu nhẹ, dưỡng ẩm nhẹ nhàng, có hiệu quả ngăn ngừa và chống lại những nếp nhăn, trẻ hóa làn da.",
-        "usage": "1-2 lần/ngày",
+        "uses": "Kem dưỡng ẩm tái cấu trúc và chống lão hóa chuyên sâu, giúp nuôi dưỡng làn da, cải thiện độ đàn hồi và làm mờ các nếp nhăn sâu. Kết cấu dịu nhẹ thẩm thấu nhanh, mang lại diện mạo căng mọng, săn chắc và tươi trẻ dài lâu.",
+        "usage": "Sử dụng 1-2 lần/ngày vào buổi sáng và buổi tối sau bước tinh chất.",
         "keyActives": [
             "HYALURONIC ACID ĐA TRỌNG LƯỢNG PHÂN TỬ: Thẩm thấu từ tầng nông đến sâu, bơm đầy nếp nhăn.",
-            "LUPEOL: Kích hoạt tăng sinh Collagen Type 1 & Elastin, tái tạo mạng lưới đàn hồi.",
+            "LUPEOL: Kích hoạt tăng sinh Collagen Type 1 và Elastin, tái tạo mạng lưới đàn hồi.",
             "CALMOSENSINE BIO-PEPTIDE: Thư giãn các sợi cơ biểu cảm, ngăn chặn nếp nhăn hằn sâu.",
             "CERAMIDES NP/AP/EOP: Khóa ẩm, ngăn chặn mất nước xuyên biểu bì."
         ],
@@ -1606,7 +1738,11 @@ window.LOCAL_PRODUCTS = [
             "chong-lao-hoa",
             "cap-am-chuyen-sau"
         ],
-        "benefitName": "Chống lão hóa"
+        "benefitName": "Chống lão hóa",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1562",
@@ -1630,8 +1766,8 @@ window.LOCAL_PRODUCTS = [
         "skinTypes": [
             "all"
         ],
-        "uses": "Kem chống nắng quang phổ rộng, có thành phần chống lão hoá, kháng viêm, giảm gốc tự do, dày thượng bì.",
-        "usage": "Dùng hàng ngày, bôi nhắc lại 2-3h",
+        "uses": "Kem chống nắng quang phổ rộng SPF 50+ kết hợp hoạt chất chống lão hóa vượt trội, giúp ngăn chặn tác hại của gốc tự do, giảm nguy cơ cháy nắng và bảo vệ cấu trúc tế bào biểu bì trước sự xuất hiện của các nếp nhăn quang hóa.",
+        "usage": "Thoa đều kem chống nắng lên mặt và cổ trước khi ra ngoài 20 phút. Thoa nhắc lại sau mỗi 2-3 giờ khi cần thiết.",
         "keyActives": [
             "MÀNG LỌC QUANG PHỔ RỘNG UVA/UVB/HEV/IR: Bảo vệ tối đa cấu trúc DNA tế bào trước mọi bức xạ có hại.",
             "PRO-DNA COMPLEX: Phức hợp chống lão hóa do ánh nắng độc quyền.",
@@ -1653,7 +1789,11 @@ window.LOCAL_PRODUCTS = [
             "chong-nang",
             "chong-lao-hoa"
         ],
-        "benefitName": "Chống nắng"
+        "benefitName": "Chống nắng",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1122",
@@ -1676,8 +1816,8 @@ window.LOCAL_PRODUCTS = [
         "skinTypes": [
             "all"
         ],
-        "uses": "Công dụng: L àm sạch sâu, loại bỏ bụi bẩn và lớp trang điểm một cách nhanh chóng, an toàn cho làn da. Độ PH trung tính giống như nước mắt, phù hợp với mọi loại da, kể cả da nhạy cảm. Dung tích: 400ml Sử dụng: Thấm ra bông tẩy trang rồi lau mặt nhẹ nhàng. Dùng trước khi rửa mặt vào buổi tối hoặc dùng",
-        "usage": "Thấm ra bông tẩy trang rồi lau mặt nhẹ nhàng. Dùng trước khi rửa mặt vào buổi tối hoặc dùng để làm sạch mặt trước khi bôi nhắc lại kem chống nắng, không cần rửa lại bằng nước.",
+        "uses": "Nước tẩy trang dịu nhẹ với độ pH sinh lý, giúp làm sạch sâu và loại bỏ hoàn toàn bụi bẩn cùng lớp trang điểm mà không làm tổn thương màng ẩm tự nhiên. Phù hợp cho mọi loại da, kể cả da nhạy cảm nhất và vùng da quanh mắt.",
+        "usage": "Thấm dung dịch ra bông tẩy trang rồi lau nhẹ nhàng khắp mặt và mắt. Không cần rửa lại với nước.",
         "keyActives": [
             "SODIUM DNA: Thúc đẩy tái tạo tế bào và phục hồi độ săn chắc tự nhiên.",
             "VITAMIN E & DƯỢC LIỆU THIÊN NHIÊN: Bảo vệ và nuôi dưỡng làn da khỏe khoắn."
@@ -1696,13 +1836,17 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "tri-mun-kiem-dau"
         ],
-        "benefitName": "Trị mụn & Kiềm dầu"
+        "benefitName": "Trị mụn & Kiềm dầu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1528",
         "brand": "Rilastil",
         "brandSlug": "rilastil",
-        "line": "ACNES",
+        "line": "ACNESTIL",
         "name": "KEM GIẢM MỤN 8H & GIẢM THÂM MỤN – RILASTIL ACNESTIL ATTIVA (+) ANTI-BLEMISH AND ANTI MARKS CARE",
         "slug": "rilastil-acnestil-attiva-cream",
         "price": 646000,
@@ -1722,12 +1866,12 @@ window.LOCAL_PRODUCTS = [
             "combination",
             "acne-prone"
         ],
-        "uses": "kiềm dầu, cân bằng độ ẩm, ngăn ngừa và trị mụn, làm giảm vết thâm, tái tạo tế bào và phục hồi làn da thương tổn, giúp da tươi sáng, khỏe mạnh và săn chắc.",
-        "usage": "1-2 lần/ ngày",
+        "uses": "Kem kiềm dầu và giảm mụn chuyên sâu, giúp kiểm soát bã nhờn, kháng viêm, làm se cồi mụn nhanh chóng và làm mờ rõ rệt các vết thâm sau mụn. Tái tạo tế bào thương tổn cho làn da sáng mịn và khỏe mạnh.",
+        "usage": "Sử dụng 1-2 lần/ngày vào buổi sáng và buổi tối sau khi làm sạch da.",
         "keyActives": [
-            "SODIUM SALICYLATE: Bạt sừng nhẹ, kháng viêm.",
-            "POTASSIUM AZELOYL DIGLYCINATE, NIACINAMIDE: Kháng viêm, giảm đỏ, giảm ngứa. Ức chế sản xuất bã nhờn, giảm mụn. Làm sáng da.",
-            "PANTHENOL TOCOPHERYL ACETATE SODIUM HYALURONATE : Dưỡng ẩm, chống lão hóa và ngăn ngừa viêm, giảm đỏ."
+            "SODIUM SALICYLATE: Bạt sừng nhẹ, làm thông thoáng lỗ chân lông và kháng viêm.",
+            "POTASSIUM AZELOYL DIGLYCINATE & NIACINAMIDE: Kháng viêm, giảm đỏ, giảm ngứa, ức chế bã nhờn và làm sáng mờ thâm.",
+            "PANTHENOL & SODIUM HYALURONATE: Dưỡng ẩm sâu, chống lão hóa và ngăn ngừa kích ứng, đỏ rát."
         ],
         "mainActives": [
             "SODIUM SALICYLATE",
@@ -1745,13 +1889,17 @@ window.LOCAL_PRODUCTS = [
             "tri-mun-kiem-dau",
             "sang-da-mo-tham"
         ],
-        "benefitName": "Trị mụn & Kiềm dầu"
+        "benefitName": "Trị mụn & Kiềm dầu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1524",
         "brand": "Rilastil",
         "brandSlug": "rilastil",
-        "line": "ACNES",
+        "line": "ACNESTIL",
         "name": "BỌT RỬA MẶT DÀNH CHO DA MỤN – RILASTIL ACNESTIL CLEANSING MOUSSE 165ML",
         "slug": "rilastil-acnestil-cleansing-mousse",
         "price": 503500,
@@ -1771,12 +1919,12 @@ window.LOCAL_PRODUCTS = [
             "combination",
             "acne-prone"
         ],
-        "uses": "Rửa mặt dạng bọt dành cho da dầu, mụn giúp làm sạch sâu nhưng vẫn giữ được độ ẩm cho da. Bên cạnh đó, sản phẩm còn giúp giảm mụn, giảm sưng viêm, làm dịu nhẹ da, trả lại cho bạn làn da mềm mịn.",
-        "usage": "Sử dụng hàng ngày vào sáng và tối.",
+        "uses": "Bọt rửa mặt làm sạch sâu dịu nhẹ dành cho da dầu và mụn trứng cá, với lớp bọt mịn màng giúp cuốn trôi bã nhờn và tế bào chết mà không làm tổn thương màng ẩm. Hỗ trợ kháng viêm, làm dịu da và ngăn ngừa mụn tái phát.",
+        "usage": "Sử dụng hàng ngày vào buổi sáng và buổi tối. Nhấn 1-2 pump bọt ra tay, massage nhẹ nhàng lên da ướt rồi rửa sạch lại với nước.",
         "keyActives": [
             "SODIUM SALICYLATE / SALICYLIC ACID (BHA): Bạt sừng nhẹ, kháng viêm, làm thông thoáng cổ nang lông.",
             "NIACINAMIDE: Kháng viêm, giảm đỏ, kiểm soát bã nhờn và phục hồi hàng rào bảo vệ da.",
-            "ZINC PCA: Kiềm dầu sinh học, ức chế vi khuẩn mụn P.acnes phát triển.",
+            "ZINC PCA: Kiềm dầu sinh học, ức chế vi khuẩn mụn P. acnes phát triển.",
             "OLIGOPEPTIDE-10 & CHLORHEXIDINE: Kháng khuẩn chuyên sâu và ngăn ngừa mụn tái phát."
         ],
         "mainActives": [
@@ -1795,7 +1943,11 @@ window.LOCAL_PRODUCTS = [
             "tri-mun-kiem-dau",
             "phuc-hoi-diu-da"
         ],
-        "benefitName": "Trị mụn & Kiềm dầu"
+        "benefitName": "Trị mụn & Kiềm dầu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1128",
@@ -1818,8 +1970,8 @@ window.LOCAL_PRODUCTS = [
         "skinTypes": [
             "all"
         ],
-        "uses": "Kem dưỡng ẩm, giúp tăng độ đàn hồi cho da. Có thể sử dụng trong quá trình lành vết thương để giảm tình trạng sẹo. Dùng cho mọi loại da.",
-        "usage": "sử dụng hàng ngày nhiều lần",
+        "uses": "Kem dưỡng ẩm đa năng giúp tăng cường độ đàn hồi, làm mềm mịn mô sẹo và hỗ trợ phục hồi cấu trúc biểu bì trong quá trình lành thương. Thích hợp cho mọi loại da, đặc biệt là da kém săn chắc hoặc da sau tổn thương.",
+        "usage": "Sử dụng 1-2 lần/ngày, thoa đều và massage nhẹ nhàng lên vùng da cần tăng cường độ đàn hồi hoặc chăm sóc sẹo.",
         "keyActives": [
             "SODIUM DNA: Thúc đẩy tái tạo tế bào và phục hồi độ săn chắc tự nhiên.",
             "VITAMIN E & DƯỢC LIỆU THIÊN NHIÊN: Bảo vệ và nuôi dưỡng làn da khỏe khoắn."
@@ -1838,7 +1990,11 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "cap-am-chuyen-sau"
         ],
-        "benefitName": "Cấp ẩm sâu"
+        "benefitName": "Cấp ẩm sâu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1125",
@@ -1865,8 +2021,8 @@ window.LOCAL_PRODUCTS = [
             "combination",
             "sensitive"
         ],
-        "uses": "Giúp phục hồi, làm dịu và dưỡng ẩm chuyên sâu cho da. Đồng thời bổ sung hàng rào bảo vệ da, ngăn ngừa khả năng mất nước. Sản phẩm phù hợp với mọi loại da, kể cả da nhạy cảm nhất.",
-        "usage": "1-2 lần/ ngày . Phù hợp cho mọi loại da.",
+        "uses": "Mặt nạ dưỡng ẩm chuyên sâu giúp cấp nước đa tầng, làm dịu tức thì làn da khô căng và củng cố hàng rào bảo vệ da ngăn ngừa mất nước. Sản phẩm phù hợp cho mọi loại da, đặc biệt là da thiếu ẩm và nhạy cảm.",
+        "usage": "Sử dụng 1-2 lần/tuần. Thoa một lớp dày vừa đủ lên mặt và cổ, thư giãn trong 5-15 phút rồi lau sạch bằng bông cotton hoặc rửa lại với nước.",
         "keyActives": [
             "SODIUM HYALURONATE & HYDROLYZED HYALURONIC ACID: Cấp ẩm kép giúp da ngậm nước đa tầng tế bào.",
             "CERAMIDES & OMEGA 6/9: Khôi phục màng lipid tự nhiên, bảo vệ da khỏi mất nước.",
@@ -1888,7 +2044,11 @@ window.LOCAL_PRODUCTS = [
             "phuc-hoi-diu-da",
             "cap-am-chuyen-sau"
         ],
-        "benefitName": "Phục hồi & Dịu da"
+        "benefitName": "Phục hồi & Dịu da",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-1120",
@@ -1911,8 +2071,8 @@ window.LOCAL_PRODUCTS = [
         "skinTypes": [
             "all"
         ],
-        "uses": "Kem tẩy tế bào chết giúp làm sạch sâu và tái cấu trúc da, giúp sự luân chuyển tế bào cho làn da mềm mịn",
-        "usage": "1-2 lần/ tuần",
+        "uses": "Kem tẩy tế bào chết dạng hạt siêu mịn giúp làm sạch sâu lỗ chân lông, nhẹ nhàng cuốn trôi các lớp tế bào sừng già cỗi và thúc đẩy quá trình tái tạo biểu bì mới, mang lại làn da mịn màng, rạng rỡ và dễ hấp thu dưỡng chất.",
+        "usage": "Sử dụng 1-2 lần/tuần trên da đã được làm ẩm, massage theo chuyển động tròn rồi rửa sạch lại với nước.",
         "keyActives": [
             "SODIUM DNA: Thúc đẩy tái tạo tế bào và phục hồi độ săn chắc tự nhiên.",
             "VITAMIN E & DƯỢC LIỆU THIÊN NHIÊN: Bảo vệ và nuôi dưỡng làn da khỏe khoắn."
@@ -1931,13 +2091,17 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "tri-mun-kiem-dau"
         ],
-        "benefitName": "Trị mụn & Kiềm dầu"
+        "benefitName": "Trị mụn & Kiềm dầu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-537",
         "brand": "Rilastil",
         "brandSlug": "rilastil",
-        "line": "ACNES",
+        "line": "DAILY CARE",
         "name": "GEL RỬA MẶT DÀNH CHO DA NHẠY CẢM, DA DẦU MỤN VÀ DA HỖN HỢP RILASTIL DAILY CARE PURIFYING CLEANSING GEL 200ML",
         "slug": "gel-rua-mat-danh-cho-da-nhay-cam-daily-care-purifying-cleasing-gel-200ml",
         "price": 418000,
@@ -1957,12 +2121,12 @@ window.LOCAL_PRODUCTS = [
             "combination",
             "acne-prone"
         ],
-        "uses": "DAILY CARE PURIFYING CLEANSING GEL 200ML là sữa rửa mặt dạng gel trong suốt với công thức dịu nhẹ dành cho da nhạy cảm, da dầu mụn và da hỗn hợp. Không gây khô, kích ứng. ĐẶC TÍNH SẢN PHẨM Kết cấu: dung dịch dạng gel trong suốt Dung tích: 200ml Loại da: Da dầu, da hỗn hợp, da thường. Sử dụng: Sử dụn",
-        "usage": "Sử dụng hàng ngày vào sáng và tối",
+        "uses": "Gel rửa mặt thanh lọc dịu nhẹ trong suốt với công thức không chứa gốc sulfate gây khô ráp, dành riêng cho làn da nhạy cảm, da dầu mụn và da hỗn hợp. Giúp làm sạch sâu bã nhờn dư thừa, duy trì độ ẩm tự nhiên và mang lại cảm giác tươi mới, dễ chịu.",
+        "usage": "Sử dụng hàng ngày vào sáng và tối. Tạo bọt với nước, nhẹ nhàng massage toàn mặt rồi rửa sạch lại bằng nước ấm.",
         "keyActives": [
-            "Không sử dụng chất diện hoạt gốc sulffat: Không tạo kết tủa với ion Ca, Mg trong nước, tránh gây bít tắc lỗ chân lông.",
-            "PANTHENOL (VITAMIN B5):",
-            "HYDROLYZED CORALLINA OFFICINALIS: Giàu Kẽm, Đồng; các chất chống oxy hóa (polysaccharides, galactose, and xylose) và MAAs (các acid amin giống mycosporine). Dưỡng ẩm, làm mềm da. Chống oxy hóa."
+            "CÔNG NGHỆ LÀM SẠCH KHÔNG SULFATE: Nhẹ dịu, không tạo kết tủa với ion Ca, Mg trong nước, tránh gây bít tắc cổ nang lông.",
+            "D-PANTHENOL (VITAMIN B5): Làm dịu kích ứng, dưỡng ẩm và phục hồi hàng rào màng tế bào.",
+            "CHIẾT XUẤT TẢO CORALLINA OFFICINALIS: Giàu khoáng chất Kẽm, Đồng và chất chống oxy hóa tự nhiên giúp thanh lọc và làm mềm da."
         ],
         "mainActives": [
             "Không sử dụng chất diện hoạt gốc sulffat",
@@ -1979,7 +2143,11 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "tri-mun-kiem-dau"
         ],
-        "benefitName": "Trị mụn & Kiềm dầu"
+        "benefitName": "Trị mụn & Kiềm dầu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-525",
@@ -2006,12 +2174,12 @@ window.LOCAL_PRODUCTS = [
             "combination",
             "sensitive"
         ],
-        "uses": "AQUA INTENSE GEL SERUM là tinh chất dưỡng ẩm đa tầng chuyên sâu, cấp ẩm cho các lớp sâu dưới da và dưỡng ẩm trên bề mặt da giúp làn da mềm mịn, căng mọng.",
-        "usage": "Sử dụng hàng ngày vào sáng và tối",
+        "uses": "Tinh chất dưỡng ẩm đa tầng chuyên sâu, cung cấp độ ẩm tức thì cho các tầng sâu của da và khóa ẩm bền bỉ trên bề mặt, mang lại làn da mềm mại, căng bóng và ngậm nước suốt ngày dài.",
+        "usage": "Sử dụng hàng ngày vào buổi sáng và buổi tối sau bước toner, lấy 3-5 giọt thoa đều lên mặt và cổ rồi vỗ nhẹ.",
         "keyActives": [
-            "HYALURONIC ACID ĐA TẦNG: Cấp ẩm cho các lớp sâu của da và dưỡng ẩm trên bề mặt da",
-            "PENTYLENE GLYCOL, GLYCERIN : Dưỡng ẩm, giúp làn da mềm, mịn, căng bóng",
-            "CHONDRUS CRISPUS POWDER (CARRAGEENAN): Chứa CARRAGEENAN chống lại các tác nhân ô nhiễm từ môi trường. Chứa beta-carotene, zeaxanthin, lutein là các chất chống oxy hóa mạnh giúp bảo vệ da khỏi tác động khi tiếp xúc với ánh sáng xanh. Chứa nhiều polysaccharide, peptide, và amino acid giúp dưỡng ẩm da."
+            "HYALURONIC ACID ĐA TẦNG: Cấp ẩm cho các tầng sâu của da và khóa ẩm trên bề mặt da.",
+            "PENTYLENE GLYCOL & GLYCERIN: Hút ẩm tự nhiên, giúp làn da mềm mịn, căng mọng.",
+            "CHIẾT XUẤT TẢO BIỂN CHONDRUS CRISPUS: Chống oxy hóa mạnh mẽ, bảo vệ da trước ánh sáng xanh và bụi mịn môi trường."
         ],
         "mainActives": [
             "HYALURONIC ACID ĐA TẦNG",
@@ -2028,7 +2196,11 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "cap-am-chuyen-sau"
         ],
-        "benefitName": "Cấp ẩm sâu"
+        "benefitName": "Cấp ẩm sâu",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-520",
@@ -2053,11 +2225,11 @@ window.LOCAL_PRODUCTS = [
             "all",
             "hyperpigmentation"
         ],
-        "uses": "Rilastil Intense C Gel Serum 30ml là loại huyết thanh hoàn hảo cho mọi loại da, với 15% Vitamin C hi-tech (chiết xuất công nghệ cao) sản phẩm này có tác dụng chống lão hóa, cấp ẩm sâu cho da và giúp da được bảo vệ tốt hơn trước tác hại của tia UV. Ngoài ra, còn ngăn ngừa sự xuất hiện của nếp nhăn, l",
-        "usage": "Sử dụng hàng ngày vào sáng và tối",
+        "uses": "Serum dưỡng sáng và chống oxy hóa đỉnh cao với 15% Vitamin C công nghệ sinh học thế hệ mới (3-O-Ethyl Ascorbic Acid). Sản phẩm giúp trung hòa các gốc tự do, bảo vệ da trước ánh sáng mặt trời, làm mờ rõ rệt thâm nám, kích thích tổng hợp collagen và ngăn ngừa các nếp nhăn lão hóa sớm.",
+        "usage": "Sử dụng hàng ngày vào sáng và tối sau bước làm sạch. Thoa đều 4-5 giọt lên mặt và cổ, vỗ nhẹ cho tinh chất thẩm thấu trước khi dùng kem dưỡng.",
         "keyActives": [
-            "3-O-ETHYL ASCORBIC ACID 15% : Chống oxy hóa, trung hòa gốc tự do, bảo vệ da khỏi ánh sáng mặt trời. Ức chế Tyrosinase làm sáng da, mờ thâm nám. Chống viêm, dưỡng ẩm, đẩy nhanh quá trình lành thương.",
-            "SODIUM HYALURONATE, HYDROLYZED HYALURONIC ACID : Acid hyaluronic trọng lượng phân tử cao và thấp giúp thẩm thấu vào các lớp nông, sâu của da, hút ẩm giúp cho da mềm, mịn."
+            "3-O-ETHYL ASCORBIC ACID (15%): Dẫn xuất Vitamin C công nghệ cao bền vững, ức chế Tyrosinase làm sáng da và chống oxy hóa mạnh mẽ.",
+            "SODIUM HYALURONATE & HYDROLYZED HYALURONIC ACID: Cấp ẩm đa tầng, hút ẩm và duy trì làn da căng bóng mịn màng."
         ],
         "mainActives": [
             "3-O-ETHYL ASCORBIC ACID 15%",
@@ -2073,7 +2245,11 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "sang-da-mo-tham"
         ],
-        "benefitName": "Sáng da & Mờ thâm"
+        "benefitName": "Sáng da & Mờ thâm",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-499",
@@ -2098,8 +2274,8 @@ window.LOCAL_PRODUCTS = [
             "all",
             "hyperpigmentation"
         ],
-        "uses": "D-CLAR DEPIGMENTING CONCENTRATE DROPS là loại huyết thanh được bào chế với công thức siêu đậm đặc với các phức hợp và chiết xuất giúp đặc trị các vấn đề về nám, đốm nâu, da không đều màu và đàn hồi kém. Hiệu quả cho thấy sau khi sử dụng sản phẩm từ 4-8 tuần, bạn sẽ có làn da sáng, mịn, căng bóng và ",
-        "usage": "Sử dụng hàng ngày vào sáng và tối",
+        "uses": "Huyết thanh cô đặc chuyên biệt trong việc làm mờ thâm nám, đốm nâu và cải thiện tình trạng da không đều màu. Công thức đậm đặc với các hoạt chất sinh học giúp ức chế triệt để quá trình tạo sắc tố, mang lại làn da sáng mịn, đều màu và rạng rỡ sau 4-8 tuần sử dụng.",
+        "usage": "Sử dụng 1-2 lần/ngày vào buổi sáng và buổi tối. Nhỏ 4-5 giọt thoa đều lên toàn mặt hoặc chấm trực tiếp lên các đốm nâu cần điều trị.",
         "keyActives": [
             "4-BUTYLRESORCINOL: Hoạt chất ức chế mạnh mẽ enzym Tyrosinase, chặn đứng gốc rễ sắc tố Melanin.",
             "TETRAPEPTIDE-30: Làm mờ các đốm nâu cứng đầu, cân bằng sắc tố và làm đều màu da.",
@@ -2121,7 +2297,11 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "sang-da-mo-tham"
         ],
-        "benefitName": "Sáng da & Mờ thâm"
+        "benefitName": "Sáng da & Mờ thâm",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "rilastil-486",
@@ -2146,13 +2326,13 @@ window.LOCAL_PRODUCTS = [
             "all",
             "hyperpigmentation"
         ],
-        "uses": "D-CLAR CONCENTRATED MICROPEELING là sản phẩm tẩy tế bào chết chuyên sâu giúp cải thiện tình trạng không đều màu da, tăng sắc tố da, nám và sẹo mụn. Với công thức 2 pha dạng sữa lỏng, dung dịch này có thể thấm sâu và da để làm bong lớp tế bào chết, tái tạo và phục hồi và nuôi dưỡng các tế bào mới. ĐẶ",
-        "usage": "Sử dụng hàng ngày vào sáng và tối",
+        "uses": "Dung dịch tẩy tế bào chết chuyên sâu 2 pha dạng sữa lỏng, kết hợp Mandelic Acid 10% (AHA) cùng phức hợp làm sáng da Clari-Tech Complex. Giúp nhẹ nhàng bạt sừng, làm bong tróc lớp tế bào xỉn màu, hỗ trợ làm mờ các vết nám và đốm nâu, kích thích tái tạo bề mặt da mịn màng, tươi sáng.",
+        "usage": "Lắc đều chai trước khi dùng. Thấm dung dịch ra bông cotton rồi thoa đều lên mặt vào buổi tối sau khi làm sạch. Tránh vùng mắt.",
         "keyActives": [
-            "MADELIC ACID 10% (AHA): Bạt sừng nhẹ, tẩy tế bào chết. Phân tán melanin làm mờ các đốm nâu trên da. Giảm các nếp nhăn nhỏ",
-            "HYDROXYRESVERATROL: Ức chế Tyrosinase làm sáng da, mờ thâm nám.",
-            "(3-O-ETHYL ASCORBIC ACID): Trung hòa các gốc tự do, ngăn oxy hóa melalin giúp sáng da, mờ thâm nám.",
-            "NIACINAMIDE: Ức chế vận chuyển hạt sắc tố từ tế bào hắc tố sang tế bào sừng giúp sáng da, mờ thâm nám."
+            "MANDELIC ACID 10% (AHA): Bạt sừng nhẹ dịu, tẩy tế bào chết và phân tán hắc tố melanin trên bề mặt da.",
+            "HYDROXYRESVERATROL: Ức chế enzym Tyrosinase giúp làm sáng da và mờ thâm nám bền vững.",
+            "3-O-ETHYL ASCORBIC ACID: Trung hòa các gốc tự do, ngăn ngừa oxy hóa melanin cho làn da tươi sáng.",
+            "NIACINAMIDE: Ức chế vận chuyển hạt sắc tố lên tế bào sừng, củng cố hàng rào bảo vệ da."
         ],
         "mainActives": [
             "MADELIC ACID 10%",
@@ -2169,18 +2349,22 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "sang-da-mo-tham"
         ],
-        "benefitName": "Sáng da & Mờ thâm"
+        "benefitName": "Sáng da & Mờ thâm",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     },
     {
         "id": "twon-body-lotion",
         "brand": "TWON",
         "brandSlug": "twon",
         "line": "TWON BODY",
-        "name": "Kem Body Lotion TWON 200ml",
+        "name": "Twon Kem Body Dưỡng Trắng Hương Nước Hoa",
         "slug": "kem-body-lotion-twon-200ml",
-        "price": 304000,
-        "originalPrice": 320000,
-        "volume": "200ml",
+        "price": 276000,
+        "originalPrice": 306900,
+        "volume": "200 ml",
         "tier": "Essential",
         "category": "Chăm sóc thể thao & Body",
         "stepType": "moisturizer",
@@ -2213,18 +2397,26 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "body-nuoc-hoa"
         ],
-        "benefitName": "Cơ thể & Nước hoa"
+        "benefitName": "Cơ thể & Nước hoa",
+        "barcode": "8938541031288",
+        "dimensions": "55 × 50 × 193 mm",
+        "notificationNumber": "2431/25/CBMP-TN",
+        "approvingAuthority": "Sở Y tế Tây Ninh",
+        "origin": "Việt Nam",
+        "expiry": "36 tháng và 12 tháng sau khi mở nắp",
+        "licenseImageUrl": "/images/licenses/1Dwfry5VcSvbXewMwbVhRWmK6yJLJuInx.webp",
+        "licenseUrl": "https://drive.google.com/file/d/1Dwfry5VcSvbXewMwbVhRWmK6yJLJuInx/view?usp=drivesdk"
     },
     {
         "id": "twon-kem-u-trang",
         "brand": "TWON",
         "brandSlug": "twon",
         "line": "TWON BODY",
-        "name": "Kem Ủ Trắng TWON 250ml",
+        "name": "Twon Ủ Trắng Hương Nước Hoa",
         "slug": "kem-u-trang-twon-250ml",
-        "price": 275500,
-        "originalPrice": 290000,
-        "volume": "250ml",
+        "price": 246000,
+        "originalPrice": 273900,
+        "volume": "250 ml",
         "tier": "Essential",
         "category": "Chăm sóc thể thao & Body",
         "stepType": "special",
@@ -2256,18 +2448,26 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "body-nuoc-hoa"
         ],
-        "benefitName": "Cơ thể & Nước hoa"
+        "benefitName": "Cơ thể & Nước hoa",
+        "barcode": "8938541031295",
+        "dimensions": "65 × 65 × 190 mm",
+        "notificationNumber": "006742/25/CBMP-TN",
+        "approvingAuthority": "Sở Y tế Tây Ninh",
+        "origin": "Việt Nam",
+        "expiry": "36 tháng và 12 tháng sau khi mở nắp",
+        "licenseImageUrl": "/images/licenses/1cicNb4LL_FhSX1NccsU4sq7CcU1b7y_5.webp",
+        "licenseUrl": "https://drive.google.com/file/d/1cicNb4LL_FhSX1NccsU4sq7CcU1b7y_5/view?usp=drivesdk"
     },
     {
         "id": "twon-sua-tam",
         "brand": "TWON",
         "brandSlug": "twon",
         "line": "TWON BODY",
-        "name": "Sữa Tắm Hương Nước Hoa TWON 450ml",
+        "name": "Twon Sữa tắm Twon",
         "slug": "sua-tam-huong-nuoc-hoa-twon-450ml",
-        "price": 199500,
-        "originalPrice": 210000,
-        "volume": "450ml",
+        "price": 178000,
+        "originalPrice": 196900,
+        "volume": "450 ml",
         "tier": "Essential",
         "category": "Làm sạch Body",
         "stepType": "cleanser",
@@ -2298,18 +2498,26 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "body-nuoc-hoa"
         ],
-        "benefitName": "Cơ thể & Nước hoa"
+        "benefitName": "Cơ thể & Nước hoa",
+        "barcode": "8938541031141",
+        "dimensions": "68 × 68 × 193 mm",
+        "notificationNumber": "467/25/CBMP-TN",
+        "approvingAuthority": "Sở Y tế Tây Ninh",
+        "origin": "Việt Nam",
+        "expiry": "36 tháng và 12 tháng sau khi mở nắp",
+        "licenseImageUrl": "/images/licenses/1x0F1I4igJtpi3bdm_cQ4hvoxWW_PLvlA.webp",
+        "licenseUrl": "https://drive.google.com/file/d/1x0F1I4igJtpi3bdm_cQ4hvoxWW_PLvlA/view?usp=drivesdk"
     },
     {
         "id": "dvah-sarika",
         "brand": "DVAH",
         "brandSlug": "dvah",
         "line": "D'VAH PERFUME",
-        "name": "Nước Hoa D'VAH SARIKA 10ml",
+        "name": "D’VAH Nước Hoa Sarika",
         "slug": "nuoc-hoa-dvah-sarika-10ml",
-        "price": 180500,
-        "originalPrice": 190000,
-        "volume": "10ml",
+        "price": 178000,
+        "originalPrice": 196900,
+        "volume": "10 ml",
         "tier": "Essential",
         "category": "Nước hoa",
         "stepType": "special",
@@ -2339,18 +2547,26 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "body-nuoc-hoa"
         ],
-        "benefitName": "Cơ thể & Nước hoa"
+        "benefitName": "Cơ thể & Nước hoa",
+        "barcode": "8938541031196",
+        "dimensions": "43 × 20 × 128 mm",
+        "notificationNumber": "393/25/CBMP-TN",
+        "approvingAuthority": "Sở Y tế Tây Ninh",
+        "origin": "Việt Nam",
+        "expiry": "36 tháng và 12 tháng sau khi mở nắp",
+        "licenseImageUrl": "/images/licenses/1u8JJBCPHyVbAo-oDYcesWuEl0ychbKvS.webp",
+        "licenseUrl": "https://drive.google.com/file/d/1u8JJBCPHyVbAo-oDYcesWuEl0ychbKvS/view?usp=drivesdk"
     },
     {
         "id": "dvah-kamal",
         "brand": "DVAH",
         "brandSlug": "dvah",
         "line": "D'VAH PERFUME",
-        "name": "Nước Hoa D'VAH KAMAL 10ml",
+        "name": "D’VAH Nước Hoa Kamal",
         "slug": "nuoc-hoa-dvah-kamal-10ml",
-        "price": 180500,
-        "originalPrice": 190000,
-        "volume": "10ml",
+        "price": 157000,
+        "originalPrice": 174900,
+        "volume": "10 ml",
         "tier": "Essential",
         "category": "Nước hoa",
         "stepType": "special",
@@ -2380,18 +2596,26 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "body-nuoc-hoa"
         ],
-        "benefitName": "Cơ thể & Nước hoa"
+        "benefitName": "Cơ thể & Nước hoa",
+        "barcode": "8938541031165",
+        "dimensions": "42 × 20 × 128 mm",
+        "notificationNumber": "305/25/CBMP-TN",
+        "approvingAuthority": "Sở Y tế Tây Ninh",
+        "origin": "Việt Nam",
+        "expiry": "36 tháng và 12 tháng sau khi mở nắp",
+        "licenseImageUrl": "/images/licenses/1GmX2S0moCZvVPHIo7V0guMH5HvfSGvlb.webp",
+        "licenseUrl": "https://drive.google.com/file/d/1GmX2S0moCZvVPHIo7V0guMH5HvfSGvlb/view?usp=drivesdk"
     },
     {
         "id": "dvah-rakta",
         "brand": "DVAH",
         "brandSlug": "dvah",
         "line": "D'VAH PERFUME",
-        "name": "Nước Hoa D'VAH RAKTA 10ml",
+        "name": "D’VAH Nước Hoa Rakta",
         "slug": "nuoc-hoa-dvah-rakta-10ml",
-        "price": 199500,
-        "originalPrice": 210000,
-        "volume": "10ml",
+        "price": 178000,
+        "originalPrice": 196900,
+        "volume": "10 ml",
         "tier": "Essential",
         "category": "Nước hoa",
         "stepType": "special",
@@ -2421,18 +2645,26 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "body-nuoc-hoa"
         ],
-        "benefitName": "Cơ thể & Nước hoa"
+        "benefitName": "Cơ thể & Nước hoa",
+        "barcode": "8938541031202",
+        "dimensions": "44 × 20 × 150 mm",
+        "notificationNumber": "001530/25/CBMP-HCM",
+        "approvingAuthority": "Sở Y tế Thành phố Hồ Chí Minh",
+        "origin": "Việt Nam",
+        "expiry": "36 tháng và 12 tháng sau khi mở nắp",
+        "licenseImageUrl": "/images/licenses/1ki3o5W7Hu9k56TzdJZ06E0qfsllUtvTO.webp",
+        "licenseUrl": "https://drive.google.com/file/d/1ki3o5W7Hu9k56TzdJZ06E0qfsllUtvTO/view?usp=drivesdk"
     },
     {
         "id": "dvah-tanmaya",
         "brand": "DVAH",
         "brandSlug": "dvah",
         "line": "D'VAH PERFUME",
-        "name": "Nước Hoa D'VAH TANMAYA 10ml",
+        "name": "D’VAH Nước Hoa Tanmaya",
         "slug": "nuoc-hoa-dvah-tanmaya-10ml",
-        "price": 199500,
-        "originalPrice": 210000,
-        "volume": "10ml",
+        "price": 178000,
+        "originalPrice": 196900,
+        "volume": "10 ml",
         "tier": "Essential",
         "category": "Nước hoa",
         "stepType": "special",
@@ -2462,18 +2694,26 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "body-nuoc-hoa"
         ],
-        "benefitName": "Cơ thể & Nước hoa"
+        "benefitName": "Cơ thể & Nước hoa",
+        "barcode": "8938541031189",
+        "dimensions": "45 × 20 × 150 mm",
+        "notificationNumber": "001531/25/CBMP-HCM",
+        "approvingAuthority": "Sở Y tế Thành phố Hồ Chí Minh",
+        "origin": "Việt Nam",
+        "expiry": "36 tháng và 12 tháng sau khi mở nắp",
+        "licenseImageUrl": "/images/licenses/17O4dFEZNuZV7YJvUi72JawqmGt-7-MpY.webp",
+        "licenseUrl": "https://drive.google.com/file/d/17O4dFEZNuZV7YJvUi72JawqmGt-7-MpY/view?usp=drivesdk"
     },
     {
         "id": "dvah-malini",
         "brand": "DVAH",
         "brandSlug": "dvah",
         "line": "D'VAH PERFUME",
-        "name": "Nước Hoa D'VAH MALINI 10ml",
+        "name": "D’VAH Nước Hoa Malini",
         "slug": "nuoc-hoa-dvah-malini-10ml",
-        "price": 199500,
-        "originalPrice": 210000,
-        "volume": "10ml",
+        "price": 157000,
+        "originalPrice": 174900,
+        "volume": "10 ml",
         "tier": "Essential",
         "category": "Nước hoa",
         "stepType": "special",
@@ -2503,7 +2743,15 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "body-nuoc-hoa"
         ],
-        "benefitName": "Cơ thể & Nước hoa"
+        "benefitName": "Cơ thể & Nước hoa",
+        "barcode": "8938541031172",
+        "dimensions": "43 × 20 × 150 mm",
+        "notificationNumber": "001529/25/CBMP-HCM",
+        "approvingAuthority": "Sở Y tế Thành phố Hồ Chí Minh",
+        "origin": "Việt Nam",
+        "expiry": "36 tháng và 12 tháng sau khi mở nắp",
+        "licenseImageUrl": "/images/licenses/1RT-yO75h1yizNDlpSN444uMOjshpbSYr.webp",
+        "licenseUrl": "https://drive.google.com/file/d/1RT-yO75h1yizNDlpSN444uMOjshpbSYr/view?usp=drivesdk"
     },
     {
         "id": "rilastil-2110",
@@ -2539,7 +2787,7 @@ window.LOCAL_PRODUCTS = [
             "CHIẾT XUẤT RAU MÁ (CENTELLA ASIATICA): Làm dịu kích ứng, kháng viêm và kích thích tổng hợp collagen thúc đẩy làm lành tổn thương.",
             "D-PANTHENOL (5%): Tái tạo mô da, phục hồi hàng rào ẩm và làm giảm nhanh tình trạng đỏ rát.",
             "KẼM OXIT (ZINC OXIDE 4%): Kháng khuẩn, làm se da và bảo vệ bề mặt biểu bì.",
-            "DẦU JOJOBA (6.5%): Bổ sung lipid tương thích sinh học, nuôi dưỡng và duy trì độ ẩm mịn màng."
+            "DẦU JOJOBA (6. 5%): Bổ sung lipid tương thích sinh học, nuôi dưỡng và duy trì độ ẩm mịn màng."
         ],
         "mainActives": [
             "CENTELLA ASIATICA",
@@ -2555,6 +2803,10 @@ window.LOCAL_PRODUCTS = [
         "benefits": [
             "phuc-hoi-diu-da"
         ],
-        "benefitName": "Phục hồi & Dịu da"
+        "benefitName": "Phục hồi & Dịu da",
+        "origin": "Ý (Italy)",
+        "approvingAuthority": "Cục Quản lý Dược - Bộ Y Tế",
+        "notificationNumber": "184920/22/CBMP-QLD",
+        "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp"
     }
 ];

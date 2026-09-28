@@ -54,8 +54,8 @@ Chưa có tài liệu API của công ty nên mọi route bên dưới đều ch
 | price / originalPrice | Giá bán/giá so sánh từ server | Server tính lại khi đặt hàng |
 | volume | Thuộc tính biến thể | Xác nhận 2 xung đột dung tích trong báo cáo catalog |
 | mainActives / keyActives / fullIngredients / usage | Custom fields/PIM nếu API có | Không tự bịa khi API thiếu; dùng trạng thái chưa cập nhật |
-| `src/js/cart/cart.js`: giỏ khách trong bộ nhớ; giỏ đăng nhập trong Firestore | Giỏ API nếu phần mềm bán hàng hỗ trợ | Ghép giỏ khách khi đăng nhập, kiểm tra lại SKU/giá/tồn |
-| `src/js/account/auth-firebase.js`: Firebase Authentication | Xác thực liên thông nếu cần | Worker hiện xác minh Firebase ID token; không dùng UID do client tự gửi để cấp quyền |
+| `src/features/cart`: giỏ khách trong bộ nhớ; giỏ đăng nhập trong Firestore | Giỏ API nếu phần mềm bán hàng hỗ trợ | Ghép giỏ khách khi đăng nhập, kiểm tra lại SKU/giá/tồn |
+| `src/features/auth/services/authService.js`: Firebase Authentication | Xác thực liên thông nếu cần | Worker hiện xác minh Firebase ID token; không dùng UID do client tự gửi để cấp quyền |
 | `users/{uid}/skinReports` trên Firestore | API báo cáo riêng nếu được duyệt | Người dùng chỉ xem báo cáo được cấp quyền |
 | `worker/index.js`: API tạo/hủy/xem đơn trên Firestore | Adapter đồng bộ đơn với phần mềm bán hàng | Chốt nguồn dữ liệu chính và xử lý đồng bộ trước khi tích hợp |
 | Chuyển Zalo | Đơn nháp + kênh tư vấn, tùy hợp đồng | Mở Zalo không có nghĩa đã tạo đơn/đã thanh toán |
@@ -95,10 +95,11 @@ Không hiển thị stack trace hoặc token trong lỗi UI.
 
 ## 7. Nơi chỉnh mã sau này
 
-- Thêm adapter API trong src/js/services/ sau khi chốt contract; không fetch phân tán
-  trong ProductCard hoặc HTML.
+- Thêm adapter API trong `src/infrastructure/http` hoặc feature service sở hữu nghiệp
+  vụ sau khi chốt contract; không fetch phân tán trong ProductCard hoặc HTML.
 - Điều chỉnh `src/js/catalog/catalog-loader.js` để nạp catalog từ adapter sau khi chốt API. Xem lại fallback catalog đóng gói và cách Worker định giá để dữ liệu giao dịch nhất quán.
-- Điều chỉnh `src/js/cart/cart.js`, `src/js/account/auth-firebase.js` và `worker/index.js` theo hợp đồng xác thực, giỏ và đơn đã chốt; hiện các luồng này dùng Firebase/Firestore và Worker.
+- Điều chỉnh `src/features/cart/services/checkoutService.js` và `worker/index.js` theo
+  hợp đồng giỏ và đơn đã chốt; hiện các luồng này dùng Firebase/Firestore và Worker.
 - ProductCard và modal tiếp tục nhận view model thống nhất; không phải thiết kế lại.
 - Các click analytics (xem sản phẩm, lọc, thêm giỏ) là event tùy chọn, không tự động
   gửi hết sang hệ thống bán hàng. Chốt mục đích và danh sách sự kiện trước.

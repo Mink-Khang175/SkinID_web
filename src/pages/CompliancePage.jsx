@@ -4,9 +4,9 @@ import Header from '../components/layout/Header.jsx';
 import Footer from '../components/layout/Footer.jsx';
 import MobileNav from '../components/layout/MobileNav.jsx';
 import StorefrontModals from '../components/dialogs/StorefrontModals.jsx';
-import ProductDetailModal from '../components/dialogs/ProductDetailModal.jsx';
-import useLegacyApplication from '../hooks/useLegacyApplication.js';
+import ProductDetailModal from '../features/catalog/ProductDetailModal.jsx';
 import usePageMetadata from '../hooks/usePageMetadata.js';
+import { useCatalog } from '../features/catalog/hooks/useCatalog.js';
 
 export default function CompliancePage() {
   usePageMetadata({
@@ -14,43 +14,35 @@ export default function CompliancePage() {
     description: 'Tra cứu nhanh phiếu tiếp nhận công bố mỹ phẩm có mộc đỏ Cục Quản lý Dược cho các sản phẩm tại SkinID.'
   });
 
-  useLegacyApplication('compliance');
-
-  const [products, setProducts] = useState(() => (typeof window !== 'undefined' && Array.isArray(window.LOCAL_PRODUCTS) ? window.LOCAL_PRODUCTS : []));
-  const [selectedProductId, setSelectedProductId] = useState('');
+  const { products } = useCatalog();
+  const [selectedProductId, setSelectedProductId] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('product') || params.get('id') || '';
+    }
+    return '';
+  });
+  const [selectedBrand, setSelectedBrand] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(100); // 75, 100, 125, 150, 175, 200
   const dropdownRef = useRef(null);
-
-  // Load products from window.LOCAL_PRODUCTS
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const load = () => {
-        if (Array.isArray(window.LOCAL_PRODUCTS) && window.LOCAL_PRODUCTS.length > 0) {
-          setProducts(window.LOCAL_PRODUCTS);
-          return true;
-        }
-        return false;
-      };
-      if (!load()) {
-        const interval = setInterval(() => {
-          if (load()) clearInterval(interval);
-        }, 100);
-        return () => clearInterval(interval);
-      }
-    }
-  }, []);
 
   // Chỉ lấy những sản phẩm ĐANG CÓ CHỨNG NHẬN (có licenseImageUrl)
   const certifiedProducts = useMemo(() => {
     return products.filter((p) => Boolean(p.licenseImageUrl));
   }, [products]);
 
-  // Set default product initially
+  // Set selected product from URL or default
   useEffect(() => {
-    if (certifiedProducts.length > 0 && !selectedProductId) {
-      setSelectedProductId(certifiedProducts[0].id);
+    if (certifiedProducts.length > 0) {
+      const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+      const targetId = params ? (params.get('product') || params.get('id')) : null;
+      if (targetId && certifiedProducts.some((p) => p.id === targetId)) {
+        setSelectedProductId(targetId);
+      } else if (!selectedProductId || !certifiedProducts.some((p) => p.id === selectedProductId)) {
+        setSelectedProductId(certifiedProducts[0].id);
+      }
     }
   }, [certifiedProducts, selectedProductId]);
 
@@ -65,19 +57,32 @@ export default function CompliancePage() {
     return () => document.removeEventListener('mousedown', handleOutsideClick);
   }, []);
 
-  // Filter products by search query
+  // Filter products by selected brand and search query
   const searchResults = useMemo(() => {
-    if (!searchQuery.trim()) return certifiedProducts;
+    let list = certifiedProducts;
+    if (selectedBrand !== 'all') {
+      list = list.filter((p) => {
+        const b = (p.brand || '').toLowerCase();
+        const target = selectedBrand.toLowerCase();
+        if (target.includes('twon')) return b.includes('twon');
+        if (target.includes('dvah') || target.includes("d'vah")) return b.includes('dvah') || b.includes("d'vah");
+        if (target.includes('rilastil')) return b.includes('rilastil');
+        return b === target;
+      });
+    }
+
+    if (!searchQuery.trim()) return list;
     const q = searchQuery.toLowerCase().trim();
-    return certifiedProducts.filter((p) => {
+    return list.filter((p) => {
       return (
         (p.name || '').toLowerCase().includes(q) ||
         (p.line || '').toLowerCase().includes(q) ||
         (p.brand || '').toLowerCase().includes(q) ||
-        (p.barcode || '').toLowerCase().includes(q)
+        (p.barcode || '').toLowerCase().includes(q) ||
+        (p.notificationNumber || '').toLowerCase().includes(q)
       );
     });
-  }, [certifiedProducts, searchQuery]);
+  }, [certifiedProducts, selectedBrand, searchQuery]);
 
   const selectedProduct = useMemo(() => {
     return certifiedProducts.find((p) => p.id === selectedProductId) || certifiedProducts[0] || null;
@@ -87,6 +92,29 @@ export default function CompliancePage() {
     setSelectedProductId(p.id);
     setIsDropdownOpen(false);
     setZoomLevel(100);
+    if (typeof window !== 'undefined' && window.history?.replaceState) {
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.set('product', p.id);
+      window.history.replaceState({}, '', newUrl.toString());
+    }
+  };
+
+  const handleSelectBrand = (brand) => {
+    setSelectedBrand(brand);
+    // Auto select first product of new brand if current is not in that brand
+    if (brand !== 'all') {
+      const firstOfBrand = certifiedProducts.find((p) => {
+        const b = (p.brand || '').toLowerCase();
+        const target = brand.toLowerCase();
+        if (target.includes('twon')) return b.includes('twon');
+        if (target.includes('dvah') || target.includes("d'vah")) return b.includes('dvah') || b.includes("d'vah");
+        if (target.includes('rilastil')) return b.includes('rilastil');
+        return b === target;
+      });
+      if (firstOfBrand) {
+        handleSelectProduct(firstOfBrand);
+      }
+    }
   };
 
   const handleZoomIn = () => setZoomLevel((prev) => Math.min(prev + 25, 200));
@@ -116,9 +144,37 @@ export default function CompliancePage() {
               
               {/* Box Chọn / Tìm kiếm sản phẩm */}
               <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-2xs">
-                <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
-                  Chọn sản phẩm cần tra cứu:
-                </label>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-700">
+                    Chọn sản phẩm tra cứu:
+                  </label>
+                  <span className="text-[11px] font-semibold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full">
+                    {certifiedProducts.length} sản phẩm
+                  </span>
+                </div>
+
+                {/* Brand Tabs */}
+                <div className="flex items-center gap-1.5 mb-3 flex-wrap">
+                  {[
+                    { id: 'all', label: 'Tất cả' },
+                    { id: 'Rilastil', label: 'Rilastil' },
+                    { id: 'TWON', label: 'TWON' },
+                    { id: "D'VAH", label: "D'VAH" }
+                  ].map((b) => (
+                    <button
+                      key={b.id}
+                      type="button"
+                      onClick={() => handleSelectBrand(b.id)}
+                      className={`px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all cursor-pointer ${
+                        selectedBrand === b.id
+                          ? 'bg-rose-600 text-white shadow-xs'
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                    >
+                      {b.label}
+                    </button>
+                  ))}
+                </div>
 
                 {/* Dropdown Container */}
                 <div className="relative" ref={dropdownRef}>
@@ -168,7 +224,7 @@ export default function CompliancePage() {
                             type="text"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="Gõ tên sản phẩm cần tìm..."
+                            placeholder="Gõ tên hoặc mã vạch cần tìm..."
                             autoFocus
                             className="w-full pl-8 pr-7 py-2 bg-white border border-gray-200 rounded-lg text-xs focus:outline-none focus:border-rose-400"
                           />
@@ -216,7 +272,7 @@ export default function CompliancePage() {
                                     {p.name}
                                   </div>
                                   <div className="text-[10px] text-gray-500 truncate mt-0.5">
-                                    {p.brand} {p.volume ? `• ${p.volume}` : ''}
+                                    {p.brand} {p.volume ? `• ${p.volume}` : ''} {p.notificationNumber ? `• ${p.notificationNumber}` : ''}
                                   </div>
                                 </div>
                                 {isSelected && (
@@ -255,16 +311,45 @@ export default function CompliancePage() {
                   </div>
 
                   {/* Chi tiết pháp lý tóm tắt */}
-                  <div className="mt-3 space-y-1.5 text-xs">
-                    <div className="flex justify-between py-1 border-b border-gray-50">
+                  <div className="mt-3 space-y-2 text-xs">
+                    <div className="flex justify-between items-center py-1 border-b border-gray-50">
                       <span className="text-gray-500">Số tiếp nhận CBMP:</span>
-                      <span className="font-mono font-bold text-gray-900 bg-gray-100 px-1.5 py-0.5 rounded">
-                        184920/22/CBMP-QLD
+                      <span className="font-mono font-bold text-gray-900 bg-rose-50 text-rose-700 border border-rose-100 px-2 py-0.5 rounded">
+                        {selectedProduct.notificationNumber || '184920/22/CBMP-QLD'}
                       </span>
                     </div>
-                    <div className="flex justify-between py-1">
+                    <div className="flex justify-between items-center py-1 border-b border-gray-50">
                       <span className="text-gray-500">Cơ quan phê duyệt:</span>
-                      <span className="font-medium text-gray-800">Cục Quản lý Dược</span>
+                      <span className="font-semibold text-gray-800">
+                        {selectedProduct.approvingAuthority || (selectedProduct.brand === 'Rilastil' ? 'Cục Quản lý Dược - Bộ Y Tế' : 'Sở Y Tế')}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center py-1 border-b border-gray-50">
+                      <span className="text-gray-500">Mã vạch (Barcode):</span>
+                      <span className="font-mono font-medium text-gray-900 bg-gray-100 px-1.5 py-0.5 rounded">
+                        {selectedProduct.barcode || 'Đang cập nhật'}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center py-1 border-b border-gray-50">
+                      <span className="text-gray-500">Xuất xứ:</span>
+                      <span className="font-medium text-gray-800">
+                        {selectedProduct.origin || (selectedProduct.brand === 'Rilastil' ? 'Ý (Italy)' : 'Việt Nam')}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center py-1 border-b border-gray-50">
+                      <span className="text-gray-500">Hạn sử dụng:</span>
+                      <span className="font-medium text-gray-800">
+                        {selectedProduct.expiry || '36 tháng kể từ NSX'}
+                      </span>
+                    </div>
+                    {selectedProduct.dimensions && (
+                      <div className="flex justify-between items-center py-1 border-b border-gray-50">
+                        <span className="text-gray-500">Quy cách bao bì:</span>
+                        <span className="font-medium text-gray-800">{selectedProduct.dimensions}</span>
+                      </div>
+                    )}
+                    <div className="pt-2 text-[11px] text-gray-500 leading-relaxed">
+                      <strong className="text-gray-700">Đơn vị chịu trách nhiệm:</strong> CÔNG TY TNHH FIELDMAN (MST: 0319200638 - VP: Tầng 9, 343 Phạm Ngũ Lão, Q.1, TP.HCM).
                     </div>
                   </div>
                 </div>

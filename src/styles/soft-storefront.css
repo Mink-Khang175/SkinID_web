@@ -1095,6 +1095,17 @@ body {
   word-break: break-word !important;
   overflow-wrap: anywhere !important;
 }
+
+.pmodal-discount-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 2px 7px !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  color: #e11d48 !important;
+  background: #ffe4e6 !important;
+  border-radius: 6px !important;
+}
 .pmodal-actions {
   display: flex;
   justify-content: flex-end;

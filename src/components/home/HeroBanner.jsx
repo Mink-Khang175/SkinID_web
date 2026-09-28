@@ -1,4 +1,5 @@
 import { assetUrl } from '../../assets/index.js';
+import { openConsultationDialog } from '../../shared/events/storefrontDialogs.js';
 
 export default function HeroBanner() {
   return (
@@ -12,7 +13,7 @@ export default function HeroBanner() {
               <p>Chụp ảnh khuôn mặt theo hướng dẫn để tham khảo tình trạng da và tìm nhanh nhóm sản phẩm phù hợp.</p>
               <div className="hero-actions">
                 <a className="btn btn--ai-primary" href="/skin-analysis"><i data-feather="camera"></i> Bắt đầu soi da</a>
-                <button className="btn btn--secondary" type="button" onClick={() => window?.openConsultation?.()}>Tư vấn nhanh</button>
+                <button className="btn btn--secondary" type="button" onClick={openConsultationDialog}>Tư vấn nhanh</button>
               </div>
               <small>Kết quả mang tính tham khảo, không thay thế chẩn đoán y khoa.</small>
             </div>

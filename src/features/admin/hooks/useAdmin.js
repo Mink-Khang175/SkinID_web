@@ -1,40 +1,40 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '../../auth/index.js';
-import { fetchAdminStats, deleteUserAccount } from '../services/adminService.js';
+import { fetchAdminDashboard } from '../services/adminService.js';
 
-/**
- * Hook to manage Admin Dashboard data and actions.
- */
+const emptyDashboard = { users: [], orders: [], products: [] };
+
 export function useAdmin() {
   const { user, isAdmin, isLoading: authLoading } = useAuth();
-  const [stats, setStats] = useState({ userCount: 0, orderCount: 0, productCount: 0 });
+  const [dashboard, setDashboard] = useState(emptyDashboard);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const loadStats = useCallback(async () => {
-    if (!isAdmin) return;
+  const refresh = useCallback(async () => {
+    if (!isAdmin) return emptyDashboard;
     setLoading(true);
+    setError('');
     try {
-      const data = await fetchAdminStats();
-      const productCount = Array.isArray(window.PRODUCTS) ? window.PRODUCTS.length : (window.LOCAL_PRODUCTS?.length || 55);
-      setStats({ ...data, productCount });
+      const result = await fetchAdminDashboard();
+      setDashboard(result);
+      return result;
+    } catch (requestError) {
+      setError(requestError.message || 'Không thể tải dữ liệu quản trị.');
+      throw requestError;
     } finally {
       setLoading(false);
     }
   }, [isAdmin]);
 
   useEffect(() => {
-    if (isAdmin) {
-      loadStats();
+    if (authLoading) return;
+    if (!isAdmin) {
+      setLoading(false);
+      setDashboard(emptyDashboard);
+      return;
     }
-  }, [isAdmin, loadStats]);
+    refresh().catch(() => undefined);
+  }, [authLoading, isAdmin, refresh]);
 
-  return {
-    user,
-    isAdmin,
-    authLoading,
-    stats,
-    loading,
-    refreshStats: loadStats,
-    deleteUserAccount
-  };
+  return { user, isAdmin, authLoading, ...dashboard, loading, error, refresh };
 }

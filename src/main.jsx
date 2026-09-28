@@ -6,6 +6,13 @@ import './styles/soft-storefront.css';
 import './styles/navigation-drawer.css';
 import './styles/home-refresh.css';
 import './styles/scroll-reveal.css';
+import './shared/ui/route-status.css';
+import { initializeAnalytics, installLegacyFirebaseBridge } from './infrastructure/firebase/index.js';
+import { installLegacyRuntimeConfig } from './shared/config/runtime.js';
+
+installLegacyRuntimeConfig();
+installLegacyFirebaseBridge();
+initializeAnalytics();
 
 window.trackSkinIDEvent = function trackSkinIDEvent(eventName, eventParams = {}) {
   console.log(`[Analytics Event] ${eventName}:`, eventParams);

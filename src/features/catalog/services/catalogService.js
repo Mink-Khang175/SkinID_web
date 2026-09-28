@@ -1,3 +1,7 @@
+import { CATALOG_SUMMARY } from '../data/catalogSummary.generated.js';
+
+let moduleCatalog = CATALOG_SUMMARY;
+
 const SHOP_CATEGORY_OVERRIDES = {
   'rilastil-1856': ['sunscreen'],
   'rilastil-2085': ['moisturizer'],
@@ -131,7 +135,12 @@ export function getAvailableProducts() {
       return window.LOCAL_PRODUCTS;
     }
   }
-  return [];
+  return moduleCatalog;
+}
+
+export function setAvailableProducts(products) {
+  if (Array.isArray(products) && products.length) moduleCatalog = products;
+  return moduleCatalog;
 }
 
 /**

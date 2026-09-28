@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { assetUrl } from '../../assets/index.js';
 import { useCart } from '../../features/cart/index.js';
+import { useCatalog } from '../../features/catalog/index.js';
 
 const ROUTINE_DATA = {
   'rilastil-525': {
@@ -38,10 +39,14 @@ const ROUTINE_DATA = {
 };
 
 export default function FeaturedProducts() {
-  const [products, setProducts] = useState([]);
+  const { products: catalog } = useCatalog();
   const [heroId, setHeroId] = useState('rilastil-1774');
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef(null);
+  const ids = ['rilastil-1774', 'rilastil-525', 'rilastil-2067', 'rilastil-1857'];
+  const featuredProducts = ids
+    .map(id => catalog.find(product => product.id === id && product.image && product.price))
+    .filter(Boolean);
 
   // Kích hoạt hiệu ứng Staggered Entrance Animation khi cuộn tới
   useEffect(() => {
@@ -65,45 +70,12 @@ export default function FeaturedProducts() {
   }, []);
 
   useEffect(() => {
-    products.forEach((product) => {
+    featuredProducts.forEach((product) => {
       const image = new Image();
       image.src = assetUrl(product.image, product.brandSlug);
       image.decode?.().catch(() => {});
     });
-  }, [products]);
-
-  useEffect(() => {
-    const ids = ['rilastil-1774', 'rilastil-525', 'rilastil-2067', 'rilastil-1857'];
-    const getCatalog = () => (Array.isArray(window.PRODUCTS) && window.PRODUCTS.length > 0)
-      ? window.PRODUCTS
-      : (Array.isArray(window.LOCAL_PRODUCTS) ? window.LOCAL_PRODUCTS : []);
-
-    let interval;
-    const update = () => {
-      const cat = getCatalog();
-      if (!cat.length) return;
-      const list = ids
-        .map(id => cat.find(product => product.id === id && product.image && product.price))
-        .filter(Boolean);
-      if (list.length > 0) {
-        setProducts(list);
-        if (list.length === ids.length && interval) {
-          clearInterval(interval);
-          interval = undefined;
-        }
-      }
-    };
-
-    update();
-    interval = setInterval(update, 200);
-    document.addEventListener('skinid:ready', update);
-    document.addEventListener('skinid:catalog-ready', update);
-    return () => {
-      if (interval) clearInterval(interval);
-      document.removeEventListener('skinid:ready', update);
-      document.removeEventListener('skinid:catalog-ready', update);
-    };
-  }, []);
+  }, [featuredProducts]);
 
   const { addToCart } = useCart();
 
@@ -123,8 +95,8 @@ export default function FeaturedProducts() {
   };
 
   // Xác định sản phẩm Ngôi sao (Hero) và các sản phẩm vệ tinh (Satellites)
-  const heroProduct = products.find(p => p.id === heroId) || products[0];
-  const satelliteProducts = products.filter(p => p.id !== heroProduct?.id);
+  const heroProduct = featuredProducts.find(p => p.id === heroId) || featuredProducts[0];
+  const satelliteProducts = featuredProducts.filter(p => p.id !== heroProduct?.id);
   const heroStory = heroProduct ? (ROUTINE_DATA[heroProduct.id] || {
     stepNum: '02',
     stepLabel: 'SẢN PHẨM NỔI BẬT',
@@ -149,7 +121,7 @@ export default function FeaturedProducts() {
           </div>
         </header>
 
-        {products.length === 0 ? (
+        {featuredProducts.length === 0 ? (
           <div className="borderless-loading">Đang chuẩn bị routine dành cho bạn…</div>
         ) : (
           <div className="routine-stage">
@@ -192,7 +164,7 @@ export default function FeaturedProducts() {
               <span className="routine-orbit routine-orbit--one" aria-hidden="true"></span>
               <span className="routine-orbit routine-orbit--two" aria-hidden="true"></span>
               <div className="routine-product-stack">
-                {products.map((product) => {
+                {featuredProducts.map((product) => {
                   const isActive = product.id === heroProduct.id;
                   return (
                     <button
@@ -219,7 +191,7 @@ export default function FeaturedProducts() {
             </div>
 
             <div className="routine-step-rail" aria-label="Các bước trong routine">
-              {products.map((product, idx) => {
+              {featuredProducts.map((product, idx) => {
                 const story = ROUTINE_DATA[product.id] || { satelliteLabel: `0${idx + 1} · Routine` };
                 const isActive = product.id === heroProduct.id;
                 return (

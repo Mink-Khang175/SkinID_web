@@ -1,5 +1,9 @@
 # Kiểm tra dữ liệu và bộ lọc sản phẩm
 
+> Đây là snapshot lịch sử tại ngày 2026-09-10 và commit được nêu bên dưới. Catalog
+> runtime hiện tại đã có 55 sản phẩm; các con số 54 trong báo cáo này chỉ mô tả nguồn
+> tại thời điểm audit, không phải số liệu hiện hành.
+
 Nguồn: https://github.com/danhhuynh-stack/skinid-web/tree/8fa91f4878ac8bf73d39063ea03955527e28d29f
 
 ## Đối chiếu dữ liệu

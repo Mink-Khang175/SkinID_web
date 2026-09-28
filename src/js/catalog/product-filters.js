@@ -111,7 +111,7 @@ function filterProducts(products, { brand = 'all', step = 'all', benefit = 'all'
             const benefits = getProductBenefits(product);
             if (!benefits.includes(targetBenefit)) return false;
         }
-        const text = [product.name, product.brand, product.brandSlug, product.fullIngredients,
+        const text = [product.name, product.brand, product.brandSlug, product.line, product.slug, product.uses, product.fullIngredients,
             ...(product.keyActives || []), ...(product.mainActives || [])].join(' ');
         return !search || normalizeProductSearch(text).includes(search);
     });

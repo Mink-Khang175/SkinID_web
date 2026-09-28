@@ -11,7 +11,7 @@ const siteCss = read('src/styles/site.css');
 const hero = read('src/components/home/HeroBanner.jsx');
 const brandBar = read('src/components/home/BrandBar.jsx');
 const categories = read('src/components/home/CategorySection.jsx');
-const productList = read('src/components/home/ProductList.jsx');
+const productList = read('src/features/catalog/ProductCatalog.jsx');
 const productCard = read('src/js/catalog/product-card.js');
 const brandShowcase = read('src/components/home/BrandShowcase.jsx');
 const header = read('src/components/layout/Header.jsx');
@@ -54,7 +54,7 @@ assert(featuredProducts.includes('className={`routine-choice ${isActive ? \'is-a
 assert(featuredProducts.includes('onMouseEnter={() => activateProduct(product.id)}'));
 assert(featuredProducts.includes('className={`floating-hero-trigger routine-product-layer ${isActive ? \'is-active\' : \'\'}`}'));
 assert(featuredProducts.includes("document.dispatchEvent(new CustomEvent('skinid:open-product-detail'"));
-assert(read('src/components/dialogs/ProductDetailModal.jsx').includes("document.addEventListener('skinid:open-product-detail'"));
+assert(read('src/features/catalog/ProductDetailModal.jsx').includes("document.addEventListener('skinid:open-product-detail'"));
 assert(header.includes('aria-controls="product-menu"'));
 assert(header.includes('onMouseEnter={open}'));
 assert(storefrontSource.includes("($('#featured-products') || $('#catalog'))?.scrollIntoView"));
@@ -102,7 +102,7 @@ assert(brandShowcase.includes('/images/brands/dvah.png'));
 assert(!brandShowcase.includes('Xem 46 sản phẩm'));
 assert.equal((brandShowcase.match(/Khám phá bộ sưu tập/g) || []).length, 3);
 assert(read('src/pages/HomePage.jsx').includes('<ProductDetailModal />'));
-assert(read('src/components/dialogs/ProductDetailModal.jsx').includes('id="product-detail-modal"'));
+assert(read('src/features/catalog/ProductDetailModal.jsx').includes('id="product-detail-modal"'));
 assert(read('src/components/analysis/SkincareRoutine.jsx').includes('id="privacy-modal"'));
 assert(!read('src/components/analysis/SkincareRoutine.jsx').includes(String.raw`</div>\n`));
 assert(source.includes('grid.appendChild(createProductCard(p))'));
@@ -115,9 +115,9 @@ assert(shared.includes("checkbox.type = 'checkbox'"));
 const checkbox = { checked: false };
 const button = { disabled: true, classList: { add() {} } };
 const context = {
-  document: { getElementById: id => id === 'privacy-consent-checkbox' ? checkbox : button },
-  window: { currentRoutineIds: ['a', 'b', 'a'], excludedRoutineIds: new Set(['b']), cartManager: true },
-  cartManager: { addItem: (id, quantity) => added.push([id, quantity]) },
+  document: { getElementById: id => id === 'privacy-consent-checkbox' ? checkbox : button, dispatchEvent: event => event.detail.productIds.forEach(id => added.push([id, 1])) },
+  window: { currentRoutineIds: ['a', 'b', 'a'], excludedRoutineIds: new Set(['b']) },
+  CustomEvent: class CustomEvent { constructor(type, options) { this.type = type; this.detail = options.detail; } },
   showToast: message => messages.push(message)
 };
 const added = [], messages = [];

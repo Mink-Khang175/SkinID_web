@@ -1,148 +1,166 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
-import { getProductById } from '../../catalog/services/catalogService.js';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useAuth } from '../../auth/index.js';
+import { getProductById } from '../../catalog/index.js';
+import { loadUserCart, mergeCartItems, sanitizeCartItems, saveUserCart } from '../services/cartService.js';
 
 const CartContext = createContext(null);
 
+const fallbackCart = Object.freeze({
+  items: [], totalItems: 0, subtotal: 0, isOpen: false, isCheckoutOpen: false, isHydrated: true,
+  addToCart: async () => [], removeItem: async () => [], updateQuantity: async () => [], clearCart: async () => [],
+  openCart: () => {}, closeCart: () => {}, toggleCart: () => {}, openCheckout: async () => false,
+  closeCheckout: () => {}, completeCheckout: () => {}
+});
+
 export function CartProvider({ children }) {
+  const { user, isLoading: isAuthLoading, openAuthModal } = useAuth();
   const [items, setItems] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
+  const itemsRef = useRef([]);
+  const activeUserIdRef = useRef(null);
+  const isHydratedRef = useRef(false);
+  const saveQueueRef = useRef(Promise.resolve());
+  const hydrationRef = useRef(Promise.resolve());
 
-  // Sync state from window.cartManager
-  const syncFromCartManager = useCallback(() => {
-    if (typeof window !== 'undefined' && window.cartManager) {
-      const currentItems = window.cartManager.items || [];
-      setItems([...currentItems]);
-    }
+  const replaceItems = useCallback((nextItems) => {
+    const sanitized = sanitizeCartItems(nextItems);
+    itemsRef.current = sanitized;
+    setItems(sanitized);
+    return sanitized;
+  }, []);
+
+  const enqueueSave = useCallback((nextItems) => {
+    const userId = activeUserIdRef.current;
+    if (!userId || !isHydratedRef.current) return Promise.resolve(nextItems);
+    saveQueueRef.current = saveQueueRef.current
+      .catch(() => undefined)
+      .then(() => saveUserCart(userId, nextItems));
+    return saveQueueRef.current;
   }, []);
 
   useEffect(() => {
-    syncFromCartManager();
-    const interval = setInterval(syncFromCartManager, 300);
+    if (isAuthLoading) return undefined;
+    let active = true;
+    const userId = user?.uid || null;
+    const previousUserId = activeUserIdRef.current;
+    const shouldMergeGuest = !previousUserId;
 
-    const handleReady = () => syncFromCartManager();
-    document.addEventListener('skinid:ready', handleReady);
-    document.addEventListener('skinid:auth-changed', handleReady);
-
-    return () => {
-      clearInterval(interval);
-      document.removeEventListener('skinid:ready', handleReady);
-      document.removeEventListener('skinid:auth-changed', handleReady);
-    };
-  }, [syncFromCartManager]);
-
-  const addToCart = useCallback((productId, quantity = 1) => {
-    if (typeof window !== 'undefined') {
-      if (typeof window.addToCart === 'function') {
-        window.addToCart(productId);
-      } else if (window.cartManager?.addItem) {
-        window.cartManager.addItem(productId, quantity);
-        if (typeof window.showToast === 'function') {
-          window.showToast('Đã thêm sản phẩm vào giỏ hàng!');
-        }
+    isHydratedRef.current = false;
+    setIsHydrated(false);
+    hydrationRef.current = (async () => {
+      if (!userId) {
+        activeUserIdRef.current = null;
+        if (previousUserId) replaceItems([]);
+        return;
       }
-    }
-    syncFromCartManager();
-  }, [syncFromCartManager]);
+      const remoteItems = await loadUserCart(userId);
+      if (!active) return;
+      const guestItems = shouldMergeGuest ? itemsRef.current : [];
+      const mergedItems = mergeCartItems(remoteItems, guestItems);
+      activeUserIdRef.current = userId;
+      replaceItems(mergedItems);
+      if (guestItems.length) {
+        isHydratedRef.current = true;
+        await enqueueSave(mergedItems);
+      }
+    })().catch((error) => {
+      console.error('[SkinID Cart] Không thể tải giỏ hàng:', error);
+      if (active) activeUserIdRef.current = userId;
+    }).finally(() => {
+      if (!active) return;
+      isHydratedRef.current = true;
+      setIsHydrated(true);
+    });
 
-  const removeItem = useCallback((productId) => {
-    if (typeof window !== 'undefined' && window.cartManager?.removeItem) {
-      window.cartManager.removeItem(productId);
-    }
-    syncFromCartManager();
-  }, [syncFromCartManager]);
+    return () => { active = false; };
+  }, [enqueueSave, isAuthLoading, replaceItems, user?.uid]);
 
-  const updateQuantity = useCallback((productId, quantity) => {
-    if (typeof window !== 'undefined' && window.cartManager?.updateQuantity) {
-      window.cartManager.updateQuantity(productId, quantity);
-    }
-    syncFromCartManager();
-  }, [syncFromCartManager]);
-
-  const clearCart = useCallback(() => {
-    if (typeof window !== 'undefined' && window.cartManager?.clearCart) {
-      window.cartManager.clearCart();
-    }
-    setItems([]);
+  useEffect(() => {
+    const addOne = (event) => {
+      const productId = String(event.detail?.productId || '');
+      if (productId) addToCartRef.current(productId, event.detail?.quantity || 1);
+    };
+    const addMany = (event) => {
+      for (const productId of event.detail?.productIds || []) {
+        if (productId) addToCartRef.current(String(productId), 1);
+      }
+      setIsOpen(true);
+    };
+    document.addEventListener('skinid:cart-add', addOne);
+    document.addEventListener('skinid:cart-add-many', addMany);
+    return () => {
+      document.removeEventListener('skinid:cart-add', addOne);
+      document.removeEventListener('skinid:cart-add-many', addMany);
+    };
   }, []);
 
-  const openCart = useCallback(() => {
-    if (typeof window !== 'undefined' && window.cartManager?.toggleCartUI) {
-      window.cartManager.toggleCartUI(true);
-    }
-    setIsOpen(true);
-  }, []);
+  const commit = useCallback((producer) => {
+    const nextItems = replaceItems(producer(itemsRef.current));
+    return enqueueSave(nextItems);
+  }, [enqueueSave, replaceItems]);
 
-  const closeCart = useCallback(() => {
-    if (typeof window !== 'undefined' && window.cartManager?.toggleCartUI) {
-      window.cartManager.toggleCartUI(false);
+  const addToCart = useCallback((productId, quantity = 1) => commit((current) => {
+    const requested = Math.max(1, Math.trunc(Number(quantity) || 1));
+    const existing = current.find((item) => item.productId === productId);
+    return existing
+      ? current.map((item) => item.productId === productId ? { ...item, quantity: item.quantity + requested } : item)
+      : [...current, { productId, quantity: requested }];
+  }), [commit]);
+  const addToCartRef = useRef(addToCart);
+  addToCartRef.current = addToCart;
+
+  const removeItem = useCallback((productId) => commit(
+    (current) => current.filter((item) => item.productId !== productId)
+  ), [commit]);
+
+  const updateQuantity = useCallback((productId, quantity) => commit((current) => {
+    const nextQuantity = Math.trunc(Number(quantity) || 0);
+    return nextQuantity <= 0
+      ? current.filter((item) => item.productId !== productId)
+      : current.map((item) => item.productId === productId ? { ...item, quantity: nextQuantity } : item);
+  }), [commit]);
+
+  const clearCart = useCallback(() => commit(() => []), [commit]);
+  const openCart = useCallback(() => setIsOpen(true), []);
+  const closeCart = useCallback(() => setIsOpen(false), []);
+  const toggleCart = useCallback(() => setIsOpen((current) => !current), []);
+
+  const openCheckout = useCallback(async () => {
+    if (!user?.uid) {
+      openAuthModal('Đăng nhập để tiếp tục thanh toán và theo dõi đơn hàng.');
+      return false;
     }
+    await hydrationRef.current;
+    await saveQueueRef.current.catch(() => undefined);
+    await saveUserCart(user.uid, itemsRef.current);
+    if (!itemsRef.current.length) return false;
     setIsOpen(false);
-  }, []);
+    setIsCheckoutOpen(true);
+    return true;
+  }, [openAuthModal, user?.uid]);
+  const closeCheckout = useCallback(() => setIsCheckoutOpen(false), []);
+  const completeCheckout = useCallback(() => {
+    replaceItems([]);
+    setIsCheckoutOpen(false);
+  }, [replaceItems]);
 
-  const toggleCart = useCallback(() => {
-    if (typeof window !== 'undefined' && window.cartManager?.toggleCartUI) {
-      window.cartManager.toggleCartUI();
-    }
-    setIsOpen((prev) => !prev);
-  }, []);
-
-  const openCheckout = useCallback(() => {
-    if (typeof window !== 'undefined' && window.cartManager?.openCheckout) {
-      window.cartManager.openCheckout();
-    }
-  }, []);
-
-  const totalItems = useMemo(() => {
-    return items.reduce((sum, item) => sum + (item.quantity || 0), 0);
-  }, [items]);
-
-  const subtotal = useMemo(() => {
-    return items.reduce((sum, item) => {
-      const prod = getProductById(item.productId);
-      return sum + (prod ? prod.price * item.quantity : 0);
-    }, 0);
-  }, [items]);
+  const totalItems = useMemo(() => items.reduce((sum, item) => sum + item.quantity, 0), [items]);
+  const subtotal = useMemo(() => items.reduce((sum, item) => {
+    const product = getProductById(item.productId);
+    return sum + (product ? Number(product.price) * item.quantity : 0);
+  }, 0), [items]);
 
   const value = useMemo(() => ({
-    items,
-    totalItems,
-    subtotal,
-    isOpen,
-    addToCart,
-    removeItem,
-    updateQuantity,
-    clearCart,
-    openCart,
-    closeCart,
-    toggleCart,
-    openCheckout
-  }), [items, totalItems, subtotal, isOpen, addToCart, removeItem, updateQuantity, clearCart, openCart, closeCart, toggleCart, openCheckout]);
+    items, totalItems, subtotal, isOpen, isCheckoutOpen, isHydrated,
+    addToCart, removeItem, updateQuantity, clearCart, openCart, closeCart, toggleCart,
+    openCheckout, closeCheckout, completeCheckout
+  }), [items, totalItems, subtotal, isOpen, isCheckoutOpen, isHydrated, addToCart, removeItem, updateQuantity, clearCart, openCart, closeCart, toggleCart, openCheckout, closeCheckout, completeCheckout]);
 
-  return (
-    <CartContext.Provider value={value}>
-      {children}
-    </CartContext.Provider>
-  );
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 
 export function useCart() {
-  const context = useContext(CartContext);
-  if (!context) {
-    // Graceful fallback for components rendered outside provider
-    return {
-      items: [],
-      totalItems: 0,
-      subtotal: 0,
-      isOpen: false,
-      addToCart: (id, qty = 1) => window.cartManager?.addItem?.(id, qty),
-      removeItem: (id) => window.cartManager?.removeItem?.(id),
-      updateQuantity: (id, qty) => window.cartManager?.updateQuantity?.(id, qty),
-      clearCart: () => window.cartManager?.clearCart?.(),
-      openCart: () => window.cartManager?.toggleCartUI?.(true),
-      closeCart: () => window.cartManager?.toggleCartUI?.(false),
-      toggleCart: () => window.cartManager?.toggleCartUI?.(),
-      openCheckout: () => window.cartManager?.openCheckout?.()
-    };
-  }
-  return context;
+  return useContext(CartContext) || fallbackCart;
 }

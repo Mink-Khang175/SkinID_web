@@ -1,4 +1,5 @@
 import { assetUrl } from '../../assets/index.js';
+import { openConsultationDialog, openPolicyDialog } from '../../shared/events/storefrontDialogs.js';
 
 export default function Footer() {
   return (
@@ -18,13 +19,13 @@ export default function Footer() {
         <a href="/products">Tất cả sản phẩm</a>
         <a href="/tra-cuu-cong-bo">Tra cứu công bố</a>
         <a href="/#brands">Thương hiệu</a>
-        <button type="button" onClick={(event) => window?.openConsultation?.()}>Tư vấn sản phẩm</button>
+        <button type="button" onClick={openConsultationDialog}>Tư vấn sản phẩm</button>
       </div>
       <div>
         <h3>Hỗ trợ</h3>
-        <button type="button" onClick={(event) => window?.openPolicy?.('shipping')}>Giao hàng & đổi trả</button>
-        <button type="button" onClick={(event) => window?.openPolicy?.('privacy')}>Bảo mật dữ liệu</button>
-        <button type="button" onClick={(event) => window?.openPolicy?.('terms')}>Điều khoản sử dụng</button>
+        <button type="button" onClick={() => openPolicyDialog('shipping')}>Giao hàng & đổi trả</button>
+        <button type="button" onClick={() => openPolicyDialog('privacy')}>Bảo mật dữ liệu</button>
+        <button type="button" onClick={() => openPolicyDialog('terms')}>Điều khoản sử dụng</button>
         <a href="https://zalo.me/0924093461">Liên hệ Zalo</a>
       </div>
       <div>

@@ -417,7 +417,7 @@
             }
         }
         if (new URLSearchParams(window.location.search).get('auth') === '1') {
-            window.authManager?.openAuthModal?.();
+            document.dispatchEvent(new CustomEvent('skinid:auth-dialog-open'));
         }
         if (window.location.hash === '#brands') {
             syncPrimaryNavigation('brands');

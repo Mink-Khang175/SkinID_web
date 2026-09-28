@@ -130,12 +130,18 @@ function createProductCard(p, options = {}) {
                             ${p.volume ? `<span class="product-card__volume">${p.volume}</span>` : ''}
                         </div>
                     </div>
-                    <button onclick="cartManager.addItem('${p.id}'); showToast('Đã thêm sản phẩm vào giỏ hàng!');" class="product-card__cart-button" aria-label="Thêm ${displayName} vào giỏ" title="Thêm vào giỏ">
+                    <button data-cart-product-id="${p.id}" class="product-card__cart-button" aria-label="Thêm ${displayName} vào giỏ" title="Thêm vào giỏ">
                         <i data-feather="shopping-bag"></i><span>Thêm vào giỏ</span>
                     </button>
                 </div>
             </div>
         `;
+        const cartButton = card.querySelector('[data-cart-product-id]');
+        if (cartButton) cartButton.onclick = event => {
+            event.stopPropagation();
+            document.dispatchEvent(new CustomEvent('skinid:cart-add', { detail: { productId: p.id, quantity: 1 } }));
+            if (typeof showToast === 'function') showToast('Đã thêm sản phẩm vào giỏ hàng!');
+        };
 
         const detailLink = document.createElement('button');
         detailLink.type = 'button';

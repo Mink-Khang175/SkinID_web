@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { assetUrl } from '../../assets/index.js';
+import { useAuth } from '../../features/auth/index.js';
+import { useCart } from '../../features/cart/index.js';
 
 export const navigationGroups = [
   {
@@ -56,6 +58,8 @@ function Icon({ name }) {
 }
 
 export default function Header() {
+  const { isAuthenticated, openAuthModal } = useAuth();
+  const { toggleCart, totalItems } = useCart();
   const [isOpen, setIsOpen] = useState(false);
   const [activeGroup, setActiveGroup] = useState(null);
   const [mobileLevel, setMobileLevel] = useState(false);
@@ -154,8 +158,8 @@ export default function Header() {
   useEffect(() => () => { window.clearTimeout(closeTimer.current); window.clearTimeout(groupTimer.current); }, []);
 
   const account = () => {
-    if (window.authManager?.getCurrentUser?.()) window.location.href = '/profile';
-    else window.authManager?.openAuthModal?.();
+    if (isAuthenticated) window.location.href = '/profile';
+    else openAuthModal();
   };
 
   return <>
@@ -167,7 +171,7 @@ export default function Header() {
           <a className="header-compliance" href="/tra-cuu-cong-bo"><Icon name="shield" /><span>Tra cứu công bố</span></a>
           <a className="icon-btn" href="/products#catalog-search" aria-label="Tìm sản phẩm"><Icon name="search" /></a>
           <button className="icon-btn minimal-account" type="button" aria-label="Tài khoản" onClick={account}><Icon name="user" /></button>
-          <button className="icon-btn cart-button" type="button" aria-label="Mở giỏ hàng" onClick={() => window.cartManager?.toggleCartUI?.()}><Icon name="bag" /><span id="cart-badge" className="opacity-0">0</span></button>
+          <button className="icon-btn cart-button" type="button" aria-label={`Mở giỏ hàng, ${totalItems} sản phẩm`} onClick={toggleCart}><Icon name="bag" /><span id="cart-badge" className={totalItems ? '' : 'opacity-0'}>{totalItems}</span></button>
         </div>
       </div>
     </header>

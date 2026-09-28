@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 
 const externalScripts = {
-  profile: ['https://cdn.jsdelivr.net/npm/chart.js'],
   home: [
     'https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js',
     'https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js',

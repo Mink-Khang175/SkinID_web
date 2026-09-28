@@ -20,7 +20,8 @@ Không mở dự án bằng `file://`.
 index.html                    Shell duy nhất do Vite yêu cầu
 src/
   main.jsx                    React entry
-  App.jsx                     Chọn page theo URL
+  App.jsx                     Gắn app providers và router
+  app/router.jsx              Khai báo route, lazy loading và route aliases
   pages/HomePage.jsx          Trang chủ
   pages/SkinAnalysisPage.jsx  Trang soi da
   pages/ProfilePage.jsx       Trang hồ sơ và lịch sử
@@ -31,14 +32,12 @@ src/
     analysis/     Giao diện phác đồ/scan/account được chuyển sang JSX
     dialogs/      Các modal React dùng chung
   styles/         CSS giao diện hiện có, không thay đổi thiết kế
-  data/           products.js: dữ liệu local của 54 sản phẩm
+  features/       State, API và nghiệp vụ React theo từng tính năng
+  data/           products.js: dữ liệu local dự phòng của 55 sản phẩm
   js/
     app/          Bootstrap, Firebase client và cấu hình public không chứa bí mật
     catalog/      Product Card, bộ lọc, tương tác trang chủ
     analysis/     Chụp ảnh, phân tích và dựng báo cáo
-    account/      Firebase Authentication, profile và lịch sử Firestore
-    cart/         Giỏ hàng và checkout
-    services/     Dịch vụ email hiện có
 worker/                       Cloudflare Worker: checkout, Gemini và tác vụ admin
 tests/            Kiểm thử hồi quy chạy bằng Node
 scripts/          Kiểm tra catalog và nhập dữ liệu Firestore
@@ -48,18 +47,19 @@ dist/             Kết quả build tạm thời, được tạo lại và khôn
 
 ## Chỉnh ở đâu?
 
-- Điều phối route: `src/App.jsx`.
+- Điều phối route: `src/app/router.jsx`.
 - Thứ tự lắp ráp trang chủ: `src/pages/HomePage.jsx`.
-- Bố cục trang chủ: các file `.jsx` trong `src/components/home/`.
+- Bố cục trang chủ: các file `.jsx` trong `src/components/home/`; catalog sản phẩm nằm trong `src/features/catalog/`.
 - Component chung: `src/components/layout/`, `src/components/dialogs/` và `src/components/analysis/`.
 - Màu, khoảng cách, responsive: src/styles/site.css.
 - Thẻ sản phẩm: src/js/catalog/product-card.js.
 - Quy tắc phân loại/lọc: src/js/catalog/product-filters.js.
 - Dữ liệu sản phẩm local: src/data/products.js.
-- Cấu hình Firebase client công khai: src/js/app/runtime-config.js.
+- Cấu hình Firebase client công khai: `src/shared/config/runtime.js`.
 
-React render xong DOM trước, sau đó `useLegacyApplication` chỉ tải nhóm script nghiệp
-vụ cần cho route hiện tại. Vite quản lý và tạo URL có hash cho ảnh trong `src/assets`.
+Các route đã chuyển đổi hoàn chỉnh như `/products`, `/profile`, `/admin` và `/tra-cuu-cong-bo` không tải bootstrap
+legacy. `useLegacyApplication` chỉ còn tải nhóm script nghiệp vụ cho home và skin-analysis
+trong thời gian chuyển đổi. Vite quản lý và tạo URL có hash cho ảnh trong `src/assets`.
 Cloudflare Workers Static Assets rewrite mọi URL về React SPA, nên các route `/profile`,
 `/skin-analysis` và `/admin` vẫn hoạt động khi tải lại trực tiếp.
 

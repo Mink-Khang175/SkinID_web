@@ -17,9 +17,11 @@
     "firestore:deploy-rules": "npx firebase-tools@15.30.2 deploy --project skinid-df273 --only firestore --non-interactive"
   },
   "dependencies": {
+    "firebase": "^12.19.0",
     "jose": "^6.1.0",
     "react": "^19.3.0",
-    "react-dom": "^19.3.0"
+    "react-dom": "^19.3.0",
+    "react-router-dom": "^7.18.4"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",

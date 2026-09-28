@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { openConsultationDialog } from '../../shared/events/storefrontDialogs.js';
 
 const CONCERNS = [
   {
@@ -125,7 +126,7 @@ export default function HelpSection() {
             </h2>
             <div className="advisor-intro-side adv-anim-item adv-anim-desc">
               <p className="advisor-description">Chọn một mối quan tâm để SkinID gợi ý hướng chăm sóc ngắn gọn, dễ hiểu và vừa đủ với làn da.</p>
-              <button className="advisor-inline-cta" type="button" onClick={() => window.openConsultation?.()}>
+              <button className="advisor-inline-cta" type="button" onClick={openConsultationDialog}>
                 Trò chuyện cùng SkinID <span aria-hidden="true">↗</span>
               </button>
             </div>
