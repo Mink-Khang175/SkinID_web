@@ -314,149 +314,86 @@ export default function SkincareRoutine() {
                                 {/* Injected by JS */}
                             </div>
                             <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
-                                <button onClick={() => document.dispatchEvent(new CustomEvent('skinid:skin-report-email-request'))} style={{ color: '#ffffff' }} className="px-5 py-2.5 bg-gradient-to-r from-[#D96B82] to-[#C8526B] hover:from-[#C8526B] hover:to-[#B24058] text-white rounded-xl font-bold text-xs sm:text-sm shadow-md shadow-rose-200/40 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer">
-                                    <i data-feather="mail" className="w-4 h-4"></i> Gửi báo cáo về Email
+                                <button type="button" onClick={() => document.getElementById('routine-section')?.scrollIntoView({ behavior: 'smooth' })} className="px-5 py-2.5 bg-brand-dark hover:bg-black text-white rounded-xl font-bold text-xs sm:text-sm shadow-md hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer">
+                                    <i data-feather="arrow-down" className="w-4 h-4"></i> Xem phác đồ & sản phẩm
                                 </button>
-                                <button onClick={() => { window.location.href = '/profile?tab=history'; }} className="px-5 py-2.5 bg-white border border-gray-300 hover:border-gray-900 text-gray-800 hover:text-black rounded-xl font-bold text-xs sm:text-sm shadow-2xs hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2">
-                                    <i data-feather="clock" className="w-4 h-4"></i> Xem lịch sử cá nhân
+                                <button type="button" onClick={() => document.dispatchEvent(new CustomEvent('skinid:skin-report-email-request'))} className="px-5 py-2.5 bg-white border border-gray-300 hover:border-gray-900 text-gray-800 hover:text-black rounded-xl font-bold text-xs sm:text-sm shadow-2xs hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer">
+                                    <i data-feather="mail" className="w-4 h-4"></i> Lưu về Email
                                 </button>
+                            </div>
+                            <div className="mt-3 flex items-center justify-center md:justify-start gap-1 text-xs text-gray-500 font-medium">
+                                <span>Đã tự động lưu vào hồ sơ cá nhân ·</span>
+                                <a href="/profile?tab=history" className="text-brand-primary hover:underline font-semibold flex items-center gap-0.5">
+                                    Xem lịch sử <i data-feather="external-link" className="w-3 h-3"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Khối 3: Đọc Hiểu Nhanh */}
-                <div className="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
-                    <h3 className="font-bold text-lg mb-3 flex items-center gap-2 text-brand-dark">
-                        <i data-feather="message-circle" className="w-5 h-5 text-brand-primary"></i>
-                        Làn da bạn đang nói gì?
-                    </h3>
-                    <p id="result-assessment" className="text-gray-700 leading-relaxed text-[15px]">
-                        {/* Injected by JS */}
-                    </p>
-                </div>
-
-                {/* Khối 2: Bảng 5 Chỉ Số */}
-
-                {/* Phân tích môi trường */}
-                <div className="bg-blue-50 border border-blue-100 shadow-sm rounded-2xl p-5 mb-6 flex items-start gap-4">
-                    <div className="bg-blue-100 p-3 rounded-full text-blue-500 mt-1">
-                        <i data-feather="cloud-rain" className="w-6 h-6"></i>
+                {/* TẦNG 2: CHẨN ĐOÁN & CẢNH BÁO ƯU TIÊN */}
+                <div className="space-y-4">
+                    {/* Cảnh báo ưu tiên (Primary Concerns) */}
+                    <div id="primary-concern-card" className="bg-rose-50/80 border border-rose-100 shadow-xs rounded-2xl p-5 md:p-6 flex items-start gap-4">
+                        <div className="bg-rose-100 p-2.5 rounded-xl text-rose-500 mt-0.5 flex-shrink-0">
+                            <i data-feather="alert-triangle" className="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <span className="text-[11px] font-bold text-rose-600 tracking-wider uppercase block mb-1">Cảnh báo ưu tiên can thiệp</span>
+                            <h3 className="font-bold text-lg text-rose-900 mb-1" id="concern-title">⚠️ Đang tải cảnh báo...</h3>
+                            <p className="text-rose-700/80 text-sm font-medium leading-relaxed" id="concern-desc">AI đang phân tích các vùng da có nguy cơ cao.</p>
+                        </div>
                     </div>
-                    <div className="w-full">
-                        <h3 className="font-bold text-lg text-blue-800 mb-2 flex items-center justify-between">
-                            <span>Phân tích môi trường hiện tại</span>
-                            <span className="text-xs font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded-lg">Real-time</span>
+
+                    {/* Đọc Hiểu Nhanh: Làn da bạn đang nói gì */}
+                    <div className="bg-white border border-gray-100 shadow-xs rounded-2xl p-6">
+                        <h3 className="font-bold text-base md:text-lg mb-2 flex items-center gap-2 text-brand-dark">
+                            <i data-feather="message-circle" className="w-5 h-5 text-brand-primary"></i>
+                            Đánh giá tổng quát từ AI
                         </h3>
-                        <div className="grid grid-cols-3 gap-2 mb-3" id="environment-metrics">
-                            {/* JS Injected */}
-                        </div>
-                        <p className="text-blue-700/80 text-sm font-medium" id="environment-impact">Đang phân tích tác động môi trường...</p>
-                    </div>
-                </div>
-
-                {/* Khối 2: Cảnh báo ưu tiên (Primary Concerns) */}
-                <div id="primary-concern-card" className="bg-rose-50 border border-rose-100 shadow-sm rounded-2xl p-5 md:p-6 flex items-start gap-4 mb-6">
-                    <div className="bg-rose-100 p-3 rounded-full text-rose-500 mt-1">
-                        <i data-feather="alert-triangle" className="w-6 h-6"></i>
-                    </div>
-                    <div>
-                        <h3 className="font-bold text-lg text-rose-700 mb-1" id="concern-title">⚠️ Đang tải cảnh báo...</h3>
-                        <p className="text-rose-600/80 text-sm font-medium" id="concern-desc">AI đang phân tích các vùng da có nguy cơ cao.</p>
-                    </div>
-                </div>
-
-                {/* Khối 2.1: Tình trạng da phát hiện (Skin Conditions) */}
-                <div id="skin-conditions-card" className="bg-white border border-gray-100 shadow-sm rounded-2xl p-5 md:p-6 mb-6" style={{ display: "none" }}>
-                    <h3 className="font-bold text-lg text-brand-dark mb-4 flex items-center gap-2">
-                        <i data-feather="crosshair" className="w-5 h-5 text-brand-primary"></i>
-                        Tình trạng da phát hiện
-                    </h3>
-                    <div id="skin-conditions-list" className="space-y-3">
-                        {/* Injected by JS */}
-                    </div>
-                </div>
-
-                {/* Khối 2.5: Biểu đồ mạng nhện 12 chỉ số */}
-                <div className="bg-white border border-gray-100 shadow-sm rounded-2xl p-6 mb-6">
-                    <div className="flex flex-col md:flex-row items-center gap-8">
-                        <div className="w-full md:w-1/2 relative">
-                            <canvas id="radarChart" className="w-full max-w-[400px] mx-auto"></canvas>
-                        </div>
-                        <div className="w-full md:w-1/2">
-                            <h3 className="font-bold text-xl mb-3 flex items-center gap-2 text-brand-dark">
-                                Phân tích cấu trúc 12 tầng
-                            </h3>
-                            <p className="text-gray-500 text-sm mb-4 leading-relaxed">
-                                Biểu đồ mạng nhện thể hiện độ cân bằng của làn da. Những vùng kéo căng ra ngoài viền cho thấy sức khỏe tốt, ngược lại những vùng co thắt vào tâm (như Bã nhờn, Sắc tố UV) cho thấy da đang bị tổn thương ngầm.
-                            </p>
-                            <div className="space-y-3" id="radar-insights">
-                                {/* Injected by JS */}
-                            </div>
-                        </div>
-                    </div>
-                            <div className="mt-8 border-t border-gray-100 pt-6 w-full">
-                                <h4 className="font-bold text-lg text-brand-dark mb-4">Chi tiết 12 chỉ số cấu trúc</h4>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4" id="detailed-metrics-grid">
-                                    {/* Injected by JS */}
-                                </div>
-                            </div>
-
-
-
-                </div>
-                {/* Khối 3.5: Phân tích nguyên nhân & Dự báo lão hóa */}
-                <div className="bg-white border border-gray-100 shadow-sm rounded-3xl p-6 mb-8 mt-6">
-                    <h3 className="font-bold text-xl text-brand-dark mb-4 flex items-center gap-2">
-                        <i data-feather="search" className="text-brand-primary w-6 h-6"></i>
-                        Giải mã nguyên nhân & Dự báo
-                    </h3>
-
-                    <div className="space-y-4 mb-6" id="root-cause-analysis">
-                        {/* JS Injected: Reason for Worst 1 and Worst 2 */}
+                        <p id="result-assessment" className="text-gray-700 leading-relaxed text-sm md:text-[15px]">
+                            {/* Injected by JS */}
+                        </p>
                     </div>
 
-                    <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-6 relative overflow-hidden shadow-lg mt-6">
-                        <div className="absolute -top-10 -right-10 w-32 h-32 bg-brand-primary rounded-full blur-3xl opacity-20"></div>
-                        <div className="relative z-10">
-                            <div className="flex items-center gap-3 mb-3">
-                                <i data-feather="clock" className="text-brand-petal w-5 h-5"></i>
-                                <h4 className="text-lg font-bold text-white">Dự báo làn da (6 tháng tới)</h4>
-                            </div>
-                            <p className="text-gray-300 text-sm leading-relaxed mb-4" id="skin-forecast-text">
-                                Đang xử lý dự báo rủi ro cấu trúc...
-                            </p>
-                            <div className="bg-black/30 rounded-xl p-4 border border-white/10 backdrop-blur-sm">
-                                <div className="flex justify-between items-end mb-2">
-                                    <span className="text-xs font-semibold text-emerald-400">Khả năng phục hồi nếu dùng phác đồ chuẩn</span>
-                                    <span className="text-xl font-black text-white">92%</span>
-                                </div>
-                                <div className="w-full bg-gray-700 rounded-full h-1.5">
-                                    <div className="bg-emerald-500 h-1.5 rounded-full w-[92%] shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
-                                </div>
-                                <p className="text-[10px] text-gray-400 mt-2 text-right">Lộ trình 28 - 45 ngày (Dược mỹ phẩm Rilastil)</p>
-                            </div>
+                    {/* Tình trạng da phát hiện (Skin Conditions) */}
+                    <div id="skin-conditions-card" className="bg-white border border-gray-100 shadow-xs rounded-2xl p-5 md:p-6" style={{ display: "none" }}>
+                        <h3 className="font-bold text-base text-brand-dark mb-3 flex items-center gap-2">
+                            <i data-feather="crosshair" className="w-4 h-4 text-brand-primary"></i>
+                            Tình trạng da phát hiện
+                        </h3>
+                        <div id="skin-conditions-list" className="space-y-2.5">
+                            {/* Injected by JS */}
                         </div>
                     </div>
                 </div>
 
-                {/* Khối 4: Phác đồ Cá Nhân Hóa */}
-                <div>
-                    <h3 className="font-bold text-xl mb-4 flex items-center gap-2 text-brand-dark px-2">
-                        <i data-feather="sun" className="w-6 h-6 text-brand-primary"></i>
-                        Phác đồ 6 bước thiết kế riêng
-                    </h3>
+                {/* TẦNG 3: PHÁC ĐỒ CÁ NHÂN HÓA (SÁNG & TỐI) */}
+                <div id="routine-section" className="scroll-mt-6">
+                    <div className="mb-4 px-2">
+                        <span className="text-xs font-bold text-brand-primary uppercase tracking-wider block mb-1">Giải pháp điều trị</span>
+                        <h3 className="font-bold text-xl md:text-2xl text-brand-dark flex items-center gap-2">
+                            <i data-feather="sun" className="w-5 h-5 text-amber-500"></i>
+                            Phác đồ 6 bước thiết kế riêng
+                        </h3>
+                    </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {/* Buổi sáng */}
-                        <div className="bg-[#FFFDF5] border border-[#FFE8A1] rounded-2xl p-5">
-                            <h4 className="font-semibold text-[#B38C00] mb-4 flex items-center gap-2 border-b border-[#FFE8A1] pb-3">Buổi sáng</h4>
+                        <div className="bg-[#FFFDF5] border border-[#FFE8A1] rounded-2xl p-5 shadow-xs">
+                            <h4 className="font-bold text-[#B38C00] mb-4 flex items-center justify-between border-b border-[#FFE8A1] pb-3 text-sm uppercase tracking-wide">
+                                <span>Buổi sáng · Bảo vệ & Cấp ẩm</span>
+                                <i data-feather="sun" className="w-4 h-4"></i>
+                            </h4>
                             <div className="space-y-3" id="routine-morning">
                                 {/* Injected by JS */}
                             </div>
                         </div>
                         {/* Buổi tối */}
-                        <div className="bg-[#F8FAFF] border border-[#D5E1FC] rounded-2xl p-5">
-                            <h4 className="font-semibold text-[#3056D3] mb-4 flex items-center gap-2 border-b border-[#D5E1FC] pb-3">Buổi tối</h4>
+                        <div className="bg-[#F8FAFF] border border-[#D5E1FC] rounded-2xl p-5 shadow-xs">
+                            <h4 className="font-bold text-[#3056D3] mb-4 flex items-center justify-between border-b border-[#D5E1FC] pb-3 text-sm uppercase tracking-wide">
+                                <span>Buổi tối · Phục hồi & Tái tạo</span>
+                                <i data-feather="moon" className="w-4 h-4"></i>
+                            </h4>
                             <div className="space-y-3" id="routine-evening">
                                 {/* Injected by JS */}
                             </div>
@@ -464,55 +401,157 @@ export default function SkincareRoutine() {
                     </div>
                 </div>
 
-                {/* Khối 5: Sản Phẩm Gợi Ý */}
-                <div>
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between px-2 mb-4 gap-4">
-            <h3 className="font-bold text-xl flex items-center gap-2 text-brand-dark">
-                <i data-feather="shopping-bag" className="text-brand-primary w-5 h-5"></i>
-                Routine Khuyên Dùng
-            </h3>
-            <button className="bg-brand-dark text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-md hover:-translate-y-0.5 transition-transform flex items-center justify-center gap-2 scan-primary-button">
-                Xem chi tiết liệu trình <i data-feather="arrow-right" className="w-4 h-4"></i>
-            </button>
-        </div>
+                {/* TẦNG 4: BỘ SẢN PHẨM KHUYÊN DÙNG & CHECKOUT */}
+                <div className="bg-white border border-gray-100 shadow-sm rounded-3xl p-6 md:p-8">
+                    <div className="mb-6">
+                        <span className="text-xs font-bold text-brand-primary uppercase tracking-wider block mb-1">Kê đơn phác đồ</span>
+                        <h3 className="font-bold text-xl md:text-2xl text-brand-dark flex items-center gap-2">
+                            <i data-feather="shopping-bag" className="text-brand-primary w-5 h-5"></i>
+                            Routine Dược Mỹ Phẩm Khuyên Dùng
+                        </h3>
+                        <p className="text-gray-500 text-xs md:text-sm mt-1">Các sản phẩm chuẩn Y khoa Rilastil & TWON được AI đề xuất chính xác theo nhu cầu da của bạn.</p>
+                    </div>
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="product-recommendations">
                         {/* Injected by JS */}
                     </div>
-                    <div className="mt-6 text-center">
-                        <button className="btn-hover-effect w-full md:w-auto bg-gradient-to-r from-[#D96B82] to-[#C8526B] hover:from-[#C8526B] hover:to-[#B24058] text-white px-8 py-3.5 rounded-xl font-bold text-base inline-flex items-center justify-center gap-2 shadow-md hover:shadow-lg shadow-rose-200/50 hover:-translate-y-0.5 transition-all cursor-pointer" onClick={(event) => window?.addAllToCart?.()}>
+
+                    {/* HERO PRIMARY CTA: THÊM TRỌN BỘ */}
+                    <div className="mt-8 p-6 bg-gradient-to-r from-rose-50/80 via-brand-blush/40 to-white border border-brand-petal rounded-2xl text-center flex flex-col items-center">
+                        <span className="text-xs font-bold text-brand-primary uppercase tracking-wider mb-2">Đạt hiệu quả tối ưu sau 28 ngày</span>
+                        <button type="button" className="btn-hover-effect w-full sm:w-auto bg-gradient-to-r from-[#D96B82] to-[#C8526B] hover:from-[#C8526B] hover:to-[#B24058] text-white px-8 py-4 rounded-xl font-black text-sm sm:text-base inline-flex items-center justify-center gap-2.5 shadow-lg shadow-rose-200/50 hover:-translate-y-0.5 transition-all cursor-pointer" onClick={(event) => window?.addAllToCart?.()}>
                             <i data-feather="shopping-cart" className="w-5 h-5"></i>
-                            Thêm sản phẩm đã chọn vào giỏ
+                            Thêm trọn bộ phác đồ vào giỏ hàng
                         </button>
+                        <p className="text-[11px] text-gray-500 mt-2 font-medium">Miễn phí giao hàng toàn quốc · Cam kết 100% dược mỹ phẩm chính hãng</p>
                     </div>
                 </div>
 
-                {/* Khối 6: Theo Dõi Tiến Trình */}
-                <div className="bg-gradient-to-r from-gray-900 to-brand-dark rounded-2xl p-6 text-white text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div>
-                        <h3 className="font-bold text-lg mb-2">Đừng quên theo dõi sự thay đổi!</h3>
-                        <p className="text-gray-300 text-sm">Quét lại da sau 4 tuần để thấy rõ sự cải thiện từ phác đồ này.</p>
+                {/* TẦNG 5: PHÂN TÍCH CHUYÊN SÂU (COLLAPSIBLE ACCORDION) */}
+                <details className="group bg-white border border-gray-100 shadow-sm rounded-3xl overflow-hidden transition-all duration-300">
+                    <summary className="p-6 flex items-center justify-between cursor-pointer list-none select-none hover:bg-gray-50/80 transition-colors">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-brand-primary/10 text-brand-primary flex items-center justify-center flex-shrink-0">
+                                <i data-feather="bar-chart-2" className="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 className="font-bold text-base md:text-lg text-brand-dark">Phân tích chuyên sâu 12 tầng cấu trúc & Môi trường</h3>
+                                <p className="text-xs text-gray-500">Biểu đồ mạng nhện, chỉ số môi trường real-time và dự báo lão hóa 6 tháng.</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="text-xs font-bold text-brand-primary hidden sm:inline">Chi tiết</span>
+                            <i data-feather="chevron-down" className="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform duration-300"></i>
+                        </div>
+                    </summary>
+
+                    <div className="p-6 md:p-8 border-t border-gray-100 space-y-8 bg-gray-50/30">
+                        {/* Phân tích môi trường */}
+                        <div className="bg-blue-50/80 border border-blue-100 shadow-xs rounded-2xl p-5 flex items-start gap-4">
+                            <div className="bg-blue-100 p-2.5 rounded-xl text-blue-500 mt-1 flex-shrink-0">
+                                <i data-feather="cloud-rain" className="w-5 h-5"></i>
+                            </div>
+                            <div className="w-full">
+                                <h4 className="font-bold text-base text-blue-800 mb-2 flex items-center justify-between">
+                                    <span>Tác động môi trường thời gian thực</span>
+                                    <span className="text-[11px] font-semibold text-blue-600 bg-blue-100 px-2 py-0.5 rounded-md">Real-time</span>
+                                </h4>
+                                <div className="grid grid-cols-3 gap-2 mb-2" id="environment-metrics">
+                                    {/* JS Injected */}
+                                </div>
+                                <p className="text-blue-700/80 text-xs sm:text-sm font-medium" id="environment-impact">Đang phân tích tác động môi trường...</p>
+                            </div>
+                        </div>
+
+                        {/* Biểu đồ mạng nhện 12 chỉ số */}
+                        <div className="bg-white border border-gray-100 shadow-xs rounded-2xl p-6">
+                            <div className="flex flex-col md:flex-row items-center gap-8">
+                                <div className="w-full md:w-1/2 relative">
+                                    <canvas id="radarChart" className="w-full max-w-[360px] mx-auto"></canvas>
+                                </div>
+                                <div className="w-full md:w-1/2">
+                                    <h4 className="font-bold text-lg mb-2 text-brand-dark">Cân bằng cấu trúc 12 tầng</h4>
+                                    <p className="text-gray-500 text-xs sm:text-sm mb-4 leading-relaxed">
+                                        Biểu đồ thể hiện độ cân bằng sinh học của da. Vùng kéo căng ra ngoài viền cho thấy sức khỏe tốt, ngược lại vùng co thắt vào tâm cho thấy da đang bị tổn thương ngầm.
+                                    </p>
+                                    <div className="space-y-2.5" id="radar-insights">
+                                        {/* Injected by JS */}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="mt-6 border-t border-gray-100 pt-6 w-full">
+                                <h5 className="font-bold text-sm text-brand-dark mb-3">Chi tiết từng chỉ số cấu trúc</h5>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3" id="detailed-metrics-grid">
+                                    {/* Injected by JS */}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Giải mã nguyên nhân & Dự báo lão hóa */}
+                        <div className="bg-white border border-gray-100 shadow-xs rounded-2xl p-6">
+                            <h4 className="font-bold text-base md:text-lg text-brand-dark mb-3 flex items-center gap-2">
+                                <i data-feather="search" className="text-brand-primary w-5 h-5"></i>
+                                Giải mã nguyên nhân
+                            </h4>
+                            <div className="space-y-3 mb-6" id="root-cause-analysis">
+                                {/* JS Injected */}
+                            </div>
+
+                            <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-6 relative overflow-hidden shadow-md">
+                                <div className="absolute -top-10 -right-10 w-32 h-32 bg-brand-primary rounded-full blur-3xl opacity-20"></div>
+                                <div className="relative z-10">
+                                    <div className="flex items-center gap-2.5 mb-2">
+                                        <i data-feather="clock" className="text-brand-petal w-4 h-4"></i>
+                                        <h5 className="text-base font-bold text-white">Dự báo làn da (6 tháng tới)</h5>
+                                    </div>
+                                    <p className="text-gray-300 text-xs sm:text-sm leading-relaxed mb-4" id="skin-forecast-text">
+                                        Đang xử lý dự báo rủi ro cấu trúc...
+                                    </p>
+                                    <div className="bg-black/30 rounded-xl p-4 border border-white/10 backdrop-blur-xs">
+                                        <div className="flex justify-between items-end mb-2">
+                                            <span className="text-xs font-semibold text-emerald-400">Khả năng phục hồi với phác đồ chuẩn</span>
+                                            <span className="text-lg font-black text-white">92%</span>
+                                        </div>
+                                        <div className="w-full bg-gray-700 rounded-full h-1.5">
+                                            <div className="bg-emerald-500 h-1.5 rounded-full w-[92%] shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
+                                        </div>
+                                        <p className="text-[10px] text-gray-400 mt-2 text-right">Lộ trình 28 - 45 ngày (Dược mỹ phẩm Rilastil & TWON)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className="w-full md:w-auto flex flex-col sm:flex-row gap-2">
-                        <input type="email" placeholder="Nhập email của bạn..." className="px-4 py-2.5 rounded-xl text-gray-900 w-full sm:w-64 outline-none focus:ring-2 focus:ring-brand-primary" />
-                        <button className="px-5 py-2.5 bg-gradient-to-r from-[#D96B82] to-[#C8526B] hover:from-[#C8526B] hover:to-[#B24058] text-white rounded-xl font-bold transition-all flex-shrink-0 cursor-pointer shadow-xs">
-                            Nhắc tôi
-                        </button>
+                </details>
+
+                {/* TẦNG 6: ĐỒNG HÀNH CHU KỲ 28 NGÀY */}
+                <div className="bg-gradient-to-br from-gray-900 to-brand-dark rounded-3xl p-6 sm:p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-md">
+                    <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-brand-petal flex-shrink-0">
+                            <i data-feather="calendar" className="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <span className="text-xs font-bold text-brand-petal uppercase tracking-wider block mb-0.5">Chu kỳ sinh học của làn da</span>
+                            <h3 className="font-bold text-lg sm:text-xl mb-1.5">Đừng quên soi lại da sau 4 tuần!</h3>
+                            <p className="text-gray-300 text-xs sm:text-sm leading-relaxed max-w-xl">
+                                Làn da cần từ 28 - 45 ngày để tái tạo tế bào mới. Hãy kiên trì tuân thủ phác đồ này và quét lại da sau 4 tuần để theo dõi sự cải thiện của các tầng cấu trúc.
+                            </p>
+                        </div>
                     </div>
                 </div>
 
-                {/* Khối 7: Disclaimer & Zalo */}
-                <div className="flex flex-col items-center text-center space-y-4 pt-4 border-t border-gray-100">
-                    <p className="text-sm text-gray-500 max-w-2xl px-4">
-                        * Kết quả phân tích được tạo bởi AI (Trí tuệ nhân tạo) dựa trên công nghệ thị giác máy tính và chỉ mang tính chất tham khảo.
-                        Để có phác đồ điều trị y khoa chính xác nhất cho các bệnh lý về da, vui lòng liên hệ chuyên gia.
-                    </p>
-                    <a href="https://zalo.me/0924093461" target="_blank" className="px-6 py-2.5 bg-[#0068FF] text-white rounded-xl font-bold text-sm shadow-md hover:bg-blue-600 transition-colors flex items-center justify-center gap-2">
+                {/* TẦNG 7: TƯ VẤN 1:1 QUA ZALO & MIỄN TRỪ Y KHOA */}
+                <div className="flex flex-col items-center text-center space-y-4 pt-2 border-t border-gray-100">
+                    <a href="https://zalo.me/0924093461" target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-[#0068FF] hover:bg-blue-600 text-white rounded-xl font-bold text-sm shadow-md hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer">
                         <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="24" cy="24" r="24" fill="#0068FF"/>
                             <path d="M13.5 15.5h21v3.5l-12.5 11h12.5v3.5h-21v-3.5l12.5-11h-12.5v-3.5z" fill="#FFFFFF"/>
                         </svg>
-                        Gặp Dược sĩ tư vấn 1:1 qua Zalo
+                        Gặp Dược sĩ tư vấn phác đồ 1:1 qua Zalo
                     </a>
+                    <p className="text-xs text-gray-400 max-w-2xl px-4 leading-relaxed">
+                        * Kết quả phân tích được tạo bởi AI dựa trên thị giác máy tính và dữ liệu da liễu học chuẩn quốc tế, mang tính chất tư vấn và tham khảo.
+                        Với các bệnh lý da liễu nghiêm trọng, hãy tham khảo thêm chỉ định từ bác sĩ chuyên khoa.
+                    </p>
                 </div>
             </div>
 
