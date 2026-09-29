@@ -20,8 +20,7 @@ export async function sendSkinReportEmail(userEmail, reportData = {}) {
     })
   });
   if (!response.ok) {
-    globalThis.location.assign(`mailto:${encodeURIComponent(userEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
-    return { fallback: true };
+    throw new Error('Chưa thể gửi báo cáo qua email. Báo cáo vẫn được lưu trong lịch sử soi da.');
   }
   return { success: true };
 }

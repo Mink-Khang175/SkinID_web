@@ -636,10 +636,12 @@ export function generateReportHtml({ user = {}, history = [], orders = [] }) {
 </html>`;
 }
 
-export function exportUserPdfReport({ user, history, orders }) {
-  if (!user) throw new Error('Không có dữ liệu người dùng để xuất báo cáo.');
-
-  const html = generateReportHtml({ user, history, orders });
+export function exportUserPdfReport({ user = {}, history = [], orders = [], scan = null } = {}) {
+  const reportHistory = scan
+    ? [scan]
+    : (Array.isArray(history) ? history : []);
+  const reportOrders = Array.isArray(orders) ? orders : [];
+  const html = generateReportHtml({ user, history: reportHistory, orders: reportOrders });
   const printWindow = window.open('', '_blank');
 
   if (printWindow) {

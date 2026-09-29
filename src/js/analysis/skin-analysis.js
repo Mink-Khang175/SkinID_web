@@ -82,6 +82,10 @@ function showToast(message) {
     }, 3000);
 }
 
+document.addEventListener('skinid:scan-toast', (event) => {
+    if (event.detail?.message) showToast(event.detail.message);
+});
+
 // CATALOG
 
 // AUTOMATIC SKINCARE STEP TYPE CLASSIFICATION FOR ALL PRODUCTS
@@ -1518,15 +1522,15 @@ function renderResults(data, weatherData) {
             const isRealtime = weatherData && weatherData.temp;
             
             envMetrics.innerHTML = `
-                <div class="bg-white p-2 rounded-xl text-center shadow-sm border border-blue-50">
+                <div class="scan-env-stat">
                     <p class="text-[10px] text-gray-500 uppercase tracking-wider font-semibold">Nhiệt độ</p>
                     <p class="font-bold text-gray-800 text-lg">${temp}°C</p>
                 </div>
-                <div class="bg-white p-2 rounded-xl text-center shadow-sm border border-blue-50">
+                <div class="scan-env-stat">
                     <p class="text-[10px] text-gray-500 uppercase tracking-wider font-semibold">Độ ẩm</p>
                     <p class="font-bold text-gray-800 text-lg">${humidity}%</p>
                 </div>
-                <div class="bg-white p-2 rounded-xl text-center shadow-sm border border-orange-200 bg-orange-50/30">
+                <div class="scan-env-stat scan-env-stat--uv">
                     <p class="text-[10px] text-orange-500 uppercase tracking-wider font-semibold">Tia UV</p>
                     <p class="font-bold text-orange-600 text-lg">${uvIndex}</p>
                 </div>
@@ -1589,13 +1593,13 @@ function renderResults(data, weatherData) {
             const detail2 = getDetail(worst2.id);
 
             rcaContainer.innerHTML = `
-                <div class="p-4 bg-red-50 rounded-xl border-l-4 border-red-500">
+                <div class="scan-cause-item scan-cause-item--primary p-4">
                     <h5 class="font-bold text-red-800 mb-1 flex items-center gap-2">
                         <i data-feather="alert-triangle" class="w-4 h-4"></i> ${detail1.name}
                     </h5>
                     <p class="text-sm text-red-700 leading-relaxed"><span class="font-semibold">Cơ chế:</span> ${detail1.cause}</p>
                 </div>
-                <div class="p-4 bg-orange-50 rounded-xl border-l-4 border-orange-500">
+                <div class="scan-cause-item scan-cause-item--secondary p-4">
                     <h5 class="font-bold text-orange-800 mb-1 flex items-center gap-2">
                         <i data-feather="alert-circle" class="w-4 h-4"></i> ${detail2.name}
                     </h5>
@@ -1621,28 +1625,14 @@ function renderResults(data, weatherData) {
                 const label = labels[i];
                 const score = Math.round(values[i]);
                 
-                // Determine color based on score
-                let colorClass = 'bg-brand-primary';
-                let textClass = 'text-brand-primary';
-                if (score < 50) {
-                    colorClass = 'bg-rose-500';
-                    textClass = 'text-rose-600';
-                } else if (score < 75) {
-                    colorClass = 'bg-orange-400';
-                    textClass = 'text-orange-500';
-                } else {
-                    colorClass = 'bg-emerald-500';
-                    textClass = 'text-emerald-600';
-                }
-
                 detailedHtml += `
-                    <div class="flex flex-col gap-1.5">
+                    <div class="scan-metric-item flex flex-col gap-1.5">
                         <div class="flex justify-between items-center text-sm">
                             <span class="font-semibold text-gray-700">${label}</span>
-                            <span class="font-bold ${textClass}">${score}/100</span>
+                            <span class="scan-metric-value font-bold">${score}/100</span>
                         </div>
-                        <div class="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
-                            <div class="${colorClass} h-2 rounded-full transition-all duration-1000" style="width: ${score}%"></div>
+                        <div class="scan-metric-track">
+                            <div class="scan-metric-fill" style="width: ${score}%"></div>
                         </div>
                     </div>
                 `;
@@ -1656,13 +1646,13 @@ function renderResults(data, weatherData) {
         const radarInsights = document.getElementById('radar-insights');
         if(radarInsights) {
             radarInsights.innerHTML = `
-                <div class="flex items-center gap-3 p-3 bg-red-50 rounded-xl border border-red-100 mb-2">
-                    <div class="w-2 h-2 rounded-full bg-red-500"></div>
-                    <span class="text-sm text-red-700 font-medium">${translateConcern(worst1.id)} là chỉ số nên được ưu tiên theo dõi.</span>
+                <div class="scan-insight-item flex items-center gap-3 p-3 mb-2">
+                    <div class="scan-insight-dot"></div>
+                    <span class="text-sm font-medium">${translateConcern(worst1.id)} là chỉ số nên được ưu tiên theo dõi.</span>
                 </div>
-                <div class="flex items-center gap-3 p-3 bg-orange-50 rounded-xl border border-orange-100">
-                    <div class="w-2 h-2 rounded-full bg-orange-500"></div>
-                    <span class="text-sm text-orange-700 font-medium">${translateConcern(worst2.id)} cần được chăm sóc ổn định và đánh giá lại.</span>
+                <div class="scan-insight-item flex items-center gap-3 p-3">
+                    <div class="scan-insight-dot"></div>
+                    <span class="text-sm font-medium">${translateConcern(worst2.id)} cần được chăm sóc ổn định và đánh giá lại.</span>
                 </div>
             `;
         }

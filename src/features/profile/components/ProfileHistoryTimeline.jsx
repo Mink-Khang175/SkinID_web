@@ -106,7 +106,7 @@ export default function ProfileHistoryTimeline({ history = [] }) {
               <button
                 type="button"
                 onClick={() => exportUserPdfReport({ scan })}
-                className="px-4 py-2 text-xs font-bold text-[#6F686B] hover:text-[#282326] bg-[#FFFFFF] hover:bg-[#FFF5F7] rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shadow-xs"
+                className="profile-action profile-action--quiet profile-action--compact"
                 title="Xuất báo cáo PDF phiên này"
               >
                 <svg className="w-3.5 h-3.5 text-[#E06D81]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
@@ -117,18 +117,18 @@ export default function ProfileHistoryTimeline({ history = [] }) {
                 href="https://zalo.me/0924093461"
                 target="_blank"
                 rel="noreferrer"
-                className="btn-gui-duoc-si px-4 py-2 text-xs font-bold flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+                className="profile-action profile-action--consult profile-action--compact"
               >
-                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
-                <span>Gửi Dược Sĩ</span>
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 9h8M8 13h5"/></svg>
+                <span>Tư vấn dược sĩ</span>
               </a>
 
               <button
                 type="button"
                 onClick={open}
-                className="btn-xem-chi-tiet px-4 py-2 text-xs font-extrabold text-white bg-gradient-to-r from-[#FF7893] to-[#E06D81] hover:from-[#E06D81] hover:to-[#BD3F5B] rounded-full shadow-[0_6px_16px_rgba(224,62,98,0.25)] transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap"
+                className="profile-action profile-action--primary profile-action--compact"
               >
-                <span>Chi tiết</span>
+                <span>Xem chi tiết</span>
                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
               </button>
             </div>

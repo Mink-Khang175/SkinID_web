@@ -281,8 +281,8 @@ export default function SkincareRoutine() {
                 <canvas id="confetti-canvas" className="fixed inset-0 pointer-events-none z-[9999]" style={{ display: "none" }}></canvas>
 
                 <div className="scan-result-summary bg-gradient-to-br from-[#FFF5F7] via-[#FFF9FA] to-white border border-[#FFD5DF] shadow-[0_14px_40px_rgba(233,102,130,0.08)] rounded-3xl overflow-hidden mt-4 relative">
-                    <div className="p-6 md:p-8 flex flex-col md:flex-row items-center gap-8">
-                        <div className="relative w-36 h-36 flex-shrink-0">
+                    <div className="scan-result-summary__inner p-6 md:p-8 flex flex-col md:flex-row items-center gap-8">
+                        <div className="scan-result-score relative w-36 h-36 flex-shrink-0" aria-label="Điểm sức khỏe làn da">
                             {/* Glow ring background */}
                             <div id="score-glow" className="absolute inset-0 rounded-full transition-all duration-1000" style={{ boxShadow: "0 0 0px transparent" }}></div>
                             <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
@@ -294,11 +294,12 @@ export default function SkincareRoutine() {
                                 <span className="text-[10px] text-[#8C7A82] font-semibold uppercase tracking-wider mt-0.5">Sức Khỏe</span>
                             </div>
                         </div>
-                        <div className="flex-1 text-center md:text-left w-full">
+                        <div className="scan-result-copy flex-1 text-center md:text-left w-full">
+                            <span className="scan-result-kicker">SKINID · BÁO CÁO LÀN DA CÁ NHÂN</span>
                             <div className="flex flex-col md:flex-row md:items-center gap-3 mb-2 justify-center md:justify-start">
                                 <div className="flex flex-wrap items-center gap-3">
-                                    <h2 className="text-2xl font-bold text-brand-dark" id="result-skin-type">Đang phân tích...</h2>
-                                    <div className="bg-brand-primary/10 text-brand-primary px-3.5 py-1 rounded-full text-sm font-bold border border-brand-primary/20">Tuổi da: <span id="skin-age-text">--</span></div>
+                                    <h2 className="text-2xl font-bold text-brand-dark" id="result-skin-type">Báo cáo làn da của bạn</h2>
+                                    <div className="bg-brand-primary/10 text-brand-primary px-3.5 py-1 rounded-full text-sm font-bold border border-brand-primary/20">Tuổi da: <span id="skin-age-text">—</span></div>
                                 </div>
                             </div>
                             {/* Overall Grade Label */}
@@ -307,21 +308,21 @@ export default function SkincareRoutine() {
                                 <span id="overall-grade-text"></span>
                             </div>
                             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 text-sm text-[#7D7077] mb-4 font-medium">
-                                <span id="report-id" className="bg-white/90 px-3.5 py-1 rounded-full border border-[#FFE4EB] shadow-xs">ID: SKN-XYZ</span>
-                                <span id="report-date" className="bg-white/90 px-3.5 py-1 rounded-full border border-[#FFE4EB] shadow-xs">Ngày: --/--/----</span>
+                                <span id="report-id" className="bg-white/90 px-3.5 py-1 rounded-full border border-[#FFE4EB] shadow-xs">Đang đồng bộ dữ liệu</span>
+                                <span id="report-date" className="bg-white/90 px-3.5 py-1 rounded-full border border-[#FFE4EB] shadow-xs"></span>
                             </div>
                             <div id="result-tags" className="flex flex-wrap justify-center md:justify-start gap-2 mb-6">
                                 {/* Injected by JS */}
                             </div>
-                            <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
-                                <button type="button" onClick={() => document.getElementById('routine-section')?.scrollIntoView({ behavior: 'smooth' })} className="px-6 py-3 bg-gradient-to-r from-[#FF7893] to-[#DC3E63] hover:from-[#F25576] hover:to-[#BD3F5B] text-white rounded-full font-extrabold text-xs sm:text-sm shadow-[0_12px_28px_rgba(224,62,98,0.3)] hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer">
+                            <div className="scan-result-actions flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
+                                <button type="button" onClick={() => document.getElementById('routine-section')?.scrollIntoView({ behavior: 'smooth' })} className="scan-report-action scan-report-action--primary">
                                     <i data-feather="arrow-down" className="w-4 h-4"></i> Xem routine phù hợp
                                 </button>
-                                <button type="button" onClick={() => document.dispatchEvent(new CustomEvent('skinid:skin-report-email-request'))} className="px-6 py-3 bg-white text-[#282326] hover:text-[#BD3F5B] hover:bg-[#FFF5F7] rounded-full font-extrabold text-xs sm:text-sm shadow-xs hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer">
-                                    <i data-feather="mail" className="w-4 h-4"></i> Lưu về Email
+                                <button type="button" onClick={() => document.dispatchEvent(new CustomEvent('skinid:skin-report-email-request'))} className="scan-report-action scan-report-action--quiet">
+                                    <i data-feather="mail" className="w-4 h-4"></i> Gửi qua email
                                 </button>
                             </div>
-                            <div className="mt-3 flex items-center justify-center md:justify-start gap-1 text-xs text-[#8C7A82] font-medium">
+                            <div className="scan-report-save-note mt-3 flex items-center justify-center md:justify-start gap-1 text-xs text-[#8C7A82] font-medium">
                                 <span>Đã tự động lưu vào hồ sơ cá nhân ·</span>
                                 <a href="/profile?tab=history" className="text-brand-primary hover:underline font-semibold flex items-center gap-0.5">
                                     Xem lịch sử <i data-feather="external-link" className="w-3 h-3"></i>
@@ -334,7 +335,7 @@ export default function SkincareRoutine() {
                 {/* TẦNG 2: CHẨN ĐOÁN & CẢNH BÁO ƯU TIÊN */}
                 <div className="scan-result-priorities space-y-4">
                     {/* Cảnh báo ưu tiên (Primary Concerns) */}
-                    <div id="primary-concern-card" className="bg-gradient-to-br from-[#FFF5F6] to-white border border-[#FFDCE2] shadow-xs rounded-2xl p-5 md:p-6 flex items-start gap-4">
+                    <div id="primary-concern-card" className="scan-priority-card bg-gradient-to-br from-[#FFF5F6] to-white border border-[#FFDCE2] shadow-xs rounded-2xl p-5 md:p-6 flex items-start gap-4">
                         <div className="bg-rose-100/90 p-2.5 rounded-xl text-rose-500 mt-0.5 flex-shrink-0">
                             <i data-feather="alert-triangle" className="w-5 h-5"></i>
                         </div>
@@ -346,7 +347,7 @@ export default function SkincareRoutine() {
                     </div>
 
                     {/* Đọc Hiểu Nhanh: Làn da bạn đang nói gì */}
-                    <div className="bg-white border border-[#FFE8ED] shadow-xs rounded-2xl p-6">
+                    <div className="scan-overview-card bg-white border border-[#FFE8ED] shadow-xs rounded-2xl p-6">
                         <h3 className="font-bold text-base md:text-lg mb-2 flex items-center gap-2 text-brand-dark">
                             <i data-feather="message-circle" className="w-5 h-5 text-brand-primary"></i>
                             Tổng quan làn da
@@ -370,7 +371,7 @@ export default function SkincareRoutine() {
 
                 {/* TẦNG 3: PHÁC ĐỒ CÁ NHÂN HÓA (SÁNG & TỐI) */}
                 <div id="routine-section" className="scan-result-routine scroll-mt-6">
-                    <div className="mb-4 px-2">
+                    <div className="scan-section-intro mb-4 px-2">
                         <span className="text-xs font-bold text-brand-primary uppercase tracking-wider block mb-1">Routine được đề xuất</span>
                         <h3 className="font-bold text-xl md:text-2xl text-brand-dark flex items-center gap-2">
                             <i data-feather="sun" className="w-5 h-5 text-amber-500"></i>
@@ -379,7 +380,7 @@ export default function SkincareRoutine() {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {/* Buổi sáng */}
-                        <div className="bg-gradient-to-br from-[#FFF9F6] via-[#FFFAF7] to-white border border-[#FFE6D9] rounded-2xl p-5 shadow-xs">
+                        <div className="scan-routine-column scan-routine-column--morning bg-gradient-to-br from-[#FFF9F6] via-[#FFFAF7] to-white border border-[#FFE6D9] rounded-2xl p-5 shadow-xs">
                             <h4 className="font-bold text-[#C45E28] mb-4 flex items-center justify-between border-b border-[#FFE2D1] pb-3 text-sm uppercase tracking-wide">
                                 <span>Buổi sáng · Bảo vệ & Cấp ẩm</span>
                                 <i data-feather="sun" className="w-4 h-4 text-[#E27D40]"></i>
@@ -389,7 +390,7 @@ export default function SkincareRoutine() {
                             </div>
                         </div>
                         {/* Buổi tối */}
-                        <div className="bg-gradient-to-br from-[#FDF8FB] via-[#FCF5F8] to-white border border-[#F3DCE5] rounded-2xl p-5 shadow-xs">
+                        <div className="scan-routine-column scan-routine-column--evening bg-gradient-to-br from-[#FDF8FB] via-[#FCF5F8] to-white border border-[#F3DCE5] rounded-2xl p-5 shadow-xs">
                             <h4 className="font-bold text-[#8B3D59] mb-4 flex items-center justify-between border-b border-[#F2D7E2] pb-3 text-sm uppercase tracking-wide">
                                 <span>Buổi tối · Phục hồi & Tái tạo</span>
                                 <i data-feather="moon" className="w-4 h-4 text-[#B05B79]"></i>
@@ -402,26 +403,16 @@ export default function SkincareRoutine() {
                 </div>
 
                 {/* TẦNG 4: BỘ SẢN PHẨM KHUYÊN DÙNG & CHECKOUT */}
-                <div className="scan-result-products bg-white border border-[#FFE8ED] shadow-sm rounded-3xl p-6 md:p-8">
-                    <div className="mb-6">
-                        <span className="text-xs font-bold text-brand-primary uppercase tracking-wider block mb-1">Gợi ý chu trình</span>
-                        <h3 className="font-bold text-xl md:text-2xl text-brand-dark flex items-center gap-2">
-                            <i data-feather="shopping-bag" className="text-brand-primary w-5 h-5"></i>
-                            Sản phẩm phù hợp với routine
-                        </h3>
-                        <p className="text-gray-500 text-xs md:text-sm mt-1">Các sản phẩm dược mỹ phẩm chính hãng Rilastil & TWON được AI gợi ý phù hợp theo nhu cầu da của bạn.</p>
+                <div className="scan-result-products scan-bundle-bar bg-white border border-[#FFE8ED] shadow-sm rounded-3xl p-6 md:p-8">
+                    <div className="scan-bundle-copy">
+                        <span className="text-xs font-bold text-brand-primary uppercase tracking-wider block mb-1">Routine của bạn đã sẵn sàng</span>
+                        <h3 className="font-bold text-xl md:text-2xl text-brand-dark">Hoàn thiện chu trình chăm sóc</h3>
+                        <p className="text-gray-500 text-xs md:text-sm mt-1">Bạn có thể bỏ chọn từng sản phẩm ở danh sách phía trên trước khi thêm vào giỏ.</p>
                     </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="product-recommendations">
-                        {/* Injected by JS */}
-                    </div>
-
-                    {/* HERO PRIMARY CTA: THÊM TRỌN BỘ */}
-                    <div className="mt-8 p-7 bg-gradient-to-br from-[#FFF1F4] via-[#FFF8F9] to-white border-0 shadow-[0_16px_40px_rgba(224,109,129,0.08)] rounded-3xl text-center flex flex-col items-center">
-                        <span className="text-xs font-extrabold text-brand-primary uppercase tracking-wider mb-2">Hoàn thiện routine tham khảo</span>
-                        <button type="button" className="btn-hover-effect w-full sm:w-auto bg-gradient-to-r from-[#FF7893] to-[#DC3E63] hover:from-[#F25576] hover:to-[#BD3F5B] text-white px-9 py-4 rounded-full font-black text-sm sm:text-base inline-flex items-center justify-center gap-3 shadow-[0_14px_32px_rgba(224,62,98,0.32)] hover:-translate-y-0.5 transition-all cursor-pointer" onClick={(event) => window?.addAllToCart?.()}>
+                    <div className="scan-bundle-action">
+                        <button type="button" className="scan-report-action scan-report-action--primary scan-report-action--large w-full sm:w-auto" onClick={(event) => window?.addAllToCart?.()}>
                             <i data-feather="shopping-cart" className="w-5 h-5"></i>
-                            Thêm các sản phẩm đã chọn vào giỏ
+                            Thêm routine đã chọn vào giỏ
                         </button>
                         <p className="text-[11px] text-[#786D72] mt-2.5 font-medium">Miễn phí giao hàng toàn quốc · Cam kết 100% dược mỹ phẩm chính hãng</p>
                     </div>
@@ -429,7 +420,7 @@ export default function SkincareRoutine() {
 
                 {/* TẦNG 5: PHÂN TÍCH CHUYÊN SÂU (COLLAPSIBLE ACCORDION) */}
                 <details className="scan-result-deep-dive group bg-white border border-[#FFE8ED] shadow-sm rounded-3xl overflow-hidden transition-all duration-300">
-                    <summary className="p-6 flex items-center justify-between cursor-pointer list-none select-none hover:bg-[#FFF9FA] transition-colors">
+                    <summary className="scan-deep-dive-summary p-6 flex items-center justify-between cursor-pointer list-none select-none hover:bg-[#FFF9FA] transition-colors">
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-xl bg-brand-primary/10 text-brand-primary flex items-center justify-center flex-shrink-0">
                                 <i data-feather="bar-chart-2" className="w-5 h-5"></i>
@@ -445,9 +436,9 @@ export default function SkincareRoutine() {
                         </div>
                     </summary>
 
-                    <div className="p-6 md:p-8 border-t border-[#FFE8ED] space-y-8 bg-[#FFFBFB]">
+                    <div className="scan-deep-dive-body p-6 md:p-8 border-t border-[#FFE8ED] space-y-8 bg-[#FFFBFB]">
                         {/* Phân tích môi trường */}
-                        <div className="bg-gradient-to-br from-[#F4F9FD] to-white border border-[#DCEBF6] shadow-xs rounded-2xl p-5 flex items-start gap-4">
+                        <div className="scan-environment-card bg-gradient-to-br from-[#F4F9FD] to-white border border-[#DCEBF6] shadow-xs rounded-2xl p-5 flex items-start gap-4">
                             <div className="bg-blue-100 p-2.5 rounded-xl text-blue-500 mt-1 flex-shrink-0">
                                 <i data-feather="cloud-rain" className="w-5 h-5"></i>
                             </div>
@@ -464,7 +455,7 @@ export default function SkincareRoutine() {
                         </div>
 
                         {/* Biểu đồ mạng nhện 12 chỉ số */}
-                        <div className="bg-white border border-[#FFE8ED] shadow-xs rounded-2xl p-6">
+                        <div className="scan-structure-card bg-white border border-[#FFE8ED] shadow-xs rounded-2xl p-6">
                             <div className="flex flex-col md:flex-row items-center gap-8">
                                 <div className="w-full md:w-1/2 relative">
                                     <canvas id="radarChart" className="w-full max-w-[360px] mx-auto"></canvas>
@@ -488,7 +479,7 @@ export default function SkincareRoutine() {
                         </div>
 
                         {/* Giải mã nguyên nhân & Dự báo lão hóa */}
-                        <div className="bg-white border border-[#FFE8ED] shadow-xs rounded-2xl p-6">
+                        <div className="scan-causes-card bg-white border border-[#FFE8ED] shadow-xs rounded-2xl p-6">
                             <h4 className="font-bold text-base md:text-lg text-brand-dark mb-3 flex items-center gap-2">
                                 <i data-feather="search" className="text-brand-primary w-5 h-5"></i>
                                 Yếu tố có thể ảnh hưởng
@@ -497,7 +488,7 @@ export default function SkincareRoutine() {
                                 {/* JS Injected */}
                             </div>
 
-                            <div className="bg-gradient-to-br from-[#2D1B23] via-[#24151C] to-[#1C1015] border border-[#4D2E3B] rounded-2xl p-6 relative overflow-hidden shadow-lg">
+                            <div className="scan-forecast-card bg-gradient-to-br from-[#2D1B23] via-[#24151C] to-[#1C1015] border border-[#4D2E3B] rounded-2xl p-6 relative overflow-hidden shadow-lg">
                                 <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#E06D81] rounded-full blur-3xl opacity-25"></div>
                                 <div className="relative z-10">
                                     <div className="flex items-center gap-2.5 mb-2">
@@ -507,7 +498,7 @@ export default function SkincareRoutine() {
                                     <p className="text-rose-100/70 text-xs sm:text-sm leading-relaxed mb-4" id="skin-forecast-text">
                                         Đang xử lý dự báo rủi ro cấu trúc...
                                     </p>
-                                    <div className="bg-white/5 rounded-xl p-4 border border-white/10 backdrop-blur-xs">
+                                    <div className="scan-routine-fit bg-white/5 rounded-xl p-4 border border-white/10 backdrop-blur-xs">
                                         <div className="flex justify-between items-end mb-2">
                                             <span className="text-xs font-semibold text-emerald-400">Mức độ phù hợp của routine đề xuất</span>
                                             <span className="text-lg font-black text-white">92%</span>
@@ -537,13 +528,14 @@ export default function SkincareRoutine() {
                             </p>
                         </div>
                     </div>
+                    <div className="scan-followup-mark" aria-hidden="true"><strong>04</strong><span>tuần</span></div>
                 </div>
 
                 {/* TẦNG 7: TƯ VẤN 1:1 QUA ZALO & MIỄN TRỪ Y KHOA */}
-                <div className="flex flex-col items-center text-center space-y-4 pt-4 border-t border-[#FFE8ED]">
-                    <a href="https://zalo.me/0924093461" target="_blank" rel="noopener noreferrer" className="px-7 py-3.5 bg-gradient-to-r from-[#0068FF] to-[#0055D4] hover:from-[#005CE6] hover:to-[#004BB8] text-white rounded-full font-extrabold text-sm shadow-[0_10px_24px_rgba(0,104,255,0.28)] hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2.5 cursor-pointer">
+                <div className="scan-result-consult flex flex-col items-center text-center space-y-4 pt-4 border-t border-[#FFE8ED]">
+                    <a href="https://zalo.me/0924093461" target="_blank" rel="noopener noreferrer" className="scan-report-action scan-report-action--consult">
                         <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="24" cy="24" r="24" fill="#0068FF"/>
+                            <circle cx="24" cy="24" r="24" fill="currentColor"/>
                             <path d="M13.5 15.5h21v3.5l-12.5 11h12.5v3.5h-21v-3.5l12.5-11h-12.5v-3.5z" fill="#FFFFFF"/>
                         </svg>
                         Gặp Dược sĩ tư vấn phác đồ 1:1 qua Zalo

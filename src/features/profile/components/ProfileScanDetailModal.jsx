@@ -236,7 +236,7 @@ function SkincareRoutineSection({ scan }) {
                         <h6 className="text-[11px] font-bold text-[#282326] truncate">{s.product.name}</h6>
                         <span className="text-xs font-black text-[#C45E28]">{formatPrice(s.product.price)}</span>
                       </div>
-                      <button type="button" onClick={() => buy(s.product)} className="px-3 py-1.5 bg-[#C45E28] hover:bg-[#A84A1A] text-white text-[11px] font-bold rounded-full transition-all flex-shrink-0 cursor-pointer shadow-xs">+ Thêm giỏ</button>
+                      <button type="button" onClick={() => buy(s.product)} className="profile-action profile-action--mini profile-action--morning flex-shrink-0">Thêm</button>
                     </div>
                   )}
                 </div>
@@ -271,7 +271,7 @@ function SkincareRoutineSection({ scan }) {
                         <h6 className="text-[11px] font-bold text-[#282326] truncate">{s.product.name}</h6>
                         <span className="text-xs font-black text-[#8B3D59]">{formatPrice(s.product.price)}</span>
                       </div>
-                      <button type="button" onClick={() => buy(s.product)} className="px-3 py-1.5 bg-[#8B3D59] hover:bg-[#722F47] text-white text-[11px] font-bold rounded-full transition-all flex-shrink-0 cursor-pointer shadow-xs">+ Thêm giỏ</button>
+                      <button type="button" onClick={() => buy(s.product)} className="profile-action profile-action--mini profile-action--evening flex-shrink-0">Thêm</button>
                     </div>
                   )}
                 </div>
@@ -292,7 +292,7 @@ function SkincareRoutineSection({ scan }) {
           <button
             type="button"
             onClick={buyAll}
-            className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-gradient-to-r from-[#FF7893] to-[#DC3E63] hover:from-[#F25576] hover:to-[#BD3F5B] text-white text-xs font-extrabold shadow-[0_12px_28px_rgba(224,62,98,0.3)] hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer"
+            className="profile-action profile-action--primary profile-action--large w-full sm:w-auto"
           >
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
             <span>{addedAll ? 'Đã thêm trọn bộ vào giỏ!' : 'Thêm trọn bộ vào giỏ hàng'}</span>
@@ -301,10 +301,10 @@ function SkincareRoutineSection({ scan }) {
             href="https://zalo.me/0924093461"
             target="_blank"
             rel="noreferrer"
-            className="w-full sm:w-auto px-5 py-3.5 rounded-full bg-white text-[#282326] hover:text-[#BD3F5B] hover:bg-[#FFF5F7] text-xs font-extrabold transition-all text-center flex items-center justify-center gap-2 shadow-xs"
+            className="profile-action profile-action--consult profile-action--large w-full sm:w-auto"
           >
-            <svg className="w-4 h-4 text-[#0068FF]" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
-            <span>Gửi Dược Sĩ Tư Vấn</span>
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 9h8M8 13h5"/></svg>
+            <span>Nhờ dược sĩ tư vấn</span>
           </a>
         </div>
       </div>
@@ -389,9 +389,10 @@ export default function ProfileScanDetailModal({ history = [] }) {
             ref={closeButtonRef}
             type="button"
             onClick={close}
+            className="profile-report-close"
             aria-label="Đóng"
           >
-            ×
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
           </button>
         </div>
 
@@ -518,16 +519,16 @@ export default function ProfileScanDetailModal({ history = [] }) {
             <button
               type="button"
               onClick={() => exportUserPdfReport({ scan })}
-              className="px-5 py-2.5 bg-[#282326] hover:bg-black text-white text-xs font-extrabold rounded-full transition-all shadow-xs flex items-center gap-2 cursor-pointer"
+              className="profile-action profile-action--quiet"
             >
               <svg className="w-4 h-4 text-[#FF7893]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
               <span>Xuất Báo Cáo PDF</span>
             </button>
-            <a href="/skin-analysis" className="px-4 py-2.5 text-xs font-bold text-[#E06D81] hover:bg-[#FFF0F4] rounded-full transition-colors">
-              + Soi da mới
+            <a href="/skin-analysis" className="profile-action profile-action--secondary">
+              Soi da mới
             </a>
           </div>
-          <button type="button" onClick={close} className="px-6 py-2.5 bg-white text-[#282326] hover:bg-[#FFF5F7] text-xs font-extrabold rounded-full shadow-xs cursor-pointer">
+          <button type="button" onClick={close} className="profile-action profile-action--ghost">
             Đóng
           </button>
         </div>
