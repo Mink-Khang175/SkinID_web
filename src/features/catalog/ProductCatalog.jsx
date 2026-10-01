@@ -12,6 +12,10 @@ function SearchIcon() {
   return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg>;
 }
 
+function ResetFilterIcon() {
+  return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 12a9 9 0 1 0 3-6.7" /><path d="M3 4v6h6" /></svg>;
+}
+
 function CatalogDropdown({ id, kind, label, value, onChange, sort = false }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef(null);
@@ -84,7 +88,7 @@ export default function ProductList() {
             {isReady ? <><strong>{visibleProducts.length}</strong> sản phẩm</> : 'Đang tải sản phẩm…'}
           </div>
           <CatalogDropdown id="catalog-sort" kind="sort" label="Sắp xếp" value={sort} onChange={value => update('sort', value)} sort />
-          <button className="catalog-reset" type="button" onClick={reset}>Xóa bộ lọc</button>
+          <button className="catalog-reset" type="button" onClick={reset}><ResetFilterIcon /><span>Xóa bộ lọc</span></button>
         </div>
         <div id="product-grid" aria-live="polite" aria-busy={!isReady}>
           {isReady && visibleProducts.map(product => <ProductCard key={product.id} product={product} onOpen={openProduct} />)}
@@ -92,7 +96,7 @@ export default function ProductList() {
             <div className="col-span-full text-center py-20 px-6 bg-white rounded-2xl border border-gray-200 flex flex-col items-center justify-center">
               <h2 className="text-base font-semibold text-gray-900">Không tìm thấy sản phẩm phù hợp</h2>
               <p className="text-xs text-gray-500 mt-2 max-w-md">Bộ lọc hiện tại không có kết quả khớp. Hãy xóa tiêu chí lọc để xem toàn bộ danh mục.</p>
-              <button type="button" className="catalog-reset mt-5" onClick={reset}>Xóa bộ lọc &amp; Xem tất cả</button>
+              <button type="button" className="catalog-reset mt-5" onClick={reset}><ResetFilterIcon /><span>Xóa bộ lọc &amp; Xem tất cả</span></button>
             </div>
           )}
         </div>

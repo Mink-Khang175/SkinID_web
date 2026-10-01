@@ -1,30 +1,19 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { assetUrl } from '../../assets/index.js';
+import useMotionAwareVisibility from '../../hooks/useMotionAwareVisibility.js';
 
 export default function BrandShowcase() {
   const sectionRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const node = sectionRef.current;
-    if (!node) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) return;
-      setIsVisible(true);
-      observer.disconnect();
-    }, { threshold: 0.14 });
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
+  const isVisible = useMotionAwareVisibility(sectionRef, { threshold: 0.14 });
 
   return (
     <>
-<section id="brands" ref={sectionRef} className={`section brand-shop ${isVisible ? 'is-visible' : ''}`}>
+<section id="brands" ref={sectionRef} className={`section home-anchor-scene brand-shop ${isVisible ? 'is-visible' : ''}`}>
   <div className="container">
     <div className="section-heading brand-reveal brand-reveal--heading">
       <div>
-        <span className="section-kicker">TUYỂN CHỌN BỞI SKINID</span>
-        <h2>Ba thế giới.<br />Một chuẩn chăm sóc.</h2>
+        <span className="section-kicker skinid-editorial-kicker">TUYỂN CHỌN BỞI SKINID</span>
+        <h2 className="skinid-editorial-title skinid-editorial-title--brands">Ba thế giới. <em>Một chuẩn chăm sóc.</em></h2>
         <p>Từ dược mỹ phẩm đến hương thơm cá nhân — mỗi thương hiệu mang một cảm xúc riêng.</p>
       </div>
     </div>
@@ -37,7 +26,7 @@ export default function BrandShowcase() {
         <span className="brand-card-copy">
           <small>DƯỢC MỸ PHẨM TỪ Ý</small>
           <span className="brand-card-wordmark brand-card-wordmark--rilastil" aria-label="Rilastil">RILASTIL</span>
-          <p>Giải pháp chăm sóc da chuyên sâu, từ làm sạch đến chống nắng.</p>
+          <p>Chăm sóc da chuyên sâu, từ làm sạch đến chống nắng.</p>
           <b>Khám phá bộ sưu tập <i data-feather="arrow-right"></i></b>
         </span>
       </button>

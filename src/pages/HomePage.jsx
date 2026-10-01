@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import SkincareRoutine from '../components/analysis/SkincareRoutine.jsx';
 import ProductDetailModal from '../features/catalog/ProductDetailModal.jsx';
 import StorefrontModals from '../components/dialogs/StorefrontModals.jsx';
@@ -24,11 +25,43 @@ export default function HomePage() {
   useLegacyApplication('home');
   useScrollReveal(mainRef);
 
+  useEffect(() => {
+    document.body.classList.add('home-page-active');
+    return () => document.body.classList.remove('home-page-active');
+  }, []);
+
+  useEffect(() => {
+    const scrollToHash = (behaviorOverride) => {
+      if (!window.location.hash) return;
+      const target = document.querySelector(window.location.hash);
+      if (!target) return;
+      const behavior = behaviorOverride || (window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
+      const header = document.querySelector('.site-header');
+      const headerHeight = header ? header.offsetHeight : 89;
+      const targetTop = target.getBoundingClientRect().top + window.scrollY - headerHeight;
+      window.scrollTo({
+        top: Math.max(0, targetTop),
+        behavior
+      });
+    };
+    const handleHashChange = () => scrollToHash();
+    const handleWindowLoad = () => scrollToHash();
+    scrollToHash();
+    window.addEventListener('hashchange', handleHashChange);
+    window.addEventListener('load', handleWindowLoad, { once: true });
+    const settleTimer = window.setTimeout(() => scrollToHash('instant'), 500);
+    return () => {
+      window.clearTimeout(settleTimer);
+      window.removeEventListener('hashchange', handleHashChange);
+      window.removeEventListener('load', handleWindowLoad);
+    };
+  }, []);
+
   return (
     <>
-      <OfferBar />
+      <OfferBar revealOnUpScroll />
       <Header />
-      <main id="top" ref={mainRef} className="home-refresh scroll-reveal-root">
+      <main id="top" ref={mainRef} className="home-refresh ambient-page-canvas scroll-reveal-root">
         <HeroBanner />
         <FeaturedProducts />
         <HelpSection />
@@ -44,4 +77,3 @@ export default function HomePage() {
     </>
   );
 }
-import { useRef } from 'react';

@@ -7,7 +7,13 @@ import './styles/navigation-drawer.css';
 import './styles/home-refresh.css';
 import './styles/scroll-reveal.css';
 import './styles/scan-refresh.css';
+import './styles/typography.css';
+import './styles/home-scenes.css';
+import './styles/editorial-titles.css';
+import './styles/ambient-canvas.css';
+import './styles/acie-editorial.css';
 import './shared/ui/route-status.css';
+import './styles/responsive-layout.css';
 import { initializeAnalytics, installLegacyFirebaseBridge } from './infrastructure/firebase/index.js';
 import { installLegacyRuntimeConfig } from './shared/config/runtime.js';
 

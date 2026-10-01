@@ -27,7 +27,7 @@
 
 .scan-page-body {
   color: var(--skinid-dark);
-  font-family: "Be Vietnam Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--skinid-font-body);
   background:
     radial-gradient(circle at 6% 12%, rgba(255, 220, 229, 0.65), transparent 26%),
     radial-gradient(circle at 94% 38%, rgba(218, 241, 255, 0.68), transparent 28%),

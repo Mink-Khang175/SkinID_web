@@ -1,7 +1,9 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { assetUrl } from '../../assets/index.js';
 import { useCart } from '../../features/cart/index.js';
 import { useCatalog } from '../../features/catalog/index.js';
+import { FEATURED_PRODUCT_IDS } from '../../features/catalog/featuredProducts.js';
+import useMotionAwareVisibility from '../../hooks/useMotionAwareVisibility.js';
 
 const ROUTINE_DATA = {
   'rilastil-525': {
@@ -38,46 +40,94 @@ const ROUTINE_DATA = {
   },
 };
 
+const ROUTINE_STEPS = [
+  { id: 'cleanser', number: '01', shortLabel: 'Làm sạch', title: 'Làm sạch dịu lành' },
+  { id: 'treatment', number: '02', shortLabel: 'Điều trị', title: 'Tinh chất & đặc trị' },
+  { id: 'moisturizer', number: '03', shortLabel: 'Khóa ẩm', title: 'Dưỡng ẩm chuyên sâu' },
+  { id: 'sunscreen', number: '04', shortLabel: 'Bảo vệ', title: 'Chống nắng mỗi ngày' },
+];
+
+function formatProductHeadline(raw) {
+  if (!raw || typeof raw !== 'string') return { title: raw || '', subtitle: null };
+
+  // 1. If separated by dash: "Công dụng – Thương hiệu & Dòng sản phẩm"
+  const dashMatch = raw.split(/\s+[–—―-]\s+/);
+  if (dashMatch.length === 2) {
+    const [p1, p2] = dashMatch;
+    const brandRegex = /\b(rilastil|twon|d'vah|dvah)\b/i;
+    if (brandRegex.test(p2) && !brandRegex.test(p1)) {
+      return { title: p2.trim(), subtitle: p1.trim() };
+    }
+    if (brandRegex.test(p1)) {
+      return { title: p1.trim(), subtitle: p2.trim() };
+    }
+    return { title: p2.trim(), subtitle: p1.trim() };
+  }
+
+  // 2. If contains brand name without dash: "Tinh Chất Cấp Ẩm Chuyên Sâu Rilastil Aqua..."
+  const brandIndex = raw.search(/\b(Rilastil|TWON|D’VAH|D'VAH)\b/i);
+  if (brandIndex > 0) {
+    const funcPart = raw.slice(0, brandIndex).trim();
+    const brandPart = raw.slice(brandIndex).trim();
+    if (funcPart && brandPart) {
+      return { title: brandPart, subtitle: funcPart };
+    }
+  }
+
+  return { title: raw, subtitle: null };
+}
+
+const FEATURED_PRIORITY = new Map(FEATURED_PRODUCT_IDS.map((id, index) => [id, index]));
+
 export default function FeaturedProducts() {
   const { products: catalog } = useCatalog();
   const [heroId, setHeroId] = useState('rilastil-1774');
-  const [isVisible, setIsVisible] = useState(false);
+  const [activeStepId, setActiveStepId] = useState('cleanser');
+  const [isOrbitPaused, setIsOrbitPaused] = useState(false);
   const sectionRef = useRef(null);
-  const ids = ['rilastil-1774', 'rilastil-525', 'rilastil-2067', 'rilastil-1857'];
-  const featuredProducts = ids
-    .map(id => catalog.find(product => product.id === id && product.image && product.price))
-    .filter(Boolean);
+  const isVisible = useMotionAwareVisibility(sectionRef);
 
-  // Kích hoạt hiệu ứng Staggered Entrance Animation khi cuộn tới
-  useEffect(() => {
-    const node = sectionRef.current;
-    if (!node) return;
+  const productsByStep = useMemo(() => Object.fromEntries(ROUTINE_STEPS.map((step) => {
+    const products = catalog
+      .filter(product => product.brandSlug === 'rilastil' && product.stepType === step.id && product.image && product.price)
+      .sort((a, b) => {
+        const aPriority = FEATURED_PRIORITY.has(a.id) ? FEATURED_PRIORITY.get(a.id) : 99;
+        const bPriority = FEATURED_PRIORITY.has(b.id) ? FEATURED_PRIORITY.get(b.id) : 99;
+        return aPriority - bPriority;
+      })
+      .slice(0, 4);
+    return [step.id, products];
+  })), [catalog]);
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
+  const featuredProducts = useMemo(
+    () => ROUTINE_STEPS.flatMap(step => productsByStep[step.id] || []),
+    [productsByStep]
+  );
+  const activeStep = ROUTINE_STEPS.find(step => step.id === activeStepId) || ROUTINE_STEPS[0];
+  const activeStepProducts = productsByStep[activeStep.id] || [];
 
   useEffect(() => {
-    featuredProducts.forEach((product) => {
+    activeStepProducts.forEach((product) => {
       const image = new Image();
       image.src = assetUrl(product.image, product.brandSlug);
       image.decode?.().catch(() => {});
     });
-  }, [featuredProducts]);
+  }, [activeStepProducts]);
 
   const { addToCart } = useCart();
+
+  // Ref to the arc container for triggering the rotation animation
+  const arcRef = useRef(null);
+  const prevHeroIdRef = useRef(heroId);
+  useEffect(() => {
+    if (prevHeroIdRef.current === heroId) return;
+    prevHeroIdRef.current = heroId;
+    const arc = arcRef.current;
+    if (!arc) return;
+    arc.classList.add('is-rotating');
+    const timer = window.setTimeout(() => arc.classList.remove('is-rotating'), 600);
+    return () => window.clearTimeout(timer);
+  }, [heroId]);
 
   const handleAddToCart = (e, productId) => {
     e.stopPropagation();
@@ -91,32 +141,55 @@ export default function FeaturedProducts() {
   };
 
   const activateProduct = (productId) => {
+    const product = featuredProducts.find(item => item.id === productId);
+    if (product?.stepType) setActiveStepId(product.stepType);
     if (productId !== heroId) setHeroId(productId);
   };
 
+  const activateStep = (stepId) => {
+    setActiveStepId(stepId);
+    const firstProduct = productsByStep[stepId]?.[0];
+    if (firstProduct && firstProduct.id !== heroId) setHeroId(firstProduct.id);
+  };
+
+  useEffect(() => {
+    if (!isVisible || isOrbitPaused || activeStepProducts.length < 2) return undefined;
+
+    const timer = window.setInterval(() => {
+      setHeroId((currentId) => {
+        const currentIndex = activeStepProducts.findIndex(product => product.id === currentId);
+        return activeStepProducts[(currentIndex + 1 + activeStepProducts.length) % activeStepProducts.length].id;
+      });
+    }, 3600);
+
+    return () => window.clearInterval(timer);
+  }, [activeStepProducts, isOrbitPaused, isVisible]);
+
   // Xác định sản phẩm Ngôi sao (Hero) và các sản phẩm vệ tinh (Satellites)
   const heroProduct = featuredProducts.find(p => p.id === heroId) || featuredProducts[0];
-  const satelliteProducts = featuredProducts.filter(p => p.id !== heroProduct?.id);
+  const heroStep = ROUTINE_STEPS.find(step => step.id === heroProduct?.stepType) || activeStep;
   const heroStory = heroProduct ? (ROUTINE_DATA[heroProduct.id] || {
-    stepNum: '02',
-    stepLabel: 'SẢN PHẨM NỔI BẬT',
-    headline: heroProduct.name,
+    stepNum: heroStep.number,
+    stepLabel: `BƯỚC ${heroStep.number} · ${heroStep.title.toUpperCase()}`,
+    headline: window.productDisplayName?.(heroProduct) || heroProduct.name,
     desc: heroProduct.uses || 'Chăm sóc làn da dịu lành mỗi ngày.',
-    roleTag: 'Dược Mỹ Phẩm Ý',
+    roleTag: [heroProduct.line, heroProduct.tier].filter(Boolean).join(' · ') || 'Dược Mỹ Phẩm Ý',
+    satelliteLabel: `${heroStep.number} · ${heroStep.shortLabel}`,
   }) : null;
+  const formattedHeadline = formatProductHeadline(heroStory?.headline);
 
   return (
     <section
       id="featured-products"
       ref={sectionRef}
-      className={`section borderless-hero-showcase ${isVisible ? 'is-visible' : ''}`}
+      className={`section home-anchor-scene borderless-hero-showcase ${isVisible ? 'is-visible' : ''}`}
       aria-label="Sản phẩm nổi bật"
     >
       <div className="container relative z-10 routine-home">
         <header className="routine-home__intro">
-          <span className="hero-showcase-tagline" data-reveal data-reveal-delay="0">ROUTINE ĐƯỢC TUYỂN CHỌN</span>
+          <span className="hero-showcase-tagline skinid-editorial-kicker" data-reveal data-reveal-delay="0">ROUTINE ĐƯỢC TUYỂN CHỌN</span>
           <div className="routine-home__intro-row">
-            <h2 data-reveal data-reveal-delay="90">Chăm da theo nhịp.<br /><em>Nhẹ nhàng mà đúng.</em></h2>
+            <h2 className="skinid-editorial-title skinid-editorial-title--routine" data-reveal data-reveal-delay="90">Chăm da theo nhịp. <em>Nhẹ nhàng mà đúng.</em></h2>
             <p data-reveal data-reveal-delay="180">Một routine bốn bước rõ ràng, được sắp xếp để làn da nhận đúng điều mình cần vào đúng thời điểm.</p>
           </div>
         </header>
@@ -124,13 +197,41 @@ export default function FeaturedProducts() {
         {featuredProducts.length === 0 ? (
           <div className="borderless-loading">Đang chuẩn bị routine dành cho bạn…</div>
         ) : (
-          <div className="routine-stage">
+          <>
+            <div className="routine-step-nav" role="tablist" aria-label="Chọn bước chăm sóc">
+              {ROUTINE_STEPS.map((step) => (
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={step.id === activeStep.id}
+                  className={`routine-step-nav__item ${step.id === activeStep.id ? 'is-active' : ''}`}
+                  key={step.id}
+                  onMouseEnter={() => activateStep(step.id)}
+                  onFocus={() => activateStep(step.id)}
+                  onClick={() => activateStep(step.id)}
+                >
+                  <small>{step.number}</small>
+                  <span><b>{step.shortLabel}</b><em>{step.title}</em></span>
+                </button>
+              ))}
+            </div>
+
+            <div className="routine-stage routine-stage--focused">
             <div className="routine-stage__copy" aria-live="polite">
               <span className="routine-stage__step" data-reveal data-reveal-delay="0">
                 <span key={`step-${heroProduct.id}`} className="routine-swap-text">{heroStory?.stepLabel}</span>
               </span>
               <h3 data-reveal data-reveal-delay="80">
-                <span key={`headline-${heroProduct.id}`} className="routine-swap-text">{heroStory?.headline}</span>
+                <span key={`headline-${heroProduct.id}`} className="routine-swap-text">
+                  {formattedHeadline.subtitle ? (
+                    <span className="routine-headline-wrap">
+                      <span className="routine-headline__title">{formattedHeadline.title}</span>
+                      <span className="routine-headline__subtitle">{formattedHeadline.subtitle}</span>
+                    </span>
+                  ) : (
+                    formattedHeadline.title
+                  )}
+                </span>
               </h3>
               <p data-reveal data-reveal-delay="160">
                 <span key={`desc-${heroProduct.id}`} className="routine-swap-text">{heroStory?.desc}</span>
@@ -161,8 +262,6 @@ export default function FeaturedProducts() {
             </div>
 
             <div className="routine-stage__product" data-reveal="soft-scale" data-reveal-delay="220">
-              <span className="routine-orbit routine-orbit--one" aria-hidden="true"></span>
-              <span className="routine-orbit routine-orbit--two" aria-hidden="true"></span>
               <div className="routine-product-stack">
                 {featuredProducts.map((product) => {
                   const isActive = product.id === heroProduct.id;
@@ -188,48 +287,64 @@ export default function FeaturedProducts() {
                 })}
               </div>
               <span className="routine-stage__focus-label"><i></i>Sản phẩm tâm điểm</span>
-            </div>
-
-            <div className="routine-step-rail" aria-label="Các bước trong routine">
-              {featuredProducts.map((product, idx) => {
-                const story = ROUTINE_DATA[product.id] || { satelliteLabel: `0${idx + 1} · Routine` };
-                const isActive = product.id === heroProduct.id;
-                return (
-                  <div
-                    className={`routine-choice ${isActive ? 'is-active' : ''}`}
+              <div
+                ref={arcRef}
+                className="routine-product-arc"
+                aria-label={`Các sản phẩm tiếp theo trong bước ${activeStep.title}`}
+                onMouseEnter={() => setIsOrbitPaused(true)}
+                onMouseLeave={() => setIsOrbitPaused(false)}
+                onFocusCapture={() => setIsOrbitPaused(true)}
+                onBlurCapture={(event) => {
+                  if (!event.currentTarget.contains(event.relatedTarget)) {
+                    setIsOrbitPaused(false);
+                  }
+                }}
+              >
+                <svg
+                  className="routine-product-arc__stroke"
+                  viewBox="0 0 240 360"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <defs>
+                    <linearGradient id={`routine-arc-${activeStep.id}`} x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0" stopColor="#e06d81" stopOpacity="0" />
+                      <stop offset="0.22" stopColor="#e06d81" stopOpacity="0.28" />
+                      <stop offset="0.5" stopColor="#76b9dc" stopOpacity="0.34" />
+                      <stop offset="0.78" stopColor="#e06d81" stopOpacity="0.28" />
+                      <stop offset="1" stopColor="#e06d81" stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M 88 6 C 250 70 250 290 88 354"
+                    fill="none"
+                    stroke={`url(#routine-arc-${activeStep.id})`}
+                    strokeWidth="1.25"
+                    strokeLinecap="round"
+                    vectorEffect="non-scaling-stroke"
+                  />
+                </svg>
+                {activeStepProducts.filter(product => product.id !== heroProduct?.id).map((product, index) => (
+                  <button
+                    type="button"
+                    className="routine-product-arc__item"
                     key={product.id}
-                    data-reveal
-                    data-reveal-delay={360 + idx * 70}
                     onMouseEnter={() => activateProduct(product.id)}
-                    onFocusCapture={() => activateProduct(product.id)}
+                    onFocus={() => activateProduct(product.id)}
+                    onClick={() => activateProduct(product.id)}
+                    aria-pressed="false"
+                    aria-label={`Hiển thị ${product.name}`}
+                    title={window.productDisplayName?.(product) || product.name}
+                    style={{ '--arc-index': index }}
                   >
-                    <button
-                      type="button"
-                      className="routine-step__select"
-                      onClick={() => activateProduct(product.id)}
-                      aria-pressed={isActive}
-                      aria-label={`Chọn ${product.name} làm tâm điểm`}
-                    >
-                      <span className="routine-step__number">{story.stepNum || `0${idx + 1}`}</span>
-                      <span className="routine-step__visual">
-                        <img src={assetUrl(product.image, product.brandSlug)} alt="" loading="lazy" />
-                      </span>
-                      <span className="routine-step__meta">
-                        <small>{story.satelliteLabel}</small>
-                        <b>{window.productDisplayName?.(product) || product.name}</b>
-                      </span>
-                    </button>
-                    <button
-                      type="button"
-                      className="routine-step__add"
-                      aria-label={`Thêm ${product.name} vào giỏ`}
-                      onClick={(e) => handleAddToCart(e, product.id)}
-                    >+</button>
-                  </div>
-                );
-              })}
+                    <img src={assetUrl(product.image, product.brandSlug)} alt="" loading="lazy" />
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
+          </>
         )}
       </div>
     </section>

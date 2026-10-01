@@ -27,7 +27,6 @@ export default function ProfilePage() {
     changeAvatar,
     cancelOrder,
     clearHistory,
-    downloadData,
     downloadPdf,
     history,
     isAuthenticated,
@@ -204,10 +203,10 @@ export default function ProfilePage() {
             <div className="profile-surface p-6 sm:p-8">
                 <div className="pb-4 mb-6 border-b border-gray-100">
                     <h2 className="text-lg font-black text-gray-900">Quyền riêng tư & dữ liệu</h2>
-                    <p className="text-xs text-gray-500">Bạn có thể tải bản sao dữ liệu hoặc xóa lịch sử soi da khỏi tài khoản.</p>
+                    <p className="text-xs text-gray-500">Bạn có thể tải báo cáo PDF hoặc xóa lịch sử soi da khỏi tài khoản.</p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div className="profile-data-card flex flex-col justify-between bg-gradient-to-br from-[#FFF0F4] via-[#FFFFFF] to-[#FFF5F7] shadow-[0_12px_32px_rgba(224,109,129,0.08)]">
                         <div>
                             <div className="flex items-center gap-2 text-[#282326] font-extrabold text-sm mb-2">
@@ -231,26 +230,6 @@ export default function ProfilePage() {
                                 <line x1="12" y1="15" x2="12" y2="3"></line>
                             </svg>
                             Tải Xuống Báo Cáo PDF
-                        </button>
-                    </div>
-
-                    <div className="profile-data-card flex flex-col justify-between bg-gradient-to-br from-[#EEF7FF] via-[#FFFFFF] to-[#F5FAFF] shadow-[0_12px_32px_rgba(27,108,168,0.06)]">
-                        <div>
-                            <div className="flex items-center gap-2 text-[#282326] font-extrabold text-sm mb-2">
-                                <span className="w-7 h-7 rounded-full bg-[#EEF7FF] text-[#1B6CA8] flex items-center justify-center flex-shrink-0">
-                                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                        <polyline points="14 2 14 8 20 8"></polyline>
-                                        <line x1="12" y1="18" x2="12" y2="12"></line>
-                                        <line x1="9" y1="15" x2="15" y2="15"></line>
-                                    </svg>
-                                </span>
-                                Xuất Dữ Liệu (JSON)
-                            </div>
-                            <p className="text-xs text-[#6F686B] mb-5 leading-relaxed">Tải về hồ sơ, lịch sử soi da, phác đồ và đơn hàng ở định dạng dữ liệu kỹ thuật chuẩn JSON.</p>
-                        </div>
-                        <button type="button" onClick={downloadData} className="profile-btn profile-btn--secondary self-start">
-                            Tải Xuống Dữ Liệu
                         </button>
                     </div>
 

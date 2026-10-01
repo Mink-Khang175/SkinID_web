@@ -4,6 +4,7 @@ import Header from '../components/layout/Header.jsx';
 import Footer from '../components/layout/Footer.jsx';
 import MobileNav from '../components/layout/MobileNav.jsx';
 import StorefrontModals from '../components/dialogs/StorefrontModals.jsx';
+import AcieFeatureGrid from '../components/acie/AcieFeatureGrid.jsx';
 import useLegacyApplication from '../hooks/useLegacyApplication.js';
 import usePageMetadata from '../hooks/usePageMetadata.js';
 import useScrollReveal from '../hooks/useScrollReveal.js';
@@ -20,11 +21,11 @@ export default function AciePage() {
   return (
     <>
       <Header />
-      <main ref={mainRef} className="acie-page acie-motion-page scroll-reveal-root" id="acie-landing">
+      <main ref={mainRef} className="acie-page ambient-page-canvas acie-motion-page scroll-reveal-root" id="acie-landing">
         <section className="container acie-hero">
           <div className="acie-copy">
-            <span className="section-kicker" data-reveal data-reveal-delay="0">SKINID × ACIE · SẮP RA MẮT</span>
-            <h1 data-reveal data-reveal-delay="90">Một chạm nhỏ.<br /><em>Hiểu làn da hơn.</em></h1>
+            <span className="section-kicker skinid-editorial-kicker" data-reveal data-reveal-delay="0">SKINID × ACIE · SẮP RA MẮT</span>
+            <h1 className="skinid-editorial-title skinid-editorial-title--acie" data-reveal data-reveal-delay="90">Một chạm nhỏ. <em>Hiểu làn da hơn.</em></h1>
             <p data-reveal data-reveal-delay="180">Gặp gỡ ACIE — “con bọ” soi da nhỏ gọn, mở đầu cho hành trình chăm sóc dành riêng cho bạn.</p>
             <a className="soft-button" href="#acie-discover" data-reveal data-reveal-delay="270">
               <span>Gặp gỡ ACIE</span>
@@ -33,6 +34,7 @@ export default function AciePage() {
                 <polyline points="19 12 12 19 5 12"></polyline>
               </svg>
             </a>
+            <AcieFeatureGrid className="acie-page-feature-grid" />
             <small data-reveal data-reveal-delay="340">Một trải nghiệm mới đang đến với SkinID.</small>
           </div>
           <figure className="acie-device" data-reveal="soft-scale" data-reveal-delay="360">
@@ -48,8 +50,8 @@ export default function AciePage() {
               <img src={assetUrl('/images/acie/acie-lifestyle-scan.jpg')} alt="Trải nghiệm soi da với thiết bị ACIE" loading="lazy" />
             </div>
             <div className="acie-story-copy">
-              <span className="section-kicker" data-reveal data-reveal-delay="70">LẮNG NGHE LÀN DA</span>
-              <h2 data-reveal data-reveal-delay="140">Chăm da bắt đầu<br />từ sự thấu hiểu.</h2>
+              <span className="section-kicker skinid-editorial-kicker" data-reveal data-reveal-delay="70">LẮNG NGHE LÀN DA</span>
+              <h2 className="skinid-editorial-title skinid-editorial-title--story" data-reveal data-reveal-delay="140">Chăm da bắt đầu <em>từ sự thấu hiểu.</em></h2>
               <p data-reveal data-reveal-delay="210">ACIE kết hợp thiết bị cảm biến và ứng dụng để bạn khám phá làn da, rồi từng bước tìm cách chăm sóc phù hợp hơn.</p>
               <div className="acie-promises">
                 <div data-reveal data-reveal-delay="290"><span>01</span><h3>Nhỏ gọn, gần gũi</h3><p>Một thiết bị vừa trong lòng bàn tay.</p></div>
@@ -62,8 +64,8 @@ export default function AciePage() {
 
         <section className="acie-invitation section">
           <div className="container">
-            <span className="section-kicker" data-reveal data-reveal-delay="0">HẸN BẠN MỘT NGÀY GẦN NHẤT</span>
-            <h2 data-reveal data-reveal-delay="90">Điều nhỏ xinh.<br /><em>Dành riêng cho bạn.</em></h2>
+            <span className="section-kicker skinid-editorial-kicker" data-reveal data-reveal-delay="0">HẸN BẠN MỘT NGÀY GẦN NHẤT</span>
+            <h2 className="skinid-editorial-title skinid-editorial-title--invitation" data-reveal data-reveal-delay="90">Điều nhỏ xinh. <em>Dành riêng cho bạn.</em></h2>
             <p data-reveal data-reveal-delay="180">Muốn biết thêm về ACIE? Trò chuyện cùng SkinID để cập nhật thông tin trải nghiệm.</p>
             <a className="soft-button" href="https://zalo.me/0924093461" target="_blank" rel="noopener noreferrer" data-reveal data-reveal-delay="270">
               <span>Hỏi SkinID về ACIE</span>

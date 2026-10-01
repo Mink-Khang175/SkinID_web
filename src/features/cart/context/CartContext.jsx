@@ -23,6 +23,7 @@ export function CartProvider({ children }) {
   const isHydratedRef = useRef(false);
   const saveQueueRef = useRef(Promise.resolve());
   const hydrationRef = useRef(Promise.resolve());
+  const openCheckoutRef = useRef(async () => false);
 
   const replaceItems = useCallback((nextItems) => {
     const sanitized = sanitizeCartItems(nextItems);
@@ -88,11 +89,19 @@ export function CartProvider({ children }) {
       }
       setIsOpen(true);
     };
+    const buyNow = async (event) => {
+      const productId = String(event.detail?.productId || '');
+      if (!productId) return;
+      await addToCartRef.current(productId, event.detail?.quantity || 1);
+      await openCheckoutRef.current();
+    };
     document.addEventListener('skinid:cart-add', addOne);
     document.addEventListener('skinid:cart-add-many', addMany);
+    document.addEventListener('skinid:buy-now', buyNow);
     return () => {
       document.removeEventListener('skinid:cart-add', addOne);
       document.removeEventListener('skinid:cart-add-many', addMany);
+      document.removeEventListener('skinid:buy-now', buyNow);
     };
   }, []);
 
@@ -140,6 +149,7 @@ export function CartProvider({ children }) {
     setIsCheckoutOpen(true);
     return true;
   }, [openAuthModal, user?.uid]);
+  openCheckoutRef.current = openCheckout;
   const closeCheckout = useCallback(() => setIsCheckoutOpen(false), []);
   const completeCheckout = useCallback(() => {
     replaceItems([]);

@@ -3,7 +3,6 @@ import { useAuth } from '../../auth/index.js';
 import {
   cancelUserOrder,
   changeUserPassword,
-  exportUserData,
   exportUserPdfReport,
   fetchUserOrders,
   fetchUserSkinReports,
@@ -72,7 +71,6 @@ export function useProfile() {
     }
   }, []);
 
-  const downloadData = useCallback(() => exportUserData({ user, history, orders }), [user, history, orders]);
   const downloadPdf = useCallback(() => exportUserPdfReport({ user, history, orders }), [user, history, orders]);
 
   const cancelOrder = useCallback(async (orderId) => {
@@ -101,7 +99,6 @@ export function useProfile() {
     saveProfile,
     changeAvatar,
     updatePassword,
-    downloadData,
     downloadPdf,
     cancelOrder,
     clearHistory,

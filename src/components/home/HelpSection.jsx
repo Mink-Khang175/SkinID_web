@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
+import useMotionAwareVisibility from '../../hooks/useMotionAwareVisibility.js';
 import { openConsultationDialog } from '../../shared/events/storefrontDialogs.js';
 
 const CONCERNS = [
@@ -40,29 +41,20 @@ const CONCERNS = [
   },
 ];
 
+const QUESTION_WORDS = [
+  { text: 'Hôm', line: 1 },
+  { text: 'nay,', line: 1 },
+  { text: 'làn', line: 2 },
+  { text: 'da', line: 2 },
+  { text: 'đang', line: 2, accent: true },
+  { text: 'muốn', line: 2, accent: true },
+  { text: 'kể', line: 3, accent: true },
+  { text: 'gì?', line: 3, accent: true },
+];
+
 export default function HelpSection() {
   const sectionRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const node = sectionRef.current;
-    if (!node) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
+  const isVisible = useMotionAwareVisibility(sectionRef);
 
   const handleSelectBenefit = (e, benefitId) => {
     if (window.location.pathname === '/products') {
@@ -114,18 +106,43 @@ export default function HelpSection() {
     <section
       id="skin-advisor"
       ref={sectionRef}
-      className={`section borderless-advisor-section ${isVisible ? 'is-visible' : ''}`}
+      className={`section home-anchor-scene borderless-advisor-section ${isVisible ? 'is-visible' : ''}`}
       aria-labelledby="need-advisor-title"
     >
       <div className="container gentle-advisor-grid">
         <header className="advisor-static-col">
-          <span className="advisor-tagline adv-anim-item adv-anim-tagline">CHỌN THEO LÀN DA · KHÔNG THEO XU HƯỚNG</span>
+          <span className="advisor-tagline skinid-editorial-kicker adv-anim-item adv-anim-tagline">CHỌN THEO LÀN DA · KHÔNG THEO XU HƯỚNG</span>
           <div className="advisor-heading-row">
-            <h2 id="need-advisor-title" className="advisor-heading adv-anim-item adv-anim-heading">
-              Hôm nay, làn da<br /><span className="highlight-pink">đang muốn kể gì?</span>
+            <h2
+              id="need-advisor-title"
+              className="advisor-heading advisor-question skinid-editorial-title adv-anim-item adv-anim-heading"
+              aria-label="Hôm nay, làn da đang muốn kể gì?"
+            >
+              {[1, 2, 3].map((line) => (
+                <span className={`advisor-question__line advisor-question__line--${line}`} aria-hidden="true" key={line}>
+                  {QUESTION_WORDS.filter((word) => word.line === line).map((word, index) => {
+                    const wordIndex = QUESTION_WORDS.indexOf(word);
+                    return (
+                      <span
+                        className={`advisor-question__word ${word.accent ? 'is-accent' : ''}`}
+                        style={{ '--question-word-index': wordIndex }}
+                        key={`${line}-${index}-${word.text}`}
+                      >
+                        {word.text}
+                      </span>
+                    );
+                  })}
+                  {line === 3 && (
+                    <span className="advisor-typing-dots" aria-hidden="true">
+                      <i></i><i></i><i></i>
+                    </span>
+                  )}
+                </span>
+              ))}
             </h2>
             <div className="advisor-intro-side adv-anim-item adv-anim-desc">
-              <p className="advisor-description">Chọn một mối quan tâm để SkinID gợi ý hướng chăm sóc ngắn gọn, dễ hiểu và vừa đủ với làn da.</p>
+              <h3 className="advisor-intro-title">Chăm sóc da cá nhân hóa</h3>
+              <p className="advisor-description">Nhận gợi ý chu trình skincare ngắn gọn, dễ hiểu và vừa đủ cho riêng bạn.</p>
               <button className="advisor-inline-cta" type="button" onClick={openConsultationDialog}>
                 Trò chuyện cùng SkinID <span aria-hidden="true">↗</span>
               </button>

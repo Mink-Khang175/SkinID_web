@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { assetUrl } from '../../assets/index.js';
 import { useCart } from '../cart/index.js';
 import { compactActiveLabel, formatPrice, productBenefit, productDisplayName } from './catalog.presenters.js';
+import { isFeaturedProduct } from './featuredProducts.js';
 
 function ShoppingBagIcon() {
-  return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 8h12l1 12H5L6 8Z" /><path d="M9 9V6a3 3 0 0 1 6 0v3" /></svg>;
+  return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M6 8h12l1 12H5L6 8Z" /><path d="M9 9V6a3 3 0 0 1 6 0v3" /></svg>;
 }
 
 export default function ProductCard({ product, onOpen }) {
-  const { addToCart } = useCart();
+  const { addToCart, openCheckout } = useCart();
   const [imageFailed, setImageFailed] = useState(false);
   const [fallbackUsed, setFallbackUsed] = useState(false);
   const displayName = productDisplayName(product);
@@ -20,16 +21,34 @@ export default function ProductCard({ product, onOpen }) {
   const reviews = Number(product.reviewCount);
   const sold = Number(product.soldCount);
   const image = fallbackUsed ? product.originalImageUrl : assetUrl(product.image, product.brandSlug);
+  const isFeatured = isFeaturedProduct(product.id);
 
   const handleImageError = () => {
     if (!fallbackUsed && product.originalImageUrl) setFallbackUsed(true);
     else setImageFailed(true);
   };
 
+  const handleAddToCart = async (event) => {
+    event.stopPropagation();
+    await addToCart(product.id);
+  };
+
+  const handleBuyNow = async (event) => {
+    event.stopPropagation();
+    await addToCart(product.id);
+    await openCheckout();
+  };
+
   return (
     <article className="product-card bg-white rounded-2xl flex flex-col h-full relative group overflow-hidden cursor-pointer" onClick={() => onOpen(product.id)}>
-      <div className="product-badges">{discounted && <span className="product-badge product-badge--sale">Giảm {discount}%</span>}</div>
-      {product.tier && <span className="product-badge product-badge--tier">{product.tier}</span>}
+      <div className="product-card__badge-layer">
+        {(isFeatured || product.tier) && (
+          <span className={isFeatured ? 'product-card__featured-label' : 'product-card__tier-label'}>
+            {isFeatured ? 'Sản phẩm nổi bật' : product.tier}
+          </span>
+        )}
+        {discounted && <span className="product-card__discount">−{discount}%</span>}
+      </div>
       <div className="product-card__media">
         {imageFailed
           ? <div className="w-full h-full missing-image-placeholder text-center px-4 flex items-center justify-center text-xs text-gray-400 font-semibold">{product.brand}</div>
@@ -58,9 +77,14 @@ export default function ProductCard({ product, onOpen }) {
               {product.volume && <span className="product-card__volume">{product.volume}</span>}
             </div>
           </div>
-          <button type="button" className="product-card__cart-button" aria-label={`Thêm ${displayName} vào giỏ`} onClick={(event) => { event.stopPropagation(); addToCart(product.id); }}>
-            <ShoppingBagIcon /><span>Thêm vào giỏ</span>
-          </button>
+          <div className="product-card__actions">
+            <button type="button" className="product-card__cart-button" aria-label={`Thêm ${displayName} vào giỏ`} onClick={handleAddToCart}>
+              <ShoppingBagIcon /><span>Thêm vào giỏ</span>
+            </button>
+            <button type="button" className="product-card__buy-button" aria-label={`Mua ngay ${displayName}`} onClick={handleBuyNow}>
+              <span>Mua ngay</span>
+            </button>
+          </div>
         </div>
       </div>
     </article>

@@ -162,6 +162,29 @@ export default function Header() {
     else openAuthModal();
   };
 
+  const navigateToHomeSection = (event, hash) => {
+    close(false);
+    document.body.classList.remove('navigation-drawer-open');
+    if (window.location.pathname !== '/') {
+      window.location.href = '/' + hash;
+      return;
+    }
+    if (event) event.preventDefault();
+    window.history.pushState(null, '', hash);
+    setTimeout(() => {
+      const target = document.querySelector(hash);
+      if (target) {
+        const header = document.querySelector('.site-header');
+        const headerHeight = header ? header.offsetHeight : 89;
+        const targetTop = target.getBoundingClientRect().top + window.scrollY - headerHeight;
+        window.scrollTo({
+          top: Math.max(0, targetTop),
+          behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+        });
+      }
+    }, 60);
+  };
+
   return <>
     <header className="site-header skinid-header minimal-header">
       <div className="container header-main">
@@ -185,7 +208,7 @@ export default function Header() {
             <a className="drawer-all" href="/products" data-first-link onClick={() => close(false)}>Tất cả sản phẩm <span aria-hidden="true">↗</span></a>
             <span className="drawer-eyebrow drawer-section-label">TÌM ĐIỀU PHÙ HỢP</span>
             {navigationGroups.map((item, index) => <button key={item.id} id={'nav-group-' + item.id} className={'drawer-group' + (activeGroup === item.id ? ' is-active' : '')} type="button" aria-controls="drawer-submenu" aria-expanded={activeGroup === item.id && (!compact || mobileLevel)} onPointerEnter={event => hoverGroup(event, item.id)} onPointerLeave={scheduleGroupClose} onFocus={() => { if (!isCompact()) selectGroup(item.id); }} onClick={() => selectGroup(item.id, true)} onKeyDown={event => { if (event.key === 'ArrowRight') { event.preventDefault(); selectGroup(item.id, true); } }}><span className="drawer-number">0{index + 1}</span><span>{item.title}</span><Icon name="arrow" /></button>)}
-            <div className="drawer-explore"><span className="drawer-eyebrow">CÙNG SKINID KHÁM PHÁ</span><a href="/#featured-products" onClick={() => close(false)}>Sản phẩm nổi bật <span aria-hidden="true">↗</span></a><a href="/skin-analysis" onClick={() => close(false)}>Soi da AI <span aria-hidden="true">↗</span></a><a href="/acie" onClick={() => close(false)}>Gặp gỡ ACIE <small>Sắp ra mắt</small></a></div>
+            <div className="drawer-explore"><span className="drawer-eyebrow">CÙNG SKINID KHÁM PHÁ</span><a href="/#featured-products" onClick={(event) => navigateToHomeSection(event, '#featured-products')}>Sản phẩm nổi bật <span aria-hidden="true">↗</span></a><a href="/#skin-advisor" onClick={(event) => navigateToHomeSection(event, '#skin-advisor')}>Chọn theo làn da <span aria-hidden="true">↗</span></a><a href="/#acie-teaser" onClick={(event) => navigateToHomeSection(event, '#acie-teaser')}>Gặp gỡ ACIE <small>Sắp ra mắt</small></a><a href="/skin-analysis" onClick={() => close(false)}>Soi da AI <span aria-hidden="true">↗</span></a></div>
             {compact && <button className="drawer-account" type="button" onClick={() => { close(false); requestAnimationFrame(account); }}><Icon name="user" />Tài khoản của bạn</button>}
             </div>
             <a className="drawer-compliance" href="/tra-cuu-cong-bo" onClick={() => close(false)}><Icon name="shield" /><span>Tra cứu phiếu công bố<small>Thông tin sản phẩm minh bạch</small></span><span aria-hidden="true">↗</span></a>
@@ -194,7 +217,13 @@ export default function Header() {
             <button className="drawer-back" type="button" onClick={back}>← Quay lại menu</button>
             {group && <><span className="drawer-eyebrow">{group.title}</span><h3>{group.note}</h3>
             <div className="drawer-links" key={group.id}>{group.links.map(([label, href]) => <a key={href} href={href} onClick={() => close(false)}>{label}<span aria-hidden="true">↗</span></a>)}</div>
-            <a className={'drawer-editorial drawer-editorial--' + group.id} href={group.previewHref} onClick={() => close(false)}><img src={assetUrl(group.image)} alt={group.imageAlt} /><div><span className="drawer-eyebrow">GỢI Ý TỪ SKINID</span><p>{group.previewTitle}</p><span className="drawer-editorial-cta">{group.previewLabel} →</span></div></a></>}
+            <a className={'drawer-editorial drawer-editorial--' + group.id} href={group.previewHref} onClick={(event) => {
+              if (group.previewHref?.startsWith('/#')) {
+                navigateToHomeSection(event, group.previewHref.slice(1));
+              } else {
+                close(false);
+              }
+            }}><img src={assetUrl(group.image)} alt={group.imageAlt} /><div><span className="drawer-eyebrow">GỢI Ý TỪ SKINID</span><p>{group.previewTitle}</p><span className="drawer-editorial-cta">{group.previewLabel} →</span></div></a></>}
           </nav>
         </div>
       </div>

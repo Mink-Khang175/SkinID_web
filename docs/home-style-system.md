@@ -18,7 +18,15 @@ SkinID là một không gian chăm sóc da sáng, mềm và có nhịp thở:
 Chỉ tham chiếu homepage từ:
 
 - `src/styles/soft-storefront.css` — token thương hiệu, header, catalog và storefront primitives;
+- `src/styles/typography.css` — token và quy tắc font dùng chung toàn dự án;
+- `src/styles/home-scenes.css` — hệ section vừa viewport, neo menu và compact mode theo chiều cao;
+- `src/styles/editorial-titles.css` — ngữ pháp tiêu đề/kicker và các thẻ giá trị ACIE dùng chung;
+- `src/styles/acie-editorial.css` — triển khai ngôn ngữ homepage cho landing page ACIE;
+- `src/styles/responsive-layout.css` — container, gutter và hợp đồng responsive dùng chung toàn dự án;
+- `src/styles/ambient-canvas.css` — nền liên tục cấp trang và ambient glow nối các section;
 - `src/styles/home-refresh.css` — hero, section, floating surface và animation;
+- `src/styles/scroll-reveal.css` — entrance storytelling và trạng thái tĩnh an toàn;
+- `src/hooks/useMotionAwareVisibility.js` và `src/hooks/useScrollReveal.js` — kích hoạt animation có fallback;
 - `src/pages/HomePage.jsx` và `src/components/home/`.
 
 Không copy style từ:
@@ -38,10 +46,11 @@ Nếu một màn hình cũ chưa giống homepage, refactor về hệ thống n�
   --skinid-blush: #FFF2F4;
   --skinid-petal: #FFD6DE;
   --skinid-soft-bg: #FFFAFB;
-  --skinid-dark: #282326;
+  --skinid-dark: #2D1F23;
   --skinid-light: #FFF8F9;
-  --skinid-muted: #6F686B;
-  --skinid-border: #F0ECEE;
+  --ink: #282326;
+  --muted: #6F686B;
+  --line: var(--skinid-primary);
   --skinid-rose-dark: #BD3F5B;
   --skinid-cta-start: #FF7893;
   --skinid-cta-mid: #F25576;
@@ -63,27 +72,40 @@ Không dùng đen tuyệt đối cho typography hoặc nhiều accent cạnh tra
 ## 4. Typography
 
 ```css
+:root {
+  --skinid-font-heading: "Outfit", "Segoe UI", Arial, sans-serif;
+  --skinid-font-body: "Manrope", "Segoe UI", Arial, sans-serif;
+}
+
 body {
   color: var(--skinid-dark);
-  font-family: "Be Vietnam Pro", -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, sans-serif;
+  font-family: var(--skinid-font-body);
   -webkit-font-smoothing: antialiased;
 }
 ```
 
-| Vai trò | Kích thước | Đặc tính |
-| --- | ---: | --- |
-| Hero heading | `clamp(2.8rem, 6vw, 6.5rem)` | weight 800, line-height `.98–1.04`, tracking âm |
-| Section heading | `clamp(2rem, 4vw, 4rem)` | weight 800, tối đa 2 dòng |
-| Card heading | `1rem–1.35rem` | weight 700–800 |
-| Body | `.9rem–1rem` | line-height `1.65–1.8`, muted |
-| Kicker | `.62rem–.75rem` | uppercase, letter-spacing `.12–.16em` |
+- **Outfit** chỉ dùng cho heading, kicker, nhãn ngắn và CTA để tạo nét tròn, mềm, hiện đại.
+- **Manrope** dùng cho nội dung dài, navigation, form, metadata và control để giữ tiếng Việt rõ ràng.
+- Trang/component mới phải dùng hai token trên; không khai báo trực tiếp một font riêng trong page CSS.
+- Chỉ dùng serif cho wordmark/logo có chủ đích, không dùng làm typography nội dung.
+
+| Vai trò | Font | Kích thước | Đặc tính |
+| --- | --- | ---: | --- |
+| Hero heading | `var(--skinid-font-heading)` | `clamp(2.8rem, 4.8vw, 4.9rem)` | weight 800, line-height `.98–1.04`, tracking `-0.025em` |
+| Section heading | `var(--skinid-font-heading)` | `clamp(2.35rem, 4–4.6vw, 4.6rem)` | weight 800, tối đa 2 dòng, tracking `-0.025em` |
+| Card heading | `var(--skinid-font-heading)` | `1rem–1.35rem` | weight 700–800 |
+| Action Button | `var(--skinid-font-heading)` | `.88rem–1rem` | weight 700, pill button |
+| Body | `var(--skinid-font-body)` | `.9rem–1rem` | line-height `1.65–1.8`, muted |
+| Kicker | `var(--skinid-font-heading)` | `.62rem–.75rem` | uppercase, letter-spacing `.12–.16em`, weight 700 |
 
 ## 5. Layout và floating surface
 
 ```css
-.skinid-container {
-  width: min(calc(100% - 48px), 1240px);
+.container,
+.layout-container,
+[data-layout-container] {
+  width: var(--layout-container-width);
+  max-width: none;
   margin-inline: auto;
 }
 
@@ -103,8 +125,16 @@ body {
 
 Quy tắc:
 
-- desktop content width `1180–1240px`;
-- section có thể full-bleed, nội dung bên trong vẫn theo container;
+- mọi page shell dùng `.container`, `.layout-container` hoặc `data-layout-container`; không tự khai báo `max-width` cho toàn trang;
+- layout token nằm duy nhất tại `src/styles/responsive-layout.css`; trang mới tự kế thừa khả năng zoom và responsive;
+- desktop thông thường giữ content khoảng `1180–1240px`, sau đó mở rộng liên tục theo viewport khi màn hình lớn hoặc browser zoom-out;
+- section và hero có thể full-bleed; không khóa toàn bộ trang thành một khối `1240px` nhỏ giữa viewport rộng;
+- page có nhiều section dùng `.ambient-page-canvas`; section con ưu tiên nền trong suốt và đặt màu nhấn trong card/artwork;
+- section được điều hướng từ menu dùng `.home-anchor-scene`; không tự đặt `min-height`, `scroll-margin` hoặc padding viewport trong từng component;
+- khi cần tối ưu cho browser zoom, dùng media query theo **chiều cao viewport** trong `home-scenes.css`, không tạo rule riêng cho từng mức zoom;
+- không tạo một background độc lập cho mỗi section; ambient glow phải tan về trong suốt để không sinh đường cắt ngang;
+- zoom-in được phép reflow theo breakpoint để nội dung không tràn hoặc chồng lên nhau; không khóa desktop layout bằng pixel cố định;
+- nội dung dài vẫn dùng `max-width` cục bộ để giữ độ dài dòng dễ đọc;
 - grid editorial thường dùng `1.1fr/.9fr` hoặc `1.2fr/.8fr`;
 - radius chính `24–34px`, pill `999px`;
 - shadow mềm và rộng, không dùng shadow đen sắc;
@@ -143,6 +173,11 @@ Quy tắc:
 
 Không dùng nút vuông góc nhỏ kiểu admin/dashboard cho hành động chính.
 
+Với commerce surface, luôn phân cấp rõ hai hành động:
+
+- **Mua ngay**: CTA chính, gradient hồng, mở luồng thanh toán;
+- **Thêm giỏ**: CTA phụ nền blush/outline, chỉ thêm sản phẩm và giữ người dùng ở ngữ cảnh hiện tại.
+
 ## 7. Background và decorative language
 
 ```css
@@ -162,6 +197,14 @@ Không dùng nút vuông góc nhỏ kiểu admin/dashboard cho hành động ch�
 ```
 
 Orbit, glow và gradient chỉ làm nền; không đặt chúng lên chữ hoặc làm giảm contrast.
+
+### Tiêu đề editorial
+
+- Dùng chung cấu trúc `.skinid-editorial-kicker` + `.skinid-editorial-title` để tạo nhịp nhận diện nhất quán.
+- Phần chữ nhấn dùng `em` hoặc `.highlight-pink`: màu hồng và highlight mỏng ở chân chữ, không dùng khối màu phủ kín.
+- Mỗi section chỉ được có **một** motif phụ nhỏ sau tiêu đề (orbit, chấm nhịp, đường đôi hoặc halo); motif không được nằm đè lên chữ.
+- Không ép xuống dòng bằng `<br>` chỉ để trang trí. Để `text-wrap: balance` và kích thước responsive quyết định cách xuống dòng.
+- Decoration phải bị ẩn ở mobile nếu làm giảm không gian đọc; nội dung và thứ bậc typography vẫn phải đầy đủ khi không có decoration.
 
 ## 8. Animation
 
@@ -189,21 +232,27 @@ Orbit, glow và gradient chỉ làm nền; không đặt chúng lên chữ hoặ
 
 ```css
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: .01ms !important;
-    transition-duration: .01ms !important;
-    scroll-behavior: auto !important;
+  [data-reveal],
+  .skinid-enter {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
   }
 }
 ```
 
+Reduced-motion không được chỉ rút thời lượng animation: mọi element đang chờ reveal phải được đưa thẳng về trạng thái cuối để không biến mất khi trình duyệt vô hiệu chuyển động.
+
 ## 9. Responsive contract
 
-- `≥ 1100px`: editorial grid, hero image lớn, card grid 3–4 cột;
-- `761–1099px`: giảm gap, card grid 2 cột;
+- `≥ 1180px`: editorial grid đầy đủ, hero image lớn, card grid 3–4 cột;
+- `761–1179px`: giữ cấu trúc và thứ tự desktop, chỉ giảm gap, padding, typography và kích thước art;
 - `≤ 760px`: một cột, CTA có thể full-width, tabs chuyển grid 2 cột;
 - không ẩn nội dung quan trọng ở breakpoint;
 - mobile giữ radius lớn nhưng giảm về `24–28px`.
+- kiểm tra cả viewport rộng tương đương zoom-out (`1600–3072px`) để container không co thành một khối nhỏ ở giữa.
 
 ## 10. Accessibility và content tone
 
@@ -223,5 +272,5 @@ Orbit, glow và gradient chỉ làm nền; không đặt chúng lên chữ hoặ
 - [ ] Có responsive desktop/tablet/mobile.
 - [ ] Có entrance animation và reduced-motion fallback.
 - [ ] Không copy style từ `profile.css` hoặc `scan-refresh.css`.
-- [ ] Kiểm tra trực tiếp ở 1440px và 390px.
+- [ ] Kiểm tra trực tiếp ở 1440px, 960px, 390px và viewport zoom-out tối thiểu 1600px.
 

@@ -89,7 +89,7 @@ function createProductCard(p, options = {}) {
         let promoBadge = '';
         if (p.originalPrice && p.originalPrice > p.price) {
             const discount = Math.round((1 - p.price / p.originalPrice) * 100);
-            promoBadge = `<span class="product-badge product-badge--sale">Giảm ${discount}%</span>`;
+            promoBadge = `<span class="product-card__discount">−${discount}%</span>`;
         }
 
         const displayName = productDisplayName(p);
@@ -102,11 +102,10 @@ function createProductCard(p, options = {}) {
         };
 
         card.innerHTML = `
-            <div class="product-badges">
+            <div class="product-card__badge-layer">
+                ${p.tier ? `<span class="product-card__tier-label">${p.tier}</span>` : ''}
                 ${promoBadge}
             </div>
-            ${p.tier ? `<span class="product-badge product-badge--tier">${p.tier}</span>` : ''}
-            
             <div class="product-card__media">
                 <img src="${imgSrc}" alt="${p.name}" loading="lazy"
                      class="w-full h-full object-contain mix-blend-multiply transition-transform duration-300 ease-in-out"
@@ -130,9 +129,14 @@ function createProductCard(p, options = {}) {
                             ${p.volume ? `<span class="product-card__volume">${p.volume}</span>` : ''}
                         </div>
                     </div>
-                    <button data-cart-product-id="${p.id}" class="product-card__cart-button" aria-label="Thêm ${displayName} vào giỏ" title="Thêm vào giỏ">
-                        <i data-feather="shopping-bag"></i><span>Thêm vào giỏ</span>
-                    </button>
+                    <div class="product-card__actions">
+                        <button data-cart-product-id="${p.id}" class="product-card__cart-button" aria-label="Thêm ${displayName} vào giỏ" title="Thêm vào giỏ">
+                            <i data-feather="shopping-bag"></i><span>Thêm vào giỏ</span>
+                        </button>
+                        <button data-buy-product-id="${p.id}" class="product-card__buy-button" aria-label="Mua ngay ${displayName}" title="Mua ngay">
+                            <span>Mua ngay</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         `;
@@ -141,6 +145,11 @@ function createProductCard(p, options = {}) {
             event.stopPropagation();
             document.dispatchEvent(new CustomEvent('skinid:cart-add', { detail: { productId: p.id, quantity: 1 } }));
             if (typeof showToast === 'function') showToast('Đã thêm sản phẩm vào giỏ hàng!');
+        };
+        const buyButton = card.querySelector('[data-buy-product-id]');
+        if (buyButton) buyButton.onclick = event => {
+            event.stopPropagation();
+            document.dispatchEvent(new CustomEvent('skinid:buy-now', { detail: { productId: p.id, quantity: 1 } }));
         };
 
         const detailLink = document.createElement('button');
@@ -152,9 +161,9 @@ function createProductCard(p, options = {}) {
 
         if (options.variant === 'horizontal') {
             card.classList.add('product-card--horizontal');
-            card.querySelector('.product-badges').remove();
+            card.querySelector('.product-card__badge-layer').remove();
             card.querySelector('.product-badge--tier')?.remove();
-            card.querySelector('.product-card__cart-button').remove();
+            card.querySelector('.product-card__actions').remove();
             const content = card.querySelector('.product-card__content');
             const step = document.createElement('div');
             step.className = 'product-card__step';

@@ -1,50 +1,31 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { assetUrl } from '../../assets/index.js';
+import useMotionAwareVisibility from '../../hooks/useMotionAwareVisibility.js';
 import { openConsultationDialog } from '../../shared/events/storefrontDialogs.js';
+import AcieFeatureGrid from '../acie/AcieFeatureGrid.jsx';
 
 export default function AcieTeaser() {
   const sectionRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  // IntersectionObserver kích hoạt hiệu ứng xuất hiện tuần tự khi cuộn tới
-  useEffect(() => {
-    const node = sectionRef.current;
-    if (!node) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.18 }
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
+  const isVisible = useMotionAwareVisibility(sectionRef, { threshold: 0.18 });
 
   return (
     <section
       id="acie-teaser"
       ref={sectionRef}
-      className={`section acie-home borderless-acie-section ${isVisible ? 'is-visible' : ''}`}
+      className={`section home-anchor-scene acie-home borderless-acie-section ${isVisible ? 'is-visible' : ''}`}
     >
       <div className="container acie-home-grid acie-home-panel">
         <span className="acie-panel-orb acie-panel-orb--one" aria-hidden="true"></span>
         <span className="acie-panel-orb acie-panel-orb--two" aria-hidden="true"></span>
         <div className="acie-home-copy">
           {/* Bước 1: Cụm chữ nhỏ mờ dần hiện lên (Fade-in) */}
-          <span className="section-kicker acie-anim-item acie-anim-tagline">
+          <span className="section-kicker skinid-editorial-kicker acie-anim-item acie-anim-tagline">
             SKINID • ACIE • SẮP RA MẮT
           </span>
 
           {/* Bước 2: Tiêu đề lớn từ từ trượt từ dưới lên 15px và rõ dần */}
-          <h2 className="acie-anim-item acie-anim-heading">
-            Một người bạn nhỏ.<br /><em>Thấu hiểu làn da.</em>
+          <h2 className="skinid-editorial-title skinid-editorial-title--acie acie-anim-item acie-anim-heading">
+            Một người bạn nhỏ. <em>Thấu hiểu làn da.</em>
           </h2>
 
           {/* Bước 3: Đoạn văn bản mô tả tiếp tục trượt lên */}
@@ -69,11 +50,7 @@ export default function AcieTeaser() {
               <span>Đăng ký tại Store</span>
             </button>
           </div>
-          <div className="acie-mini-signals acie-anim-item acie-anim-actions" aria-label="Điểm nổi bật của ACIE">
-            <span><i></i> Vi điểm AI</span>
-            <span><i></i> Routine cá nhân</span>
-            <span><i></i> Theo dõi mỗi ngày</span>
-          </div>
+          <AcieFeatureGrid className="acie-anim-item acie-anim-actions" />
         </div>
 
         {/* Bước 4: Thiết bị ACIE lơ lửng & Aura phát sáng bừng lên chậm hơn 0.2s */}

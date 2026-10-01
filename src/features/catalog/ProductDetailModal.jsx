@@ -8,10 +8,6 @@ function CloseIcon() {
   return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m6 6 12 12M18 6 6 18" /></svg>;
 }
 
-function ShoppingBagIcon() {
-  return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 8h12l1 12H5L6 8Z" /><path d="M9 9V6a3 3 0 0 1 6 0v3" /></svg>;
-}
-
 function formatActive(raw) {
   if (!raw || typeof raw !== 'string') return { title: 'Hoạt chất', desc: '' };
   const idx = raw.indexOf(':');
@@ -56,7 +52,7 @@ function Certification({ product }) {
 }
 
 export default function ProductDetailModal() {
-  const { addToCart } = useCart();
+  const { addToCart, openCheckout } = useCart();
   const [product, setProduct] = useState(null);
   const [open, setOpen] = useState(false);
   const [fallbackImage, setFallbackImage] = useState(false);
@@ -102,6 +98,17 @@ export default function ProductDetailModal() {
   const uses = typeof rawUses === 'string' ? rawUses.replace(/[_─—–-]{3,}[\s\S]*/g, '').trim() || rawUses : rawUses;
   const image = fallbackImage ? product.originalImageUrl : assetUrl(product.image, product.brandSlug);
   const volume = product.volume ? product.volume.trim() : 'Tiêu chuẩn';
+
+  const handleAddToCart = async () => {
+    await addToCart(product.id);
+    closeModal();
+  };
+
+  const handleBuyNow = async () => {
+    await addToCart(product.id);
+    closeModal();
+    await openCheckout();
+  };
 
   return (
     <div id="product-detail-modal" role="dialog" aria-modal="true" aria-labelledby="pmodal-title" className={`flex ${open ? 'opacity-100' : 'opacity-0'}`} onClick={event => { if (event.target === event.currentTarget) closeModal(); }}>
@@ -157,8 +164,8 @@ export default function ProductDetailModal() {
         </div>
 
         <div className="pmodal-actions">
-          <button className="btn btn--outline" type="button" onClick={closeModal}>Tiếp tục xem</button>
-          <button className="btn btn--primary" type="button" onClick={() => { addToCart(product.id); closeModal(); }}><ShoppingBagIcon /> Thêm vào giỏ</button>
+          <button className="btn btn--primary pmodal-buy-now" type="button" onClick={handleBuyNow}>Mua ngay</button>
+          <button className="btn btn--outline pmodal-add-cart" type="button" onClick={handleAddToCart}>Thêm vào giỏ</button>
         </div>
       </div>
     </div>

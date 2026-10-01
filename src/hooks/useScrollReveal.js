@@ -5,19 +5,15 @@ export default function useScrollReveal(rootRef) {
     const root = rootRef?.current;
     if (!root) return undefined;
 
-    const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    const motionPreference = window.matchMedia?.('(prefers-reduced-motion: reduce)');
     const revealImmediately = (element) => element.classList.add('is-revealed');
+    const revealAll = () => root.querySelectorAll('[data-reveal]').forEach(revealImmediately);
 
-    if (reduceMotion || typeof IntersectionObserver === 'undefined') {
-      root.querySelectorAll('[data-reveal]').forEach(revealImmediately);
-      return undefined;
-    }
-
-    const observer = new IntersectionObserver((entries) => {
+    const observer = typeof IntersectionObserver === 'undefined' ? null : new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
         entry.target.classList.add('is-revealed');
-        observer.unobserve(entry.target);
+        observer?.unobserve(entry.target);
       });
     }, {
       threshold: 0.12,
@@ -29,6 +25,10 @@ export default function useScrollReveal(rootRef) {
       element.dataset.revealBound = 'true';
       const delay = Number(element.dataset.revealDelay || 0);
       element.style.setProperty('--reveal-delay', `${Math.max(0, delay)}ms`);
+      if (motionPreference?.matches || !observer) {
+        revealImmediately(element);
+        return;
+      }
       observer.observe(element);
     };
 
@@ -43,9 +43,17 @@ export default function useScrollReveal(rootRef) {
     });
     mutationObserver.observe(root, { childList: true, subtree: true });
 
+    const handleMotionPreference = (event) => {
+      if (!event.matches) return;
+      revealAll();
+      observer?.disconnect();
+    };
+    motionPreference?.addEventListener?.('change', handleMotionPreference);
+
     return () => {
-      observer.disconnect();
+      observer?.disconnect();
       mutationObserver.disconnect();
+      motionPreference?.removeEventListener?.('change', handleMotionPreference);
     };
   }, [rootRef]);
 }

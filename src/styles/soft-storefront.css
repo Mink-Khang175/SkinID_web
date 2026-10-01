@@ -20,12 +20,14 @@
   --cta-rose-mid: #f25576;
   --cta-rose-end: #dc3e63;
   --cta-rose-shadow: rgba(224, 62, 98, 0.3);
+  --skinid-font-heading: "Outfit", "Segoe UI", Arial, sans-serif;
+  --skinid-font-body: "Manrope", "Segoe UI", Arial, sans-serif;
 }
 
 body {
   background: #ffffff;
   color: var(--ink);
-  font-family: "Be Vietnam Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--skinid-font-body);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -43,6 +45,33 @@ body {
   color: #E06D81;
   margin: 0 10px;
 }
+
+/* Homepage keeps its first viewport clean. The offer bar behaves like a hidden
+   ribbon and appears only after a deliberate extra upward gesture at page top. */
+.offer-bar--scroll {
+  position: fixed;
+  z-index: 96;
+  inset: 0 0 auto;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-100%);
+  transition: opacity .3s ease, transform .42s cubic-bezier(.16, 1, .3, 1), visibility 0s linear .42s;
+}
+
+.offer-bar--scroll.is-visible {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition-delay: 0s;
+}
+
+.offer-bar--scroll + .skinid-header {
+  transition: top .42s cubic-bezier(.16, 1, .3, 1);
+}
+
+.offer-bar--scroll.is-visible + .skinid-header { top: 34px; }
 
 /* 2. Site Header: Clinical Pure White with Hairline Border */
 .skinid-header {
@@ -219,7 +248,7 @@ body {
 }
 .mega-col-header h4 {
   margin: 4px 0 0;
-  font-family: "Plus Jakarta Sans", sans-serif;
+  font-family: var(--skinid-font-heading);
   font-size: 1rem;
   font-weight: 700;
   color: #181517;
@@ -415,7 +444,7 @@ body {
 .acie-page h1,
 .acie-page h2,
 .catalog-intro h1 {
-  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", -apple-system, sans-serif;
+  font-family: var(--skinid-font-heading);
   font-weight: 700;
   letter-spacing: -0.025em;
   line-height: 1.25;
@@ -441,11 +470,11 @@ body {
 
 .hero-slide-copy h1,
 .hero-slide-copy h2 {
-  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+  font-family: var(--skinid-font-heading);
   font-weight: 800;
   font-size: clamp(2.4rem, 4.2vw, 3.4rem);
   line-height: 1.15;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.025em;
   color: #282326;
 }
 .hero-slide-copy p {
@@ -584,7 +613,7 @@ body {
 
 /* 2. Tiêu đề chính to, hiện đại */
 .hero-showcase-heading {
-  font-family: "Plus Jakarta Sans", sans-serif;
+  font-family: var(--skinid-font-heading);
   font-size: clamp(2.2rem, 3.8vw, 3.2rem);
   font-weight: 800;
   line-height: 1.15;
@@ -1067,7 +1096,7 @@ body {
   mix-blend-mode: multiply !important;
 }
 .pmodal-head h2 {
-  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+  font-family: var(--skinid-font-heading);
   margin: 6px 0 10px;
   padding-right: 44px;
   font-size: 1.35rem;
@@ -1223,7 +1252,7 @@ body {
 }
 
 .advisor-heading {
-  font-family: "Plus Jakarta Sans", sans-serif;
+  font-family: var(--skinid-font-heading);
   font-size: clamp(2.2rem, 3.8vw, 3.2rem);
   font-weight: 800;
   line-height: 1.18;
@@ -1624,7 +1653,7 @@ body {
   align-items: center;
 }
 .acie-home-copy h2 {
-  font-family: "Plus Jakarta Sans", sans-serif;
+  font-family: var(--skinid-font-heading);
   font-size: clamp(2.2rem, 3.4vw, 2.8rem);
   font-weight: 800;
   line-height: 1.2;
@@ -2322,7 +2351,6 @@ select:focus-visible {
   .btn-xem-chi-tiet,
   .btn-xem-phac-do,
   .help-btn--primary,
-  .product-card__cart-button,
   #pmodal-add-cart-btn
 ) {
   position: relative;
@@ -2346,7 +2374,6 @@ select:focus-visible {
   .btn-xem-chi-tiet,
   .btn-xem-phac-do,
   .help-btn--primary,
-  .product-card__cart-button,
   #pmodal-add-cart-btn
 )::after {
   position: absolute;
@@ -2371,7 +2398,6 @@ select:focus-visible {
   .btn-xem-chi-tiet,
   .btn-xem-phac-do,
   .help-btn--primary,
-  .product-card__cart-button,
   #pmodal-add-cart-btn
 ):hover:not(:disabled) {
   filter: saturate(1.08) brightness(1.035);
@@ -2390,7 +2416,6 @@ select:focus-visible {
   .btn-xem-chi-tiet,
   .btn-xem-phac-do,
   .help-btn--primary,
-  .product-card__cart-button,
   #pmodal-add-cart-btn
 ):hover:not(:disabled)::after {
   opacity: 1;
@@ -2405,7 +2430,6 @@ select:focus-visible {
   .btn-xem-chi-tiet,
   .btn-xem-phac-do,
   .help-btn--primary,
-  .product-card__cart-button,
   #pmodal-add-cart-btn
 ):active:not(:disabled) {
   filter: saturate(1.02);
@@ -2421,7 +2445,6 @@ select:focus-visible {
   .btn-xem-chi-tiet,
   .btn-xem-phac-do,
   .help-btn--primary,
-  .product-card__cart-button,
   #pmodal-add-cart-btn
 ):focus-visible {
   outline: 0 !important;
@@ -2436,8 +2459,8 @@ select:focus-visible {
   transform: none !important;
 }
 @media (prefers-reduced-motion: reduce) {
-  :is(.btn--primary,.btn--ai-primary,.scan-primary-button,.profile-btn--primary,.acie-teaser-btn,.btn-xem-chi-tiet,.btn-xem-phac-do,.help-btn--primary,.product-card__cart-button,#pmodal-add-cart-btn),
-  :is(.btn--primary,.btn--ai-primary,.scan-primary-button,.profile-btn--primary,.acie-teaser-btn,.btn-xem-chi-tiet,.btn-xem-phac-do,.help-btn--primary,.product-card__cart-button,#pmodal-add-cart-btn)::after { transition:none !important; }
+  :is(.btn--primary,.btn--ai-primary,.scan-primary-button,.profile-btn--primary,.acie-teaser-btn,.btn-xem-chi-tiet,.btn-xem-phac-do,.help-btn--primary,#pmodal-add-cart-btn),
+  :is(.btn--primary,.btn--ai-primary,.scan-primary-button,.profile-btn--primary,.acie-teaser-btn,.btn-xem-chi-tiet,.btn-xem-phac-do,.help-btn--primary,#pmodal-add-cart-btn)::after { transition:none !important; }
 }
 
 /* 11. BrandBar Tabs (Synchronized with Hero Carousel) */
@@ -2554,4 +2577,260 @@ select:focus-visible {
   .brand-tab img { height: 18px; max-width: 58px; }
   .brand-tab b { font-size: 0.62rem; }
   .brand-tab small { font-size: 0.58rem; }
+}
+
+/* Keep merchandising signals in the image's quiet corners without adding a rail. */
+.product-card {
+  position: relative;
+}
+
+.product-card__badge-layer {
+  position: absolute;
+  z-index: 8;
+  top: 11px;
+  right: 11px;
+  left: 11px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.product-card__tier-label,
+.product-card__featured-label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 23px;
+  min-width: 0;
+  padding: 5px 9px;
+  border: 1px solid rgba(93, 75, 82, .09);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .88);
+  box-shadow: 0 5px 16px rgba(79, 48, 57, .06);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  font-size: .58rem;
+  font-weight: 750;
+  line-height: 1;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.product-card__tier-label {
+  color: #746a6e;
+}
+
+.product-card__featured-label {
+  gap: 7px;
+  border-color: rgba(201, 69, 98, .13);
+  background: rgba(255, 247, 249, .92);
+  color: #a93651;
+  font-weight: 850;
+}
+
+.product-card__featured-label::before {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #dd526f;
+  box-shadow: 0 0 0 3px rgba(221,82,111,.12);
+  content: "";
+}
+
+.product-card__discount {
+  flex: none;
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 22px;
+  padding: 4px 8px;
+  border: 1px solid rgba(201,69,98,.13);
+  border-radius: 999px;
+  background: rgba(255, 247, 249, .92);
+  box-shadow: 0 5px 16px rgba(79, 48, 57, .06);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: #b53d58;
+  font-size: .58rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: .01em;
+}
+
+.product-card__actions {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 3fr);
+  gap: 0;
+  margin: 0 -15px -14px;
+  border-top: 1px solid #eee7e9;
+  background: #fff;
+}
+
+.product-card__buy-button,
+.product-card__cart-button {
+  min-width: 0;
+  width: 100% !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px !important;
+  padding-inline: 12px !important;
+  border-radius: 0 !important;
+  font: inherit;
+  letter-spacing: .01em;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: transform .28s cubic-bezier(.16,1,.3,1), box-shadow .28s ease, background .25s ease, border-color .25s ease !important;
+}
+
+.product-card__buy-button {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 0 !important;
+  background: linear-gradient(110deg, #ea6680 0%, #df506f 55%, #cf3f61 100%) !important;
+  color: #fff !important;
+  font-size: .76rem !important;
+  font-weight: 800 !important;
+  box-shadow: 0 10px 22px rgba(196,55,88,.22) !important;
+}
+
+.product-card__cart-button,
+.products-page .product-card__cart-button,
+.product-card:hover .product-card__cart-button {
+  min-height: 48px !important;
+  border: 0 !important;
+  border-right: 1px solid rgba(190,88,111,.2) !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: #9f3f57 !important;
+  font-size: .7rem !important;
+  font-weight: 750 !important;
+  gap: 8px !important;
+  box-shadow: none !important;
+}
+
+.product-card__cart-button svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+
+.product-card__cart-button *,
+.products-page .product-card__cart-button *,
+.product-card:hover .product-card__cart-button * {
+  color: #bd3f5b !important;
+  stroke: #bd3f5b !important;
+}
+
+.product-card__cart-button::after { display: none !important; }
+
+.product-card__cart-button:hover,
+.products-page .product-card__cart-button:hover {
+  border-color: rgba(190,88,111,.5) !important;
+  background: #fff7f9 !important;
+  color: #91354d !important;
+  transform: translateY(-1px) !important;
+}
+
+.pmodal-actions {
+  width: auto;
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(142px, 178px) minmax(132px, 164px);
+  gap: 8px;
+  justify-content: end;
+  padding: 11px 24px 12px;
+  background: #fff !important;
+}
+
+.pmodal-actions :is(.pmodal-buy-now, .pmodal-add-cart) {
+  width: 100%;
+  min-height: 42px;
+  border-radius: 10px !important;
+  font-size: .74rem;
+  letter-spacing: .01em;
+  justify-content: center;
+}
+
+.pmodal-actions .pmodal-buy-now {
+  background: linear-gradient(110deg, #ea6680 0%, #df506f 55%, #cf3f61 100%) !important;
+  box-shadow: 0 12px 26px rgba(196,55,88,.24) !important;
+}
+
+.pmodal-actions .pmodal-add-cart {
+  border-color: rgba(190,88,111,.3) !important;
+  background: #fff !important;
+  color: #9f3f57 !important;
+  box-shadow: none !important;
+}
+
+/* Product-card and product-detail purchase CTAs share one interaction language. */
+.product-card__buy-button::after {
+  position: absolute;
+  z-index: 1;
+  top: -55%;
+  bottom: -55%;
+  left: -45%;
+  width: 34%;
+  pointer-events: none;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.42), transparent);
+  content: "";
+  opacity: 0;
+  transform: translateX(-120%) skewX(-18deg);
+  transition: transform 520ms cubic-bezier(.2,.7,.25,1), opacity 180ms ease;
+}
+
+.product-card__buy-button > span { position: relative; z-index: 2; }
+
+.product-card__buy-button:hover:not(:disabled),
+.pmodal-actions .pmodal-buy-now:hover:not(:disabled) {
+  background: linear-gradient(135deg, #e85d75, #d44c64) !important;
+  filter: saturate(1.08) brightness(1.035);
+  transform: translateY(-2px) scale(1.01) !important;
+  box-shadow: 0 14px 30px rgba(224,62,98,.36), 0 4px 10px rgba(116,30,52,.1), inset 0 1px 0 rgba(255,255,255,.58) !important;
+}
+
+.product-card__buy-button:hover:not(:disabled)::after {
+  opacity: 1;
+  transform: translateX(470%) skewX(-18deg);
+}
+
+.catalog-reset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+
+.catalog-reset svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  transition: transform .35s cubic-bezier(.16,1,.3,1);
+}
+
+.catalog-reset:hover svg { transform: rotate(-45deg); }
+
+@media (max-width: 760px) {
+  .product-card__actions { grid-template-columns: minmax(0, 7fr) minmax(0, 3fr); }
+  .product-card__buy-button,
+  .product-card__cart-button { min-height: 44px !important; padding-inline: 8px !important; }
+}
+
+@media (max-width: 600px) {
+  .product-card__actions { margin: 0 -11px -12px; }
+}
+
+@media (max-width: 430px) {
+  .product-card__actions { margin: 0 -12px -12px; }
+  .product-card__badge-layer { top: 9px; right: 9px; left: 9px; }
+  .product-card__featured-label,
+  .product-card__tier-label,
+  .product-card__discount { font-size: .53rem; }
+  .pmodal-actions { grid-template-columns: 1fr 1fr; padding-inline: 16px; }
+  .pmodal-actions :is(.pmodal-buy-now, .pmodal-add-cart) { width: 100%; }
 }

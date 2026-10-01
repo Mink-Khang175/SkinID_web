@@ -67,19 +67,3 @@ export function changeUserPassword(currentPassword, newPassword) {
 
 export { exportUserPdfReport } from './profilePdfExport.js';
 
-export function exportUserData({ user, history, orders }) {
-  if (!user) throw new Error('Không có dữ liệu người dùng để xuất.');
-  const blob = new Blob([JSON.stringify({
-    profile: user,
-    scanHistory: history,
-    orders,
-    exportedAt: new Date().toISOString()
-  }, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement('a');
-  anchor.href = url;
-  anchor.download = 'skinid-profile.json';
-  anchor.click();
-  URL.revokeObjectURL(url);
-}
-

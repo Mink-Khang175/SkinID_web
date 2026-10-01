@@ -86,8 +86,11 @@
 @media (prefers-reduced-motion: reduce) {
   .scroll-reveal-root [data-reveal] {
     opacity: 1 !important;
+    visibility: visible !important;
     transform: none !important;
     transition: none !important;
+    animation: none !important;
+    will-change: auto !important;
   }
 
   .acie-motion-page .acie-device img { animation: none !important; }

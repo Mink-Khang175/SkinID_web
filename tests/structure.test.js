@@ -13,7 +13,9 @@ for (const file of htmlFiles) {
         assert(fs.existsSync(path.join(root, url)), file + ': missing reference ' + url);
     }
 }
-assert.match(read('index.html'), /<meta name="viewport" content="width=device-width, initial-scale=1\.0, maximum-scale=1\.0, user-scalable=no">/);
+const indexHtml = read('index.html');
+assert.match(indexHtml, /<meta name="viewport" content="width=device-width, initial-scale=1\.0, viewport-fit=cover">/);
+assert.doesNotMatch(indexHtml, /user-scalable=no|maximum-scale=1/);
 assert.match(read('index.html'), /<div id="root"><\/div>/);
 assert.match(read('index.html'), /<script type="module" src="\/src\/main\.jsx"><\/script>/);
 assert.match(read('src/main.jsx'), /import '\.\/styles\/site\.css'/);
@@ -119,7 +121,8 @@ const compliancePage = read('src/pages/CompliancePage.jsx');
 assert.doesNotMatch(compliancePage, /useLegacyApplication|window\.LOCAL_PRODUCTS|setInterval/);
 assert.match(compliancePage, /useCatalog/);
 const featuredProducts = read('src/components/home/FeaturedProducts.jsx');
-assert(featuredProducts.indexOf('const featuredProducts =') < featuredProducts.indexOf('featuredProducts.forEach'));
+assert(featuredProducts.indexOf('const productsByStep = useMemo') < featuredProducts.indexOf('activeStepProducts.forEach'));
+assert.match(featuredProducts, /activeStepProducts\.forEach/);
 assert.match(read('firestore.rules'), /match \/orders\/\{orderId\}/);
 assert.match(read('firestore.rules'), /match \/commerce\/\{documentId\}/);
 assert.match(read('firestore.rules'), /allow create: if false/);
