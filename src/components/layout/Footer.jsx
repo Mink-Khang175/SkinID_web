@@ -26,7 +26,7 @@ export default function Footer() {
         <button type="button" onClick={() => openPolicyDialog('shipping')}>Giao hàng & đổi trả</button>
         <button type="button" onClick={() => openPolicyDialog('privacy')}>Bảo mật dữ liệu</button>
         <button type="button" onClick={() => openPolicyDialog('terms')}>Điều khoản sử dụng</button>
-        <a href="https://zalo.me/0924093461">Liên hệ Zalo</a>
+        <a href="https://zalo.me/0924093461" target="_blank" rel="noopener noreferrer">Liên hệ Zalo</a>
       </div>
       <div>
         <h3>CÔNG TY TNHH FIELDMAN</h3>
