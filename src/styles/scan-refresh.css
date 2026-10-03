@@ -75,6 +75,36 @@
   color: var(--skinid-dark);
 }
 
+.scan-page-body .scan-page-welcome__copy .scan-welcome-title {
+  width: fit-content;
+  max-width: 100%;
+  font-size: clamp(2rem, 4.6vw, 4.8rem);
+  line-height: 1.1;
+}
+
+.scan-welcome-title__line {
+  display: block;
+  width: fit-content;
+  white-space: nowrap;
+}
+
+.scan-welcome-title__accent {
+  position: relative;
+  isolation: isolate;
+  color: var(--skinid-primary);
+}
+
+.scan-welcome-title__accent::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: auto -.02em .04em;
+  height: .16em;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(224, 109, 129, .24), rgba(224, 109, 129, .07));
+  transform: rotate(-1.5deg);
+}
+
 .scan-page-body .scan-page-welcome__copy > p {
   max-width: 620px;
   color: var(--skinid-muted);
@@ -885,6 +915,9 @@
   }
   .scan-page-body .scan-page-welcome__copy h1 {
     font-size: clamp(2.55rem, 12vw, 3.7rem);
+  }
+  .scan-page-body .scan-page-welcome__copy .scan-welcome-title {
+    font-size: clamp(2rem, 9.5vw, 3.7rem);
   }
   .scan-page-body .scan-page-guide span:nth-child(2) {
     margin-left: 0;

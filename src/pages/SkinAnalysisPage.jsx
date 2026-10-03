@@ -74,7 +74,7 @@ export default function SkinAnalysisPage() {
             <div className="scan-page-welcome__copy">
               <a className="scan-page-back" href="/"><i data-feather="arrow-left"></i> Quay lại mua sắm</a>
               <span className="section-kicker">TIỆN ÍCH HỖ TRỢ CHỌN SẢN PHẨM</span>
-              <h1>Soi da theo ba góc chụp</h1>
+              <h1 className="scan-welcome-title"><span className="scan-welcome-title__line">Soi da theo</span>{' '}<span className="scan-welcome-title__line scan-welcome-title__accent">ba góc chụp</span></h1>
               <p>Chụp chính diện và hai góc nghiêng để nhận báo cáo tình trạng da cùng routine tham khảo. Bạn cũng có thể tải ảnh có sẵn nếu thiết bị không cấp quyền camera.</p>
               <div className="scan-page-actions">
                 <button className="btn btn--primary" type="button" onClick={beginScan} disabled={!legacyReady}><i data-feather="camera"></i> {legacyReady ? 'Bắt đầu soi da' : 'Đang khởi tạo…'}</button>

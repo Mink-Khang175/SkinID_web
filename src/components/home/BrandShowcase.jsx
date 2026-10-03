@@ -25,7 +25,7 @@ export default function BrandShowcase() {
         </span>
         <span className="brand-card-copy">
           <small>DƯỢC MỸ PHẨM TỪ Ý</small>
-          <span className="brand-card-wordmark brand-card-wordmark--rilastil" aria-label="Rilastil">RILASTIL</span>
+          <span className="brand-card-mark"><span className="brand-card-wordmark brand-card-wordmark--rilastil" aria-label="Rilastil">RILASTIL</span></span>
           <p>Chăm sóc da chuyên sâu, từ làm sạch đến chống nắng.</p>
           <b>Khám phá bộ sưu tập <i data-feather="arrow-right"></i></b>
         </span>
@@ -37,7 +37,7 @@ export default function BrandShowcase() {
         </span>
         <span className="brand-card-copy">
           <small>CHĂM SÓC CƠ THỂ</small>
-          <img className="brand-card-logo brand-card-logo--twon" src={assetUrl('/images/brands/twon.png')} alt="TWON" loading="lazy" />
+          <span className="brand-card-mark"><img className="brand-card-logo brand-card-logo--twon" src={assetUrl('/images/brands/twon.png')} alt="TWON" loading="lazy" /></span>
           <p>Chăm sóc cơ thể mềm mịn cùng trải nghiệm hương thơm dễ chịu.</p>
           <b>Khám phá bộ sưu tập <i data-feather="arrow-right"></i></b>
         </span>
@@ -49,7 +49,7 @@ export default function BrandShowcase() {
         </span>
         <span className="brand-card-copy">
           <small>NƯỚC HOA CÁ NHÂN</small>
-          <img className="brand-card-logo brand-card-logo--dvah" src={assetUrl('/images/brands/dvah.png')} alt="D'VAH" loading="lazy" />
+          <span className="brand-card-mark"><img className="brand-card-logo brand-card-logo--dvah" src={assetUrl('/images/brands/dvah.png')} alt="D'VAH" loading="lazy" /></span>
           <p>Nước hoa nhỏ gọn, dễ mang theo và dễ chọn theo cá tính.</p>
           <b>Khám phá bộ sưu tập <i data-feather="arrow-right"></i></b>
         </span>
