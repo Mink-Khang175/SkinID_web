@@ -149,10 +149,10 @@ body,
 }
 
 .home-refresh .brand-cards .brand-card .brand-card-wordmark {
-  color: var(--skinid-dark);
+  color: #17225b;
 }
 
-.home-refresh .brand-card-mark .brand-card-logo {
+.home-refresh .brand-card-mark .brand-card-logo--dvah {
   filter: brightness(0);
   opacity: .88;
 }
