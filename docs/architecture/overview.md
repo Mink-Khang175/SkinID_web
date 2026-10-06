@@ -35,8 +35,11 @@ quyền quản trị hoặc trạng thái thanh toán.
 Routing và app providers đã nằm trong `src/app`. Các route được code-split. Route
 `/products` là route React thuần trong `src/features/catalog`: URL là nguồn state cho
 tìm kiếm/bộ lọc/sắp xếp, card và modal không sửa DOM thủ công. Catalog repository đọc
-Firestore bằng npm SDK và dynamic-import fixture đầy đủ khi cần fallback, nên dữ liệu
-55 sản phẩm không nằm trong app shell. Route này không gọi `useLegacyApplication` và
+fixture đầy đủ bằng dynamic import và hiển thị ngay, không chờ Firestore. Repository
+đọc Firestore một lần ở nền để bổ sung trường chưa có trong catalog đóng gói; giá và
+nội dung đã công bố vẫn được ưu tiên như Worker checkout. React và legacy dùng chung
+promise catalog, không tải lại `src/data/products.js` ở runtime. Dữ liệu 54 sản phẩm
+không nằm trong app shell. Route này không gọi `useLegacyApplication` và
 không tải bootstrap, auth, cart, checkout, MediaPipe hoặc Chart.js legacy.
 
 Auth dialog và lịch sử soi da được mount một lần bởi `AppProviders` từ
@@ -100,7 +103,7 @@ nhiều overlay không mở khóa cuộn của nhau. Storefront dialog giao ti�
 
 | Khu vực | Nguồn runtime hiện tại | Trạng thái legacy |
 | --- | --- | --- |
-| Catalog `/products` | `features/catalog` + Firestore/fixture lazy | Không tải bootstrap |
+| Catalog `/products` | `features/catalog` + fixture lazy, Firestore bổ sung ở nền | Không tải bootstrap |
 | Hồ sơ `/profile` | `features/profile` + Auth context | Không tải bootstrap |
 | Quản trị `/admin` | `features/admin` + Firestore/API Worker | Không tải bootstrap |
 | Tra cứu công bố | `CompliancePage` + `useCatalog` | Không tải bootstrap |

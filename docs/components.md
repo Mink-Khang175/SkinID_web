@@ -24,8 +24,8 @@ Các route hiện có:
 - `layout/Footer.jsx`, `layout/MobileNav.jsx`: footer và điều hướng mobile.
 - `dialogs/StorefrontModals.jsx`: modal chính sách/tư vấn dùng chung.
 - `features/catalog/ProductDetailModal.jsx`: chi tiết sản phẩm thuộc catalog.
-- `features/catalog/services/catalogRepository.js`: đọc catalog Firestore và lazy-load
-  fixture đầy đủ khi offline; không phụ thuộc catalog global.
+- `features/catalog/services/catalogRepository.js`: lazy-load catalog đóng gói để hiện
+  ngay; một truy vấn Firestore dùng chung bổ sung dữ liệu ở nền, không chặn render.
 - `features/profile/components/ProfileHistoryTimeline.jsx`: timeline lịch sử soi da lấy dữ liệu
   từ Auth context; không render HTML thủ công trong script legacy.
 - `features/profile/components/ProfileHistoryOverview.jsx`: KPI và biểu đồ SVG tiến

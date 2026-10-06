@@ -1,7 +1,6 @@
 (function () {
   const storefrontScripts = [
     'src/js/app/scroll-lock.js',
-    'src/data/products.js',
     'src/js/catalog/catalog-loader.js',
     'src/js/catalog/product-card.js',
     'src/js/catalog/product-filters.js',

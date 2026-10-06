@@ -107,12 +107,13 @@ export default function FeaturedProducts() {
   const activeStepProducts = productsByStep[activeStep.id] || [];
 
   useEffect(() => {
+    if (!isVisible) return;
     activeStepProducts.forEach((product) => {
       const image = new Image();
       image.src = assetUrl(product.image, product.brandSlug);
       image.decode?.().catch(() => {});
     });
-  }, [activeStepProducts]);
+  }, [activeStepProducts, isVisible]);
 
   const { addToCart } = useCart();
 
@@ -277,9 +278,9 @@ export default function FeaturedProducts() {
                     >
                       <img
                         className="floating-hero-image"
-                        src={assetUrl(product.image, product.brandSlug)}
+                        src={isActive ? assetUrl(product.image, product.brandSlug) : undefined}
                         alt={isActive ? product.name : ''}
-                        loading="eager"
+                        loading={isActive && isVisible ? 'eager' : 'lazy'}
                         decoding="async"
                       />
                     </button>

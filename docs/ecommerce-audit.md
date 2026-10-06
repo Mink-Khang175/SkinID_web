@@ -2,8 +2,10 @@
 
 ## Đã có trong mã hiện tại
 
-- Catalog đọc Firestore qua `src/features/catalog/services/catalogRepository.js`, lazy-load
-  fixture 55 sản phẩm khi không tải được; tìm kiếm, lọc, sắp xếp và xem chi tiết sản phẩm.
+- Catalog lazy-load 54 sản phẩm đóng gói qua `src/features/catalog/services/catalogRepository.js`
+  và hiển thị trước khi Firestore phản hồi; một truy vấn dùng chung bổ sung trường remote
+  ở nền. Giá đóng gói được ưu tiên ở storefront và Worker checkout; tìm kiếm, lọc,
+  sắp xếp và xem chi tiết hoạt động cả khi Firestore không truy cập được.
 - Giỏ khách trong bộ nhớ trang; giỏ của tài khoản đăng nhập lưu tại `users/{uid}/commerce/cart`.
 - Firebase Authentication bằng email/mật khẩu và Google qua `features/auth`; hồ sơ, lịch sử soi da, đơn hàng trong Firestore.
 - Checkout hiển thị COD và thu thập địa chỉ giao hàng. Cloudflare Worker xác minh Firebase ID token, đọc lại giá từ Firestore (hoặc catalog đóng gói khi sản phẩm chưa có trên Firestore), tính tổng và tạo đơn. Phí giao hàng là 30.000đ; miễn phí khi tạm tính từ 500.000đ.

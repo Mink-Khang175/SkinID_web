@@ -34,7 +34,7 @@ export default function HeroBanner() {
             </div>
             <div className="hero-brand-banner">
               <img src={assetUrl('/images/banners/Rilastil_banner.png')} alt="Bộ sản phẩm Rilastil trên bục kính giữa nền xanh dịu" />
-              <div className="hero-banner-caption"><b>Routine được yêu thích</b><strong>Giảm đến 16%</strong></div>
+              <div className="hero-banner-caption"><b>Routine được yêu thích</b><strong>Giảm 10%</strong></div>
             </div>
           </div>
         </article>
