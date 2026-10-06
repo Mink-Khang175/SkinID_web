@@ -168,7 +168,8 @@ assert(!read('src/components/analysis/SkincareRoutine.jsx').includes(String.raw`
 assert(profilePage.includes('<OfferBar />'));
 assert(profilePage.includes('<Header />'));
 assert(profilePage.includes('<Footer />'));
-assert(profilePage.includes('role="tablist"'));
+assert(profilePage.includes('<ProfileTabs activeTab={activeTab}'));
+assert(read('src/features/profile/components/ProfileTabs.jsx').includes('role="tablist"'));
 assert(profilePage.includes('href="/skin-analysis"'));
 assert(!profilePage.includes('Xuất Dữ Liệu (JSON)'));
 assert(!profilePage.includes('downloadData'));

@@ -3,18 +3,18 @@ import { exportUserPdfReport } from '../services/profilePdfExport.js';
 function scoreTheme(score) {
   if (score < 60) {
     return {
-      score: 'bg-gradient-to-br from-[#FF7893] to-[#BD3F5B] text-white shadow-[0_8px_20px_rgba(224,62,98,0.25)]',
+      score: 'bg-[#FFF2F4] text-[#BD3F5B]',
       chip: 'bg-[#FFF2F4] text-[#BD3F5B]'
     };
   }
   if (score < 75) {
     return {
-      score: 'bg-gradient-to-br from-[#FBBF24] to-[#D97706] text-white shadow-[0_8px_20px_rgba(217,119,6,0.22)]',
+      score: 'bg-[#FCF5E8] text-[#9C722B]',
       chip: 'bg-[#FEF3C7] text-[#B45309]'
     };
   }
   return {
-    score: 'bg-gradient-to-br from-[#34D399] to-[#059669] text-white shadow-[0_8px_20px_rgba(5,150,105,0.22)]',
+    score: 'bg-[#EDF6F1] text-[#397963]',
     chip: 'bg-[#ECFDF5] text-[#047857]'
   };
 }
@@ -23,7 +23,7 @@ function openScanDetail(scanId, scanIndex) {
   document.dispatchEvent(new CustomEvent('skinid:scan-detail-open', { detail: { scanId, scanIndex } }));
 }
 
-export default function ProfileHistoryTimeline({ history = [] }) {
+export default function ProfileHistoryTimeline({ history = [], user = {} }) {
   if (!history.length) {
     return (
       <div id="timeline-scan-container" className="space-y-4">
@@ -106,7 +106,7 @@ export default function ProfileHistoryTimeline({ history = [] }) {
             >
               <button
                 type="button"
-                onClick={() => exportUserPdfReport({ scan })}
+                onClick={() => exportUserPdfReport({ scan, user })}
                 className="profile-action profile-action--quiet profile-action--compact"
                 title="Xuất báo cáo PDF phiên này"
               >
