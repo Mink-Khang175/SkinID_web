@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict');
 
 (async () => {
-  const { loadProducts, validateProducts } = await import('../scripts/import-products-to-firestore.mjs');
+  const { loadProducts, validateProducts } = await import('../scripts/backend/catalog.mjs');
   const products = await loadProducts();
   const result = validateProducts(products);
 

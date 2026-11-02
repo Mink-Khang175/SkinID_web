@@ -1,5 +1,8 @@
 export function assetUrl(path, brandSlug) {
   if (!path) return '';
+  if (/\/placeholder\.(?:png|jpe?g)$/i.test(path)) {
+    return import.meta.env.DEV ? '/src/assets/images/products/placeholder.svg' : '/images/products/placeholder.svg';
+  }
   if (path.startsWith('http:') || path.startsWith('https:') || path.startsWith('data:')) {
     return path;
   }

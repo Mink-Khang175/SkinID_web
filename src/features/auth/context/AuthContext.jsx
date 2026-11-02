@@ -4,6 +4,7 @@ import {
   authErrorMessage,
   clearUserHistory,
   fetchHistory,
+  isRootAdminEmail,
   loadAuthSession,
   loginWithEmail as loginWithEmailService,
   loginWithGoogle as loginWithGoogleService,
@@ -125,11 +126,28 @@ export function AuthProvider({ children }) {
   }, [session.user?.uid]);
 
   const isAuthenticated = Boolean(session.user?.uid);
-  const isAdmin = Boolean(session.user?.isAdmin || session.user?.customClaims?.admin);
+  const isRootAdmin = isRootAdminEmail(session.user?.email);
+  const rawRole = session.user?.role || session.user?.customClaims?.role;
+  const isSuperAdmin = Boolean(rawRole === 'super_admin' || session.user?.isSuperAdmin || isRootAdmin);
+  const isAdmin = Boolean(
+    isSuperAdmin ||
+    rawRole === 'admin' ||
+    session.user?.isAdmin ||
+    session.user?.customClaims?.admin
+  );
+  const isStaff = Boolean(
+    isAdmin ||
+    rawRole === 'staff'
+  );
+  const role = isSuperAdmin ? 'super_admin' : isAdmin ? 'admin' : isStaff ? 'staff' : 'customer';
+
   const value = useMemo(() => ({
     ...session,
     isAuthenticated,
+    role,
+    isSuperAdmin,
     isAdmin,
+    isStaff,
     isLoading,
     loginWithEmail,
     registerWithEmail,
@@ -141,7 +159,7 @@ export function AuthProvider({ children }) {
     resetPassword,
     clearHistory,
     refreshSession
-  }), [session, isAuthenticated, isAdmin, isLoading, loginWithEmail, registerWithEmail, loginWithGoogle, logout, openAuthModal, closeAuthModal, updateProfile, resetPassword, clearHistory, refreshSession]);
+  }), [session, isAuthenticated, role, isSuperAdmin, isAdmin, isStaff, isLoading, loginWithEmail, registerWithEmail, loginWithGoogle, logout, openAuthModal, closeAuthModal, updateProfile, resetPassword, clearHistory, refreshSession]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
@@ -152,7 +170,10 @@ export function useAuth() {
   return {
     ...emptySession,
     isAuthenticated: false,
+    role: 'customer',
+    isSuperAdmin: false,
     isAdmin: false,
+    isStaff: false,
     isLoading: false,
     loginWithEmail: async () => ({ success: false }),
     registerWithEmail: async () => ({ success: false }),

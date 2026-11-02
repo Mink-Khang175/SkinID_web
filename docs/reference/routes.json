@@ -1,0 +1,61 @@
+{
+  "public": [
+    "/",
+    "/products",
+    "/products/:productSlug",
+    "/khuyen-mai",
+    "/blog",
+    "/blog/:postSlug",
+    "/skin-analysis",
+    "/acie",
+    "/tra-cuu-cong-bo"
+  ],
+  "account": [
+    "/profile",
+    "/profile?tab=history",
+    "/profile?tab=orders",
+    "/profile?tab=settings"
+  ],
+  "admin": [
+    "/admin",
+    "/admin?tab=orders",
+    "/admin?tab=cms",
+    "/admin?tab=promotions",
+    "/admin?tab=blog",
+    "/admin?tab=products",
+    "/admin?tab=members",
+    "/admin?tab=system",
+    "/admin?tab=audit-logs",
+    "/admin?tab=settings"
+  ],
+  "policies": [
+    "thong-tin-don-vi-van-hanh",
+    "dieu-khoan-giao-dich",
+    "huong-dan-mua-hang",
+    "chinh-sach-bao-mat",
+    "chinh-sach-van-chuyen",
+    "chinh-sach-thanh-toan",
+    "chinh-sach-doi-tra",
+    "dieu-khoan-soi-da-ai",
+    "chinh-sach-du-lieu-soi-da",
+    "chinh-sach-bao-hanh-thiet-bi",
+    "quan-ly-tai-khoan"
+  ],
+  "dialogs": [
+    "Đăng nhập",
+    "Đăng ký",
+    "Quên mật khẩu",
+    "Chi tiết sản phẩm",
+    "Giỏ hàng",
+    "Thông tin nhận hàng",
+    "Mã giảm giá",
+    "Đặt hàng thành công",
+    "VietQR",
+    "Chi tiết lịch sử soi da",
+    "Sửa sản phẩm/bài viết/voucher/người dùng",
+    "Thư viện ảnh",
+    "Chi tiết khách hàng",
+    "Lịch sử đơn hàng"
+  ],
+  "preview": "/__preview"
+}

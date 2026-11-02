@@ -6,16 +6,21 @@ export function corsHeaders(request, env) {
     .filter(Boolean);
   const normalizedOrigin = origin.replace(/\/$/, '');
   const local = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
-  const domainMatch = /^https?:\/\/([a-z0-9-]+\.)*(skinid\.vn|pages\.dev)$/i.test(normalizedOrigin);
+  const domainMatch = /^https:\/\/(www\.)?skinid\.vn$/i.test(normalizedOrigin);
   const sameOrigin = !origin || origin === new URL(request.url).origin;
-  const allowed = sameOrigin || local || domainMatch || configured.includes('*') || configured.includes(normalizedOrigin);
+  const allowed = sameOrigin || (env.IS_LOCAL_DEV === true && local) || domainMatch || configured.includes(normalizedOrigin);
 
   return {
     'access-control-allow-origin': allowed && origin ? origin : new URL(request.url).origin,
     'access-control-allow-headers': 'authorization, content-type, idempotency-key',
     'access-control-allow-methods': 'GET, POST, PATCH, DELETE, OPTIONS',
     'access-control-max-age': '86400',
-    vary: 'Origin'
+    vary: 'Origin',
+    'x-content-type-options': 'nosniff',
+    'x-frame-options': 'DENY',
+    'referrer-policy': 'strict-origin-when-cross-origin',
+    'permissions-policy': 'camera=(self), microphone=(), geolocation=()',
+    'strict-transport-security': 'max-age=31536000; includeSubDomains; preload'
   };
 }
 

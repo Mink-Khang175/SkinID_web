@@ -1,3 +1,4 @@
+import { POLICY_META_MAP } from './policies.generated.js';
 import {
   commitWrites,
   deleteFirebaseUser,
@@ -5,15 +6,23 @@ import {
   encodeFields,
   getDocument,
   listDocuments,
-  runQuery
+  runQuery,
+  setFirebaseCustomUserClaims
 } from './firestore.js';
 import { SERVER_CATALOG } from './catalog.generated.js';
+import { SERVER_ARTICLES } from './articles.generated.js';
 import { ApiError } from './app/errors.js';
 import { json, corsHeaders } from './app/http.js';
 import { isValidFirebasePrivateKey, requiredFirebaseEnv } from './app/env.js';
 import { authenticate } from './infrastructure/firebase/auth.js';
+import { syncOrderToS3 } from './services/s3Dispatch.js';
+import { sendTelegramOrderNotification } from './services/telegramService.js';
+import { integrationStatus } from './app/integrations.js';
+import { getOrRefreshToken } from './services/s3Service.js';
+import { getS3Config } from './app/env.js';
 
 const bundledProducts = new Map(SERVER_CATALOG.map(product => [product.id, product]));
+const bundledArticles = new Map((typeof SERVER_ARTICLES !== 'undefined' ? SERVER_ARTICLES : []).map(article => [article.id, article]));
 
 function text(value, label, maxLength = 500) {
   const normalized = String(value || '').trim();
@@ -79,7 +88,7 @@ async function createOrder(request, env, user) {
     if (!hasFirestore) return bundledProducts.get(id) || null;
     const remoteProduct = await getDocument(env, `products/${id}`);
     const localProduct = bundledProducts.get(id);
-    return localProduct ? { ...remoteProduct, ...localProduct } : remoteProduct || null;
+    return localProduct ? { ...localProduct, ...remoteProduct } : remoteProduct || null;
   }));
   const items = products.map((product, index) => {
     const productId = productIds[index];
@@ -89,6 +98,8 @@ async function createOrder(request, env, user) {
     const quantity = quantities.get(productId);
     return {
       productId,
+      productCode: String(product.productCode || ''),
+      s3ProductId: Number(product.s3ProductId || 0),
       name: String(product.name || productId),
       image: String(product.image || ''),
       volume: String(product.volume || ''),
@@ -105,23 +116,108 @@ async function createOrder(request, env, user) {
     throw new ApiError(400, 'invalid_phone', 'Số điện thoại Việt Nam chưa đúng định dạng.');
   }
   const subtotal = items.reduce((sum, item) => sum + item.lineTotal, 0);
-  const shippingFee = subtotal >= 500000 ? 0 : 30000;
   const now = new Date();
-  const idempotencyKey = String(request.headers.get('idempotency-key') || '').trim();
+
+  // Validate coupon against Firestore promotions or fallback
+  const couponCode = String(payload.couponCode || '').trim().toUpperCase();
+  let discountAmount = 0;
+  let isFreeshipCoupon = false;
+  let promotionDoc = null;
+
+  if (couponCode) {
+    if (hasFirestore) {
+      try {
+        promotionDoc = await getDocument(env, `promotions/${couponCode}`);
+      } catch (err) {
+        console.warn('[Worker Promo Lookup Warning]', err.message);
+      }
+    }
+
+    // Fallback dictionary for offline / staging / standard coupons
+    if (!promotionDoc && !hasFirestore) {
+      const STATIC_COUPONS = {
+        SKINID10: { code: 'SKINID10', type: 'percent', discountValue: 10, minOrderValue: 200000, maxDiscount: 150000, active: true },
+        WELCOME50: { code: 'WELCOME50', type: 'fixed', discountValue: 50000, minOrderValue: 300000, maxDiscount: 50000, active: true },
+        FREESHIP: { code: 'FREESHIP', type: 'freeship', discountValue: 30000, minOrderValue: 0, maxDiscount: 30000, active: true }
+      };
+      promotionDoc = STATIC_COUPONS[couponCode] || null;
+    }
+
+    if (!promotionDoc) {
+      throw new ApiError(400, 'invalid_coupon', `Mã giảm giá "${couponCode}" không tồn tại hoặc đã bị xóa.`);
+    }
+
+    if (promotionDoc.active === false) {
+      throw new ApiError(400, 'coupon_inactive', `Mã giảm giá "${couponCode}" đã tạm ngừng áp dụng.`);
+    }
+
+    const nowIso = now.toISOString();
+    if (promotionDoc.startAt && String(promotionDoc.startAt) > nowIso) {
+      throw new ApiError(400, 'coupon_not_started', `Mã giảm giá "${couponCode}" chưa đến thời gian áp dụng.`);
+    }
+    if (promotionDoc.endAt && String(promotionDoc.endAt) < nowIso) {
+      throw new ApiError(400, 'coupon_expired', `Mã giảm giá "${couponCode}" đã hết hạn sử dụng.`);
+    }
+
+    const minOrder = Number(promotionDoc.minOrderValue || promotionDoc.minOrder || 0);
+    if (minOrder > 0 && subtotal < minOrder) {
+      throw new ApiError(
+        400,
+        'coupon_min_order',
+        `Đơn hàng cần tối thiểu ${minOrder.toLocaleString('vi-VN')}đ để sử dụng mã "${couponCode}".`
+      );
+    }
+
+    const usageLimit = Number(promotionDoc.usageLimit || 0);
+    const usedCount = Number(promotionDoc.usedCount || 0);
+    if (usageLimit > 0 && usedCount >= usageLimit) {
+      throw new ApiError(400, 'coupon_limit_exceeded', `Mã giảm giá "${couponCode}" đã hết lượt sử dụng.`);
+    }
+
+    const pType = String(promotionDoc.type || 'percent').toLowerCase();
+    const val = Number(promotionDoc.discountValue || promotionDoc.value || 0);
+    const maxCap = Number(promotionDoc.maxDiscount || 0);
+
+    if (pType === 'percent' || pType === 'percentage') {
+      discountAmount = Math.round(subtotal * (val / 100));
+      if (maxCap > 0) discountAmount = Math.min(discountAmount, maxCap);
+    } else if (pType === 'fixed') {
+      discountAmount = Math.min(subtotal, val);
+    } else if (pType === 'freeship' || pType === 'shipping') {
+      isFreeshipCoupon = true;
+    }
+  }
+
+  // Shipping Fee calculation (standard BCT rules)
+  function resolveShippingFee(provinceName, orderSubtotal, isFreeShip) {
+    if (isFreeShip || orderSubtotal >= 500000) return 0;
+    const name = String(provinceName || '').toLowerCase();
+    if (name.includes('hồ chí minh') || name.includes('hcm')) return 30000;
+    if (name.includes('hà nội') || name.includes('đà nẵng') || name.includes('bình dương') || name.includes('đồng nai')) return 30000;
+    return 30000;
+  }
+  const shippingFee = resolveShippingFee(shippingAddress.provinceName, subtotal, isFreeshipCoupon);
+  // A shipping voucher removes shipping, never discounts merchandise again.
+  const finalTotal = Math.max(0, subtotal - discountAmount) + shippingFee;
+
+  const idempotencyKey = String(request.headers.get('idempotency-key') || payload.idempotencyKey || '').trim();
   let orderId = crypto.randomUUID().replaceAll('-', '');
   if (idempotencyKey) {
-    if (!/^[A-Za-z0-9_-]{16,100}$/.test(idempotencyKey)) throw new ApiError(400, 'invalid_idempotency_key', 'Mã xác nhận đơn hàng không hợp lệ.');
+    if (!/^[A-Za-z0-9_-]{8,100}$/.test(idempotencyKey)) throw new ApiError(400, 'invalid_idempotency_key', 'Mã xác nhận đơn hàng không hợp lệ.');
     const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(`${user.sub}:${idempotencyKey}`));
     orderId = [...new Uint8Array(digest)].map(value => value.toString(16).padStart(2, '0')).join('').slice(0, 32);
-    const existingOrder = await getDocument(env, `orders/${orderId}`);
-    if (existingOrder?.userId === user.sub) {
+    const existingOrder = hasFirestore ? await getDocument(env, `orders/${orderId}`) : devOrdersStore.get(orderId);
+    if (existingOrder && existingOrder.userId === user.sub) {
       return json(request, env, {
         success: true,
         duplicate: true,
         orderId,
         subtotal: existingOrder.subtotal,
+        discount: existingOrder.discountAmount || 0,
         shippingFee: existingOrder.shippingFee,
-        total: existingOrder.total
+        total: existingOrder.total,
+        status: existingOrder.status,
+        message: 'Đơn hàng đã được ghi nhận trước đó.'
       });
     }
   }
@@ -138,12 +234,15 @@ async function createOrder(request, env, user) {
     items,
     note: String(payload.note || '').trim().slice(0, 1000),
     subtotal,
+    discountAmount,
+    couponCode: couponCode || null,
     shippingFee,
-    total: subtotal + shippingFee,
+    total: finalTotal,
     paymentMethod,
-    paymentStatus: 'unpaid',
+    paymentStatus: paymentMethod === 'bank_transfer' ? 'pending_transfer' : 'unpaid',
     status: 'pending',
     source: 'cloudflare-worker',
+    s3SyncStatus: 'pending',
     createdAt: now,
     updatedAt: now
   };
@@ -158,19 +257,267 @@ async function createOrder(request, env, user) {
   const activity = { type: 'order_created', orderId, total: order.total, createdAt: now };
 
   if (hasFirestore) {
-    await commitWrites(env, [
+    const writes = [
       updateWrite(env, `orders/${orderId}`, order, null, { exists: false }),
       updateWrite(env, `users/${user.sub}`, profile, Object.keys(profile)),
       updateWrite(env, `users/${user.sub}/addresses/default`, address),
       updateWrite(env, `users/${user.sub}/activities/${orderId}`, activity),
       { delete: documentName(env, `users/${user.sub}/commerce/cart`) }
-    ]);
+    ];
+    if (couponCode && promotionDoc && hasFirestore) {
+      const nextCount = (Number(promotionDoc.usedCount) || 0) + 1;
+      writes.push(
+        updateWrite(env, `promotions/${couponCode}`, { usedCount: nextCount, updatedAtServer: now }, ['usedCount', 'updatedAtServer'], promotionDoc._updateTime ? { updateTime: promotionDoc._updateTime } : undefined)
+      );
+    }
+    try {
+      await commitWrites(env, writes);
+    } catch (error) {
+      if (error.code === 'write_conflict' && idempotencyKey) {
+        const saved = await getDocument(env, `orders/${orderId}`);
+        if (saved?.userId === user.sub) return json(request, env, { success: true, duplicate: true, orderId, subtotal: saved.subtotal, discount: saved.discountAmount || 0, shippingFee: saved.shippingFee, total: saved.total, s3SyncStatus: saved.s3SyncStatus });
+      }
+      throw error;
+    }
   } else {
     order.id = orderId;
     devOrdersStore.set(orderId, order);
   }
 
-  return json(request, env, { success: true, orderId, subtotal, shippingFee, total: order.total }, 201);
+  // Resilient fail-safe synchronization to S3 POS
+  let s3SyncStatus = 'pending';
+  if (typeof syncOrderToS3 === 'function') {
+    try {
+      const s3Result = await syncOrderToS3({ orderId, order, env, timeoutMs: 4000 });
+      s3SyncStatus = s3Result.s3SyncStatus || 'pending';
+      const s3Fields = {
+        s3SyncStatus,
+        ...(s3Result.s3OrderId ? { s3OrderId: s3Result.s3OrderId } : {}),
+        ...(s3Result.syncedAt ? { s3SyncedAt: s3Result.syncedAt } : {}),
+        ...(s3Result.s3CustomerId ? { s3CustomerId: s3Result.s3CustomerId } : {}),
+        ...(s3Result.error ? { s3Error: s3Result.error } : {})
+      };
+      if (hasFirestore) await commitWrites(env, [updateWrite(env, `orders/${orderId}`, s3Fields, Object.keys(s3Fields))]);
+      else Object.assign(order, s3Fields);
+
+    } catch (err) {
+      console.warn('[Worker S3 Sync Exception]', err.message);
+    }
+  }
+
+  // Instant real-time alert via Telegram
+  try {
+    if (typeof sendTelegramOrderNotification === 'function') {
+      sendTelegramOrderNotification({ orderId, order, env }).catch(err => {
+        console.warn('[Worker Telegram Sync Exception]', err.message);
+      });
+    }
+  } catch (err) {
+    console.warn('[Worker Telegram Dispatch Error]', err.message);
+  }
+
+  return json(request, env, { success: true, orderId, subtotal, discount: discountAmount, shippingFee, total: order.total, s3SyncStatus }, 201);
+}
+
+async function resyncOrderToS3(request, env, user, orderId) {
+  assertStaffRole(user, ['admin']);
+  const hasFirestore = isFirestoreConfigured(env);
+  let order = null;
+  if (hasFirestore) {
+    order = await getDocument(env, `orders/${orderId}`);
+  } else {
+    order = devOrdersStore.get(orderId);
+  }
+  if (!order) throw new ApiError(404, 'order_not_found', 'Không tìm thấy đơn hàng.');
+  if (order.s3SyncStatus === 'synced') return json(request, env, { success: true, orderId, alreadySynced: true });
+
+  const s3Result = await syncOrderToS3({ orderId, order, env, timeoutMs: 8000 });
+  const s3Fields = {
+    s3SyncStatus: s3Result.s3SyncStatus || (s3Result.success ? 'synced' : 'pending'),
+    ...(s3Result.s3OrderId ? { s3OrderId: s3Result.s3OrderId } : {}),
+    ...(s3Result.syncedAt ? { s3SyncedAt: s3Result.syncedAt } : {}),
+    ...(s3Result.s3CustomerId ? { s3CustomerId: s3Result.s3CustomerId } : {}),
+    ...(s3Result.error ? { s3Error: s3Result.error } : {})
+  };
+
+  if (hasFirestore) {
+    await commitWrites(env, [
+      updateWrite(env, `orders/${orderId}`, s3Fields, Object.keys(s3Fields))
+    ]);
+  } else {
+    Object.assign(order, s3Fields);
+  }
+
+  return json(request, env, { success: s3Result.success === true, orderId, s3Result, message: s3Result.error || (s3Result.skipped ? 'S3 chưa được bật trên server.' : undefined) }, s3Result.success ? 200 : s3Result.s3SyncStatus === 'needs_review' ? 409 : 503);
+}
+
+
+export const VALID_ROLES = [
+  'super_admin',
+  'admin',
+  'editor',
+  'marketing',
+  'sales',
+  'dermatologist',
+  'warehouse',
+  'customer'
+];
+if (typeof globalThis !== 'undefined') globalThis.VALID_ROLES = VALID_ROLES;
+
+const SUPER_ADMIN_EMAILS = [
+  'admin@skinid.vn',
+  'admin@fieldman.vn',
+  'danh.huynh@fieldman.vn',
+  'danhhuynh.nexus@gmail.com'
+];
+
+function isUserSuperAdmin(user) {
+  if (!user) return false;
+  if (user.role === 'super_admin') return true;
+  if (user.admin === true && (!user.role || user.role === 'super_admin')) return true;
+  if (user.email_verified === true && user.email && SUPER_ADMIN_EMAILS.includes(String(user.email).toLowerCase())) return true;
+  return false;
+}
+
+function getUserRole(user) {
+  if (isUserSuperAdmin(user)) return 'super_admin';
+  return user.role || (user.admin ? 'admin' : 'customer');
+}
+
+function assertStaffRole(user, allowedRoles = []) {
+  const role = getUserRole(user);
+  if (role === 'super_admin') return role;
+  if (allowedRoles.includes(role)) return role;
+  if (user.admin === true && allowedRoles.includes('admin')) return 'admin';
+  throw new ApiError(403, 'permission_denied', 'Bạn không có quyền thực hiện thao tác này.');
+}
+
+const devAuditLogs = [];
+
+async function logAuditEvent(env, { actor, action, resource, resourceId, details = {}, request = null }) {
+  const now = new Date();
+  const logId = `log_${now.getTime()}_${crypto.randomUUID().slice(0, 8)}`;
+  const ip = request?.headers?.get ? (request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for') || '127.0.0.1') : 'internal';
+  const logEntry = {
+    action,
+    resource,
+    resourceId: String(resourceId || ''),
+    actorId: actor?.sub || 'system',
+    actorEmail: actor?.email || 'system@skinid.vn',
+    actorRole: getUserRole(actor),
+    details,
+    ip,
+    createdAt: now.toISOString()
+  };
+
+  if (isFirestoreConfigured(env)) {
+    try {
+      await commitWrites(env, [
+        updateWrite(env, `auditLogs/${logId}`, logEntry, null, { exists: false })
+      ]);
+    } catch (err) {
+      console.warn('[Audit Log Write Warning]', err.message);
+    }
+  } else {
+    devAuditLogs.unshift({ id: logId, ...logEntry });
+    if (devAuditLogs.length > 500) devAuditLogs.pop();
+  }
+  return logEntry;
+}
+
+const VALID_ORDER_TRANSITIONS = {
+  pending: ['confirmed', 'cancelled'],
+  confirmed: ['shipping', 'cancelled'],
+  shipping: ['completed', 'returned', 'cancelled'],
+  completed: [],
+  returned: [],
+  cancelled: []
+};
+
+async function transitionOrderStatus(request, env, user, orderId) {
+  assertStaffRole(user, ['super_admin', 'admin', 'sales', 'warehouse']);
+  const hasFirestore = isFirestoreConfigured(env);
+  let order = null;
+  if (hasFirestore) {
+    order = await getDocument(env, `orders/${orderId}`);
+  } else {
+    order = devOrdersStore.get(orderId);
+  }
+  if (!order) throw new ApiError(404, 'order_not_found', 'Không tìm thấy đơn hàng.');
+
+  const body = await request.json().catch(() => ({}));
+  const targetStatus = text(body.targetStatus, 'trạng thái đích', 40).toLowerCase();
+  const note = String(body.note || '').trim().slice(0, 500);
+
+  const currentStatus = String(order.status || 'pending').toLowerCase();
+  const allowed = VALID_ORDER_TRANSITIONS[currentStatus] || [];
+  if (!allowed.includes(targetStatus)) {
+    throw new ApiError(
+      400,
+      'invalid_transition',
+      `Không thể chuyển trạng thái đơn hàng từ "${currentStatus}" sang "${targetStatus}". Các trạng thái hợp lệ tiếp theo: ${allowed.join(', ') || 'Không có (đây là trạng thái kết thúc)'}.`
+    );
+  }
+
+  const now = new Date();
+  const transitionEntry = {
+    from: currentStatus,
+    to: targetStatus,
+    changedBy: user.email || user.sub,
+    note,
+    timestamp: now.toISOString()
+  };
+  const statusHistory = Array.isArray(order.statusHistory) ? [...order.statusHistory, transitionEntry] : [transitionEntry];
+
+  const updateFields = {
+    status: targetStatus,
+    statusHistory,
+    updatedAt: now
+  };
+
+  // If transition to confirmed and S3 POS is not synced yet, trigger S3 sync
+  let s3SyncResult = null;
+  if (targetStatus === 'confirmed' && order.s3SyncStatus !== 'synced') {
+    if (typeof syncOrderToS3 === 'function') {
+      try {
+        const res = await syncOrderToS3({ orderId, order: { ...order, status: targetStatus }, env, timeoutMs: 4000 });
+        if (res.success) {
+          updateFields.s3SyncStatus = 'synced';
+          updateFields.s3OrderId = res.s3OrderId;
+          updateFields.s3SyncedAt = res.syncedAt;
+          s3SyncResult = res;
+        }
+      } catch (s3Err) {
+        console.warn('[Worker Transition S3 Warning]', s3Err.message);
+      }
+    }
+  }
+
+  if (hasFirestore) {
+    await commitWrites(env, [
+      updateWrite(env, `orders/${orderId}`, updateFields, Object.keys(updateFields))
+    ]);
+  } else {
+    Object.assign(order, updateFields);
+  }
+
+  await logAuditEvent(env, {
+    actor: user,
+    action: 'order_transition',
+    resource: 'orders',
+    resourceId: orderId,
+    details: { fromStatus: currentStatus, toStatus: targetStatus, note },
+    request
+  });
+
+  return json(request, env, {
+    success: true,
+    orderId,
+    previousStatus: currentStatus,
+    status: targetStatus,
+    statusHistory,
+    s3SyncResult
+  });
 }
 
 async function cancelOrder(request, env, user, orderId) {
@@ -475,7 +822,7 @@ async function analyzeSkin(request, env, user) {
 }
 
 async function deleteUser(request, env, user, uid) {
-  if (user.admin !== true) throw new ApiError(403, 'permission_denied', 'Chỉ quản trị viên mới có thể xóa tài khoản.');
+  assertStaffRole(user, ['super_admin', 'admin']);
   if (!uid || uid === user.sub) throw new ApiError(400, 'invalid_user', 'Không thể xóa tài khoản này.');
   const orders = await runQuery(env, {
     from: [{ collectionId: 'orders' }],
@@ -490,21 +837,536 @@ async function deleteUser(request, env, user, uid) {
   ];
   for (let index = 0; index < writes.length; index += 450) await commitWrites(env, writes.slice(index, index + 450));
   await deleteFirebaseUser(env, uid);
+
+  await logAuditEvent(env, {
+    actor: user,
+    action: 'delete_user',
+    resource: 'users',
+    resourceId: uid,
+    details: { deletedOrders: orders.length },
+    request
+  });
+
   return json(request, env, { success: true, uid, deletedOrders: orders.length });
+}
+
+async function listStaff(request, env, user) {
+  assertStaffRole(user, ['super_admin', 'admin']);
+  const hasFirestore = isFirestoreConfigured(env);
+  let staffList = [];
+  if (hasFirestore) {
+    try {
+      const allUsers = await listDocuments(env, 'users');
+      staffList = allUsers
+        .filter(u => u.role && u.role !== 'customer')
+        .map(u => ({
+          uid: u.id,
+          email: u.email || '',
+          name: u.name || u.displayName || '',
+          role: u.role,
+          updatedAt: u.updatedAt || u.createdAt || null
+        }));
+    } catch (err) {
+      console.warn('[Worker listStaff Warning]', err.message);
+    }
+  }
+  const emailLower = String(user?.email || '').toLowerCase();
+  if (isUserSuperAdmin(user) && !staffList.some(s => s.email?.toLowerCase() === emailLower)) {
+    staffList.unshift({
+      uid: user.sub,
+      email: user.email || '',
+      name: user.name || 'Super Admin',
+      role: 'super_admin',
+      updatedAt: new Date().toISOString()
+    });
+  }
+  return json(request, env, { success: true, staff: staffList });
+}
+
+async function assignStaffRole(request, env, user) {
+  assertStaffRole(user, ['super_admin']);
+  const payload = await request.json().catch(() => {
+    throw new ApiError(400, 'invalid_json', 'Dữ liệu gửi lên không hợp lệ.');
+  });
+  const targetUid = String(payload.uid || '').trim();
+  const newRole = String(payload.role || '').trim().toLowerCase();
+
+  if (!targetUid) {
+    throw new ApiError(400, 'missing_uid', 'Thiếu mã người dùng (UID).');
+  }
+  if (!VALID_ROLES.includes(newRole)) {
+    throw new ApiError(400, 'invalid_role', `Vai trò "${newRole}" không hợp lệ. Cho phép: ${VALID_ROLES.join(', ')}`);
+  }
+
+  const now = new Date();
+  const hasFirestore = isFirestoreConfigured(env);
+
+  if (hasFirestore) {
+    try {
+      if (typeof setFirebaseCustomUserClaims === 'function') {
+        await setFirebaseCustomUserClaims(env, targetUid, {
+          role: newRole,
+          admin: ['super_admin', 'admin'].includes(newRole)
+        });
+      }
+    } catch (err) {
+      console.warn('[Worker setCustomClaims Warning]', err.message);
+    }
+
+    const patch = {
+      role: newRole,
+      updatedAt: now
+    };
+    await commitWrites(env, [
+      updateWrite(env, `users/${targetUid}`, patch, ['role', 'updatedAt'])
+    ]);
+  }
+
+  await logAuditEvent(env, {
+    actor: user,
+    action: 'assign_role',
+    resource: 'staff',
+    resourceId: targetUid,
+    details: { assignedRole: newRole },
+    request
+  });
+
+  return json(request, env, { success: true, uid: targetUid, role: newRole });
+}
+
+async function listAuditLogs(request, env, user) {
+  assertStaffRole(user, ['super_admin', 'admin']);
+  const hasFirestore = isFirestoreConfigured(env);
+  let logs = [];
+  if (hasFirestore) {
+    try {
+      const docs = await listDocuments(env, 'auditLogs');
+      logs = docs.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)).slice(0, 100);
+    } catch (err) {
+      console.warn('[Worker listAuditLogs Warning]', err.message);
+    }
+  } else {
+    logs = devAuditLogs.slice(0, 100);
+  }
+  return json(request, env, { success: true, logs });
+}
+
+async function recordClientAuditLog(request, env, user) {
+  assertStaffRole(user, ['super_admin', 'admin', 'editor', 'marketing', 'sales', 'dermatologist', 'warehouse']);
+  const payload = await request.json().catch(() => ({}));
+  const action = String(payload.action || 'client_action').slice(0, 80);
+  const resource = String(payload.resource || 'general').slice(0, 80);
+  const resourceId = String(payload.resourceId || '').slice(0, 120);
+  const details = typeof payload.details === 'object' && payload.details ? payload.details : {};
+
+  const entry = await logAuditEvent(env, {
+    actor: user,
+    action,
+    resource,
+    resourceId,
+    details,
+    request
+  });
+
+  return json(request, env, { success: true, logId: entry.id });
 }
 
 async function handleApi(request, env) {
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: corsHeaders(request, env) });
-  const user = await authenticate(request, env);
   const url = new URL(request.url);
+  if (request.method === 'GET' && url.pathname === '/api/health') return json(request, env, { success: true, service: 'skinid-api', status: 'ok' });
+  const user = await authenticate(request, env);
+  if (request.method === 'GET' && url.pathname === '/api/admin/integrations') {
+    assertStaffRole(user, ['admin']);
+    return json(request, env, { success: true, integrations: integrationStatus(env) });
+  }
+  if (request.method === 'POST' && url.pathname === '/api/admin/integrations/check') {
+    assertStaffRole(user, ['admin']);
+    const { service } = await request.json();
+    const config = integrationStatus(env);
+    if (service === 'firebase') {
+      requiredFirebaseEnv(env);
+      await getDocument(env, 'system_config/general');
+      return json(request, env, { success: true, service, status: 'connected' });
+    }
+    if (service === 's3') {
+      if (!config.s3.configured) throw new ApiError(503, 's3_not_configured', 'Server chưa có thông tin xác thực S3 POS.');
+      await getOrRefreshToken(getS3Config(env), (url, options) => fetch(url, { ...options, signal: AbortSignal.timeout(8000) }));
+      return json(request, env, { success: true, service, status: 'connected', syncEnabled: config.s3.enabled });
+    }
+    throw new ApiError(400, 'invalid_service', 'Chỉ hỗ trợ kiểm tra Firebase hoặc S3.');
+  }
   if (request.method === 'GET' && url.pathname === '/api/orders') return listOrders(request, env, user);
   if (request.method === 'POST' && url.pathname === '/api/orders') return createOrder(request, env, user);
+  const s3ResyncMatch = url.pathname.match(/^\/api\/admin\/orders\/([^/]+)\/resync-s3$/);
+  if (request.method === 'POST' && s3ResyncMatch) return resyncOrderToS3(request, env, user, decodeURIComponent(s3ResyncMatch[1]));
+  const transitionMatch = url.pathname.match(/^\/api\/admin\/orders\/([^/]+)\/transition$/);
+  if (request.method === 'POST' && transitionMatch) return transitionOrderStatus(request, env, user, decodeURIComponent(transitionMatch[1]));
   const orderMatch = url.pathname.match(/^\/api\/orders\/([^/]+)$/);
   if (request.method === 'PATCH' && orderMatch) return cancelOrder(request, env, user, decodeURIComponent(orderMatch[1]));
   if (request.method === 'POST' && url.pathname === '/api/analyze-skin') return analyzeSkin(request, env, user);
+  if (request.method === 'GET' && url.pathname === '/api/admin/staff') return listStaff(request, env, user);
+  if (request.method === 'POST' && url.pathname === '/api/admin/staff/roles') return assignStaffRole(request, env, user);
+  if (request.method === 'GET' && url.pathname === '/api/admin/audit-logs') return listAuditLogs(request, env, user);
+  if (request.method === 'POST' && url.pathname === '/api/admin/audit-logs') return recordClientAuditLog(request, env, user);
   const userMatch = url.pathname.match(/^\/api\/admin\/users\/([^/]+)$/);
   if (request.method === 'DELETE' && userMatch) return deleteUser(request, env, user, decodeURIComponent(userMatch[1]));
   throw new ApiError(404, 'not_found', 'Không tìm thấy API được yêu cầu.');
+}
+
+
+// ========================================================
+// TECHNICAL SEO & EDGE DYNAMIC RENDERING (BCT & BOTS)
+// ========================================================
+
+const BOT_USER_AGENTS = new RegExp(
+  'googlebot|bingbot|yandex|baiduspider|facebookexternalhit|facebot|twitterbot|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest|slackbot|vkShare|W3C_Validator|whatsapp|flipboard|tumblr|bitlybot|skypeuripreview|nuzzel|discordbot|google page speed|qwantify|bitrix link preview|xing-content-crawler|chrome-lighthouse|telegrambot|integration-test|zalo',
+  'i'
+);
+
+function isBotRequest(request) {
+  const ua = request.headers.get('User-Agent') || '';
+  return BOT_USER_AGENTS.test(ua);
+}
+
+function handleRobotsTxt(url) {
+  const robots = `# https://skinid.vn/robots.txt
+# SkinID - Hệ thống Dược Mỹ Phẩm & Chăm Sóc Da Chuẩn Y Khoa
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: ${url.origin}/sitemap.xml
+`;
+  return new Response(robots, {
+    headers: {
+      'Content-Type': 'text/plain; charset=utf-8',
+      'Cache-Control': 'public, max-age=86400, s-maxage=86400'
+    }
+  });
+}
+
+function handleSitemapXml(url) {
+  const origin = url.origin;
+  const today = new Date().toISOString().split('T')[0];
+
+  const staticRoutes = [
+    { loc: '/', priority: '1.0', changefreq: 'daily' },
+    { loc: '/products', priority: '0.9', changefreq: 'daily' },
+    { loc: '/skin-analysis', priority: '0.9', changefreq: 'weekly' },
+    { loc: '/khuyen-mai', priority: '0.8', changefreq: 'weekly' },
+    { loc: '/blog', priority: '0.8', changefreq: 'daily' },
+    { loc: '/goc-cham-da', priority: '0.8', changefreq: 'weekly' },
+    { loc: '/tin-tuc', priority: '0.7', changefreq: 'weekly' },
+    { loc: '/tra-cuu-cong-bo', priority: '0.7', changefreq: 'monthly' },
+    { loc: '/compliance', priority: '0.7', changefreq: 'monthly' },
+    { loc: '/kiem-chung', priority: '0.7', changefreq: 'monthly' },
+    // Bộ 6 chính sách website SkinID.vn nộp Bộ Công Thương
+    { loc: '/chinh-sach-bao-mat', priority: '0.8', changefreq: 'monthly' },
+    { loc: '/chinh-sach-van-chuyen', priority: '0.8', changefreq: 'monthly' },
+    { loc: '/chinh-sach-doi-tra', priority: '0.8', changefreq: 'monthly' },
+    { loc: '/chinh-sach-thanh-toan', priority: '0.8', changefreq: 'monthly' },
+    { loc: '/dieu-khoan-giao-dich', priority: '0.8', changefreq: 'monthly' },
+    { loc: '/quy-trinh-khieu-nai', priority: '0.8', changefreq: 'monthly' }
+  ];
+
+  let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+  xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+
+  for (const route of staticRoutes) {
+    xml += `  <url>
+    <loc>${origin}${route.loc}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>${route.changefreq}</changefreq>
+    <priority>${route.priority}</priority>
+  </url>\n`;
+  }
+
+  for (const product of SERVER_CATALOG) {
+    const pLoc = `${origin}/products/${encodeURIComponent(product.id)}`;
+    xml += `  <url>
+    <loc>${pLoc}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>\n`;
+  }
+
+  for (const article of (typeof SERVER_ARTICLES !== 'undefined' ? SERVER_ARTICLES : [])) {
+    const aLoc = `${origin}/blog/${encodeURIComponent(article.id)}`;
+    xml += `  <url>
+    <loc>${aLoc}</loc>
+    <lastmod>${article.date || today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>\n`;
+  }
+
+  xml += '</urlset>';
+
+  return new Response(xml, {
+    headers: {
+      'Content-Type': 'application/xml; charset=utf-8',
+      'Cache-Control': 'public, max-age=3600, s-maxage=3600'
+    }
+  });
+}
+
+
+async function applyDynamicSeo(request, env, url, response) {
+  const pathname = url.pathname;
+  let targetProduct = null;
+
+  // Check product route: /products/:id or query ?product=:id
+  const productMatch = pathname.match(/^\/products\/([^/]+)$/);
+  if (productMatch) {
+    const rawId = decodeURIComponent(productMatch[1]);
+    targetProduct = bundledProducts.get(rawId) || SERVER_CATALOG.find(p => p.slug === rawId || p.id === rawId);
+    if (!targetProduct && env && isFirestoreConfigured(env)) {
+      try {
+        const remoteDoc = await getDocument(env, `products/${rawId}`);
+        if (remoteDoc && remoteDoc.name) targetProduct = remoteDoc;
+      } catch (err) {
+        console.warn('[SkinID Edge SEO] Firestore lookup error for product:', rawId, err.message);
+      }
+    }
+  } else if (url.searchParams.has('product')) {
+    const pId = url.searchParams.get('product');
+    targetProduct = bundledProducts.get(pId) || SERVER_CATALOG.find(p => p.slug === pId || p.id === pId);
+    if (!targetProduct && env && isFirestoreConfigured(env)) {
+      try {
+        const remoteDoc = await getDocument(env, `products/${pId}`);
+        if (remoteDoc && remoteDoc.name) targetProduct = remoteDoc;
+      } catch (err) {
+        console.warn('[SkinID Edge SEO] Firestore lookup error for product query:', pId, err.message);
+      }
+    }
+  }
+
+  if (targetProduct) {
+    const title = `${targetProduct.name} - ${targetProduct.brand || 'Chính Hãng'} | SkinID Dược Mỹ Phẩm`;
+    const desc = (targetProduct.uses || targetProduct.description || `Dược mỹ phẩm chính hãng ${targetProduct.name} của ${targetProduct.brand}. Tư vấn da liễu chuyên sâu tại SkinID.vn.`).slice(0, 160);
+    const img = targetProduct.image ? (targetProduct.image.startsWith('http') ? targetProduct.image : `${url.origin}${targetProduct.image}`) : `${url.origin}/images/og-default.jpg`;
+    const canonical = `${url.origin}/products/${targetProduct.slug || targetProduct.id}`;
+    const price = Number(targetProduct.price) || 0;
+
+    const schemaProduct = {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "name": targetProduct.name,
+      "image": [img],
+      "description": desc,
+      "brand": {
+        "@type": "Brand",
+        "name": targetProduct.brand || "SkinID"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": canonical,
+        "priceCurrency": "VND",
+        "price": price,
+        "availability": "https://schema.org/InStock",
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": {
+          "@type": "Organization",
+          "name": "CÔNG TY TNHH FIELDMAN"
+        }
+      }
+    };
+
+    const rewriter = new HTMLRewriter()
+      .on('title', {
+        element(el) {
+          el.setInnerContent(title);
+        }
+      })
+      .on('meta[name="description"]', {
+        element(el) {
+          el.setAttribute('content', desc);
+        }
+      })
+      .on('head', {
+        element(el) {
+          el.append(`<link rel="canonical" href="${canonical}" />`, { html: true });
+          el.append(`<meta property="og:title" content="${title}" />`, { html: true });
+          el.append(`<meta property="og:description" content="${desc}" />`, { html: true });
+          el.append(`<meta property="og:image" content="${img}" />`, { html: true });
+          el.append(`<meta property="og:url" content="${canonical}" />`, { html: true });
+          el.append(`<meta property="og:type" content="product" />`, { html: true });
+          el.append(`<meta property="og:site_name" content="SkinID.vn" />`, { html: true });
+          el.append(`<meta name="twitter:card" content="summary_large_image" />`, { html: true });
+          el.append(`<meta name="twitter:title" content="${title}" />`, { html: true });
+          el.append(`<meta name="twitter:description" content="${desc}" />`, { html: true });
+          el.append(`<meta name="twitter:image" content="${img}" />`, { html: true });
+          el.append(`<script type="application/ld+json">${JSON.stringify(schemaProduct)}</script>`, { html: true });
+        }
+      });
+
+    return rewriter.transform(response);
+  }
+
+  // Check blog route: /blog/:id, /goc-cham-da/:id, or ?post=:id
+  let targetArticle = null;
+  const articlesList = typeof SERVER_ARTICLES !== 'undefined' ? SERVER_ARTICLES : [];
+  const blogMatch = pathname.match(/^\/(?:blog|goc-cham-da)\/([^/]+)$/);
+  if (blogMatch) {
+    const rawPostId = decodeURIComponent(blogMatch[1]);
+    targetArticle = bundledArticles.get(rawPostId) || articlesList.find(a => a.id === rawPostId);
+    if (!targetArticle && env && isFirestoreConfigured(env)) {
+      try {
+        const remoteDoc = await getDocument(env, `blog_posts/${rawPostId}`);
+        if (remoteDoc && remoteDoc.title) targetArticle = remoteDoc;
+      } catch (err) {
+        console.warn('[SkinID Edge SEO] Firestore lookup error for blog post:', rawPostId, err.message);
+      }
+    }
+  } else if (url.searchParams.has('post')) {
+    const pId = url.searchParams.get('post');
+    targetArticle = bundledArticles.get(pId) || articlesList.find(a => a.id === pId);
+    if (!targetArticle && env && isFirestoreConfigured(env)) {
+      try {
+        const remoteDoc = await getDocument(env, `blog_posts/${pId}`);
+        if (remoteDoc && remoteDoc.title) targetArticle = remoteDoc;
+      } catch (err) {
+        console.warn('[SkinID Edge SEO] Firestore lookup error for blog post query:', pId, err.message);
+      }
+    }
+  }
+
+  if (targetArticle) {
+    const title = `${targetArticle.title} | Cẩm nang Skincare Khoa học SkinID`;
+    const desc = (targetArticle.excerpt || targetArticle.description || targetArticle.title).slice(0, 160);
+    const img = targetArticle.image ? (targetArticle.image.startsWith('http') ? targetArticle.image : `${url.origin}${targetArticle.image}`) : `${url.origin}/images/og-default.jpg`;
+    const canonical = `${url.origin}/blog/${targetArticle.id}`;
+    const schemaArticle = {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": targetArticle.title,
+      "description": desc,
+      "image": [img],
+      "datePublished": targetArticle.date || new Date().toISOString().split('T')[0],
+      "author": {
+        "@type": "Person",
+        "name": targetArticle.author || "Chuyên gia Da liễu SkinID"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "SkinID.vn",
+        "logo": {
+          "@type": "ImageObject",
+          "url": `${url.origin}/logo.png`
+        }
+      }
+    };
+
+    const rewriter = new HTMLRewriter()
+      .on('title', {
+        element(el) {
+          el.setInnerContent(title);
+        }
+      })
+      .on('meta[name="description"]', {
+        element(el) {
+          el.setAttribute('content', desc);
+        }
+      })
+      .on('head', {
+        element(el) {
+          el.append(`<link rel="canonical" href="${canonical}" />`, { html: true });
+          el.append(`<meta property="og:title" content="${title}" />`, { html: true });
+          el.append(`<meta property="og:description" content="${desc}" />`, { html: true });
+          el.append(`<meta property="og:image" content="${img}" />`, { html: true });
+          el.append(`<meta property="og:url" content="${canonical}" />`, { html: true });
+          el.append(`<meta property="og:type" content="article" />`, { html: true });
+          el.append(`<meta property="og:site_name" content="SkinID.vn" />`, { html: true });
+          el.append(`<meta name="twitter:card" content="summary_large_image" />`, { html: true });
+          el.append(`<meta name="twitter:title" content="${title}" />`, { html: true });
+          el.append(`<meta name="twitter:description" content="${desc}" />`, { html: true });
+          el.append(`<meta name="twitter:image" content="${img}" />`, { html: true });
+          el.append(`<script type="application/ld+json">${JSON.stringify(schemaArticle)}</script>`, { html: true });
+        }
+      });
+
+    return rewriter.transform(response);
+  }
+
+  // Check policy route
+  const policyMeta = POLICY_META_MAP[pathname];
+  if (policyMeta) {
+    const canonical = `${url.origin}${pathname}`;
+    const rewriter = new HTMLRewriter()
+      .on('title', {
+        element(el) {
+          el.setInnerContent(policyMeta.title);
+        }
+      })
+      .on('meta[name="description"]', {
+        element(el) {
+          el.setAttribute('content', policyMeta.desc);
+        }
+      })
+      .on('head', {
+        element(el) {
+          el.append(`<link rel="canonical" href="${canonical}" />`, { html: true });
+          el.append(`<meta property="og:title" content="${policyMeta.title}" />`, { html: true });
+          el.append(`<meta property="og:description" content="${policyMeta.desc}" />`, { html: true });
+          el.append(`<meta property="og:url" content="${canonical}" />`, { html: true });
+        }
+      });
+    return rewriter.transform(response);
+  }
+
+  return response;
+}
+
+function generateSitemapXml(request, env) {
+  const origin = new URL(request.url).origin;
+  const staticRoutes = [
+    '',
+    'products',
+    'khuyen-mai',
+    'blog',
+    'skin-analysis',
+    'acie',
+    'tra-cuu-cong-bo',
+    'chinh-sach-bao-mat',
+    'chinh-sach-van-chuyen',
+    'chinh-sach-doi-tra',
+    'chinh-sach-thanh-toan',
+    'dieu-khoan-giao-dich',
+    'quy-trinh-khieu-nai'
+  ];
+
+  staticRoutes.push(...Object.keys(POLICY_META_MAP).map(route => route.slice(1)).filter(route => !staticRoutes.includes(route)));
+  const now = new Date().toISOString().split('T')[0];
+  let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+  xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+
+  for (const r of staticRoutes) {
+    const loc = r ? `${origin}/${r}` : `${origin}/`;
+    const priority = r === '' ? '1.0' : (r === 'products' ? '0.9' : '0.8');
+    xml += `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${now}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>${priority}</priority>\n  </url>\n`;
+  }
+
+  for (const p of SERVER_CATALOG) {
+    const slug = p.slug || p.id;
+    xml += `  <url>\n    <loc>${origin}/products/${slug}</loc>\n    <lastmod>${now}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>\n`;
+  }
+
+  for (const a of (typeof SERVER_ARTICLES !== 'undefined' ? SERVER_ARTICLES : [])) {
+    xml += `  <url>\n    <loc>${origin}/blog/${a.id}</loc>\n    <lastmod>${a.date || now}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+  }
+
+  xml += '</urlset>';
+
+  return new Response(xml, {
+    headers: {
+      'Content-Type': 'application/xml; charset=utf-8',
+      'Cache-Control': 'public, max-age=3600'
+    }
+  });
 }
 
 export default {
@@ -512,7 +1374,13 @@ export default {
     try {
       const url = new URL(request.url);
       if (url.pathname.startsWith('/api/')) return await handleApi(request, env);
-      return env.ASSETS.fetch(request);
+      if (url.pathname === '/sitemap.xml') return generateSitemapXml(request, env);
+      if (url.pathname === '/robots.txt') return new Response(`User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /profile\nDisallow: /__preview\nDisallow: /api/\nSitemap: ${url.origin}/sitemap.xml\n`, { headers: { 'content-type': 'text/plain; charset=utf-8' } });
+      const response = await env.ASSETS.fetch(request);
+      if (request.method === 'GET' && response.status === 200 && response.headers.get('content-type')?.includes('text/html')) {
+        return await applyDynamicSeo(request, env, url, response);
+      }
+      return response;
     } catch (error) {
       console.error('[SkinID Worker]', { code: error.code, message: error.message });
       const isExpected = error instanceof ApiError;

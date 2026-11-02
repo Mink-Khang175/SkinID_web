@@ -1,0 +1,3 @@
+// Non-payable placeholder for the local UI preview.
+const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="360" height="420" viewBox="0 0 360 420"><rect width="360" height="420" rx="20" fill="white"/><rect x="35" y="35" width="290" height="290" rx="12" fill="#f5f0f2" stroke="#e5c7d2"/><text x="180" y="160" text-anchor="middle" font-family="Arial" font-size="44" font-weight="bold" fill="#bd3f5b">DEMO</text><text x="180" y="200" text-anchor="middle" font-family="Arial" font-size="16" fill="#73616a">XEM GIAO DIEN VIETQR</text><text x="180" y="365" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#bd3f5b">KHONG THANH TOAN</text></svg>';
+export const PREVIEW_QR_URL = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;

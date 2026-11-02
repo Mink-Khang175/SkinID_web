@@ -17,3 +17,8 @@ gha-creds-*.json
 .secret.local
 .dev.vars
 .wrangler/
+
+!.env.ui
+!.dev.vars.example
+service-account*.json
+credentials/

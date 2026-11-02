@@ -1,0 +1,58 @@
+{
+  "source": "https://skinid.vn/",
+  "capturedDate": "2026-11-02",
+  "documents": {
+    "settings/system_config": {
+      "brandName": "SkinID.vn",
+      "slogan": "Healthier Skin, Happier You",
+      "hotline": "0924 093 461",
+      "supportEmail": "operation@fieldman.vn",
+      "showroomAddress": "35 đường số 3, Phường Tân Mỹ, TP. Hồ Chí Minh",
+      "freeshipThreshold": 500000,
+      "shippingFee": 30000,
+      "allowInspection": true
+    },
+    "promotions": [
+      {
+        "id": "FREESHIP",
+        "code": "FREESHIP",
+        "type": "shipping",
+        "discountValue": 30000,
+        "minOrderValue": 0,
+        "maxDiscount": 0,
+        "description": "Miễn phí vận chuyển (Tối đa 30.000đ)",
+        "active": true,
+        "badge": "Freeship Extra"
+      },
+      {
+        "id": "SKINID10",
+        "code": "SKINID10",
+        "type": "percent",
+        "discountValue": 10,
+        "minOrderValue": 200000,
+        "maxDiscount": 150000,
+        "description": "Giảm 10% tổng đơn hàng (Tối đa 150.000đ cho đơn từ 200.000đ)",
+        "active": true,
+        "badge": "Phổ biến nhất"
+      },
+      {
+        "id": "WELCOME50",
+        "code": "WELCOME50",
+        "type": "fixed",
+        "discountValue": 50000,
+        "minOrderValue": 300000,
+        "maxDiscount": 0,
+        "description": "Giảm 50.000đ cho đơn từ 300.000đ",
+        "active": true,
+        "badge": "Khách mới"
+      }
+    ]
+  },
+  "readStatus": {
+    "settings/system_config": 200,
+    "settings/campaign_config": 403,
+    "promotions": 200,
+    "posts": 403,
+    "pages/home": 404
+  }
+}

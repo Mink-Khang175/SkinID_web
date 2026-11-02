@@ -10,9 +10,23 @@
     "directory": "./dist",
     "binding": "ASSETS",
     "not_found_handling": "single-page-application",
-    "run_worker_first": ["/api/*"]
+    "run_worker_first": [
+      "/api/*",
+      "/sitemap.xml",
+      "/robots.txt",
+      "/products/*",
+      "/blog/*",
+      "/goc-cham-da/*",
+      "/chinh-sach-*",
+      "/dieu-khoan-*",
+      "/quy-trinh-khieu-nai",
+      "/thong-tin-don-vi-van-hanh",
+      "/huong-dan-mua-hang",
+      "/quan-ly-tai-khoan"
+    ]
   },
   "observability": {
     "enabled": true
-  }
+  },
+  "workers_dev": true
 }

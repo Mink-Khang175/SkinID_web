@@ -1,3 +1,4 @@
+import { isFrontendPreview, previewBackend } from '../../preview/runtime.js';
 import { getApp, getApps, initializeApp } from 'firebase/app';
 import {
   browserLocalPersistence,
@@ -36,8 +37,8 @@ import {
 import { firebaseConfig } from '../../shared/config/runtime.js';
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+const auth = isFrontendPreview ? previewBackend.auth : getAuth(app);
+const db = isFrontendPreview ? previewBackend.db : getFirestore(app);
 
 const authSdk = Object.freeze({
   browserLocalPersistence,
@@ -77,7 +78,7 @@ export const firebaseServices = Object.freeze({
   app,
   auth,
   db,
-  sdk: Object.freeze({ auth: authSdk, firestore: firestoreSdk })
+  sdk: isFrontendPreview ? previewBackend.sdk : Object.freeze({ auth: authSdk, firestore: firestoreSdk })
 });
 
 export const firebaseReady = Promise.resolve(firebaseServices);
@@ -91,7 +92,7 @@ export function installLegacyFirebaseBridge() {
 }
 
 export async function initializeAnalytics() {
-  if (typeof window === 'undefined') return null;
+  if (isFrontendPreview || typeof window === 'undefined') return null;
   try {
     const analyticsSdk = await import('firebase/analytics');
     if (!(await analyticsSdk.isSupported())) return null;

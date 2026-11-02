@@ -1,0 +1,21 @@
+# Server only. Copy to .dev.vars locally. Never prefix a secret with VITE_.
+FIREBASE_PROJECT_ID=skinid-df273
+# Local Node/Vite: service-account JSON path, ignored by Git.
+GOOGLE_APPLICATION_CREDENTIALS=./credentials/service-account.json
+# Cloudflare: Danh configures these three Worker secrets instead of a local file.
+FIREBASE_CLIENT_EMAIL=
+FIREBASE_PRIVATE_KEY=
+GEMINI_API_KEY=
+GEMINI_MODEL=
+
+# ES3 retail POS, NOT Amazon S3 storage.
+S3_BASE_URL=https://m.es3.vn
+S3_USERNAME=
+S3_PASSWORD=
+S3_BRANCH_ID=9099
+S3_CASHIER_ID=16614
+S3_SYNC_ENABLED=false
+
+TELEGRAM_BOT_TOKEN=
+TELEGRAM_CHAT_ID=
+ALLOWED_ORIGINS=https://skinid.vn,https://www.skinid.vn

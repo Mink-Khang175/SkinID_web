@@ -1,4 +1,7 @@
 import { exportUserPdfReport } from '../services/profilePdfExport.js';
+import { useState } from 'react';
+import { searchScanHistory } from '../profileListSearch.mjs';
+import ProfileListControls, { ProfileListMore } from './ProfileListControls.jsx';
 
 function scoreTheme(score) {
   if (score < 60) {
@@ -24,6 +27,12 @@ function openScanDetail(scanId, scanIndex) {
 }
 
 export default function ProfileHistoryTimeline({ history = [], user = {} }) {
+  const batchSize = 5;
+  const [query, setQuery] = useState('');
+  const [limit, setLimit] = useState(batchSize);
+  const matches = searchScanHistory(history, query);
+  const visible = matches.slice(0, limit);
+  const changeQuery = value => { setQuery(value); setLimit(batchSize); };
   if (!history.length) {
     return (
       <div id="timeline-scan-container" className="space-y-4">
@@ -44,13 +53,15 @@ export default function ProfileHistoryTimeline({ history = [], user = {} }) {
   }
 
   return (
-    <div id="timeline-scan-container" className="space-y-4">
-      {history.map((scan, index) => {
+    <div className="space-y-4">
+      <ProfileListControls id="timeline-scan-container" label="Tìm phiên soi da" placeholder="Ngày soi, số phiên, tình trạng da…" query={query} onQueryChange={changeQuery} shown={visible.length} total={matches.length} />
+      <div id="timeline-scan-container" className="space-y-4">
+      {!matches.length && <div className="profile-list-no-results"><strong>Không tìm thấy phiên soi phù hợp</strong><p>Thử ngày soi hoặc tình trạng da khác.</p><button type="button" className="profile-action profile-action--quiet" onClick={() => changeQuery('')}>Xóa tìm kiếm</button></div>}
+      {visible.map(({ scan, index, sessionNumber }) => {
         const score = Number(scan.healthScore) || 0;
         const scanId = scan.id ?? index;
         const theme = scoreTheme(score);
         const open = () => openScanDetail(scanId, index);
-        const sessionNumber = history.length - index;
 
         return (
           <article
@@ -136,6 +147,8 @@ export default function ProfileHistoryTimeline({ history = [], user = {} }) {
           </article>
         );
       })}
+      </div>
+      <ProfileListMore id="timeline-scan-container" shown={visible.length} total={matches.length} batchSize={batchSize} onMore={() => setLimit(value => value + batchSize)} onCollapse={() => setLimit(batchSize)} />
     </div>
   );
 }

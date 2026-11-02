@@ -1,106 +1,77 @@
-# SkinID — React Vite storefront
+# SkinID — Storefront & Backend
 
-Trang chủ, trang soi da và hồ sơ tài khoản dùng chung một ứng dụng React + Vite.
-Các màn hình được tách thành component JSX và giữ nguyên toàn bộ class giao diện.
-Tailwind CSS được Vite biên dịch khi chạy dev/build, không còn phụ thuộc CDN production.
+Repo làm việc chung cho giao diện React/Vite và backend Cloudflare Worker/Firebase đang được nối lại. Giai đoạn hiện tại tận dụng hệ thống đã có để hoàn thiện website; kế hoạch chuyển server Next.js/PostgreSQL thực hiện sau. Anh Danh mới phụ trách cấu hình môi trường và deploy.
 
-## Chạy local
+Source tham chiếu: [repo Danh cũ](https://github.com/danhhuynh-stack/skinid-web), commit `01e7458958baff941d5bdd9bfe50b89a01fabe3f`. Giữ các cập nhật chức năng, chính sách V2.0 và style homepage local. Carousel, các nút gốc và footer trước đợt đổi style được giữ theo yêu cầu.
 
-```sh
-npm install
-npm run dev
+## Chạy hệ thống đang kết nối
+
+Node.js 24, npm:
+
+```powershell
+cd D:\SkinID\skinid-web
+npm ci
+npm run check:config
+npm run dev -- --host 127.0.0.1 --port 5175 --strictPort
 ```
 
-Mở `http://localhost:5173`. Các route chính là `/`, `/skin-analysis`, `/profile` và `/admin`.
-Không mở dự án bằng `file://`.
+Mở http://127.0.0.1:5175. Vite phục vụ frontend và `/api/*` cùng origin. `.env.local` bật `VITE_FRONTEND_PREVIEW=false`; `.dev.vars` chứa cấu hình server. Máy hiện tại đã được trỏ tới file service account người dùng cung cấp và project `skinid-df273`. File khóa không thuộc Git.
+
+Lần checkout mới: dùng `.env.example` làm `.env.local`, `.dev.vars.example` làm `.dev.vars`, bổ sung service account đúng project theo [hướng dẫn môi trường](docs/development/setup.md). Không chép đè cấu hình local đã có.
+
+## Xem admin
+
+- Hệ thống thật: đăng nhập tài khoản Firebase có quyền quản trị, vào `/admin`. Không dùng tham số URL để cấp quyền.
+- Xem UI bằng dữ liệu mẫu: `npm run dev:ui -- --host 127.0.0.1 --port 5176 --strictPort`, mở http://127.0.0.1:5176/__preview rồi chọn **Tổng quan & KPI**. Preview không kết nối dữ liệu thật.
+
+Chi tiết: [hướng dẫn admin](docs/development/admin-preview.md).
 
 ## Cấu trúc
 
 ```text
-index.html                    Shell duy nhất do Vite yêu cầu
-src/
-  main.jsx                    React entry
-  App.jsx                     Gắn app providers và router
-  app/router.jsx              Khai báo route, lazy loading và route aliases
-  pages/HomePage.jsx          Trang chủ
-  pages/SkinAnalysisPage.jsx  Trang soi da
-  pages/ProfilePage.jsx       Trang hồ sơ và lịch sử
-  assets/images/              Toàn bộ ảnh giao diện và sản phẩm
-  components/
-    layout/       Header, footer, offer bar, mobile navigation (.jsx)
-    home/         Hero, danh mục, catalog, thương hiệu, trợ giúp (.jsx)
-    analysis/     Giao diện phác đồ/scan/account được chuyển sang JSX
-    dialogs/      Các modal React dùng chung
-  styles/         CSS giao diện hiện có, không thay đổi thiết kế
-  features/       State, API và nghiệp vụ React theo từng tính năng
-  data/           products.js: dữ liệu local dự phòng của 55 sản phẩm
-  js/
-    app/          Bootstrap, Firebase client và cấu hình public không chứa bí mật
-    catalog/      Product Card, bộ lọc, tương tác trang chủ
-    analysis/     Chụp ảnh, phân tích và dựng báo cáo
-worker/                       Cloudflare Worker: checkout, Gemini và tác vụ admin
-tests/            Kiểm thử hồi quy chạy bằng Node
-scripts/          Kiểm tra catalog và nhập dữ liệu Firestore
-docs/             Kiến trúc, kiểm tra dữ liệu, hướng dẫn tích hợp
-dist/             Kết quả build tạm thời, được tạo lại và không lưu trong Git
+src/                         Frontend theo tính năng
+  app/, pages/               Router, providers và trang
+  features/                  Auth, catalog, cart, admin, CMS, hồ sơ, soi da
+  infrastructure/            Firebase client và HTTP client
+  components/, shared/       Khối UI và tiện ích dùng chung
+  assets/, data/, styles/    Tài nguyên, nội dung và style
+  preview/                   Adapter dữ liệu mẫu, chỉ bật rõ bằng dev:ui
+  js/                        Bridge legacy còn được sử dụng
+worker/                      Backend kế thừa
+  index.js                   Route, nghiệp vụ, Edge SEO và sitemap
+  app/                       Lỗi, CORS, cấu hình và trạng thái tích hợp
+  infrastructure/firebase/   Xác minh Firebase ID token
+  firestore.js               Firestore REST và Auth quản trị ở server
+  services/                  POS, nhật ký chống gửi trùng, Telegram
+  *.generated.js             Catalog, blog, chính sách sinh từ nguồn frontend
+scripts/dev/                 Adapter API Node/Vite và nạp môi trường server
+scripts/backend/             Kiểm tra cấu hình, catalog, phân quyền, ánh xạ POS
+scripts/generate-catalog.mjs  Sinh dữ liệu frontend/backend đồng nhất
+firestore.rules, storage.rules, firestore.indexes.json
+firebase.json, .firebaserc    Cấu hình Firebase
+wrangler.jsonc               Entry Worker và static assets
+.github/workflows/           Kiểm thử/build/dry-run; không deploy
+tests/, docs/                Kiểm thử và tài liệu đang duy trì
 ```
 
-## Chỉnh ở đâu?
-
-- Điều phối route: `src/app/router.jsx`.
-- Thứ tự lắp ráp trang chủ: `src/pages/HomePage.jsx`.
-- Bố cục trang chủ: các file `.jsx` trong `src/components/home/`; catalog sản phẩm nằm trong `src/features/catalog/`.
-- Component chung: `src/components/layout/`, `src/components/dialogs/` và `src/components/analysis/`.
-- Màu, khoảng cách, responsive: src/styles/site.css.
-- Thẻ sản phẩm: src/js/catalog/product-card.js.
-- Quy tắc phân loại/lọc: src/js/catalog/product-filters.js.
-- Dữ liệu sản phẩm local: src/data/products.js.
-- Cấu hình Firebase client công khai: `src/shared/config/runtime.js`.
-
-Các route đã chuyển đổi hoàn chỉnh như `/products`, `/profile`, `/admin` và `/tra-cuu-cong-bo` không tải bootstrap
-legacy. `useLegacyApplication` chỉ còn tải nhóm script nghiệp vụ cho home và skin-analysis
-trong thời gian chuyển đổi. Vite quản lý và tạo URL có hash cho ảnh trong `src/assets`.
-Cloudflare Workers Static Assets rewrite mọi URL về React SPA, nên các route `/profile`,
-`/skin-analysis` và `/admin` vẫn hoạt động khi tải lại trực tiếp.
-
-`npm run dev` chạy giao diện Vite trực tiếp. `npm run dev:cloudflare` build rồi chạy
-cả static assets và API Worker; lệnh này cần file `.dev.vars` chứa secret local.
+Không đưa `node_modules`, `dist`, file môi trường thật hoặc service account lên Git. Không khôi phục thư mục ảnh trùng `public/`, cache hay script hotfix một lần vào source hoạt động.
 
 ## Kiểm tra
 
-```sh
-npm test
+```powershell
 npm run test:all
-npm run audit:catalog
-npm run firestore:import-products
-npm run dev:cloudflare
+npm run check:worker
+npm run check:config
 ```
 
-`npm run test:all` kiểm tra frontend, Worker và chạy Vite production build.
-
-`dist/` được tạo bởi `npm run build` cho Cloudflare Static Assets. Không sửa trực tiếp file trong
-thư mục này vì mọi nội dung sẽ bị thay thế ở lần build tiếp theo.
-
-Lệnh import Firestore mặc định chỉ kiểm tra dữ liệu. Sau khi cấu hình service-account
-credential trong `.env`, chạy `npm run firestore:import-products -- --commit` để upsert
-collection `products`; script không xóa document ngoài catalog local.
+`check:worker` chỉ bundle thử bằng Wrangler, không deploy. `check:config` kiểm tra cấu hình có mặt, không giả báo dịch vụ đã kết nối. Không tự tạo đơn hoặc gửi thông báo thật khi chạy tests.
 
 ## Trạng thái tích hợp
 
-- [Kết nối phần mềm bán hàng](docs/sales-api-integration.md): chỉ là thiết kế/hướng dẫn,
-  chưa có kết nối nào được triển khai.
-- [Gemini và bảo mật](docs/gemini-setup.md): Cloudflare Worker dùng
-  `GEMINI_API_KEY` từ Worker Secret và Firebase Authentication trước khi gọi Gemini.
-- Firebase Auth quản lý Email/Password và Google; profile/lịch sử nằm trong Firestore.
-- Checkout gọi Cloudflare Worker để xác minh giá và tạo đơn; trang `/admin` CRUD dữ liệu Firestore theo custom claim `admin`.
-- [Triển khai GitHub → Cloudflare](docs/cloudflare-deployment.md): CI/CD tự động cho cả website và API.
-- [Thiết lập Firebase ecommerce](docs/firebase-ecommerce-setup.md): Authentication, backend và quyền admin.
-- [Báo cáo catalog](docs/catalog-audit-2026-09-10.md).
-- Catalog ưu tiên đọc collection `products` từ Firestore và dùng fixture local khi mất mạng.
-- Kết quả phân tích da chỉ mang tính tham khảo, không thay thế chẩn đoán y khoa.
+- Firebase frontend, CLI và backend cùng project `skinid-df273`; đã xác minh OAuth và đọc Firestore bằng service account, không ghi/nhập dữ liệu.
+- Đơn hàng đi qua server; giá/voucher/phí được kiểm tra lại. Đồng bộ POS chỉ ở server, có khóa chống gửi trùng và trạng thái chờ đối soát.
+- S3 POS chưa có tài khoản và mã sản phẩm POS thực tế: để tắt, anh Danh bổ sung sau. S3 ở đây là phần mềm bán lẻ ES3, không phải Amazon S3.
+- Gemini có cấu hình local nhưng chưa gọi phân tích ảnh thật; Telegram chưa có cấu hình. VietQR hiện chuyển khoản thủ công, chưa có webhook đối soát tự động.
+- Rules/Storage/Auth provider, tên miền và môi trường production cần anh Danh kiểm tra khi triển khai; đợt này chưa deploy, cấp quyền tài khoản hoặc migrate dữ liệu.
 
-Không đặt bí mật vào `src/`, HTML hoặc bất kỳ thư mục nào được static server phục vụ.
-Đổi tên thư mục thành config hay dùng Base64 không làm dữ liệu bí mật hơn.
-Mỗi push lên `main` được GitHub Actions kiểm thử rồi triển khai Cloudflare Worker và
-static assets. Firestore Rules được triển khai riêng khi thay đổi. `.env`, `.dev.vars`,
-Worker Secrets và credential CI không được đưa vào static assets hoặc repository.
+[Tài liệu](docs/README.md) · [Style](docs/design/style-system.md) · [Kiến trúc backend](docs/architecture/backend.md) · [Bàn giao anh Danh](docs/operations/danh-handover.md) · [Cộng tác GitHub](CONTRIBUTING.md)

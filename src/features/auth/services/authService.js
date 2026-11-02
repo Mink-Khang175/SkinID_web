@@ -1,4 +1,5 @@
 import { firebaseServices } from '../../../infrastructure/firebase/index.js';
+import { getCachedOrders } from '../../cart/services/orderCacheService.js';
 
 const { auth, db, sdk } = firebaseServices;
 
@@ -10,7 +11,8 @@ const firebaseMessages = {
   'auth/popup-closed-by-user': 'Cửa sổ đăng nhập Google đã bị đóng.',
   'auth/too-many-requests': 'Có quá nhiều lần thử. Vui lòng thử lại sau.',
   'auth/operation-not-allowed': 'Phương thức đăng nhập này đang tạm ngưng.',
-  'auth/unauthorized-domain': 'Đăng nhập chưa được hỗ trợ trên địa chỉ website này.'
+  'auth/unauthorized-domain': 'Đăng nhập chưa được hỗ trợ trên địa chỉ website này.',
+  'auth/configuration-not-found': 'Dịch vụ xác thực Firebase chưa được kích hoạt trên Firebase Console. Vui lòng vào mục Authentication bấm "Get started" và bật Email/Password.'
 };
 
 function announceProfileUpdate(user) {
@@ -20,6 +22,13 @@ function announceProfileUpdate(user) {
 
 export function authErrorMessage(error) {
   return firebaseMessages[error?.code] || error?.message || 'Không thể hoàn tất yêu cầu.';
+}
+
+export const ROOT_ADMIN_EMAILS = ['danh.huynh@fieldman.vn'];
+
+export function isRootAdminEmail(email) {
+  if (!email || typeof email !== 'string') return false;
+  return ROOT_ADMIN_EMAILS.includes(email.trim().toLowerCase());
 }
 
 async function loadProfile(firebaseUser, initialProfile = {}) {
@@ -35,20 +44,42 @@ async function loadProfile(firebaseUser, initialProfile = {}) {
     provider
   };
 
+  const isRootAdmin = firebaseUser.emailVerified === true && isRootAdminEmail(firebaseUser.email);
+
   if (!snapshot.exists()) {
-    await setDoc(reference, { ...defaults, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+    const initialData = {
+      ...defaults,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+      ...(isRootAdmin ? { role: 'super_admin', isAdmin: true } : {})
+    };
+    await setDoc(reference, initialData);
   }
   const profile = snapshot.data() || {};
-  const token = await sdk.auth.getIdTokenResult(firebaseUser).catch(() => ({ claims: {} }));
+
+  // Tự động nâng cấp tài khoản Root Admin nếu Firestore chưa đồng bộ
+  if (isRootAdmin && (profile.role !== 'super_admin' || !profile.isAdmin)) {
+    profile.role = 'super_admin';
+    profile.isAdmin = true;
+    await setDoc(reference, { role: 'super_admin', isAdmin: true, updatedAt: serverTimestamp() }, { merge: true }).catch(() => {});
+  }
+
+  // Force refresh token đối với tài khoản root admin để nhận Custom Claims tức thì
+  const token = await sdk.auth.getIdTokenResult(firebaseUser, isRootAdmin).catch(() => ({ claims: {} }));
+  const isSuperAdminUser = Boolean(isRootAdmin || profile.role === 'super_admin' || token.claims?.role === 'super_admin');
+  const isAdminUser = Boolean(isSuperAdminUser || profile.role === 'admin' || profile.isAdmin === true || token.claims?.admin === true);
+
   return {
     id: firebaseUser.uid,
     uid: firebaseUser.uid,
     ...defaults,
     ...profile,
+    role: isSuperAdminUser ? 'super_admin' : (profile.role || 'customer'),
+    isAdmin: isAdminUser,
+    isSuperAdmin: isSuperAdminUser,
     picture: String(profile.picture || '').startsWith('data:image/')
       ? profile.picture
       : (firebaseUser.photoURL || profile.picture || null),
-    isAdmin: token.claims?.admin === true,
     customClaims: token.claims || {}
   };
 }
@@ -60,11 +91,34 @@ export async function fetchHistory(userId) {
 }
 
 export async function fetchOrders(userId) {
-  const { collection, getDocs, query, where } = sdk.firestore;
-  const result = await getDocs(query(collection(db, 'orders'), where('userId', '==', userId)));
-  return result.docs
-    .map((snapshot) => ({ id: snapshot.id, ...snapshot.data() }))
-    .sort((left, right) => (right.createdAt?.seconds || 0) - (left.createdAt?.seconds || 0));
+  const cachedOrders = getCachedOrders(userId);
+  const getOrderTime = (val) => {
+    if (!val) return 0;
+    if (typeof val.toDate === 'function') return val.toDate().getTime();
+    if (val.seconds) return val.seconds * 1000;
+    const time = new Date(val).getTime();
+    return Number.isNaN(time) ? 0 : time;
+  };
+
+  try {
+    const { collection, getDocs, query, where } = sdk.firestore;
+    const result = await getDocs(query(collection(db, 'orders'), where('userId', '==', userId)));
+    const firestoreOrders = result.docs.map((snapshot) => ({ id: snapshot.id, ...snapshot.data() }));
+
+    const merged = new Map();
+    for (const order of cachedOrders) {
+      if (order.id) merged.set(order.id, order);
+    }
+    for (const order of firestoreOrders) {
+      if (order.id) merged.set(order.id, { ...(merged.get(order.id) || {}), ...order });
+    }
+
+    return Array.from(merged.values())
+      .sort((left, right) => getOrderTime(right.createdAt) - getOrderTime(left.createdAt));
+  } catch (err) {
+    console.warn('[SkinID Orders] Firestore fetch failed, serving cached orders:', err.message);
+    return cachedOrders.sort((left, right) => getOrderTime(right.createdAt) - getOrderTime(left.createdAt));
+  }
 }
 
 export async function loadAuthSession(firebaseUser) {

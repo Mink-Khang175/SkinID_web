@@ -1,14 +1,20 @@
+import { isFrontendPreview, previewApiRequest } from '../../preview/runtime.js';
 import { auth } from '../firebase/index.js';
 import { runtimeConfig } from '../../shared/config/runtime.js';
 
+// An optional fallback must be explicitly configured for the new backend.
+const WORKER_FALLBACK_URL = import.meta.env?.VITE_WORKER_API_URL || '';
+
 function createApiError(payload, status) {
-  const error = new Error(payload?.message || 'Không thể hoàn tất yêu cầu.');
+  const message = payload?.message || (status === 404 ? 'Máy chủ xử lý đơn hàng đang chuyển hướng. Vui lòng thử lại.' : 'Không thể hoàn tất yêu cầu.');
+  const error = new Error(message);
   error.code = payload?.code || `http_${status}`;
   error.status = status;
   return error;
 }
 
 export async function apiRequest(path, options = {}) {
+  if (isFrontendPreview) return previewApiRequest(path, options);
   const user = auth.currentUser;
   if (!user) {
     const error = new Error('Vui lòng đăng nhập trước khi tiếp tục.');
@@ -22,19 +28,38 @@ export async function apiRequest(path, options = {}) {
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
   const { timeoutMs: _ignored, headers, ...fetchOptions } = options;
 
+  const baseUrls = [runtimeConfig.apiBaseUrl.replace(/\/$/, '')];
+  if (WORKER_FALLBACK_URL && !baseUrls[0].includes('workers.dev')) {
+    baseUrls.push(WORKER_FALLBACK_URL);
+  }
+
   try {
-    const response = await fetch(`${runtimeConfig.apiBaseUrl.replace(/\/$/, '')}${path}`, {
-      ...fetchOptions,
-      signal: controller.signal,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        ...(headers || {})
+    let lastError = null;
+    for (const baseUrl of baseUrls) {
+      try {
+        const response = await fetch(`${baseUrl}${path}`, {
+          ...fetchOptions,
+          signal: controller.signal,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            ...(headers || {})
+          }
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (response.ok) return payload;
+        if (response.status === 404 && baseUrls.indexOf(baseUrl) < baseUrls.length - 1) {
+          continue;
+        }
+        throw createApiError(payload, response.status);
+      } catch (err) {
+        lastError = err;
+        if (err?.name === 'AbortError') throw err;
+        if (baseUrls.indexOf(baseUrl) < baseUrls.length - 1) continue;
+        throw err;
       }
-    });
-    const payload = await response.json().catch(() => ({}));
-    if (!response.ok) throw createApiError(payload, response.status);
-    return payload;
+    }
+    throw lastError;
   } catch (error) {
     if (error?.name !== 'AbortError') throw error;
     const timeoutError = new Error('Kết nối quá thời gian. Vui lòng thử lại.');

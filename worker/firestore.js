@@ -1,5 +1,6 @@
 import { importPKCS8, SignJWT } from 'jose';
 import { normalizeFirebasePrivateKey } from './app/env.js';
+import { ApiError } from './app/errors.js';
 
 const tokenCache = new Map();
 
@@ -159,14 +160,22 @@ export async function firestoreRequest(env, path, options = {}) {
   });
   if (response.status === 404) return null;
   const payload = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(payload?.error?.message || `Firestore trả về lỗi ${response.status}.`);
+  if (!response.ok) {
+    if ([409, 412].includes(response.status) || ['ABORTED', 'ALREADY_EXISTS', 'FAILED_PRECONDITION'].includes(payload?.error?.status)) {
+      throw new ApiError(409, 'write_conflict', 'Dữ liệu vừa được thay đổi. Vui lòng tải lại và thử lại.');
+    }
+    throw new ApiError(503, 'database_unavailable', 'Chưa thể xử lý dữ liệu. Vui lòng thử lại sau.');
+  }
   return payload;
 }
 
 export async function getDocument(env, path) {
   const encodedPath = String(path).split('/').filter(Boolean).map(encodeURIComponent).join('/');
   const document = await firestoreRequest(env, `/${encodedPath}`);
-  return document ? { id: document.name.split('/').pop(), ...decodeFields(document.fields) } : null;
+  if (!document) return null;
+  const value = { id: document.name.split('/').pop(), ...decodeFields(document.fields) };
+  Object.defineProperty(value, '_updateTime', { value: document.updateTime, enumerable: false });
+  return value;
 }
 
 export async function runQuery(env, structuredQuery) {
@@ -211,5 +220,20 @@ export async function deleteFirebaseUser(env, uid) {
   });
   const payload = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(payload?.error?.message || 'Không thể xóa tài khoản Firebase Authentication.');
+  return payload;
+}
+
+export async function setFirebaseCustomUserClaims(env, uid, claims = {}) {
+  const token = await getGoogleAccessToken(env);
+  const response = await fetch(`https://identitytoolkit.googleapis.com/v1/projects/${env.FIREBASE_PROJECT_ID}/accounts:update`, {
+    method: 'POST',
+    headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' },
+    body: JSON.stringify({
+      localId: uid,
+      customAttributes: JSON.stringify(claims)
+    })
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload?.error?.message || 'Không thể cập nhật quyền người dùng trên Firebase Auth.');
   return payload;
 }

@@ -1,3 +1,4 @@
+import { isFrontendPreview } from '../../preview/runtime.js';
 const apiBase = 'https://provinces.open-api.vn/api/v2';
 
 export const vietnamProvinces = [
@@ -18,6 +19,7 @@ export const vietnamProvinces = [
 const wardCache = new Map();
 
 export async function fetchVietnamWards(provinceCode) {
+  if (isFrontendPreview) return [{ code: 26734, name: 'Phường Tân Mỹ (mẫu)' }];
   const code = Number(provinceCode);
   if (!Number.isInteger(code)) return [];
   if (wardCache.has(code)) return wardCache.get(code);

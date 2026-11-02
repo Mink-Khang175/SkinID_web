@@ -4,77 +4,8 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
+import { apiDevPlugin } from './scripts/dev/api-plugin.mjs';
 
-function parseEnvFile(filePath) {
-  if (!fs.existsSync(filePath)) return {};
-  const content = fs.readFileSync(filePath, 'utf8');
-  const result = {};
-  const lines = content.split(/\r?\n/);
-  let currentKey = null;
-  let currentValue = '';
-  let inMultiLine = false;
-
-  for (const rawLine of lines) {
-    if (!inMultiLine) {
-      const trimmed = rawLine.trim();
-      if (!trimmed || trimmed.startsWith('#')) continue;
-      const idx = rawLine.indexOf('=');
-      if (idx > 0) {
-        const key = rawLine.slice(0, idx).trim();
-        let val = rawLine.slice(idx + 1).trim();
-        if ((val.startsWith('"') && !val.endsWith('"')) || (val.startsWith("'") && !val.endsWith("'")) || val === '"' || val === "'") {
-          inMultiLine = val[0];
-          currentKey = key;
-          currentValue = val.slice(1);
-        } else {
-          if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
-            val = val.slice(1, -1);
-          }
-          result[key] = val;
-        }
-      }
-    } else {
-      if (rawLine.trim().endsWith(inMultiLine)) {
-        currentValue += '\n' + rawLine.slice(0, rawLine.lastIndexOf(inMultiLine));
-        result[currentKey] = currentValue;
-        currentKey = null;
-        currentValue = '';
-        inMultiLine = false;
-      } else {
-        currentValue += '\n' + rawLine;
-      }
-    }
-  }
-  return result;
-}
-
-function loadDevVars() {
-  const envFileVars = parseEnvFile(resolve(import.meta.dirname, '.env'));
-  const devVars = parseEnvFile(resolve(import.meta.dirname, '.dev.vars'));
-  const env = {
-    ...process.env,
-    ...envFileVars,
-    ...devVars,
-    IS_LOCAL_DEV: 'true',
-    NODE_ENV: 'development'
-  };
-
-  const credPath = env.GOOGLE_APPLICATION_CREDENTIALS || process.env.GOOGLE_APPLICATION_CREDENTIALS;
-  if (credPath && fs.existsSync(credPath)) {
-    try {
-      const sa = JSON.parse(fs.readFileSync(credPath, 'utf8'));
-      if (sa.client_email && !env.FIREBASE_CLIENT_EMAIL) env.FIREBASE_CLIENT_EMAIL = sa.client_email;
-      if (sa.private_key && !env.FIREBASE_PRIVATE_KEY) env.FIREBASE_PRIVATE_KEY = sa.private_key;
-      if (sa.project_id && !env.FIREBASE_PROJECT_ID) env.FIREBASE_PROJECT_ID = sa.project_id;
-    } catch {
-      // Ignore invalid JSON
-    }
-  }
-
-  return env;
-}
-
-/** Serve /videos/* and /images/* from src/assets/ in dev mode */
 function staticAssetsDevPlugin() {
   return {
     name: 'static-assets-dev',
@@ -155,71 +86,13 @@ function staticAssetsDevPlugin() {
 }
 
 
-function workerApiDevPlugin() {
-  return {
-    name: 'worker-api-dev',
-    configureServer(server) {
-      server.middlewares.use(async (req, res, next) => {
-        const pathname = (req.url || '').split('?')[0];
-        if (!pathname.startsWith('/api/')) return next();
-
-        try {
-          const env = loadDevVars();
-          const host = req.headers.host || 'localhost:5173';
-          const protocol = req.socket?.encrypted ? 'https' : 'http';
-          const fullUrl = `${protocol}://${host}${req.url}`;
-          
-          const headers = new Headers();
-          for (const [key, val] of Object.entries(req.headers)) {
-            if (val !== undefined) {
-              headers.set(key, Array.isArray(val) ? val.join(', ') : val);
-            }
-          }
-
-          let body = undefined;
-          if (req.method !== 'GET' && req.method !== 'HEAD') {
-            const chunks = [];
-            for await (const chunk of req) {
-              chunks.push(chunk);
-            }
-            body = Buffer.concat(chunks);
-          }
-
-          const webReq = new Request(fullUrl, {
-            method: req.method,
-            headers,
-            body
-          });
-
-          const { default: worker } = await import('./worker/index.js');
-          const webRes = await worker.fetch(webReq, env, {
-            waitUntil() {},
-            passThroughOnException() {}
-          });
-
-          res.statusCode = webRes.status;
-          for (const [headerName, headerVal] of webRes.headers.entries()) {
-            res.setHeader(headerName, headerVal);
-          }
-          const arrayBuffer = await webRes.arrayBuffer();
-          res.end(Buffer.from(arrayBuffer));
-        } catch (err) {
-          console.error('[Worker Dev Middleware Error]', err);
-          res.statusCode = 500;
-          res.setHeader('Content-Type', 'application/json');
-          res.end(JSON.stringify({
-            success: false,
-            code: 'internal_dev_error',
-            message: err.message || 'Lỗi xử lý API trong môi trường phát triển.'
-          }));
-        }
-      });
-    }
-  };
-}
-
 export default defineConfig({
   publicDir: false,
+  server: {
+    fs: {
+      deny: ['.env', '.env.*', '**/.dev.vars*', '**/*firebase-adminsdk*.json', '**/service-account*.json', '**/credentials/**', '**/*.{crt,pem,key}', '**/.git/**']
+    }
+  },
   resolve: {
     dedupe: ['react', 'react-dom']
   },
@@ -228,7 +101,7 @@ export default defineConfig({
   },
   plugins: [
     staticAssetsDevPlugin(),
-    workerApiDevPlugin(),
+    apiDevPlugin(),
     react(),
     tailwindcss(),
     viteStaticCopy({
