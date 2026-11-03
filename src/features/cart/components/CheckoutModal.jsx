@@ -41,6 +41,7 @@ export default function CheckoutModal() {
   const [wards, setWards] = useState([]);
   const [isLoadingWards, setIsLoadingWards] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [error, setError] = useState('');
   const [couponCode, setCouponCode] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState(null);
@@ -126,6 +127,7 @@ export default function CheckoutModal() {
     const name = form.name.trim();
     const phone = form.phone.replace(/[\s.-]/g, '');
     try {
+      if (!acceptedTerms) throw new Error('Vui lòng đồng ý với Điều khoản sử dụng website và Chính sách bảo mật để đặt hàng.');
       if (name.length < 2) throw new Error('Vui lòng nhập họ và tên người nhận.');
       if (!/^(?:\+84|0)(?:3|5|7|8|9)\d{8}$/.test(phone)) {
         throw new Error('Số điện thoại Việt Nam chưa đúng định dạng.');
@@ -450,10 +452,19 @@ export default function CheckoutModal() {
 
                 {error && <div className="react-checkout-error" role="alert">{error}</div>}
 
+                <label className="react-checkout-consent">
+                  <input type="checkbox" checked={acceptedTerms} onChange={(event) => setAcceptedTerms(event.target.checked)} required />
+                  <span>
+                    Tôi đã đọc và đồng ý với <a href="/dieu-khoan-giao-dich" target="_blank" rel="noopener noreferrer">Điều khoản sử dụng website</a>,{' '}
+                    <a href="/chinh-sach-doi-tra" target="_blank" rel="noopener noreferrer">Chính sách đổi trả</a> và{' '}
+                    <a href="/chinh-sach-bao-mat" target="_blank" rel="noopener noreferrer">Chính sách bảo mật</a> của SkinID.
+                  </span>
+                </label>
+
                 <button
                   className="react-checkout-submit"
                   type="submit"
-                  disabled={isSubmitting || !items.length}
+                  disabled={isSubmitting || !items.length || !acceptedTerms}
                 >
                   {isSubmitting ? 'Đang tạo đơn…' : 'Xác nhận đặt hàng →'}
                 </button>

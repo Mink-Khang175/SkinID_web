@@ -408,9 +408,9 @@ window.openProductDetailModal ||= function(productId) {
     const certEl = document.getElementById('pmodal-certification-text');
     if (certEl) {
         if (p.brand === 'TWON' || p.brand === 'D\'VAH') {
-            certEl.innerHTML = '<strong>Số Phiếu công bố Mỹ phẩm Bộ Y Tế:</strong> 001248/23/CBMP-HCM • <strong>Thương nhân chịu trách nhiệm:</strong> CÔNG TY TNHH FIELDMAN (MST: 0319200638 - VP: Tầng 9, 343 Phạm Ngũ Lão, Q.1, TP.HCM).';
+            certEl.innerHTML = '<strong>Số Phiếu công bố Mỹ phẩm Bộ Y Tế:</strong> ' + (p.notificationNumber || 'Đang cập nhật') + ' • <strong>Thương nhân chịu trách nhiệm:</strong> CÔNG TY TNHH FIELDMAN (MST: 0319200638 - VP: Tầng 9, 343 Phạm Ngũ Lão, Q.1, TP.HCM).';
         } else {
-            certEl.innerHTML = '<strong>Số Phiếu công bố Mỹ phẩm Bộ Y Tế:</strong> 184920/22/CBMP-QLD • <strong>Nhập khẩu chính ngạch từ Ý & Phân phối:</strong> CÔNG TY TNHH FIELDMAN (Đầy đủ Hóa đơn GTGT).';
+            certEl.innerHTML = '<strong>Số Phiếu công bố Mỹ phẩm Bộ Y Tế:</strong> ' + (p.notificationNumber || 'Đang cập nhật') + ' • <strong>Nhập khẩu chính ngạch từ Ý & Phân phối:</strong> CÔNG TY TNHH FIELDMAN (Đầy đủ Hóa đơn GTGT).';
         }
     }
 
@@ -1330,7 +1330,7 @@ function renderResults(data, weatherData) {
                     </div>
                     <div class="flex gap-2">
                         <span class="font-bold text-gray-700 min-w-[80px]">Nên làm:</span>
-                        <span class="text-gray-600 leading-relaxed">${(data.detailedAdvice && data.detailedAdvice[m.id] && data.detailedAdvice[m.id].shouldDo) || 'Sử dụng sản phẩm chứa thành phần đặc trị phù hợp với chỉ số này.'}</span>
+                        <span class="text-gray-600 leading-relaxed">${(data.detailedAdvice && data.detailedAdvice[m.id] && data.detailedAdvice[m.id].shouldDo) || 'Sử dụng sản phẩm chứa thành phần phù hợp với chỉ số này.'}</span>
                     </div>
                     <div class="flex gap-2">
                         <span class="font-bold text-gray-700 min-w-[80px]">Cần tránh:</span>
@@ -1711,7 +1711,7 @@ function buildRoutine(containerId, isMorning) {
     if (isMorning) {
         steps = [
             { stepType: 'cleanser', title: "Bước 1: Làm sạch & Cân bằng", desc: "Loại bỏ dầu thừa đêm qua và ổn định độ pH" },
-            { stepType: 'treatment', title: "Bước 2: Tinh chất đặc trị", desc: "Thẩm thấu sâu khắc phục vấn đề da hàng đầu" },
+            { stepType: 'treatment', title: "Bước 2: Tinh chất chuyên sâu", desc: "Hỗ trợ chăm sóc các vấn đề da bạn quan tâm" },
             { stepType: 'sunscreen', title: "Bước 3: Bảo vệ phổ rộng (SPF 50+)", desc: "Bảo vệ màng tế bào trước tia UVA/UVB và gốc tự do" }
         ];
     } else {

@@ -554,7 +554,7 @@ export const CATALOG_SUMMARY = [
     "id": "dvah-tanmaya",
     "brand": "DVAH",
     "brandSlug": "dvah",
-    "name": "D’VAH Nước Hoa Tamaya",
+    "name": "D’VAH Nước Hoa Tanmaya",
     "image": "/images/products/dvah-tanmaya.png",
     "volume": "10 ml",
     "productCode": "DVAH-TANMAYA-10ML",

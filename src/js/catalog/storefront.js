@@ -298,11 +298,11 @@
         const cta = $('#consultation-cta');
         const result = $('#consultation-result');
         const copyByStep = {
-            'tri-mun-kiem-dau': '<strong>Gợi ý cấu trúc:</strong> Làm sạch dịu nhẹ → hoạt chất đặc trị kiểm soát dầu mụn → dưỡng phục hồi nhẹ thoáng → chống nắng kiềm dầu.',
+            'tri-mun-kiem-dau': '<strong>Gợi ý cấu trúc:</strong> Làm sạch dịu nhẹ → hoạt chất chuyên sâu kiểm soát dầu mụn → dưỡng phục hồi nhẹ thoáng → chống nắng kiềm dầu.',
             'cap-am-chuyen-sau': '<strong>Gợi ý cấu trúc:</strong> Làm sạch không khô căng → tinh chất cấp nước đa tầng → kem dưỡng khóa ẩm → chống nắng.',
             'sang-da-mo-tham': '<strong>Gợi ý cấu trúc:</strong> Làm sạch → tinh chất mờ thâm/chống oxy hóa → dưỡng ẩm đều màu → chống nắng phổ rộng.',
             'phuc-hoi-diu-da': '<strong>Gợi ý cấu trúc:</strong> Làm sạch tối giản → tinh chất làm dịu phục hồi → kem dưỡng củng cố hàng rào da → chống nắng dịu nhẹ.',
-            treatment: '<strong>Gợi ý cấu trúc:</strong> Làm sạch dịu nhẹ → hoạt chất đặc trị phù hợp → dưỡng phục hồi → chống nắng mỗi sáng.',
+            treatment: '<strong>Gợi ý cấu trúc:</strong> Làm sạch dịu nhẹ → hoạt chất chuyên sâu phù hợp → dưỡng phục hồi → chống nắng mỗi sáng.',
             moisturizer: '<strong>Gợi ý cấu trúc:</strong> Làm sạch không khô căng → lớp cấp ẩm → kem dưỡng khóa ẩm → chống nắng.',
             sunscreen: '<strong>Gợi ý cấu trúc:</strong> Làm sạch → sản phẩm hỗ trợ đều màu/đàn hồi → dưỡng ẩm → chống nắng phổ rộng.'
         };

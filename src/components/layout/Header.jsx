@@ -10,7 +10,7 @@ export const navigationGroups = [
     links: [
       ['Làm sạch & tẩy trang', '/products?step=cleanser'],
       ['Toner & cân bằng', '/products?step=toner'],
-      ['Tinh chất & đặc trị', '/products?step=treatment'],
+      ['Tinh chất & chăm sóc chuyên sâu', '/products?step=treatment'],
       ['Dưỡng ẩm', '/products?step=moisturizer'],
       ['Chống nắng', '/products?step=sunscreen'],
       ['Cơ thể & nước hoa', '/products?step=special']

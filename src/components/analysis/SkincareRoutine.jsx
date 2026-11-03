@@ -7,7 +7,7 @@ export default function SkincareRoutine() {
         <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl transform scale-95 transition-transform duration-300" id="privacy-modal-content">
             <div className="border-b border-gray-100 px-6 py-5 flex items-center justify-between">
                 <h3 className="text-xl font-semibold text-gray-800">Thỏa thuận Bảo mật & Quyền riêng tư</h3>
-                <button onClick={(event) => window?.closePrivacyModal?.()} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500">
+                <button type="button" aria-label="Đóng" onClick={(event) => window?.closePrivacyModal?.()} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500">
                     <i data-feather="x" className="w-5 h-5"></i>
                 </button>
             </div>
@@ -38,7 +38,7 @@ export default function SkincareRoutine() {
                         <i data-feather="check" className="absolute w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity"></i>
                     </div>
                     <span className="text-sm text-gray-600 group-hover:text-gray-800 transition-colors select-none font-medium">
-                        Tôi đã đọc, hiểu và đồng ý với Chính sách bảo mật của SkinID.
+                        Tôi đã đọc, hiểu và đồng ý với <a href="/chinh-sach-bao-mat" target="_blank" rel="noopener noreferrer" className="underline text-brand-primary">Chính sách bảo mật</a> và <a href="/chinh-sach-du-lieu-soi-da" target="_blank" rel="noopener noreferrer" className="underline text-brand-primary">Chính sách xử lý ảnh và dữ liệu soi da</a> của SkinID.
                     </span>
                 </label>
             </div>
@@ -62,7 +62,7 @@ export default function SkincareRoutine() {
                 <i data-feather="cpu" className="text-brand-primary w-5 h-5"></i>
                 <h3 className="font-bold text-lg">Báo cáo làn da</h3>
             </div>
-            <button onClick={(event) => window?.closeScanModal?.()} className="p-2 bg-gray-100 rounded-full text-gray-600 hover:bg-gray-200 transition-colors">
+            <button type="button" aria-label="Đóng" onClick={(event) => window?.closeScanModal?.()} className="p-2 bg-gray-100 rounded-full text-gray-600 hover:bg-gray-200 transition-colors">
                 <i data-feather="x" className="w-5 h-5"></i>
             </button>
         </div>
@@ -558,7 +558,7 @@ export default function SkincareRoutine() {
     {/* LEGAL POLICIES MODAL (Bộ Công Thương & Nghị Định 13/2023/NĐ-CP) */}
     <div id="legal-modal" className="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
         <div id="legal-modal-content" className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl transform scale-95 transition-transform duration-300 relative border border-gray-100 max-h-[85vh] flex flex-col">
-            <button onClick={(event) => window?.closeLegalModal?.()} className="absolute top-5 right-5 text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-100 transition-colors">
+            <button type="button" aria-label="Đóng" onClick={(event) => window?.closeLegalModal?.()} className="absolute top-5 right-5 text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-100 transition-colors">
                 <i data-feather="x" className="w-5 h-5"></i>
             </button>
 

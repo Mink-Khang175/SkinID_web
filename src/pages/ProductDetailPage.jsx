@@ -135,16 +135,16 @@ export default function ProductDetailPage() {
             {/* Badges cam kết */}
             <div className="grid grid-cols-3 gap-2 w-full max-w-md mt-4 text-center">
               <div className="p-2.5 rounded-xl bg-stone-50 border border-stone-200/60 text-[11px] text-slate-600">
-                <span className="block font-bold text-slate-900">100% Chính Ngạch</span>
-                {isRilastil ? 'Nhập khẩu từ Ý' : 'Dược mỹ phẩm'}
+                <span className="block font-bold text-slate-900">Chính ngạch</span>
+                {isRilastil ? 'Nhập khẩu từ Ý' : 'Phân phối chính hãng'}
               </div>
               <div className="p-2.5 rounded-xl bg-stone-50 border border-stone-200/60 text-[11px] text-slate-600">
-                <span className="block font-bold text-slate-900">CBMP Bộ Y Tế</span>
-                Tiếp nhận hợp chuẩn
+                <span className="block font-bold text-slate-900">Phiếu công bố mỹ phẩm</span>
+                {product.notificationNumber ? 'Đã được tiếp nhận công bố' : 'Đang cập nhật'}
               </div>
               <div className="p-2.5 rounded-xl bg-stone-50 border border-stone-200/60 text-[11px] text-slate-600">
-                <span className="block font-bold text-slate-900">Bác sĩ Da Liễu</span>
-                Tư vấn chuẩn y khoa
+                <span className="block font-bold text-slate-900">Tư vấn viên SkinID</span>
+                Tư vấn chăm sóc da
               </div>
             </div>
           </div>
@@ -302,7 +302,7 @@ export default function ProductDetailPage() {
                 {(product.keyActives || product.mainActives || ['Phức hợp dưỡng ẩm chuyên sâu']).map((item, idx) => (
                   <div key={idx} className="p-3.5 rounded-xl bg-stone-50 border border-stone-200/60">
                     <span className="font-semibold text-slate-900 block mb-0.5">{item}</span>
-                    <span className="text-xs text-slate-500">Hoạt chất kiểm nghiệm lâm sàng đạt độ tương thích cao.</span>
+                    <span className="text-xs text-slate-500">Thành phần có trong công thức sản phẩm.</span>
                   </div>
                 ))}
               </div>
@@ -313,10 +313,12 @@ export default function ProductDetailPage() {
             <div className="space-y-3 text-sm text-slate-700">
               <h3 className="font-bold text-base text-slate-900">Thông tin Tiếp nhận &amp; Thẩm định Mỹ phẩm:</h3>
               <div className="p-4 rounded-xl bg-stone-50 border border-stone-200/80 space-y-2 text-xs">
-                <p><strong>Số Phiếu công bố (CBMP):</strong> <span className="font-mono text-rose-700 font-bold">{product.notificationNumber || (isRilastil ? '184920/22/CBMP-QLD' : 'Đang cập nhật')}</span></p>
-                <p><strong>Cơ quan cấp:</strong> {isRilastil ? 'Cục Quản lý Dược - Bộ Y Tế' : 'Sở Y Tế TP. Hồ Chí Minh'}</p>
+                <p><strong>Số Phiếu công bố (CBMP):</strong> <span className="font-mono text-rose-700 font-bold">{product.notificationNumber || 'Đang cập nhật'}</span></p>
+                {product.notificationNumber && <p><strong>Cơ quan tiếp nhận:</strong> {product.approvingAuthority || (isRilastil ? 'Cục Quản lý Dược - Bộ Y Tế' : 'Sở Y tế')}</p>}
+                {product.expiry && <p><strong>Hạn sử dụng:</strong> {product.expiry}</p>}
                 <p><strong>Xuất xứ:</strong> {product.origin || (isRilastil ? 'Ý (Instituto Ganassini S.p.A)' : 'Chính hãng')}</p>
-                <p><strong>Đơn vị nhập khẩu &amp; chịu trách nhiệm:</strong> CÔNG TY TNHH FIELDMAN (MST: 0319200638)</p>
+                {isRilastil && <p><strong>Nhà sản xuất:</strong> Instituto Ganassini S.p.A (Ý)</p>}
+                <p><strong>{isRilastil ? 'Đơn vị nhập khẩu & chịu trách nhiệm' : 'Đơn vị phân phối & chịu trách nhiệm'}:</strong> CÔNG TY TNHH FIELDMAN (MST: 0319200638)</p>
                 <p className="text-[11px] text-slate-500 pt-1">
                   * Khách hàng có thể tra cứu toàn văn phiếu công bố mỹ phẩm tại mục <Link to="/tra-cuu-cong-bo" className="text-blue-600 underline">Tra cứu công bố</Link>.
                 </p>

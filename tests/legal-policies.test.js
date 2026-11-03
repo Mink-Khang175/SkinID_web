@@ -59,8 +59,8 @@ test('Footer.jsx chứa đầy đủ 6 đường link trực tiếp đến các 
       `Footer phải chứa thẻ liên kết tới /${slug}`
     );
   }
-  // Kiểm tra badge online.gov.vn
-  assert.ok(footerSource.includes('online.gov.vn'), 'Footer phải có liên kết Cổng TMĐT online.gov.vn');
+  // Không được ghi đã đăng ký online.gov.vn khi chưa được xác nhận; gắn biểu tượng chính thức sau khi có xác nhận.
+  assert.ok(!footerSource.includes('online.gov.vn'), 'Footer không được hiển thị đã đăng ký online.gov.vn trước khi được xác nhận');
 });
 
 test('Router khai báo đầy đủ các đường dẫn chính sách', () => {

@@ -64,7 +64,7 @@ export const LEGAL_POLICIES = {
   },
   "dieu-khoan-giao-dich": {
     "number": 1,
-    "title": "1. Điều khoản sử dụng website",
+    "title": "Điều khoản sử dụng website",
     "intro": [],
     "sections": [
       {
@@ -200,7 +200,7 @@ export const LEGAL_POLICIES = {
   },
   "huong-dan-mua-hang": {
     "number": 2,
-    "title": "2. Hướng dẫn mua hàng",
+    "title": "Hướng dẫn mua hàng",
     "intro": [],
     "sections": [
       {
@@ -279,7 +279,7 @@ export const LEGAL_POLICIES = {
   },
   "chinh-sach-bao-mat": {
     "number": 3,
-    "title": "3. Chính sách bảo vệ dữ liệu cá nhân",
+    "title": "Chính sách bảo vệ dữ liệu cá nhân",
     "intro": [
       {
         "type": "text",
@@ -513,7 +513,7 @@ export const LEGAL_POLICIES = {
   },
   "chinh-sach-van-chuyen": {
     "number": 4,
-    "title": "4. Chính sách giao hàng/vận chuyển",
+    "title": "Chính sách giao hàng/vận chuyển",
     "intro": [],
     "sections": [
       {
@@ -607,7 +607,7 @@ export const LEGAL_POLICIES = {
   },
   "chinh-sach-thanh-toan": {
     "number": 5,
-    "title": "5. Chính sách thanh toán và hoàn tiền",
+    "title": "Chính sách thanh toán và hoàn tiền",
     "intro": [],
     "sections": [
       {
@@ -731,7 +731,7 @@ export const LEGAL_POLICIES = {
   },
   "chinh-sach-doi-tra": {
     "number": 6,
-    "title": "6. Chính sách đổi trả và khiếu nại",
+    "title": "Chính sách đổi trả và khiếu nại",
     "intro": [],
     "sections": [
       {
@@ -845,7 +845,7 @@ export const LEGAL_POLICIES = {
   },
   "dieu-khoan-soi-da-ai": {
     "number": 7,
-    "title": "7. Điều khoản dịch vụ AI phân tích da",
+    "title": "Điều khoản dịch vụ AI phân tích da",
     "intro": [],
     "sections": [
       {
@@ -946,7 +946,7 @@ export const LEGAL_POLICIES = {
   },
   "chinh-sach-du-lieu-soi-da": {
     "number": 8,
-    "title": "8. Chính sách xử lý ảnh và dữ liệu soi da",
+    "title": "Chính sách xử lý ảnh và dữ liệu soi da",
     "intro": [
       {
         "type": "text",
@@ -1016,7 +1016,7 @@ export const LEGAL_POLICIES = {
   },
   "chinh-sach-bao-hanh-thiet-bi": {
     "number": 9,
-    "title": "9. Chính sách bảo hành thiết bị soi da",
+    "title": "Chính sách bảo hành thiết bị soi da",
     "intro": [],
     "sections": [
       {
@@ -1087,7 +1087,7 @@ export const LEGAL_POLICIES = {
   },
   "quan-ly-tai-khoan": {
     "number": 10,
-    "title": "10. Quản lý tài khoản và xóa dữ liệu",
+    "title": "Quản lý tài khoản và xóa dữ liệu",
     "intro": [],
     "sections": [
       {

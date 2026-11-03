@@ -12,7 +12,7 @@ const ROUTINE_DATA = {
     headline: 'Tinh Chất Cấp Ẩm Chuyên Sâu Rilastil Aqua Intense Gel Serum',
     desc: 'Công thức chuẩn dược mỹ phẩm Ý với phức hợp Hyaluronic Acid đa tầng, kích hoạt khả năng ngậm nước tự nhiên và mang lại độ căng mọng 72 giờ.',
     roleTag: 'Star Product · Cấp Ẩm Đa Tầng',
-    satelliteLabel: '02 · Điều trị',
+    satelliteLabel: '02 · Chuyên sâu',
   },
   'rilastil-1774': {
     stepNum: '01',
@@ -42,7 +42,7 @@ const ROUTINE_DATA = {
 
 const ROUTINE_STEPS = [
   { id: 'cleanser', number: '01', shortLabel: 'Làm sạch', title: 'Làm sạch dịu lành' },
-  { id: 'treatment', number: '02', shortLabel: 'Điều trị', title: 'Tinh chất & đặc trị' },
+  { id: 'treatment', number: '02', shortLabel: 'Chuyên sâu', title: 'Tinh chất & chăm sóc chuyên sâu' },
   { id: 'moisturizer', number: '03', shortLabel: 'Khóa ẩm', title: 'Dưỡng ẩm chuyên sâu' },
   { id: 'sunscreen', number: '04', shortLabel: 'Bảo vệ', title: 'Chống nắng mỗi ngày' },
 ];

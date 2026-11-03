@@ -19,20 +19,14 @@ export default function Footer() {
               <img src={assetUrl('/images/logo-footer-transparent.png')} alt="SkinID" className="h-9 w-auto" />
             </a>
             <p className="text-xs text-gray-400 leading-relaxed max-w-sm mb-4">
-              Nền tảng thương mại điện tử phân phối dược mỹ phẩm chính ngạch Châu Âu (Rilastil, TWON, D'VAH) kết hợp công nghệ soi da AI chuẩn y khoa.
+              Nền tảng thương mại điện tử phân phối dược mỹ phẩm chính ngạch Châu Âu (Rilastil, TWON, D'VAH) kết hợp công nghệ soi da AI hỗ trợ tham khảo.
             </p>
-            <div className="pt-1">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-800 bg-gray-900/60 text-[11px] text-gray-400">
-                <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-                <span>Hồ sơ TMĐT đăng ký Cổng online.gov.vn theo NĐ 52/2013/NĐ-CP</span>
-              </div>
-            </div>
           </div>
 
           {/* Cột 2: Mua sắm & Khám phá */}
           <div className="flex flex-col gap-2">
             <h3 className="text-xs font-bold uppercase tracking-wider text-white mb-2">Mua sắm &amp; Dịch vụ</h3>
-            <a href="/products">Tất cả sản phẩm (54 SKU)</a>
+            <a href="/products">Tất cả sản phẩm</a>
             <a href="/khuyen-mai">Khuyến mãi &amp; Voucher</a>
             <a href="/skin-analysis">Soi da AI 3 góc độ</a>
             <a href="/blog">Cẩm nang Skincare (Blog)</a>
@@ -58,11 +52,17 @@ export default function Footer() {
               4. Bảo mật dữ liệu cá nhân
             </a>
             <a href="/dieu-khoan-giao-dich" className="hover:text-white transition-colors">
-              5. Điều khoản giao dịch chung
+              5. Điều khoản sử dụng website
             </a>
             <a href="/quy-trinh-khieu-nai" className="hover:text-white transition-colors">
               6. Giải quyết khiếu nại (24h)
             </a>
+            <a href="/huong-dan-mua-hang" className="hover:text-white transition-colors">Hướng dẫn mua hàng</a>
+            <a href="/thong-tin-don-vi-van-hanh" className="hover:text-white transition-colors">Thông tin đơn vị vận hành</a>
+            <a href="/dieu-khoan-soi-da-ai" className="hover:text-white transition-colors">Điều khoản soi da AI</a>
+            <a href="/chinh-sach-du-lieu-soi-da" className="hover:text-white transition-colors">Dữ liệu soi da</a>
+            <a href="/chinh-sach-bao-hanh-thiet-bi" className="hover:text-white transition-colors">Bảo hành thiết bị</a>
+            <a href="/quan-ly-tai-khoan" className="hover:text-white transition-colors">Quản lý tài khoản</a>
           </div>
 
           {/* Cột 4: Thông tin chủ quản CÔNG TY TNHH FIELDMAN */}

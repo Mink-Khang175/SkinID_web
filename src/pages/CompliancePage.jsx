@@ -315,7 +315,7 @@ export default function CompliancePage() {
                     <div className="flex justify-between items-center py-1 border-b border-gray-50">
                       <span className="text-gray-500">Số tiếp nhận CBMP:</span>
                       <span className="font-mono font-bold text-gray-900 bg-rose-50 text-rose-700 border border-rose-100 px-2 py-0.5 rounded">
-                        {selectedProduct.notificationNumber || '184920/22/CBMP-QLD'}
+                        {selectedProduct.notificationNumber || 'Đang cập nhật'}
                       </span>
                     </div>
                     <div className="flex justify-between items-center py-1 border-b border-gray-50">

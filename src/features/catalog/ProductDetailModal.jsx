@@ -22,7 +22,7 @@ function formatActive(raw) {
 
 function Certification({ product }) {
   const isRilastil = product.brand === 'Rilastil';
-  const number = product.notificationNumber || (isRilastil ? '184920/22/CBMP-QLD' : 'Đang cập nhật');
+  const number = product.notificationNumber || 'Đang cập nhật';
   const authority = product.approvingAuthority || (isRilastil ? 'Cục Quản lý Dược - Bộ Y Tế' : 'Sở Y Tế');
   const origin = product.origin || (isRilastil ? 'Ý (Italy)' : 'Việt Nam');
   const distributor = 'CÔNG TY TNHH FIELDMAN (MST: 0319200638).';
@@ -35,10 +35,18 @@ function Certification({ product }) {
           {number}
         </span>
       </p>
-      <p>
-        <strong className="text-gray-900 font-bold">{isRilastil ? 'Cơ quan phê duyệt' : 'Cơ quan tiếp nhận'}:</strong>{' '}
-        <span>{authority}</span>
-      </p>
+      {product.notificationNumber && (
+        <p>
+          <strong className="text-gray-900 font-bold">{isRilastil ? 'Cơ quan phê duyệt' : 'Cơ quan tiếp nhận'}:</strong>{' '}
+          <span>{authority}</span>
+        </p>
+      )}
+      {product.expiry && (
+        <p>
+          <strong className="text-gray-900 font-bold">Hạn sử dụng:</strong>{' '}
+          <span>{product.expiry}</span>
+        </p>
+      )}
       <p>
         <strong className="text-gray-900 font-bold">Xuất xứ:</strong>{' '}
         <span>{origin}{isRilastil ? ' (Nhập khẩu chính ngạch từ Ý)' : ''}</span>

@@ -213,3 +213,9 @@
   .promotion-collection *, .journal-card * { animation: none !important; transition: none !important; }
   .collection-combo:hover, .collection-product__visual:hover img, .journal-card__image:hover img { transform: none; }
 }
+
+/* Touch targets: enlarge hit areas without changing the visual size. */
+.carousel-dots button { position: relative; }
+.carousel-dots button::after { content: ""; position: absolute; inset: -14px -7px; }
+.site-footer .footer-grid :is(a, button) { padding-block: 6px; }
+.site-footer .footer-grid { row-gap: 2rem; }
