@@ -280,7 +280,7 @@ Reduced-motion không được chỉ rút thời lượng animation: mọi eleme
 Tài liệu này được giữ lại làm chuẩn thiết kế đang duy trì. Bản homepage local trước đồng bộ là tham chiếu; source deploy chỉ là nguồn chức năng/nội dung.
 
 - Carousel banner, carousel sản phẩm và nút gốc giữ nguyên. Các CTA mới tái sử dụng `.btn--primary` / `.btn--secondary`, không sửa rule của nút cũ.
-- Khuyến mãi: `components/commerce/PromotionCollection.jsx` dùng chung trang chủ/trang ưu đãi; bố cục editorial, trắng/blush, ảnh quà tặng và surface nổi, không dùng mảng burgundy. Chỉ hiển thị ngày kết thúc nếu có dữ liệu chiến dịch, bỏ đồng hồ tự đếm lại đến nửa đêm.
+- Khuyến mãi: `components/home/FlashSaleBanner.jsx` (teaser trang chủ) và `components/commerce/PromotionsLanding.jsx` (trang ưu đãi, scrollytelling; sản phẩm giảm 50% dẫn tới tư vấn, không thêm giỏ); bố cục editorial, trắng/blush, ảnh quà tặng và surface nổi, không dùng mảng burgundy. Chỉ hiển thị ngày kết thúc nếu có dữ liệu chiến dịch, bỏ đồng hồ tự đếm lại đến nửa đêm.
 - Journal: ảnh contain với vùng thở, tiêu đề Outfit, đoạn mô tả Manrope; liên kết bài viết là link thật có thể dùng bàn phím.
 - Chi tiết sản phẩm/bài viết: dùng container chung, bỏ serif và palette riêng ở heading, phân cấp CTA theo mua ngay/thêm giỏ.
 - Chính sách: surface mềm, typography dễ đọc, vẫn giữ toàn bộ nội dung V2.0 và bảng có cuộn ngang khi cần.
@@ -290,3 +290,14 @@ Tài liệu này được giữ lại làm chuẩn thiết kế đang duy trì. 
 `src/styles/brand-alignment.css` bổ sung ngôn ngữ chung cho các màn hình mới. Khi sửa, dùng semantic class của từng khối, không thêm palette độc lập hoặc ghi đè carousel/nút gốc. Màu trạng thái thành công/lỗi trong form vẫn có ý nghĩa nghiệp vụ.
 
 Giá, mã và điều kiện khuyến mãi giữ nguyên dữ liệu hiện tại. UI thêm bộ sản phẩm vào giỏ qua luồng đang có, không bổ sung thuật toán giảm combo hoặc kích hoạt ưu đãi ở backend.
+
+
+## 13. Khuyến mãi, Cẩm nang và Menu — 03/11/2026
+
+- `src/styles/home-promo.css` + `components/home/FlashSaleBanner.jsx`: khu quảng cáo trang chủ (hero với quạt ảnh combo, dải chữ chạy, scrollytelling 3 combo, hàng sản phẩm 50%, các bước tham gia). Mọi CTA dẫn tới `/khuyen-mai`. Quạt combo chọn bằng tab/click/tự xoay, **không** đổi thẻ khi hover vì các thẻ chồng nhau dễ gây nháy.
+- `src/styles/promo-landing.css` + `components/commerce/PromotionsLanding.jsx` (class `pl-`): trang `/khuyen-mai`. Scrollytelling 3 bước (Like & Follow → Share công khai → Comment “SKINID50” → Inbox) với bài đăng mô phỏng Facebook, giá tụt từ giá gốc xuống 50%. Sản phẩm bán lẻ giảm 50% **không** có nút thêm giỏ: web không kiểm tra được khách đã làm đủ 3 bước nên CTA dẫn tới tư vấn qua Zalo/hotline (`CONTACT` đầu file; thêm `messenger` khi có link Fanpage). Combo giữ giá cố định và thêm giỏ như cũ. Dưới 900px hoặc reduced-motion: bỏ sticky, các bước thành danh sách, combo thành thẻ.
+- Scrollytelling dùng chung một mẫu: section cao (300–420vh) + phần tử `position: sticky`, tiến độ cuộn ghi vào biến `--p`, chỉ số bước suy ra từ `--p`. Luôn có bản thay thế tĩnh cho mobile/reduced-motion.
+- `src/styles/blog-journal.css` + `pages/BlogPage.jsx` (class `journal-`): trang Cẩm nang. Lưới `auto-fill` (min 270px) để tự cân đối khi có nhiều bài, thẻ nổi bật cho bài đầu, phân trang “Xem thêm” (8 bài/lần). Không dùng class Tailwind chung cho nút/thẻ.
+- Menu (`navigation-drawer.css`): khối tiêu đề “Chăm sóc theo cách của bạn” có chiều rộng cố định để không xuống dòng/nhảy khi mở menu cấp 2.
+- Phần “Sản phẩm tâm điểm” (`FeaturedProducts.jsx`): chỉ đổi sản phẩm/bước khi **click**, không đổi khi hover/focus (tránh vòng lặp nháy khi danh sách vệ tinh sắp xếp lại dưới con trỏ).
+- `components/commerce/PromotionCollection.jsx` đã được thay bằng hai thành phần trên.

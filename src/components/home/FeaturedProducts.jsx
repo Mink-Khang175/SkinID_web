@@ -207,8 +207,6 @@ export default function FeaturedProducts() {
                   aria-selected={step.id === activeStep.id}
                   className={`routine-step-nav__item ${step.id === activeStep.id ? 'is-active' : ''}`}
                   key={step.id}
-                  onMouseEnter={() => activateStep(step.id)}
-                  onFocus={() => activateStep(step.id)}
                   onClick={() => activateStep(step.id)}
                 >
                   <small>{step.number}</small>
@@ -331,8 +329,6 @@ export default function FeaturedProducts() {
                     type="button"
                     className="routine-product-arc__item"
                     key={product.id}
-                    onMouseEnter={() => activateProduct(product.id)}
-                    onFocus={() => activateProduct(product.id)}
                     onClick={() => activateProduct(product.id)}
                     aria-pressed="false"
                     aria-label={`Hiển thị ${product.name}`}

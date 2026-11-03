@@ -23,7 +23,7 @@ Không đổi toàn bộ tên thư mục hoặc di chuyển hàng loạt compone
 
 Carousel banner (`components/home/HeroBanner.jsx`), carousel sản phẩm (`FeaturedProducts.jsx`, `styles/home-scenes.css`) và kiểu nút có sẵn được phục hồi từ bản local trước đồng bộ ngày 02/11/2026. Component hero cũ dùng nội dung tĩnh, không tự áp dụng banner CMS mới. Nếu cần CMS điều khiển nội dung về sau, bổ sung adapter giữ nguyên thiết kế này.
 
-Màn hình mới, trang chi tiết, blog, khuyến mãi và chính sách V2.0 giữ chức năng/nội dung, được đồng bộ về style homepage local. `components/commerce/PromotionCollection.jsx` dùng chung cho khuyến mãi ở trang chủ và trang ưu đãi; CSS bổ sung ở `styles/brand-alignment.css`. Quyết định giữ UI cũ là ngoại lệ có chủ đích so với skinid.vn.
+Màn hình mới, trang chi tiết, blog, khuyến mãi và chính sách V2.0 giữ chức năng/nội dung, được đồng bộ về style homepage local. khuyến mãi ở trang chủ là `components/home/FlashSaleBanner.jsx` (`styles/home-promo.css`), trang ưu đãi là `components/commerce/PromotionsLanding.jsx` (`styles/promo-landing.css`). Quyết định giữ UI cũ là ngoại lệ có chủ đích so với skinid.vn.
 
 ## Kiểm thử
 

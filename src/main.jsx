@@ -16,6 +16,9 @@ import './shared/ui/route-status.css';
 import './styles/responsive-layout.css';
 import './styles/hero-copy.css';
 import './styles/brand-alignment.css';
+import './styles/home-promo.css';
+import './styles/blog-journal.css';
+import './styles/promo-landing.css';
 import { initializeAnalytics, installLegacyFirebaseBridge } from './infrastructure/firebase/index.js';
 import { installLegacyRuntimeConfig } from './shared/config/runtime.js';
 
