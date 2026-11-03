@@ -264,5 +264,5 @@ export const RETAIL_50_DEALS = [
 export const CAMPAIGN_STEPS = [
   { step: '1', title: 'LIKE & FOLLOW', desc: 'Fanpage chính thức SkinID' },
   { step: '2', title: 'SHARE BÀI VIẾT', desc: 'Ở chế độ CÔNG KHAI trên trang cá nhân' },
-  { step: '3', title: 'MUA SẮM THẢ GA', desc: 'Nhận ngay mức giá giảm sốc 50% khi đặt hàng' }
+  { step: '3', title: 'COMMENT “SKINID50”', desc: 'Ngay dưới bài viết, sau đó inbox SkinID để được xác nhận ưu đãi' }
 ];
