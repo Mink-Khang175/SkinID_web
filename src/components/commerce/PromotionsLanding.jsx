@@ -237,7 +237,7 @@ function RetailDeals() {
           <span className="skinid-editorial-kicker">DAILY LITTLE JOYS</span>
           <h2>Giảm 50% cho điều <em>bạn yêu thích.</em></h2>
         </div>
-        <p>Hoàn thành 3 bước, sau đó nhắn SkinID để được tư vấn và áp dụng mức giá ưu đãi dưới đây.</p>
+        <p>Hoàn thành 3 bước, sau đó nhắn SkinID để được tư vấn và áp dụng mức giá ưu đãi dưới đây. Toàn bộ giá niêm yết và giá ưu đãi đã bao gồm thuế GTGT (VAT).</p>
       </div>
       <ul className="pl-retail__grid">
         {RETAIL_50_DEALS.map((product) => (

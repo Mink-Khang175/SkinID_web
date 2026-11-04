@@ -226,7 +226,7 @@ export default function FlashSaleBanner() {
           <div className="promo-hero__copy">
             <span className="skinid-editorial-kicker" data-reveal>ĐẶC QUYỀN SKINID · TWON & D'VAH</span>
             <h2 className="skinid-editorial-title" data-reveal data-reveal-delay="80">Một chút yêu chiều, <em>dành riêng cho bạn.</em></h2>
-            <p data-reveal data-reveal-delay="160">Like &amp; share săn deal giảm đến 50%. Chọn bộ quà tặng TWON – D'VAH hoặc từng sản phẩm yêu thích để mỗi ngày đều là một dịp yêu thương bản thân.</p>
+            <p data-reveal data-reveal-delay="160">Like &amp; share săn deal giảm đến 50%. Chọn bộ quà tặng TWON – D'VAH hoặc từng sản phẩm yêu thích (giá niêm yết đã bao gồm thuế VAT) để mỗi ngày đều là một dịp yêu thương bản thân.</p>
             <div className="promo-hero__cta" data-reveal data-reveal-delay="240">
               <MagneticLink className="btn btn--primary promo-cta" href={PROMO_URL}>
                 <span>Xem toàn bộ chương trình</span><span className="promo-cta__arrow" aria-hidden="true">↗</span>

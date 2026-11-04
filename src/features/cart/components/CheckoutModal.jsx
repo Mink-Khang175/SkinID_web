@@ -445,7 +445,10 @@ export default function CheckoutModal() {
                     </small>
                   )}
                   <div className="react-checkout-fee-row total">
-                    <span>Tổng thanh toán</span>
+                    <div>
+                      <span>Tổng thanh toán</span>
+                      <small className="block text-[10px] text-gray-500 font-normal">Đã bao gồm thuế VAT</small>
+                    </div>
                     <strong>{formatPrice(calculatedTotal)}</strong>
                   </div>
                 </div>

@@ -162,6 +162,7 @@ export default function ProductDetailModal() {
                 <span>{formatPrice(product.price)}</span>
                 {discounted && <span id="pmodal-original-price">{formatPrice(product.originalPrice)}</span>}
                 {discounted && <span className="pmodal-discount-tag">-{discount}%</span>}
+                <span className="text-xs text-slate-500 font-medium ml-2">(Đã bao gồm VAT)</span>
               </div>
               <p>{uses}</p>
               <div className="spec">

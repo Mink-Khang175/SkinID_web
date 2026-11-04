@@ -42,7 +42,8 @@ Giá gạch trên banner (`179.000đ`, `279.000đ`, `249.000đ`) chính là "Gi�
 | D'VAH Kamal, Sarika | 179.000 (**sai**) | 174.900 | 157.000 | 89.500 | 43,0% |
 
 - **Sai số học chỉ ở Kamal và Sarika**: niêm yết T10 là 174.900đ, chia 1,1 = 159.000đ, không phải 179.000đ. Banner ghi 179.000đ nên "−50%" của hai sản phẩm này thực chất giảm khoảng 44% so với niêm yết chưa VAT.
-- **Điểm cần công ty chốt**: giá 89.500đ, 139.500đ, 124.500đ khách trả **đã gồm VAT hay chưa**? Banner không ghi, web cũng chưa ghi. Nếu đã gồm VAT thì "50%" tính trên giá chưa VAT là cách quảng cáo dễ gây nhầm lẫn; mức giảm so với giá web (đã VAT) thực tế là 49,4–49,6%.
+- **Cập nhật 04/11/2026: sếp xác nhận giá niêm yết đã bao gồm VAT.** Vậy niêm yết trong T10 (196.900đ…) là giá đã VAT, còn 179.000đ trên banner chính là con số đó trừ VAT. Cần chốt **một câu**: *giá niêm yết sữa tắm TWON là 179.000đ hay 196.900đ?* Nếu 196.900đ thì banner đang gạch giá không phải niêm yết (cần sửa banner). Nếu 179.000đ thì bảng T10 đã cộng VAT hai lần và web đang bán cao hơn niêm yết 10%.
+- (Ý cũ, giữ để đối chiếu) **Điểm cần công ty chốt**: giá 89.500đ, 139.500đ, 124.500đ khách trả **đã gồm VAT hay chưa**? Banner không ghi, web cũng chưa ghi. Nếu đã gồm VAT thì "50%" tính trên giá chưa VAT là cách quảng cáo dễ gây nhầm lẫn; mức giảm so với giá web (đã VAT) thực tế là 49,4–49,6%.
 - Combo cũng tính theo giá chưa VAT: "Tổng giá trị" 707.000 = 279.000 + 249.000 + 179.000. Riêng combo 2 dùng 179.000 cho Kamal (đúng ra 159.000), nên "Tổng giá trị" 637.000 và "Tiết kiệm 138.000đ (22%)" bị phóng đại.
 - Căn cứ: giá niêm yết phải là giá đã gồm thuế, và quảng cáo mức giảm không đúng giá thực là thông tin gây nhầm lẫn (Luật Giá; Luật Bảo vệ quyền lợi người tiêu dùng 2023; Luật Quảng cáo). Pháp chế cần đối chiếu văn bản gốc.
 - Hướng xử lý: ghi rõ "giá đã bao gồm VAT", hoặc quy đổi giá gạch sang giá đã VAT (196.900đ, 306.900đ…); sửa Kamal và Sarika thành 159.000đ (chưa VAT) hoặc 174.900đ (đã VAT).
@@ -78,7 +79,7 @@ Giá gạch trên banner (`179.000đ`, `279.000đ`, `249.000đ`) chính là "Gi�
 ### 2.1. Pháp lý và thủ tục đăng ký website
 
 - [ ] **Người phụ trách quản lý, vận hành website** (họ tên, chức danh, số điện thoại, email). Footer mới chỉ ghi người đại diện pháp luật.
-- [ ] **Giá khuyến mãi trên banner (89.500đ, 139.500đ, 124.500đ, combo) và giá trên web đã gồm VAT chưa?** Banner dùng giá chưa VAT, web dùng giá đã VAT (xem 1.2); cần công ty xác nhận để ghi "đã bao gồm VAT".
+- [x] **Giá niêm yết trên web đã gồm VAT** (sếp xác nhận 04/11/2026), nên câu hỏi VAT đã chốt. Còn lại một câu cần chốt cho banner: xem 1.2, "Giá niêm yết sữa tắm TWON là 179.000đ hay 196.900đ?" (hai con số lệch đúng 10%).
 - [ ] **Link/số xác nhận** sẽ điền vào `[SỐ / LINK XÁC NHẬN]` sau khi được xác nhận thông báo (việc cần làm sau, không hỏi ngay).
 
 ### 2.2. Thể lệ chương trình giảm 50% (để làm mục 1.4)
@@ -133,6 +134,7 @@ Giá gạch trên banner (`179.000đ`, `279.000đ`, `249.000đ`) chính là "Gi�
 
 ### Tài liệu tham chiếu trong dự án
 
+- Quy chuẩn Bảng giá & VAT: [quy-chuan-gia-va-vat.md](quy-chuan-gia-va-vat.md)
 - Báo cáo đối chiếu phiếu công bố: [product-compliance-check-2026-11-03.md](product-compliance-check-2026-11-03.md)
 - Giá chuẩn: `src/data/ecom-price-list-2026-10.json`; khuyến mãi: `src/data/promotions.js`
 - Chính sách: `src/data/legalPolicies.js`; thông tin công ty: `src/data/companyInfo.js`

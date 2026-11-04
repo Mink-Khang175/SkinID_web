@@ -21,7 +21,7 @@ export const CURATED_COMBOS = [
         capacity: '250ml',
         image: '/images/products/twon-body-lotion.png',
         brandSlug: 'twon',
-        price: 279000
+        price: 306900
       },
       {
         id: 'twon-kem-u-trang',
@@ -29,7 +29,7 @@ export const CURATED_COMBOS = [
         capacity: '250ml',
         image: '/images/products/twon-kem-u-trang.png',
         brandSlug: 'twon',
-        price: 249000
+        price: 273900
       },
       {
         id: 'twon-sua-tam',
@@ -37,7 +37,7 @@ export const CURATED_COMBOS = [
         capacity: '450ml',
         image: '/images/products/twon-sua-tam.png',
         brandSlug: 'twon',
-        price: 179000
+        price: 196900
       }
     ],
     items: [
@@ -52,15 +52,15 @@ export const CURATED_COMBOS = [
       'Lưu hương nước hoa bền lâu',
       'Thấm nhanh 3s, không nhờn rít'
     ],
-    originalPrice: 707000,
+    originalPrice: 777700,
     price: 529000,
-    savedPrice: 178000,
-    discountPercent: 25
+    savedPrice: 248700,
+    discountPercent: 32
   },
   {
     id: 'combo-nang-quyen-ru',
     code: 'COMBO 2',
-    badge: 'HOT TREND · TIẾT KIỆM 22%',
+    badge: 'HOT TREND · TIẾT KIỆM 26%',
     title: 'Nàng Quyến Rũ ♡',
     subtitle: 'HƯƠNG NƯỚC HOA SANG TRỌNG',
     slogan: 'Tự tin tỏa sáng mỗi ngày',
@@ -74,7 +74,7 @@ export const CURATED_COMBOS = [
         capacity: '250ml',
         image: '/images/products/twon-body-lotion.png',
         brandSlug: 'twon',
-        price: 279000
+        price: 306900
       },
       {
         id: 'twon-sua-tam',
@@ -82,7 +82,7 @@ export const CURATED_COMBOS = [
         capacity: '450ml',
         image: '/images/products/twon-sua-tam.png',
         brandSlug: 'twon',
-        price: 179000
+        price: 196900
       },
       {
         id: 'dvah-kamal',
@@ -90,7 +90,7 @@ export const CURATED_COMBOS = [
         capacity: '10ml',
         image: '/images/products/dvah-kamal.png',
         brandSlug: 'dvah',
-        price: 179000
+        price: 174900
       }
     ],
     items: [
@@ -105,15 +105,15 @@ export const CURATED_COMBOS = [
       'Dưỡng trắng bật tone tự nhiên',
       'Lưu hương 6-8 tiếng trên da'
     ],
-    originalPrice: 637000,
+    originalPrice: 678700,
     price: 499000,
-    savedPrice: 138000,
-    discountPercent: 22
+    savedPrice: 179700,
+    discountPercent: 26
   },
   {
     id: 'combo-nang-thom',
     code: 'COMBO 3',
-    badge: 'ĐƯỢC YÊU THÍCH · TIẾT KIỆM 18%',
+    badge: 'ĐƯỢC YÊU THÍCH · TIẾT KIỆM 25%',
     title: 'Nàng Thơm ♡',
     subtitle: 'THƠM MỀM QUYẾN RŨ',
     slogan: 'Dưỡng sâu — Lưu hương dài lâu',
@@ -127,7 +127,7 @@ export const CURATED_COMBOS = [
         capacity: '250ml',
         image: '/images/products/twon-kem-u-trang.png',
         brandSlug: 'twon',
-        price: 249000
+        price: 273900
       },
       {
         id: 'twon-sua-tam',
@@ -135,7 +135,7 @@ export const CURATED_COMBOS = [
         capacity: '450ml',
         image: '/images/products/twon-sua-tam.png',
         brandSlug: 'twon',
-        price: 179000
+        price: 196900
       },
       {
         id: 'dvah-tanmaya',
@@ -143,7 +143,7 @@ export const CURATED_COMBOS = [
         capacity: '10ml',
         image: '/images/products/dvah-tanmaya.png',
         brandSlug: 'dvah',
-        price: 179000
+        price: 196900
       }
     ],
     items: [
@@ -158,10 +158,10 @@ export const CURATED_COMBOS = [
       'Làm dịu & dưỡng ẩm sâu',
       'Thơm ngát quyến rũ suốt ngày dài'
     ],
-    originalPrice: 607000,
+    originalPrice: 667700,
     price: 499000,
-    savedPrice: 108000,
-    discountPercent: 18
+    savedPrice: 168700,
+    discountPercent: 25
   }
 ];
 
@@ -172,8 +172,8 @@ export const RETAIL_50_DEALS = [
     brand: 'TWON',
     brandSlug: 'twon',
     image: '/images/products/twon-sua-tam.png',
-    originalPrice: 179000,
-    price: 89500,
+    originalPrice: 196900,
+    price: 98450,
     discountPercent: 50,
     features: ['Làm sạch dịu nhẹ', 'Dưỡng ẩm mịn màng', 'Lưu hương lâu', 'Không nhờn rít']
   },
@@ -183,8 +183,8 @@ export const RETAIL_50_DEALS = [
     brand: 'TWON',
     brandSlug: 'twon',
     image: '/images/products/twon-body-lotion.png',
-    originalPrice: 279000,
-    price: 139500,
+    originalPrice: 306900,
+    price: 153450,
     discountPercent: 50,
     features: ['Dưỡng trắng an toàn', 'Làm mịn da, đều màu', 'Thấm nhanh, không nhờn rít', 'Hương nước hoa nhẹ nhàng']
   },
@@ -194,8 +194,8 @@ export const RETAIL_50_DEALS = [
     brand: 'TWON',
     brandSlug: 'twon',
     image: '/images/products/twon-kem-u-trang.png',
-    originalPrice: 249000,
-    price: 124500,
+    originalPrice: 273900,
+    price: 136950,
     discountPercent: 50,
     features: ['Dưỡng trắng chuyên sâu', 'Cải thiện thô ráp', 'Giúp da sáng mịn', 'Hương thơm sang trọng']
   },
@@ -205,8 +205,8 @@ export const RETAIL_50_DEALS = [
     brand: "D'VAH",
     brandSlug: 'dvah',
     image: '/images/products/dvah-kamal.png',
-    originalPrice: 179000,
-    price: 89500,
+    originalPrice: 174900,
+    price: 87450,
     discountPercent: 50,
     scent: 'Hương ấm ngọt ngào Quyến rũ',
     features: ['Hương ấm ngọt ngào', 'Quyến rũ tinh tế', 'Độ lưu hương 6-8h']
@@ -217,8 +217,8 @@ export const RETAIL_50_DEALS = [
     brand: "D'VAH",
     brandSlug: 'dvah',
     image: '/images/products/dvah-malini.png',
-    originalPrice: 179000,
-    price: 89500,
+    originalPrice: 196900,
+    price: 98450,
     discountPercent: 50,
     scent: 'Hương hoa thuần khiết Nữ tính',
     features: ['Hương hoa thuần khiết', 'Nữ tính dịu dàng', 'Độ lưu hương 6-8h']
@@ -229,8 +229,8 @@ export const RETAIL_50_DEALS = [
     brand: "D'VAH",
     brandSlug: 'dvah',
     image: '/images/products/dvah-sarika.png',
-    originalPrice: 179000,
-    price: 89500,
+    originalPrice: 174900,
+    price: 87450,
     discountPercent: 50,
     scent: 'Hương ngọt sang trọng Tinh tế',
     features: ['Hương ngọt sang trọng', 'Tinh tế cuốn hút', 'Độ lưu hương 6-8h']
@@ -241,8 +241,8 @@ export const RETAIL_50_DEALS = [
     brand: "D'VAH",
     brandSlug: 'dvah',
     image: '/images/products/dvah-tanmaya.png',
-    originalPrice: 179000,
-    price: 89500,
+    originalPrice: 196900,
+    price: 98450,
     discountPercent: 50,
     scent: 'Hương trầm ấm Hiện đại Cuốn hút',
     features: ['Hương trầm ấm hiện đại', 'Cuốn hút quyến rũ', 'Độ lưu hương 6-8h']
@@ -253,8 +253,8 @@ export const RETAIL_50_DEALS = [
     brand: "D'VAH",
     brandSlug: 'dvah',
     image: '/images/products/dvah-rakta.png',
-    originalPrice: 179000,
-    price: 89500,
+    originalPrice: 196900,
+    price: 98450,
     discountPercent: 50,
     scent: 'Hương thơm nồng nàn Cá tính',
     features: ['Hương nồng nàn cá tính', 'Sang trọng đẳng cấp', 'Độ lưu hương 6-8h']

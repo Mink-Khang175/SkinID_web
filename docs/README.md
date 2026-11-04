@@ -10,6 +10,7 @@
 | [Bàn giao anh Danh](operations/danh-handover.md) | Cấu hình, chạy local và vận hành chưa deploy |
 | [Backend](integration/backend-contract.md) | Điểm thay adapter để nối Next.js/PostgreSQL |
 | [Chính sách](content/policies-v2.md) | Nguồn V2.0 và những nội dung chưa xác nhận |
+| [Quy chuẩn Giá & VAT](operations/quy-chuan-gia-va-vat.md) | Bản chất bảng giá Ecom T10, thuế GTGT, trần khuyến mại 50% và chuẩn Bộ Công Thương |
 | [Route](reference/routes.json) | Danh sách route và nhóm tương tác |
 | [Dọn repo](maintenance.md) | Phần đã đưa ra lưu trữ và kết quả kiểm tra |
 

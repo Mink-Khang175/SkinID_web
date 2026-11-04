@@ -2771,7 +2771,7 @@ export const CATALOG_FIXTURE = [
     "brand": "DVAH",
     "brandSlug": "dvah",
     "line": "D'VAH PERFUME",
-    "name": "D’VAH Nước Hoa Malani",
+    "name": "D’VAH Nước Hoa Malini",
     "slug": "nuoc-hoa-dvah-malini-10ml",
     "price": 177000,
     "originalPrice": 196900,

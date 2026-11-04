@@ -99,7 +99,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="footer-bottom mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
           <div className="text-center sm:text-left leading-relaxed text-[11px]">
-            © 2026 SkinID.vn. Bản quyền thuộc CÔNG TY TNHH FIELDMAN. Dược mỹ phẩm không phải là thuốc và không có tác dụng thay thế thuốc chữa bệnh.
+            © 2026 SkinID.vn. Bản quyền thuộc CÔNG TY TNHH FIELDMAN. Toàn bộ giá sản phẩm niêm yết trên website đã bao gồm thuế GTGT (VAT). Dược mỹ phẩm không phải là thuốc và không có tác dụng thay thế thuốc chữa bệnh.
           </div>
           <div className="flex items-center gap-4 text-[11px] flex-shrink-0">
             <a href="/chinh-sach-bao-mat" className="hover:text-white transition-colors">Bảo mật</a>

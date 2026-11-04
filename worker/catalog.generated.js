@@ -565,7 +565,7 @@ export const SERVER_CATALOG = [
     "id": "dvah-malini",
     "brand": "DVAH",
     "brandSlug": "dvah",
-    "name": "D’VAH Nước Hoa Malani",
+    "name": "D’VAH Nước Hoa Malini",
     "image": "/images/products/dvah-malini.png",
     "volume": "10 ml",
     "productCode": "DVAH-MALINI-10ML",

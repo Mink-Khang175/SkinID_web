@@ -166,7 +166,7 @@ export default function ProductDetailPage() {
               </h1>
 
               {/* Price Section */}
-              <div className="flex items-baseline gap-3 pb-4 border-b border-stone-100">
+              <div className="flex flex-wrap items-baseline gap-3 pb-4 border-b border-stone-100">
                 <span className="text-3xl font-bold text-[#D04862] tracking-tight">
                   {formatPrice(product.price)}
                 </span>
@@ -175,6 +175,7 @@ export default function ProductDetailPage() {
                     {formatPrice(product.originalPrice)}
                   </span>
                 )}
+                <span className="text-xs text-slate-500 font-medium">(Đã bao gồm thuế VAT)</span>
               </div>
 
               {/* Quick Summary */}
