@@ -254,7 +254,7 @@ export function generateDeliveryNoteHtml(order) {
   <div class="header">
     <div>
       <div class="brand-title">SkinID.vn — Mỹ Phẩm Chính Hãng</div>
-      <div class="company-info">CÔNG TY TNHH FIELDMAN • MST: 0319200638 • Hotline: 0924 093 461</div>
+      <div class="company-info">CÔNG TY TNHH FIELDMAN • MST: 0319200638 • Hotline: 0704 136 862</div>
       <div class="company-info">Địa chỉ: 175 Phan Chu Trinh, Phường 13, Bình Thạnh, TP. Hồ Chí Minh</div>
     </div>
     <div class="order-badge">
@@ -267,7 +267,7 @@ export function generateDeliveryNoteHtml(order) {
     <div class="party-content">
       <span class="section-title">Đơn vị gửi</span>
       <p><strong>KHO VẬN SKINID VIỆT NAM</strong></p>
-      <p>Hotline hỗ trợ giao hàng: 0924 093 461</p>
+      <p>Hotline hỗ trợ giao hàng: 0704 136 862</p>
       <p>Website: https://skinid.vn</p>
     </div>
     <div class="party-content">
@@ -351,7 +351,7 @@ export function generateDeliveryNoteHtml(order) {
   </div>
 
   <div class="terms">
-    Quý khách vui lòng đồng kiểm ngoại quan sản phẩm trước khi nhận hàng. SkinID hỗ trợ đổi trả trong vòng 7 ngày đối với hàng hóa còn nguyên tem niêm phong. Mọi thắc mắc xin gọi hotline: 0924 093 461.
+    Quý khách vui lòng đồng kiểm ngoại quan sản phẩm trước khi nhận hàng. SkinID hỗ trợ đổi trả trong vòng 7 ngày đối với hàng hóa còn nguyên tem niêm phong. Mọi thắc mắc xin gọi hotline: 0704 136 862.
   </div>
 
   <div class="print-actions no-print">

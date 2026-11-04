@@ -24,7 +24,7 @@ export const LEGAL_POLICIES = {
           [
             "Bên bán hàng, xuất hóa đơn, bên kiểm soát dữ liệu cá nhân",
             "CÔNG TY TNHH FIELDMAN",
-            "MST: 0319200638; Địa chỉ: 35 đường số 3, Phường Tân Mỹ, Thành phố Hồ Chí Minh; Hotline: 0924 093 461; Email: operation@fieldman.vn"
+            "MST: 0319200638; Địa chỉ: 35 đường số 3, Phường Tân Mỹ, Thành phố Hồ Chí Minh; Hotline: 0704 136 862; Email: operation@fieldman.vn"
           ],
           [
             "Đối tác công nghệ AI phân tích da (bên xử lý dữ liệu)",
@@ -83,7 +83,7 @@ export const LEGAL_POLICIES = {
         "blocks": [
           {
             "type": "text",
-            "content": "* Bạn có thể mua hàng không cần tài khoản. Tài khoản giúp theo dõi đơn hàng, lưu lịch sử phân tích da và nhận ưu đãi.\n* Bạn cung cấp thông tin chính xác và giữ bí mật thông tin đăng nhập. Bạn chịu trách nhiệm với các hoạt động phát sinh từ tài khoản trong phạm vi lỗi của mình (ví dụ tự tiết lộ mật khẩu, cho người khác dùng chung tài khoản).\n* SkinID có trách nhiệm áp dụng biện pháp bảo mật phù hợp và phối hợp xử lý khi có truy cập trái phép. Trường hợp tài khoản bị xâm nhập do lỗi hệ thống của SkinID, SkinID chịu trách nhiệm theo quy định pháp luật.\n* Hãy báo ngay qua 0924 093 461 hoặc operation@fieldman.vn khi nghi ngờ tài khoản bị truy cập trái phép; SkinID sẽ tạm khóa tài khoản để bảo vệ bạn."
+            "content": "* Bạn có thể mua hàng không cần tài khoản. Tài khoản giúp theo dõi đơn hàng, lưu lịch sử phân tích da và nhận ưu đãi.\n* Bạn cung cấp thông tin chính xác và giữ bí mật thông tin đăng nhập. Bạn chịu trách nhiệm với các hoạt động phát sinh từ tài khoản trong phạm vi lỗi của mình (ví dụ tự tiết lộ mật khẩu, cho người khác dùng chung tài khoản).\n* SkinID có trách nhiệm áp dụng biện pháp bảo mật phù hợp và phối hợp xử lý khi có truy cập trái phép. Trường hợp tài khoản bị xâm nhập do lỗi hệ thống của SkinID, SkinID chịu trách nhiệm theo quy định pháp luật.\n* Hãy báo ngay qua 0704 136 862 hoặc operation@fieldman.vn khi nghi ngờ tài khoản bị truy cập trái phép; SkinID sẽ tạm khóa tài khoản để bảo vệ bạn."
           }
         ]
       },
@@ -167,7 +167,7 @@ export const LEGAL_POLICIES = {
         "blocks": [
           {
             "type": "text",
-            "content": "* Kênh tiếp nhận: hotline 0924 093 461, email operation@fieldman.vn, chat Zalo Hotline 0924 093 461 hoặc trực tiếp tại 35 đường số 3, Phường Tân Mỹ, Thành phố Hồ Chí Minh.\n* SkinID xác nhận đã tiếp nhận khiếu nại trong vòng 24 giờ làm việc và thông báo phương án xử lý trong vòng 7 ngày làm việc. Trường hợp phức tạp cần xác minh với nhà sản xuất hoặc đơn vị vận chuyển, SkinID sẽ thông báo thời hạn dự kiến.\n* Tranh chấp được ưu tiên giải quyết bằng thương lượng, hòa giải. Bạn có quyền yêu cầu tổ chức xã hội tham gia bảo vệ quyền lợi người tiêu dùng, cơ quan quản lý nhà nước có thẩm quyền hỗ trợ, hoặc khởi kiện tại Tòa án có thẩm quyền theo quy định pháp luật."
+            "content": "* Kênh tiếp nhận: hotline 0704 136 862, email operation@fieldman.vn, chat Zalo Hotline 0704 136 862 hoặc trực tiếp tại 35 đường số 3, Phường Tân Mỹ, Thành phố Hồ Chí Minh.\n* SkinID xác nhận đã tiếp nhận khiếu nại trong vòng 24 giờ làm việc và thông báo phương án xử lý trong vòng 7 ngày làm việc. Trường hợp phức tạp cần xác minh với nhà sản xuất hoặc đơn vị vận chuyển, SkinID sẽ thông báo thời hạn dự kiến.\n* Tranh chấp được ưu tiên giải quyết bằng thương lượng, hòa giải. Bạn có quyền yêu cầu tổ chức xã hội tham gia bảo vệ quyền lợi người tiêu dùng, cơ quan quản lý nhà nước có thẩm quyền hỗ trợ, hoặc khởi kiện tại Tòa án có thẩm quyền theo quy định pháp luật."
           }
         ]
       },
@@ -239,7 +239,7 @@ export const LEGAL_POLICIES = {
         "blocks": [
           {
             "type": "text",
-            "content": "Gọi 0924 093 461 (08:00 – 21:00 (Thứ 2 – Chủ nhật)) hoặc nhắn tin qua Zalo Hotline 0924 093 461. Nhân viên tư vấn sẽ tạo đơn và gửi lại cho bạn bản tóm tắt đơn hàng (sản phẩm, giá, phí vận chuyển, tổng tiền) để xác nhận trước khi xử lý."
+            "content": "Gọi 0704 136 862 (08:00 – 21:00 (Thứ 2 – Chủ nhật)) hoặc nhắn tin qua Zalo Hotline 0704 136 862. Nhân viên tư vấn sẽ tạo đơn và gửi lại cho bạn bản tóm tắt đơn hàng (sản phẩm, giá, phí vận chuyển, tổng tiền) để xác nhận trước khi xử lý."
           }
         ]
       },
@@ -651,7 +651,7 @@ export const LEGAL_POLICIES = {
           },
           {
             "type": "text",
-            "content": "SkinID chỉ nhận chuyển khoản vào tài khoản đứng tên pháp nhân nêu trên, không bao giờ yêu cầu chuyển vào tài khoản cá nhân. Khi có nghi ngờ, vui lòng gọi 0924 093 461 để xác minh."
+            "content": "SkinID chỉ nhận chuyển khoản vào tài khoản đứng tên pháp nhân nêu trên, không bao giờ yêu cầu chuyển vào tài khoản cá nhân. Khi có nghi ngờ, vui lòng gọi 0704 136 862 để xác minh."
           }
         ]
       },
@@ -809,7 +809,7 @@ export const LEGAL_POLICIES = {
         "blocks": [
           {
             "type": "text",
-            "content": "1. Liên hệ 0924 093 461, operation@fieldman.vn hoặc chức năng “Yêu cầu đổi trả” trong tài khoản; cung cấp mã đơn hàng và mô tả vấn đề."
+            "content": "1. Liên hệ 0704 136 862, operation@fieldman.vn hoặc chức năng “Yêu cầu đổi trả” trong tài khoản; cung cấp mã đơn hàng và mô tả vấn đề."
           },
           {
             "type": "text",

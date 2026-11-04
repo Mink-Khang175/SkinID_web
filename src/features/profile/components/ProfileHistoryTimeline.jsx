@@ -126,7 +126,7 @@ export default function ProfileHistoryTimeline({ history = [], user = {} }) {
               </button>
 
               <a
-                href="https://zalo.me/0924093461"
+                href="https://zalo.me/0704136862"
                 target="_blank"
                 rel="noreferrer"
                 className="profile-action profile-action--consult profile-action--compact"

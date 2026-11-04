@@ -67,7 +67,7 @@ test('GD5: Phiếu giao hàng A5/A6 - Đầy đủ thông tin pháp nhân & Cam 
   // Thông tin pháp nhân Fieldman
   assert.match(html, /CÔNG TY TNHH FIELDMAN/);
   assert.match(html, /MST: 0319200638/);
-  assert.match(html, /0924 093 461/);
+  assert.match(html, /0704 136 862/);
   // Thông tin người nhận
   assert.match(html, /Nguyễn Thị Thu Hà/);
   assert.match(html, /0901234567/);

@@ -298,7 +298,7 @@ function SkincareRoutineSection({ scan }) {
             <span>{addedAll ? 'Đã thêm trọn bộ vào giỏ!' : 'Thêm trọn bộ vào giỏ hàng'}</span>
           </button>
           <a
-            href="https://zalo.me/0924093461"
+            href="https://zalo.me/0704136862"
             target="_blank"
             rel="noreferrer"
             className="profile-action profile-action--consult profile-action--large w-full sm:w-auto"

@@ -44,7 +44,7 @@ test('Toàn bộ văn bản pháp lý sạch 100% placeholder [Điền ...]', ()
 test('Thông tin định danh CÔNG TY TNHH FIELDMAN chính xác theo đăng ký kinh doanh', () => {
   assert.equal(COMPANY_INFO.taxCode, '0319200638');
   assert.equal(COMPANY_INFO.email, 'operation@fieldman.vn');
-  assert.equal(COMPANY_INFO.hotline, '0924.093.461');
+  assert.equal(COMPANY_INFO.hotline, '0704.136.862');
   assert.equal(COMPANY_INFO.dpoName, 'Ông Trần Trung Nghĩa');
   assert.equal(COMPANY_INFO.bank.accountNumber, '1063583549');
   assert.equal(COMPANY_INFO.bank.accountName, 'CÔNG TY TNHH FIELDMAN');
@@ -84,7 +84,7 @@ test('getPolicyBySlug lookup helper hoạt động chuẩn xác', () => {
 
 test('parseInlineTokens chuyển đổi **in đậm** thành token bold và sạch 100% dấu hoa thị (*)', async () => {
   const { parseInlineTokens, parsePolicyContent } = await import('../src/components/policies/policyParser.js');
-  const sample = '**CÔNG TY TNHH FIELDMAN** và Hotline **0924.093.461**';
+  const sample = '**CÔNG TY TNHH FIELDMAN** và Hotline **0704.136.862**';
   const tokens = parseInlineTokens(sample);
   assert.ok(Array.isArray(tokens));
   assert.equal(tokens.length, 3);
@@ -93,7 +93,7 @@ test('parseInlineTokens chuyển đổi **in đậm** thành token bold và sạ
   assert.equal(tokens[1].type, 'text');
   assert.equal(tokens[1].text, ' và Hotline ');
   assert.equal(tokens[2].type, 'bold');
-  assert.equal(tokens[2].text, '0924.093.461');
+  assert.equal(tokens[2].text, '0704.136.862');
 
   // Khẳng định không còn bất kỳ dấu * nào trong text parsed
   for (const t of tokens) {

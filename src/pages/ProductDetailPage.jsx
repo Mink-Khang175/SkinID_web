@@ -245,7 +245,7 @@ export default function ProductDetailPage() {
               </div>
 
               <a
-                href="https://zalo.me/0924093461"
+                href="https://zalo.me/0704136862"
                 target="_blank"
                 rel="noreferrer"
                 className="w-full py-2.5 px-4 rounded-xl bg-blue-50 text-blue-700 text-xs font-semibold flex items-center justify-center gap-2 border border-blue-200/60 hover:bg-blue-100/70 transition-colors"

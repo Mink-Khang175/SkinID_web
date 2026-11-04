@@ -8,7 +8,7 @@ export default function OfferBar({ revealOnUpScroll = false }) {
     currency: 'VND',
     maximumFractionDigits: 0
   }).format(settings.freeshipThreshold || 500000);
-  const hotline = settings.hotline || '0924.093.461';
+  const hotline = settings.hotline || '0704.136.862';
 
   const [isVisible, setIsVisible] = useState(!revealOnUpScroll);
   const hideTimerRef = useRef(0);

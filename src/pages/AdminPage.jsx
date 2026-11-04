@@ -170,7 +170,7 @@ const ROLE_DEFINITIONS = {
 const DEFAULT_SYSTEM_SETTINGS = {
   brandName: 'SkinID.vn',
   slogan: 'Healthier Skin, Happier You',
-  hotline: '0924 093 461',
+  hotline: '0704 136 862',
   supportEmail: 'cskh@skinid.vn',
   showroomAddress: '71 Trạng Trình, Phường 9, TP. Đà Lạt, Lâm Đồng',
   freeshipThreshold: 499000,
@@ -2841,7 +2841,7 @@ export default function AdminPage() {
     if (users && users.length > 0) return users;
     if (isDevPreview) {
       return [
-        { id: 'u1', email: 'danh.huynh@fieldman.vn', name: 'Danh Huỳnh Thanh', role: 'super_admin', phone: '0924 093 461' },
+        { id: 'u1', email: 'danh.huynh@fieldman.vn', name: 'Danh Huỳnh Thanh', role: 'super_admin', phone: '0704 136 862' },
         { id: 'u2', email: 'vanhanh@skinid.vn', name: 'Nguyễn Quản Lý', role: 'admin', phone: '0909 111 222' },
         { id: 'u3', email: 'cskh@skinid.vn', name: 'Trần CSKH', role: 'staff', phone: '0908 333 444' },
         { id: 'u4', email: 'khachhang@gmail.com', name: 'Bùi Thị Lan', role: 'customer', phone: '0977 555 666' }

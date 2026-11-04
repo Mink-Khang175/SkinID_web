@@ -22,3 +22,6 @@ gha-creds-*.json
 !.dev.vars.example
 service-account*.json
 credentials/
+
+# Local agent tooling state (taste learnings, session data).
+.commandcode/

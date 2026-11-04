@@ -67,7 +67,7 @@ export default function AciePage() {
             <span className="section-kicker skinid-editorial-kicker" data-reveal data-reveal-delay="0">HẸN BẠN MỘT NGÀY GẦN NHẤT</span>
             <h2 className="skinid-editorial-title skinid-editorial-title--invitation" data-reveal data-reveal-delay="90">Điều nhỏ xinh. <em>Dành riêng cho bạn.</em></h2>
             <p data-reveal data-reveal-delay="180">Muốn biết thêm về ACIE? Trò chuyện cùng SkinID để cập nhật thông tin trải nghiệm.</p>
-            <a className="soft-button" href="https://zalo.me/0924093461" target="_blank" rel="noopener noreferrer" data-reveal data-reveal-delay="270">
+            <a className="soft-button" href="https://zalo.me/0704136862" target="_blank" rel="noopener noreferrer" data-reveal data-reveal-delay="270">
               <span>Hỏi SkinID về ACIE</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ width: '16px', height: '16px' }}>
                 <line x1="7" y1="17" x2="17" y2="7"></line>

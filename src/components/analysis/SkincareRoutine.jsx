@@ -533,7 +533,7 @@ export default function SkincareRoutine() {
 
                 {/* TẦNG 7: TƯ VẤN 1:1 QUA ZALO & MIỄN TRỪ Y KHOA */}
                 <div className="scan-result-consult flex flex-col items-center text-center space-y-4 pt-4 border-t border-[#FFE8ED]">
-                    <a href="https://zalo.me/0924093461" target="_blank" rel="noopener noreferrer" className="scan-report-action scan-report-action--consult">
+                    <a href="https://zalo.me/0704136862" target="_blank" rel="noopener noreferrer" className="scan-report-action scan-report-action--consult">
                         <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="24" cy="24" r="24" fill="currentColor"/>
                             <path d="M13.5 15.5h21v3.5l-12.5 11h12.5v3.5h-21v-3.5l12.5-11h-12.5v-3.5z" fill="#FFFFFF"/>
