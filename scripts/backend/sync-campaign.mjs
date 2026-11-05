@@ -15,6 +15,7 @@ export function buildCampaignData() {
     badge: 'SIÊU SALE ĐẶC BIỆT',
     basisPolicy: 'Chính sách bán hàng Fieldman (15/04/2026)',
     active: true,
+    salesChannel: 'store',
     steps: CAMPAIGN_STEPS,
     combos: CURATED_COMBOS,
     flashSale: RETAIL_50_DEALS,
@@ -47,37 +48,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1]
           fields: encodeFields(campaign)
         },
         updateMask: { fieldPaths: Object.keys(campaign) }
-      },
-      // 2. Ghi vào collection campaigns/twon_dvah_flashsale (dành cho quản lý chiến dịch dài hạn)
-      {
-        update: {
-          name: documentName(env, `campaigns/${campaign.id}`),
-          fields: encodeFields(campaign)
-        },
-        updateMask: { fieldPaths: Object.keys(campaign) }
-      },
-      // 3. Ghi từng combo vào collection promotions_combos
-      ...combos.map((combo) => ({
-        update: {
-          name: documentName(env, `promotions_combos/${combo.id}`),
-          fields: encodeFields({
-            ...combo,
-            updatedAtIso: campaign.updatedAtIso
-          })
-        },
-        updateMask: { fieldPaths: Object.keys(combo) }
-      })),
-      // 4. Ghi từng deal bán lẻ 50% vào collection promotions_flashsale
-      ...flashSale.map((deal) => ({
-        update: {
-          name: documentName(env, `promotions_flashsale/${deal.id}`),
-          fields: encodeFields({
-            ...deal,
-            updatedAtIso: campaign.updatedAtIso
-          })
-        },
-        updateMask: { fieldPaths: Object.keys(deal) }
-      }))
+      }
     ];
 
     await commitWrites(env, writes);

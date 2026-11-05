@@ -2,6 +2,8 @@
 
 ## Trạng thái bàn giao
 
+**Cập nhật 05/11/2026:** đã sửa dữ liệu/rules Firestore `skinid-vietnam`, chuyển cấu hình local sang project công ty và bật bảo vệ xóa database. Xem [tài liệu database](../architecture/firestore.md). Mô tả chưa ghi/chưa triển khai bên dưới thuộc đợt phục hồi source trước đó; Worker vẫn do anh Danh triển khai.
+
 Đã phục hồi source backend từ repo Danh cũ cùng Firebase rules/indexes/config; bổ sung bridge local, công cụ bảo trì, các sửa lỗi đơn hàng/POS và kiểm thử. Chưa deploy, import catalog, tạo tài khoản, cấp quyền hoặc gửi đơn/thông báo thật.
 
 Project đang dùng: **skinid-vietnam**, thống nhất ở `.firebaserc`, `src/shared/config/runtime.js`, `.env.example`, `.dev.vars.example` và secret Worker `skinid-web-v2`. Catalog 54 sản phẩm đã chuyển từ `skinid-df273` sang `skinid-vietnam` giữ nguyên document ID; 55 document cũ của vietnam (gồm `test-product`) đã được xoá sau khi backup. File JSON khóa nằm local và được ignore.
@@ -43,7 +45,7 @@ node scripts/backend/set-role.mjs --uid=FIREBASE_UID --role=super_admin
 node scripts/backend/s3-mapping.mjs --file=duong-dan-mapping.json
 ```
 
-Khi chủ quản đã chọn UID/dữ liệu và đồng ý thực hiện, thêm `--apply --project=skinid-df273`. Tài khoản cần đăng ký/đăng nhập website trước khi phân quyền theo email. Sau đổi custom claims, đăng nhập lại. Không cấp quyền dựa vào tham số URL hoặc chỉ có email chưa xác minh.
+Khi chủ quản đã chọn UID/dữ liệu và đồng ý thực hiện, thêm `--apply --project=skinid-vietnam`. Tài khoản cần đăng ký/đăng nhập website trước khi phân quyền theo email. Sau đổi custom claims, đăng nhập lại. Không cấp quyền dựa vào tham số URL hoặc chỉ có email chưa xác minh.
 
 File mapping có dạng mảng JSON `[{"productId":"id-trong-catalog","s3ProductId":12345}]`; 12345 chỉ là ví dụ cấu trúc, phải thay bằng ID thực của ES3. Script kiểm tra ID catalog, số nguyên dương và trùng lặp; không tự đoán mapping.
 

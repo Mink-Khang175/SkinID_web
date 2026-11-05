@@ -345,7 +345,7 @@ export async function saveAdminCampaign(campaignData) {
 }
 
 export async function fetchAdminBlogPosts() {
-  return await fetchBlogPosts();
+  return await fetchBlogPosts({ includeUnpublished: true });
 }
 
 export async function saveAdminBlogPost(postId, postData) {

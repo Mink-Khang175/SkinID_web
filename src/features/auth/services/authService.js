@@ -74,6 +74,8 @@ async function loadProfile(firebaseUser, initialProfile = {}) {
     uid: firebaseUser.uid,
     ...defaults,
     ...profile,
+    email: firebaseUser.email || '',
+    emailVerified: firebaseUser.emailVerified === true,
     role: isSuperAdminUser ? 'super_admin' : (profile.role || 'customer'),
     isAdmin: isAdminUser,
     isSuperAdmin: isSuperAdminUser,

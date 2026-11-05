@@ -7,7 +7,7 @@ import MobileNav from '../components/layout/MobileNav.jsx';
 import StorefrontModals from '../components/dialogs/StorefrontModals.jsx';
 import { assetUrl } from '../assets/index.js';
 import { DEFAULT_BLOG_ARTICLES } from '../data/blogArticles.js';
-import { fetchAdminBlogPosts } from '../features/admin/index.js';
+import { fetchBlogPosts } from '../features/content/index.js';
 import { useCatalog } from '../features/catalog/hooks/useCatalog.js';
 import { formatPrice } from '../features/catalog/index.js';
 import { useCart } from '../features/cart/index.js';
@@ -22,7 +22,7 @@ export default function BlogDetailPage() {
 
   useEffect(() => {
     let mounted = true;
-    fetchAdminBlogPosts()
+    fetchBlogPosts()
       .then((posts) => {
         if (mounted && Array.isArray(posts) && posts.length > 0) {
           setArticles(posts);
@@ -155,7 +155,12 @@ export default function BlogDetailPage() {
 
         {/* Article Body */}
         <article className="article-prose prose prose-stone max-w-none text-slate-700 leading-relaxed text-base sm:text-lg mb-14 space-y-6">
-          {article.content ? (
+          {Array.isArray(article.content) ? (
+            article.content.map((section, index) => <section key={index}>
+              {section.heading && <h2 className="font-bold text-xl text-slate-900 pt-4">{section.heading}</h2>}
+              {section.text && <p>{section.text}</p>}
+            </section>)
+          ) : article.content ? (
             <div dangerouslySetInnerHTML={{ __html: article.content }} />
           ) : (
             <div>

@@ -367,8 +367,7 @@ if (typeof globalThis !== 'undefined') globalThis.VALID_ROLES = VALID_ROLES;
 const SUPER_ADMIN_EMAILS = [
   'admin@skinid.vn',
   'admin@fieldman.vn',
-  'danh.huynh@fieldman.vn',
-  'danhhuynh.nexus@gmail.com'
+  'danh.huynh@fieldman.vn'
 ];
 
 function isUserSuperAdmin(user) {
@@ -986,7 +985,7 @@ async function handleApi(request, env) {
     const config = integrationStatus(env);
     if (service === 'firebase') {
       requiredFirebaseEnv(env);
-      await getDocument(env, 'system_config/general');
+      await getDocument(env, 'settings/system_config');
       return json(request, env, { success: true, service, status: 'connected' });
     }
     if (service === 's3') {

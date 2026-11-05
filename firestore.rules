@@ -11,7 +11,7 @@ rules_version = '2';
 // 4. orders: E-commerce transactions
 //    - create: BLOCKED for client-side (allow create: if false; L2 critical security fix)
 //    - read: document owner or isStaff()
-//    - update: isAdmin() OR customer self-cancellation for 'pending'/'confirmed' statuses only
+//    - update: admin operational fields (financial snapshot immutable) OR customer self-cancellation
 //    - delete: isSuperAdmin()
 // 5. users: Customer profile & account data (read: owner or isStaff())
 //    - create/update: role self-assignment strictly forbidden
@@ -20,7 +20,7 @@ rules_version = '2';
 //      * commerce, addresses, wishlist: read/write by owner
 //      * activities: read by owner, write: false (server-managed)
 //      * private: read/write: false (server-only secrets)
-// 6. posts / blog_posts: Articles & skincare routines (read: published/scheduled or isStaff(), write: isAdmin())
+// 6. posts / blog_posts: Articles & skincare routines (read: published or isStaff(), write: isAdmin())
 //    - revisions: read/write by isStaff()
 // 7. postCategories: Blog categories (read: public, write: isAdmin())
 // 8. pages: Static CMS pages (read: public, write: isAdmin())
@@ -45,7 +45,7 @@ service cloud.firestore {
     function isSuperAdmin() {
       return request.auth != null && (
         ('role' in request.auth.token && request.auth.token.role == 'super_admin') ||
-        ('admin' in request.auth.token && request.auth.token.admin == true) ||
+        ('admin' in request.auth.token && request.auth.token.admin == true && !('role' in request.auth.token)) ||
         ('email_verified' in request.auth.token && request.auth.token.email_verified == true && 'email' in request.auth.token && request.auth.token.email in [
           'admin@skinid.vn',
           'admin@fieldman.vn',
@@ -57,6 +57,7 @@ service cloud.firestore {
     function isAdmin() {
       return isSuperAdmin() || (
         request.auth != null && (
+          ('admin' in request.auth.token && request.auth.token.admin == true) ||
           ('role' in request.auth.token && request.auth.token.role in ['super_admin', 'admin']) ||
           (
             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
@@ -70,15 +71,32 @@ service cloud.firestore {
       return isAdmin() || (
         request.auth != null && (
           ('role' in request.auth.token && request.auth.token.role in [
-            'super_admin', 'admin', 'editor', 'marketing', 'sales', 'consultant', 'warehouse', 'staff'
+            'super_admin', 'admin', 'editor', 'marketing', 'sales', 'dermatologist', 'consultant', 'warehouse', 'staff'
           ]) ||
           (
             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in [
-              'super_admin', 'admin', 'editor', 'marketing', 'sales', 'consultant', 'warehouse', 'staff'
+              'super_admin', 'admin', 'editor', 'marketing', 'sales', 'dermatologist', 'consultant', 'warehouse', 'staff'
             ]
           )
         )
+      );
+    }
+
+    function profileFields() {
+      return ['name', 'email', 'phone', 'picture', 'provider', 'createdAt', 'updatedAt',
+        'birthday', 'gender', 'address', 'shippingAddress', 'skinTypeBaseline', 'mainConcern'];
+    }
+
+    function authorizationFields() {
+      return ['role', 'isAdmin', 'isSuperAdmin', 'admin', 'customClaims', 'permissions'];
+    }
+
+    function isSkinConsultant() {
+      return request.auth != null && (
+        ('role' in request.auth.token && request.auth.token.role in ['dermatologist', 'consultant']) ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['dermatologist', 'consultant'])
       );
     }
 
@@ -134,9 +152,12 @@ service cloud.firestore {
         isStaff()
       );
 
-      // Admin has full update rights. Customer can ONLY cancel pending/confirmed order.
+      // Financial snapshots can only change through trusted server workflows.
+      // Customer can ONLY cancel a pending/confirmed order.
       allow update: if request.auth != null && (
-        isAdmin() ||
+        (isAdmin() && !request.resource.data.diff(resource.data).affectedKeys().hasAny([
+          'userId', 'items', 'subtotal', 'discountAmount', 'couponCode', 'shippingFee', 'total', 'createdAt', 'id'
+        ])) ||
         (
           resource.data.userId == request.auth.uid &&
           resource.data.status in ['pending', 'confirmed'] &&
@@ -159,21 +180,24 @@ service cloud.firestore {
       // Normal users cannot set their own role upon account registration
       allow create: if request.auth != null && (
         isSuperAdmin() ||
-        (request.auth.uid == userId && !request.resource.data.keys().hasAny(['role']))
+        (request.auth.uid == userId && request.resource.data.keys().hasOnly(profileFields()) &&
+          (!('email' in request.resource.data) || request.resource.data.email == request.auth.token.email))
       );
 
       // Privilege escalation protection: role can never be updated by standard users or regular admins
       allow update: if request.auth != null && (
         isSuperAdmin() ||
-        (isAdmin() && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role'])) ||
-        (request.auth.uid == userId && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']))
+        (isAdmin() && !request.resource.data.diff(resource.data).affectedKeys().hasAny(authorizationFields())) ||
+        (request.auth.uid == userId && request.resource.data.diff(resource.data).affectedKeys().hasOnly(profileFields()) &&
+          (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['email']) || request.resource.data.email == request.auth.token.email))
       );
 
       allow delete: if isSuperAdmin();
 
       // Diagnostic skin analysis reports: immutable history
       match /skinReports/{reportId} {
-        allow read, create, delete: if request.auth != null && (request.auth.uid == userId || isStaff());
+        allow read: if request.auth != null && (request.auth.uid == userId || isAdmin() || isSkinConsultant());
+        allow create, delete: if request.auth != null && (request.auth.uid == userId || isAdmin());
         allow update: if false;
       }
 
@@ -209,7 +233,7 @@ service cloud.firestore {
     // ===============================================================
 
     match /posts/{postId} {
-      allow read: if ('status' in resource.data && resource.data.status in ['published', 'scheduled']) || isStaff();
+      allow read: if ('status' in resource.data && resource.data.status == 'published') || isStaff();
       allow write: if isAdmin();
 
       match /revisions/{revisionId} {
@@ -219,7 +243,7 @@ service cloud.firestore {
 
     // Alias for legacy blog_posts collection compatibility
     match /blog_posts/{postId} {
-      allow read: if ('status' in resource.data && resource.data.status in ['published', 'scheduled']) || isStaff();
+      allow read: if ('status' in resource.data && resource.data.status == 'published') || isStaff();
       allow write: if isAdmin();
 
       match /revisions/{revisionId} {
@@ -237,8 +261,12 @@ service cloud.firestore {
     }
 
     match /pages/{pageId} {
-      allow read: if true;
+      allow read: if pageId == 'home' || ('status' in resource.data && resource.data.status == 'published') || isStaff();
       allow write: if isAdmin();
+
+      match /versions/{versionId} {
+        allow read, write: if isAdmin();
+      }
     }
 
     // ===============================================================
@@ -277,8 +305,7 @@ service cloud.firestore {
       // General public settings (hotline, banners, SEO metadata, tracking tags) are readable
       // Private config docs (e.g. credentials, secrets, private) require admin
       allow read: if (
-        settingId != 'private' &&
-        settingId != 'secrets' &&
+        settingId in ['system_config', 'campaign_config', 'tracking_scripts', 'seo_config'] &&
         (!('isPrivate' in resource.data) || resource.data.isPrivate != true)
       ) || isAdmin();
       allow write: if isAdmin();

@@ -1,4 +1,5 @@
 import { firebaseServices } from '../../../infrastructure/firebase/index.js';
+import { normalizeBlogPost } from './contentModel.js';
 import { DEFAULT_BLOG_ARTICLES } from '../../../data/blogArticles.js';
 import { AVAILABLE_COUPONS, setRemoteCoupons } from '../../cart/services/couponService.js';
 import {
@@ -178,19 +179,22 @@ export async function saveCampaign(campaignData) {
 // -------------------------------------------------------------
 // 4. BÀI VIẾT BLOG & CẨM NANG (POSTS)
 // -------------------------------------------------------------
-export async function fetchBlogPosts() {
+export async function fetchBlogPosts({ includeUnpublished = false } = {}) {
   try {
-    const { collection, getDocs } = sdk.firestore;
-    const snapshot = await getDocs(collection(db, 'posts')).catch(() => ({ empty: true }));
+    const { collection, getDocs, query, where } = sdk.firestore;
+    const readPosts = (name) => getDocs(includeUnpublished
+      ? collection(db, name)
+      : query(collection(db, name), where('status', '==', 'published')));
+    const snapshot = await readPosts('posts').catch(() => ({ empty: true }));
     if (!snapshot.empty) {
       const remote = documents(snapshot);
-      if (remote.length > 0) return remote;
+      if (remote.length > 0) return remote.map(normalizeBlogPost);
     }
     // Fallback thử collection blog_posts cũ nếu posts chưa migrate
-    const legacySnap = await getDocs(collection(db, 'blog_posts')).catch(() => ({ empty: true }));
+    const legacySnap = await readPosts('blog_posts').catch(() => ({ empty: true }));
     if (!legacySnap.empty) {
       const legacyRemote = documents(legacySnap);
-      if (legacyRemote.length > 0) return legacyRemote;
+      if (legacyRemote.length > 0) return legacyRemote.map(normalizeBlogPost);
     }
   } catch (err) {
     console.warn('[ContentRepository] Firestore fetch blog posts failed, using defaults:', err.message);
@@ -215,11 +219,8 @@ export async function saveBlogPost(postData) {
   };
 
   const { doc, setDoc, serverTimestamp } = sdk.firestore;
-  // Ghi đồng bộ vào cả posts và blog_posts để tương thích ngược
-  await Promise.all([
-    setDoc(doc(db, 'posts', id), { ...payload, updatedAtServer: serverTimestamp() }, { merge: true }),
-    setDoc(doc(db, 'blog_posts', id), { ...payload, updatedAtServer: serverTimestamp() }, { merge: true })
-  ]);
+  // posts is authoritative. Legacy blog_posts remains a read fallback only.
+  await setDoc(doc(db, 'posts', id), { ...payload, updatedAtServer: serverTimestamp() }, { merge: true });
 
   if (typeof window !== 'undefined') {
     window.dispatchEvent(new CustomEvent('skinid:blog-posts-updated', { detail: { post: payload } }));

@@ -7,6 +7,7 @@
 | [Xem admin](development/admin-preview.md) | Đổi vai trò mẫu, tab admin, checkout và reset |
 | [Kiến trúc](architecture/frontend.md) | Trách nhiệm thư mục và luồng dữ liệu |
 | [Kiến trúc backend](architecture/backend.md) | Worker, Firebase, POS và ranh giới migration |
+| [Database Firestore công ty](architecture/firestore.md) | Schema, phân quyền, sao lưu và kết quả sửa dữ liệu thực tế |
 | [Bàn giao anh Danh](operations/danh-handover.md) | Cấu hình, chạy local và vận hành chưa deploy |
 | [Backend](integration/backend-contract.md) | Điểm thay adapter để nối Next.js/PostgreSQL |
 | [Giá và ưu đãi tại cửa hàng](content/store-promotions.md) | Phạm vi áp dụng, CTA tư vấn và giá online |

@@ -2,6 +2,8 @@
 
 ## Hai giai đoạn
 
+Project hiện tại là `skinid-vietnam`. Xem [kết quả kiểm tra Firestore 05/11/2026](firestore.md) cho các sửa chữa đã áp dụng lên database/rules thật. Các mô tả chưa triển khai dưới đây thuộc đợt phục hồi source trước đó.
+
 1. Hiện tại: tái sử dụng Cloudflare Worker, Firebase Auth/Firestore/Storage, Gemini và ES3 POS từ source đã có; giữ UI theo style local. Hoàn thiện cấu hình và vận hành website trước kế hoạch chuyển server.
 2. Sau này: anh Danh đánh giá chuyển backend sang Next.js/PostgreSQL. Chưa đổi database/framework trong đợt này; service frontend là ranh giới để migration từng phần.
 

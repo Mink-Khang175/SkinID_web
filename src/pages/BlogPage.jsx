@@ -6,7 +6,7 @@ import MobileNav from '../components/layout/MobileNav.jsx';
 import StorefrontModals from '../components/dialogs/StorefrontModals.jsx';
 import ProductDetailModal from '../features/catalog/ProductDetailModal.jsx';
 import { DEFAULT_BLOG_ARTICLES } from '../data/blogArticles.js';
-import { fetchAdminBlogPosts } from '../features/admin/index.js';
+import { fetchBlogPosts } from '../features/content/index.js';
 import { assetUrl } from '../assets/index.js';
 import usePageMetadata from '../hooks/usePageMetadata.js';
 
@@ -65,7 +65,7 @@ export default function BlogPage() {
 
   useEffect(() => {
     let mounted = true;
-    fetchAdminBlogPosts()
+    fetchBlogPosts()
       .then((posts) => {
         if (mounted && Array.isArray(posts) && posts.length > 0) setArticles(posts);
       })
