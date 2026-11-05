@@ -95,11 +95,18 @@
 .pl-card__visual:hover img { transform: translateY(-8px) scale(1.07) rotate(-2deg); }
 .pl-card__visual:hover .pl-card__hint { opacity: 1; transform: translate(-50%, 0); }
 .pl-page .pl-card h3 { margin: 6px 0 8px; font-size: .98rem; font-weight: 700; line-height: 1.45; min-height: 2.9em; }
-.pl-card__tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px; padding: 0; list-style: none; }
+.pl-card__tags { display: flex; flex-wrap: wrap; align-content: flex-start; align-items: flex-start; gap: 6px; margin: 0 0 12px; padding: 0; list-style: none; }
 .pl-card__tags li { padding: 4px 10px; border-radius: 999px; background: var(--skinid-soft-bg); color: var(--muted); font-size: .66rem; font-weight: 600; }
-.pl-card .pl-price { margin-bottom: 14px; }
-.pl-card__cta { width: 100%; justify-content: space-between; margin-top: auto; }
+.pl-card .pl-price { margin-top: auto; margin-bottom: 14px; }
+.pl-card__cta { width: 100%; justify-content: space-between; margin-top: 0; }
 .pl-card__note { display: block; margin-top: 8px; font-size: .64rem; line-height: 1.5; text-align: center; }
+
+/* Share content tracks within each visual row, including when titles or tags wrap.
+   Auto-placement starts a fresh seven-track group after the columns wrap. */
+@supports (grid-template-rows: subgrid) {
+  .pl-card { display: grid; grid-template-rows: subgrid; grid-row: span 7; row-gap: 0; }
+  .pl-card .pl-price { margin-top: 0; align-self: start; }
+}
 
 /* ---------- gifts ---------- */
 .pl-gifts { margin-top: clamp(56px, 7vw, 104px); }

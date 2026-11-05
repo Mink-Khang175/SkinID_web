@@ -6,7 +6,7 @@
  * giao diện admin hiển thị, nhưng backend KHÔNG lưu chúng vào Postgres —
  * chúng chỉ được đọc từ biến môi trường phía server.
  */
-import { CURATED_COMBOS, RETAIL_50_DEALS } from './promotions.js';
+import { CURATED_COMBOS, RETAIL_50_DEALS, CAMPAIGN_STEPS } from './promotions.js';
 import { COMPANY_INFO } from './companyInfo.js';
 
 export const DEFAULT_SYSTEM_SETTINGS = {
@@ -31,9 +31,12 @@ export const DEFAULT_SYSTEM_SETTINGS = {
 };
 
 export const DEFAULT_CAMPAIGN = {
+  id: 'twon_dvah_flashsale_2026',
   title: "Đại Tiệc Dưỡng Trắng & Hương Thơm — TWON x D'VAH",
   subtitle: 'Ưu Đãi Độc Quyền Đến 50% & Quà Tặng Nàng Thơ',
   badge: 'SIÊU SALE ĐẶC BIỆT',
+  basisPolicy: 'Chính sách bán hàng Fieldman (15/04/2026)',
+  steps: CAMPAIGN_STEPS,
   combos: CURATED_COMBOS,
   flashSale: RETAIL_50_DEALS,
   active: true

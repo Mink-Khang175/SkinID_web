@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useCart } from '../../features/cart/index.js';
 import { useCatalog, formatPrice } from '../../features/catalog/index.js';
 import { fetchAdminPromotions } from '../../features/admin/index.js';
+import { useCampaign } from '../../features/content/index.js';
 import { CURATED_COMBOS, RETAIL_50_DEALS } from '../../data/promotions.js';
 import { COMPANY_INFO } from '../../data/companyInfo.js';
 import { assetUrl } from '../../assets/index.js';
@@ -129,10 +130,11 @@ function AdvisorButtons({ className = '', light = false }) {
   );
 }
 
-function Hero({ campaign }) {
+function Hero({ campaign, retailDeals = RETAIL_50_DEALS }) {
   const ref = useHeroParallax();
   const endDate = campaign?.endsAt || campaign?.endAt ? new Date(campaign.endsAt || campaign.endAt) : null;
-  const floaters = [RETAIL_50_DEALS[0], RETAIL_50_DEALS[1], RETAIL_50_DEALS[2], RETAIL_50_DEALS[3], RETAIL_50_DEALS[6], RETAIL_50_DEALS[5]];
+  const deals = retailDeals?.length ? retailDeals : RETAIL_50_DEALS;
+  const floaters = [deals[0], deals[1], deals[2], deals[3], deals[6] || deals[0], deals[5] || deals[1]].filter(Boolean);
   return (
     <header className="pl-hero" ref={ref}>
       <div className="pl-hero__copy">
@@ -149,7 +151,7 @@ function Hero({ campaign }) {
         <span className="pl-ring pl-ring--a" /><span className="pl-ring pl-ring--b" />
         <div className="pl-medal"><small>GIẢM ĐẾN</small><b>50<sup>%</sup></b><small>SẢN PHẨM LẺ</small></div>
         {floaters.map((product, i) => (
-          <span key={product.id} className={`pl-float pl-float--${i + 1}`} style={{ '--depth': [60, -40, 90, -70, 50, -30][i] }}>
+          <span key={product.id || i} className={`pl-float pl-float--${i + 1}`} style={{ '--depth': [60, -40, 90, -70, 50, -30][i] }}>
             <img src={assetUrl(product.image, product.brandSlug)} alt="" loading="lazy" />
           </span>
         ))}
@@ -159,9 +161,9 @@ function Hero({ campaign }) {
 }
 
 /* ---------- Scrollytelling: 3 steps ---------- */
-function StepsStory() {
-  const { ref, active, goTo } = useStickyStages(STEPS.length);
-  const hero = RETAIL_50_DEALS[0];
+function StepsStory({ retailDeals = RETAIL_50_DEALS, steps = STEPS }) {
+  const { ref, active, goTo } = useStickyStages(steps.length);
+  const hero = retailDeals?.[0] || RETAIL_50_DEALS[0];
   return (
     <section className="pl-steps" id="buoc-tham-gia" ref={ref} aria-label="3 bước nhận ưu đãi giảm 50%">
       <div className="pl-steps__sticky">
@@ -229,7 +231,8 @@ function StepsStory() {
 }
 
 /* ---------- Retail 50% (advisor CTA instead of cart) ---------- */
-function RetailDeals() {
+function RetailDeals({ retailDeals = RETAIL_50_DEALS }) {
+  const deals = retailDeals?.length ? retailDeals : RETAIL_50_DEALS;
   return (
     <section className="pl-retail" id="san-pham-giam-50" aria-label="Sản phẩm bán lẻ giảm 50%">
       <div className="pl-head">
@@ -240,7 +243,7 @@ function RetailDeals() {
         <p>Hoàn thành 3 bước, sau đó nhắn SkinID để được tư vấn và áp dụng mức giá ưu đãi dưới đây. Toàn bộ giá niêm yết và giá ưu đãi đã bao gồm thuế GTGT (VAT).</p>
       </div>
       <ul className="pl-retail__grid">
-        {RETAIL_50_DEALS.map((product) => (
+        {deals.map((product) => (
           <li key={product.id} className="pl-card">
             <button type="button" className="pl-card__visual" onClick={() => openProduct(product.id)} aria-label={`Xem chi tiết ${product.name}`}>
               <img src={assetUrl(product.image, product.brandSlug)} alt="" loading="lazy" />
@@ -261,10 +264,11 @@ function RetailDeals() {
 }
 
 /* ---------- Scrollytelling: gift sets ---------- */
-function GiftStory() {
+function GiftStory({ combos = CURATED_COMBOS }) {
   const { addToCart } = useCart();
   const { isReady } = useCatalog();
-  const { ref, active, goTo } = useStickyStages(CURATED_COMBOS.length);
+  const list = combos?.length ? combos : CURATED_COMBOS;
+  const { ref, active, goTo } = useStickyStages(list.length);
   const [pending, setPending] = useState('');
   const [added, setAdded] = useState('');
   const [message, setMessage] = useState('');
@@ -274,7 +278,7 @@ function GiftStory() {
     catch { setMessage('Chưa thể thêm vào giỏ. Vui lòng thử lại.'); }
     finally { setPending(''); }
   };
-  const current = CURATED_COMBOS[active];
+  const current = list[active] || list[0] || {};
   return (
     <section className="pl-gifts" id="bo-qua-tang" aria-label="Bộ quà tặng SkinID">
       <div className="pl-head">
@@ -284,25 +288,25 @@ function GiftStory() {
       <div className="pl-story" ref={ref}>
         <div className="pl-story__sticky">
           <div className="pl-story__media" aria-hidden="true">
-            {CURATED_COMBOS.map((combo, i) => <img key={combo.id} className={`pl-story__img${i === active ? ' is-active' : i < active ? ' is-past' : ''}`} src={assetUrl(combo.image)} alt="" loading="lazy" />)}
+            {list.map((combo, i) => <img key={combo.id} className={`pl-story__img${i === active ? ' is-active' : i < active ? ' is-past' : ''}`} src={assetUrl(combo.image)} alt="" loading="lazy" />)}
             <span className="pl-story__saving"><small>TIẾT KIỆM</small><b>{current.discountPercent}%</b></span>
           </div>
           <div className="pl-story__panel">
             <span className="skinid-editorial-kicker">{current.code}</span>
             <div className="pl-story__slides">
-              {CURATED_COMBOS.map((combo, i) => (
+              {list.map((combo, i) => (
                 <div key={combo.id} className={`pl-story__slide${i === active ? ' is-active' : ''}`} aria-hidden={i !== active}>
                   <span className="pl-eyebrow">{combo.subtitle}</span>
                   <h3>{combo.title}</h3>
                   <p>{combo.slogan}</p>
                   <div className="pl-story__items">
-                    {combo.products.map((product) => (
+                    {(combo.products || []).map((product) => (
                       <button type="button" key={product.id} onClick={() => openProduct(product.id)} tabIndex={i === active ? 0 : -1} title={`Xem ${product.name}`}>
                         <img src={assetUrl(product.image, product.brandSlug)} alt={product.name} /><span>{product.capacity}</span>
                       </button>
                     ))}
                   </div>
-                  <ul>{combo.items.map((item) => <li key={item}>{item}</li>)}</ul>
+                  <ul>{(combo.items || []).map((item) => <li key={item}>{item}</li>)}</ul>
                   <div className="pl-price"><b>{formatPrice(combo.price)}</b><del>{formatPrice(combo.originalPrice)}</del></div>
                   <button type="button" className="btn btn--primary pl-btn" tabIndex={i === active ? 0 : -1} disabled={!isReady || !!pending} onClick={() => add(combo)}>
                     <span>{pending === combo.id ? 'Đang thêm…' : added === combo.id ? 'Đã thêm vào giỏ ✓' : 'Thêm bộ quà vào giỏ'}</span><i aria-hidden="true">+</i>
@@ -311,7 +315,7 @@ function GiftStory() {
               ))}
             </div>
             <div className="pl-story__nav">
-              {CURATED_COMBOS.map((combo, i) => <button type="button" key={combo.id} className={i === active ? 'is-active' : ''} onClick={() => goTo(i)} aria-label={`Xem ${combo.title}`}>0{i + 1}</button>)}
+              {list.map((combo, i) => <button type="button" key={combo.id} className={i === active ? 'is-active' : ''} onClick={() => goTo(i)} aria-label={`Xem ${combo.title}`}>0{i + 1}</button>)}
               <span className="pl-story__bar"><i /></span>
             </div>
             <p className="pl-feedback" role="status" aria-live="polite">{message}</p>
@@ -321,14 +325,14 @@ function GiftStory() {
 
       {/* Mobile / reduced motion: plain cards */}
       <div className="pl-gift-cards">
-        {CURATED_COMBOS.map((combo, index) => (
+        {list.map((combo, index) => (
           <article key={combo.id} className="pl-gift-card">
             <div className="pl-gift-card__img"><img src={assetUrl(combo.image)} alt={`Bộ quà ${combo.title}`} loading="lazy" /><span>0{index + 1}</span><em>Tiết kiệm {combo.discountPercent}%</em></div>
             <div className="pl-gift-card__body">
               <span className="pl-eyebrow">{combo.subtitle}</span>
               <h3>{combo.title}</h3>
               <p>{combo.slogan}</p>
-              <ul>{combo.items.map((item) => <li key={item}>{item}</li>)}</ul>
+              <ul>{(combo.items || []).map((item) => <li key={item}>{item}</li>)}</ul>
               <div className="pl-price"><b>{formatPrice(combo.price)}</b><del>{formatPrice(combo.originalPrice)}</del></div>
               <button type="button" className="btn btn--primary pl-btn" disabled={!isReady || !!pending} onClick={() => add(combo)}>
                 <span>{pending === combo.id ? 'Đang thêm…' : added === combo.id ? 'Đã thêm vào giỏ ✓' : 'Thêm bộ quà vào giỏ'}</span><i aria-hidden="true">+</i>
@@ -381,7 +385,13 @@ function FinalCta() {
 
 export default function PromotionsLanding() {
   const [vouchers, setVouchers] = useState(DEFAULT_VOUCHERS);
-  const [campaign, setCampaign] = useState(null);
+  const { campaign: firestoreCampaign, combos, flashSale, steps } = useCampaign();
+  const [campaign, setCampaign] = useState(firestoreCampaign);
+
+  useEffect(() => {
+    if (firestoreCampaign) setCampaign(firestoreCampaign);
+  }, [firestoreCampaign]);
+
   useEffect(() => {
     let mounted = true;
     const load = () => fetchAdminPromotions().then((data) => {
@@ -400,12 +410,16 @@ export default function PromotionsLanding() {
     return () => { mounted = false; events.forEach((name) => window.removeEventListener(name, sync)); };
   }, []);
 
+  const activeCombos = combos?.length ? combos : CURATED_COMBOS;
+  const activeDeals = flashSale?.length ? flashSale : RETAIL_50_DEALS;
+  const activeSteps = steps?.length ? steps : STEPS;
+
   return (
     <div className="pl-page">
-      <Hero campaign={campaign} />
-      <StepsStory />
-      <RetailDeals />
-      <GiftStory />
+      <Hero campaign={campaign} retailDeals={activeDeals} />
+      <StepsStory retailDeals={activeDeals} steps={activeSteps} />
+      <RetailDeals retailDeals={activeDeals} />
+      <GiftStory combos={activeCombos} />
       <Vouchers vouchers={vouchers} />
       <FinalCta />
     </div>

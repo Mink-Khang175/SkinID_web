@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { formatPrice } from '../../features/catalog/index.js';
+import { useCampaign } from '../../features/content/index.js';
 import { CURATED_COMBOS, RETAIL_50_DEALS, CAMPAIGN_STEPS } from '../../data/promotions.js';
 import { assetUrl } from '../../assets/index.js';
 
@@ -109,21 +110,23 @@ function ComboCard({ combo, index }) {
 /** Combo stack: selection is explicit (tabs, click, auto-rotate), never driven by hover, so crossing overlaps can't flip cards. */
 const FAN_ORDER = [1, 0, 2];
 
-function ComboFan() {
+function ComboFan({ combos = CURATED_COMBOS }) {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
+  const fanOrder = combos.length === 3 ? FAN_ORDER : combos.map((_, i) => i);
   useEffect(() => {
     if (paused || prefersReducedMotion()) return undefined;
-    const timer = window.setInterval(() => setActive((current) => (current + 1) % FAN_ORDER.length), 4500);
+    const timer = window.setInterval(() => setActive((current) => (current + 1) % fanOrder.length), 4500);
     return () => window.clearInterval(timer);
-  }, [paused]);
+  }, [paused, fanOrder.length]);
   const select = (index) => { setActive(index); setPaused(true); };
   return (
     <div className="promo-fan-wrap" onPointerEnter={() => setPaused(true)} onPointerLeave={() => setPaused(false)} onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}>
       <div className="promo-fan">
-        {FAN_ORDER.map((comboIndex, index) => {
-          const combo = CURATED_COMBOS[comboIndex];
-          const pos = (index - active + FAN_ORDER.length) % FAN_ORDER.length;
+        {fanOrder.map((comboIndex, index) => {
+          const combo = combos[comboIndex] || combos[0];
+          if (!combo) return null;
+          const pos = (index - active + fanOrder.length) % fanOrder.length;
           return (
             <a
               key={combo.id}
@@ -141,18 +144,22 @@ function ComboFan() {
         })}
       </div>
       <div className="promo-fan__tabs" role="tablist" aria-label="Chọn bộ quà">
-        {CURATED_COMBOS.map((_, comboIndex) => FAN_ORDER.indexOf(comboIndex)).map((index, comboIndex) => (
-          <button type="button" role="tab" aria-selected={index === active} key={comboIndex} className={index === active ? 'is-active' : ''} onClick={() => select(index)}>
-            <span>0{comboIndex + 1}</span>{CURATED_COMBOS[comboIndex].title.replace(' ♡', '')}
-          </button>
-        ))}
+        {combos.map((_, comboIndex) => fanOrder.indexOf(comboIndex)).map((index, comboIndex) => {
+          const combo = combos[comboIndex];
+          if (!combo) return null;
+          return (
+            <button type="button" role="tab" aria-selected={index === active} key={comboIndex} className={index === active ? 'is-active' : ''} onClick={() => select(index)}>
+              <span>0{comboIndex + 1}</span>{combo.title.replace(' ♡', '')}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
 }
 
 /** Scrollytelling: the section is tall, the stage sticks, scroll progress picks the combo. */
-function ComboStory() {
+function ComboStory({ combos = CURATED_COMBOS }) {
   const ref = useRef(null);
   const [active, setActive] = useState(0);
   useEffect(() => {
@@ -165,27 +172,27 @@ function ComboStory() {
       const total = Math.max(1, rect.height - window.innerHeight);
       const p = Math.min(1, Math.max(0, -rect.top / total));
       node.style.setProperty('--p', p.toFixed(4));
-      setActive(Math.min(CURATED_COMBOS.length - 1, Math.floor(p * CURATED_COMBOS.length)));
+      setActive(Math.min(combos.length - 1, Math.floor(p * combos.length)));
     };
     const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
     update();
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); cancelAnimationFrame(frame); };
-  }, []);
+  }, [combos.length]);
   const goTo = (index) => {
     const node = ref.current;
     if (!node) return;
     const total = node.offsetHeight - window.innerHeight;
-    const top = node.getBoundingClientRect().top + window.scrollY + total * ((index + 0.5) / CURATED_COMBOS.length);
+    const top = node.getBoundingClientRect().top + window.scrollY + total * ((index + 0.5) / combos.length);
     window.scrollTo({ top, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
   };
-  const current = CURATED_COMBOS[active];
+  const current = combos[active] || combos[0] || {};
   return (
     <div className="promo-story" ref={ref}>
       <div className="promo-story__sticky">
         <div className="promo-story__media" aria-hidden="true">
-          {CURATED_COMBOS.map((combo, i) => (
+          {combos.map((combo, i) => (
             <img key={combo.id} className={`promo-story__img${i === active ? ' is-active' : i < active ? ' is-past' : ''}`} src={assetUrl(combo.image)} alt="" loading="lazy" />
           ))}
           <span className="promo-story__saving"><small>TIẾT KIỆM</small><b>{current.discountPercent}%</b></span>
@@ -193,19 +200,19 @@ function ComboStory() {
         <div className="promo-story__panel">
           <span className="skinid-editorial-kicker">THE GIFT EDIT · {current.code}</span>
           <div className="promo-story__slides">
-            {CURATED_COMBOS.map((combo, i) => (
+            {combos.map((combo, i) => (
               <div key={combo.id} className={`promo-story__slide${i === active ? ' is-active' : ''}`} aria-hidden={i !== active}>
                 <span className="promo-eyebrow">{combo.subtitle}</span>
                 <h3>{combo.title}</h3>
                 <p>{combo.slogan}</p>
-                <ul>{combo.items.map((item) => <li key={item}>{item}</li>)}</ul>
+                <ul>{(combo.items || []).map((item) => <li key={item}>{item}</li>)}</ul>
                 <span className="promo-price"><b>{formatPrice(combo.price)}</b><del>{formatPrice(combo.originalPrice)}</del></span>
                 <a className="btn btn--primary promo-cta" href={PROMO_URL} tabIndex={i === active ? 0 : -1}><span>Xem combo này</span><span className="promo-cta__arrow" aria-hidden="true">↗</span></a>
               </div>
             ))}
           </div>
           <div className="promo-story__nav">
-            {CURATED_COMBOS.map((combo, i) => (
+            {combos.map((combo, i) => (
               <button type="button" key={combo.id} className={i === active ? 'is-active' : ''} onClick={() => goTo(i)} aria-label={`Xem ${combo.title}`}>0{i + 1}</button>
             ))}
             <span className="promo-story__bar"><i /></span>
@@ -217,6 +224,10 @@ function ComboStory() {
 }
 
 export default function FlashSaleBanner() {
+  const { combos = CURATED_COMBOS, flashSale = RETAIL_50_DEALS, steps = CAMPAIGN_STEPS } = useCampaign();
+  const listCombos = combos?.length ? combos : CURATED_COMBOS;
+  const listDeals = flashSale?.length ? flashSale : RETAIL_50_DEALS;
+  const listSteps = steps?.length ? steps : CAMPAIGN_STEPS;
   const ticker = [...TICKER, ...TICKER];
   return (
     <section className="skinid-collection-section promo-stage" id="khuyen-mai" aria-label="Khuyến mãi & Combo SkinID">
@@ -237,7 +248,7 @@ export default function FlashSaleBanner() {
           <div className="promo-hero__art" data-reveal="soft-scale" data-reveal-delay="120">
             <span className="promo-orbit promo-orbit--a" aria-hidden="true" />
             <span className="promo-orbit promo-orbit--b" aria-hidden="true" />
-            <ComboFan />
+            <ComboFan combos={listCombos} />
             <div className="promo-medal" aria-hidden="true">
               <small>ĐẾN</small>
               <b><CountUp to={50} /><sup>%</sup></b>
@@ -260,9 +271,9 @@ export default function FlashSaleBanner() {
           <div><span className="skinid-editorial-kicker">THE GIFT EDIT</span><h3>Ba cách gửi trao <em>yêu thương.</em></h3></div>
           <a className="collection-text-link" href={PROMO_URL}>Xem chi tiết từng bộ <span aria-hidden="true">→</span></a>
         </div>
-        <ComboStory />
+        <ComboStory combos={listCombos} />
         <div className="promo-combos">
-          {CURATED_COMBOS.map((combo, index) => <ComboCard combo={combo} index={index} key={combo.id} />)}
+          {listCombos.map((combo, index) => <ComboCard combo={combo} index={index} key={combo.id} />)}
         </div>
 
         <div className="promo-block-head promo-block-head--retail" data-reveal>
@@ -270,7 +281,7 @@ export default function FlashSaleBanner() {
           <a className="collection-text-link" href={PROMO_URL}>Tất cả ưu đãi <span aria-hidden="true">→</span></a>
         </div>
         <ul className="promo-rail" aria-label="Sản phẩm giảm 50%">
-          {RETAIL_50_DEALS.map((product, index) => (
+          {listDeals.map((product, index) => (
             <li key={product.id} data-reveal data-reveal-delay={Math.min(index, 5) * 70}>
               <a className="promo-pick" href={PROMO_URL} aria-label={`${product.name}, ${formatPrice(product.price)}`}>
                 <span className="promo-pick__visual">
@@ -291,8 +302,8 @@ export default function FlashSaleBanner() {
             <h3>Ưu đãi nhỏ. <em>Niềm vui mỗi ngày.</em></h3>
           </div>
           <ol>
-            {CAMPAIGN_STEPS.map((step) => (
-              <li key={step.step}><span>0{step.step}</span><div><strong>{step.title}</strong><p>{step.desc}</p></div></li>
+            {listSteps.map((step) => (
+              <li key={step.step || step.id}><span>0{step.step || 1}</span><div><strong>{step.title}</strong><p>{step.desc}</p></div></li>
             ))}
           </ol>
           <MagneticLink className="btn btn--primary promo-cta" href={PROMO_URL}>
