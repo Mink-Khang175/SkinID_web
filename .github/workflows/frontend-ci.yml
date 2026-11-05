@@ -33,7 +33,7 @@ jobs:
     needs: test-build
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     env:
       VITE_API_BASE_URL: https://skinid-web-v2.fieldman-vn.workers.dev/api
     permissions:
@@ -66,32 +66,36 @@ jobs:
           touch dist/.nojekyll
           ls -1 dist
 
-      - name: Force Pages to publish the workflow artifact
+      - name: Report current Pages source
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          api="https://api.github.com/repos/${{ github.repository }}/pages"
           current=$(curl -sS -H "Authorization: Bearer $GH_TOKEN" \
-            -H "Accept: application/vnd.github+json" "$api" \
-            | grep -o '"build_type":"[^"]*"' | head -1)
-          echo "current build_type: ${current:-unknown}"
-          if [ "$current" = '"build_type":"workflow"' ]; then
-            echo "already publishing the workflow artifact"
-            exit 0
-          fi
-          echo "switching Pages source to GitHub Actions"
-          code=$(curl -sS -o /tmp/pages-put.json -w '%{http_code}' \
-            -X PUT "$api" \
-            -H "Authorization: Bearer $GH_TOKEN" \
             -H "Accept: application/vnd.github+json" \
-            -H "Content-Type: application/json" \
-            -d '{"build_type":"workflow"}')
-          echo "PUT -> $code"
-          cat /tmp/pages-put.json | head -20
-          if [ "$code" != "204" ] && [ "$code" != "200" ]; then
-            echo "::error::Could not switch Pages source. Set Settings > Pages > Source to 'GitHub Actions'."
-            exit 1
+            "https://api.github.com/repos/${{ github.repository }}/pages" \
+            | grep -o '"build_type":"[^"]*"' | head -1)
+          echo "Pages build_type: ${current:-unknown}"
+          if [ "$current" != '"build_type":"workflow"' ]; then
+            echo "::warning::Pages still uses branch publishing. Set Settings > Pages > Source = GitHub Actions."
           fi
+
+      # GitHub still builds the raw repo root for every push while the site uses
+      # branch publishing. That build serves the Vite dev shell (/src/main.jsx),
+      # which browsers refuse because GitHub sends it as text/jsx. Waiting for it
+      # to finish makes the artifact deployment below the last writer.
+      - name: Let the legacy branch build finish first
+        run: |
+          sha='${{ github.sha }}'
+          py='import sys,json; r=json.load(sys.stdin).get("workflow_runs",[]); l=[x for x in r if x["name"]=="pages build and deployment"]; print(l[0]["status"] if l else "absent")'
+          for i in $(seq 1 45); do
+            status=$(curl -sS "https://api.github.com/repos/${{ github.repository }}/actions/runs?head_sha=$sha&per_page=30" | python3 -c "$py")
+            echo "attempt $i: legacy pages build = $status"
+            if [ "$status" = "completed" ]; then
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "::warning::Legacy Pages build still running; deploying anyway."
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
