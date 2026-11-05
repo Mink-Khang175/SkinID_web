@@ -11,7 +11,6 @@
 | [Backend](integration/backend-contract.md) | Điểm thay adapter để nối Next.js/PostgreSQL |
 | [Chính sách](content/policies-v2.md) | Nguồn V2.0 và những nội dung chưa xác nhận |
 | [Quy chuẩn Giá & VAT](operations/quy-chuan-gia-va-vat.md) | Bản chất bảng giá Ecom T10, thuế GTGT, trần khuyến mại 50% và chuẩn Bộ Công Thương |
-| [Tài liệu họp Giá & Khuyến mãi](operations/tai-lieu-hop-chinh-sach-gia-va-khuyen-mai.md) | 4 vấn đề cốt lõi cần chốt trong cuộc họp (Banner, VAT, Thể lệ) |
 | [Route](reference/routes.json) | Danh sách route và nhóm tương tác |
 | [Dọn repo](maintenance.md) | Phần đã đưa ra lưu trữ và kết quả kiểm tra |
 
