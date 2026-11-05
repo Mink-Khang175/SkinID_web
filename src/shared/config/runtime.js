@@ -1,10 +1,10 @@
 export const firebaseConfig = Object.freeze({
-  apiKey: import.meta.env?.VITE_FIREBASE_API_KEY || 'AIzaSyBMnJ7Z1NYjARTXSdUNL9UWs8wodU6ddiE',
-  authDomain: import.meta.env?.VITE_FIREBASE_AUTH_DOMAIN || 'skinid-df273.firebaseapp.com',
-  projectId: import.meta.env?.VITE_FIREBASE_PROJECT_ID || 'skinid-df273',
-  storageBucket: import.meta.env?.VITE_FIREBASE_STORAGE_BUCKET || 'skinid-df273.firebasestorage.app',
-  messagingSenderId: import.meta.env?.VITE_FIREBASE_MESSAGING_SENDER_ID || '489776624763',
-  appId: import.meta.env?.VITE_FIREBASE_APP_ID || '1:489776624763:web:76f0e682e559c0448b1ede',
+  apiKey: import.meta.env?.VITE_FIREBASE_API_KEY || 'AIzaSyAO6NL0qtQz0whIy75WoB9lJpJMqwMtfKg',
+  authDomain: import.meta.env?.VITE_FIREBASE_AUTH_DOMAIN || 'skinid-vietnam.firebaseapp.com',
+  projectId: import.meta.env?.VITE_FIREBASE_PROJECT_ID || 'skinid-vietnam',
+  storageBucket: import.meta.env?.VITE_FIREBASE_STORAGE_BUCKET || 'skinid-vietnam.firebasestorage.app',
+  messagingSenderId: import.meta.env?.VITE_FIREBASE_MESSAGING_SENDER_ID || '915066619862',
+  appId: import.meta.env?.VITE_FIREBASE_APP_ID || '1:915066619862:web:910237340c6509e51e4677',
   measurementId: import.meta.env?.VITE_FIREBASE_MEASUREMENT_ID || ''
 });
 

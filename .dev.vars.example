@@ -1,5 +1,5 @@
 # Server only. Copy to .dev.vars locally. Never prefix a secret with VITE_.
-FIREBASE_PROJECT_ID=skinid-df273
+FIREBASE_PROJECT_ID=skinid-vietnam
 # Local Node/Vite: service-account JSON path, ignored by Git.
 GOOGLE_APPLICATION_CREDENTIALS=./credentials/service-account.json
 # Cloudflare: Danh configures these three Worker secrets instead of a local file.

@@ -47,6 +47,6 @@ Vite preview không phục vụ backend. Muốn xem toàn hệ thống dùng `de
 
 Mọi biến `VITE_*` là cấu hình công khai của trình duyệt. Không đưa khóa AI, khóa riêng Firebase, mật khẩu POS, Telegram token hoặc đường dẫn nội bộ vào biến `VITE_*`. Firebase web config là cấu hình client; quyền truy cập vẫn do Auth/rules/backend kiểm soát.
 
-Frontend, `.firebaserc` và server đang dùng `skinid-df273`. Project này khác `skinid-vietnam` trong source deploy cũ; không trộn token hai project hoặc mặc nhiên sao chép dữ liệu giữa chúng.
+Frontend, `.firebaserc` và server đang dùng `skinid-vietnam`. Trước đây repo trỏ `skinid-df273`; catalog đã được chuyển sang `skinid-vietnam` với cùng document ID. Không trộn token hai project.
 
 Assets có một nguồn tại `src/assets`, `publicDir: false`. Hosting cần chuyển `/api/*` tới Worker trước fallback SPA. Build còn cảnh báo chunk lớn như trước; chưa tối ưu bundle trong đợt nối backend.

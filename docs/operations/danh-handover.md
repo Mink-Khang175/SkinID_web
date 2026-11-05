@@ -4,7 +4,7 @@
 
 Đã phục hồi source backend từ repo Danh cũ cùng Firebase rules/indexes/config; bổ sung bridge local, công cụ bảo trì, các sửa lỗi đơn hàng/POS và kiểm thử. Chưa deploy, import catalog, tạo tài khoản, cấp quyền hoặc gửi đơn/thông báo thật.
 
-Project đã chọn theo file khóa người dùng cung cấp: **skinid-df273**. Đây là project khác source deploy cũ **skinid-vietnam**. `.firebaserc`, public client config và server local đã đồng nhất. OAuth và đọc một tài liệu cấu hình Firestore đã thành công; không ghi dữ liệu. File JSON khóa nằm local và được ignore.
+Project đang dùng: **skinid-vietnam**, thống nhất ở `.firebaserc`, `src/shared/config/runtime.js`, `.env.example`, `.dev.vars.example` và secret Worker `skinid-web-v2`. Catalog 54 sản phẩm đã chuyển từ `skinid-df273` sang `skinid-vietnam` giữ nguyên document ID; 55 document cũ của vietnam (gồm `test-product`) đã được xoá sau khi backup. File JSON khóa nằm local và được ignore.
 
 ## Cấu hình cần bổ sung
 

@@ -56,7 +56,7 @@ Bước 1 làm site cũ ngừng phục vụ `skinid.vn` ngay khi lưu. Chỉ th�
 
 ## Firebase cần cấu hình thêm
 
-Project `skinid-df273` đã có `skinid.vn` trong **Authentication → Settings → Authorized domains**,
+Project `skinid-vietnam` đã có `skinid.vn` trong **Authentication → Settings → Authorized domains**,
 nhưng **chưa có `www.skinid.vn`**. Thêm vào trước khi dùng `www`, nếu không đăng nhập Google sẽ báo
 `auth/unauthorized-domain`.
 
@@ -93,7 +93,7 @@ npx wrangler deploy
 
 Secret bắt buộc trên Worker (đặt bằng `npx wrangler secret put <TÊN>`):
 
-- `FIREBASE_PROJECT_ID` = `skinid-df273`
+- `FIREBASE_PROJECT_ID` = `skinid-vietnam`
 - `FIREBASE_CLIENT_EMAIL`
 - `FIREBASE_PRIVATE_KEY`
 - `GEMINI_API_KEY` — thiếu thì `/api/analyze-skin` trả `503 gemini_not_configured`
@@ -116,7 +116,7 @@ npm run preview         # xem bản build; không có API
 ```
 
 Firestore/Storage rules không tự triển khai. Khi `firestore.rules`, `firestore.indexes.json` hoặc
-`storage.rules` thay đổi, chạy riêng `npx firebase-tools deploy --project skinid-df273`.
+`storage.rules` thay đổi, chạy riêng `npx firebase-tools deploy --project skinid-vietnam`.
 
 ## Kiểm thử local
 
@@ -127,4 +127,4 @@ npm run preview         # xem bản build; không có API
 ```
 
 Firestore/Storage rules không tự triển khai. Khi `firestore.rules`, `firestore.indexes.json` hoặc
-`storage.rules` thay đổi, chạy riêng `npx firebase-tools deploy --project skinid-df273`.
+`storage.rules` thay đổi, chạy riêng `npx firebase-tools deploy --project skinid-vietnam`.
