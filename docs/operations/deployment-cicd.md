@@ -60,20 +60,63 @@ Project `skinid-df273` đã có `skinid.vn` trong **Authentication → Settings 
 nhưng **chưa có `www.skinid.vn`**. Thêm vào trước khi dùng `www`, nếu không đăng nhập Google sẽ báo
 `auth/unauthorized-domain`.
 
-## Giới hạn: GitHub Pages chỉ phục vụ file tĩnh
+## Backend API: Worker riêng trên Cloudflare
 
-Repo này có backend Cloudflare Worker (`worker/index.js`) cho `/api/*`. GitHub Pages không chạy
-được Worker, nên sau khi chuyển sang Pages:
+GitHub Pages chỉ phục vụ file tĩnh nên không chạy được `worker/index.js`. Backend được deploy
+riêng thành Worker **`skinid-web-v2`**:
 
-- **Chạy được:** duyệt trang, xem catalog (đọc Firestore trực tiếp bằng Firebase client), trang chính sách.
-- **Không chạy được:** tạo đơn/checkout, trang quản trị, soi da AI (Gemini), đồng bộ POS S3.
+```
+https://skinid-web-v2.fieldman-vn.workers.dev
+```
 
-`src/shared/config/runtime.js` trả `apiBaseUrl = '/api'` khi chạy trên `skinid.vn`, nên các request
-này sẽ nhận `404` từ Pages. Muốn giữ các chức năng đó phải có backend chạy ở domain khác và trỏ
-`VITE_API_BASE_URL` hoặc `VITE_WORKER_API_URL` vào đó lúc build.
+Worker tên `skinid-web` hiện có thuộc repo cũ `danhhuynh-stack/skinid-web` và do CI của repo đó
+deploy. Không dùng lại tên này để tránh hai repo ghi đè lẫn nhau.
 
-Ngoài ra Worker đang xử lý sitemap.xml, robots.txt và meta SEO phía server. Trên Pages các đường
-dẫn đó trả về SPA, nên mất phần SEO render động (canonical/OG vẫn có trong `index.html` tĩnh).
+Build frontend nhận địa chỉ API qua biến trong job `deploy-pages`:
+
+```yaml
+env:
+  VITE_API_BASE_URL: https://skinid-web-v2.fieldman-vn.workers.dev/api
+```
+
+`src/shared/config/runtime.js` đọc `VITE_API_BASE_URL` trước mọi suy luận khác, nên request
+`/api/*` đi thẳng tới Worker thay vì same-origin `/api` trên Pages.
+
+### Deploy Worker khi backend thay đổi
+
+Worker không tự deploy trong CI. Chạy tay sau khi đã đăng nhập Cloudflare:
+
+```sh
+npm run build
+npx wrangler deploy
+```
+
+Secret bắt buộc trên Worker (đặt bằng `npx wrangler secret put <TÊN>`):
+
+- `FIREBASE_PROJECT_ID` = `skinid-df273`
+- `FIREBASE_CLIENT_EMAIL`
+- `FIREBASE_PRIVATE_KEY`
+- `GEMINI_API_KEY` — thiếu thì `/api/analyze-skin` trả `503 gemini_not_configured`
+
+S3 POS để trống (`S3_SYNC_ENABLED=false`) cho tới khi có tài khoản ES3 và mapping mã hàng.
+
+`ALLOWED_ORIGINS` không bắt buộc: `worker/app/http.js` đã cho phép sẵn mọi host `*.skinid.vn`.
+
+### Phần chỉ có trên Worker
+
+`sitemap.xml`, `robots.txt` và meta SEO động do Worker render. Trên Pages các đường dẫn đó trả về
+SPA, nên canonical/OG vẫn lấy từ `index.html` tĩnh.
+
+## Kiểm thử local
+
+```sh
+npm run test:all        # test + build production
+npm run check:worker    # bundle thử Worker bằng Wrangler, không deploy
+npm run preview         # xem bản build; không có API
+```
+
+Firestore/Storage rules không tự triển khai. Khi `firestore.rules`, `firestore.indexes.json` hoặc
+`storage.rules` thay đổi, chạy riêng `npx firebase-tools deploy --project skinid-df273`.
 
 ## Kiểm thử local
 

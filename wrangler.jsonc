@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "skinid-web",
+  "name": "skinid-web-v2",
   "main": "worker/index.js",
   "compatibility_date": "2026-09-20",
   "placement": {
