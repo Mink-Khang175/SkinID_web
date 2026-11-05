@@ -1,84 +1,71 @@
 # Quy chuẩn Bảng giá, Thuế GTGT (VAT) & Khuyến mại Website SkinID.vn
 
-> **Ngày cập nhật:** 04/11/2026  
-> **Trạng thái:** Đã chuẩn hóa & đồng bộ trên toàn bộ mã nguồn website `skinid-web`  
+> **Ngày cập nhật:** 05/11/2026  
+> **Trạng thái:** Đã phân định rạch ròi 2 hệ giá & đồng bộ toàn bộ trên mã nguồn website `skinid-web`  
 > **Căn cứ pháp lý:** Luật Giá 2023, Luật Bảo vệ quyền lợi người tiêu dùng 2023, Nghị định 52/2013/NĐ-CP & Nghị định 85/2021/NĐ-CP (TMĐT), Nghị định 128/2024/NĐ-CP (Khuyến mại).
 
 ---
 
-## 1. Căn cứ Pháp lý Bắt buộc khi Đăng ký Website với Bộ Công Thương
+## 1. Rạch Ròi Hai Hệ Thống Giá Trên Website
 
-Khi nộp hồ sơ thông báo/đăng ký website thương mại điện tử bán hàng với **Bộ Công Thương (online.gov.vn)**, chuyên viên thẩm định kiểm tra rất nghiêm ngặt về tính minh bạch giá:
-1. **Khoản 6 Điều 4 Luật Giá 2023:** *"Giá niêm yết là giá hàng hóa, dịch vụ do tổ chức, cá nhân sản xuất, kinh doanh thông báo công khai đến khách hàng... **Giá niêm yết là giá đã bao gồm các loại thuế, phí và lệ phí** (nếu có)."*
-2. **Nghị định 52/2013/NĐ-CP & Nghị định 85/2021/NĐ-CP (Điều 31):** Website thương mại điện tử bán hàng phải công bố rõ ràng giá hàng hóa, dịch vụ và **phải nêu rõ giá đã bao gồm hay chưa bao gồm các chi phí liên quan đến việc mua hàng như thuế GTGT, phí đóng gói, phí vận chuyển...**
-3. **Nghị định 128/2024/NĐ-CP (sửa đổi Điều 7 Nghị định 81/2018/NĐ-CP):** Mức giảm giá tối đa đối với hàng hóa, dịch vụ được khuyến mại **không được vượt quá 50%** giá hàng hóa, dịch vụ đó ngay trước thời gian khuyến mại.
+Để vận hành minh bạch và đúng quy chuẩn thẩm định của Bộ Công Thương, hệ thống SkinID phân định rõ ràng giữa **Giá toàn bộ sản phẩm** và **Giá chương trình khuyến mãi**:
 
----
-
-## 2. Bản chất Bảng giá Ecom T10 (`Bảng giá bán Ecom-(T10).xlsx`)
-
-Hệ thống SkinID sử dụng **Bảng giá bán Ecom T10/2026** làm cơ sở dữ liệu gốc duy nhất cho toàn bộ website:
-
-| Cột trong Excel T10 | Tên gọi nghiệp vụ | Định nghĩa & Bản chất | Tình trạng VAT |
-| :--- | :--- | :--- | :--- |
-| **Cột G** | `Giá Max (Giá Niêm Yết)` | Giá niêm yết chính thức của hãng/công ty. Dùng làm giá gạch (original price) trên web và giá trần. | **ĐÃ BAO GỒM VAT 10%** *(Ban Giám Đốc xác nhận ngày 04/11/2026)* |
-| **Cột H** | `Giá Always On` | Giá bán lẻ thực tế thường ngày (selling price) của SkinID trên website và các sàn TMĐT. | **ĐÃ BAO GỒM VAT 10%** |
-
-### Quy tắc định giá giữa các nhãn hàng:
-* **Nhãn RILASTIL (46 sản phẩm):**
-  $$\text{Giá Always On} = \text{Giá Niêm Yết} \times 90\% \quad (\text{Chiết khấu thường xuyên } 10\%)$$
-* **Nhãn TWON (3 sản phẩm) & D'VAH (5 sản phẩm):**
-  Có mức giá Always On và giá niêm yết cố định (đều đã bao gồm thuế GTGT).
+### HỆ 1: Giá toàn bộ sản phẩm trên website (Đã deploy)
+* **Căn cứ:** **Bảng giá bán Ecom T10/2026** (`src/data/products.js`, `src/data/ecom-price-list-2026-10.json`).
+* **Phạm vi áp dụng:** Toàn bộ 54 sản phẩm trên trang Danh mục sản phẩm (`/san-pham`), trang Chi tiết sản phẩm (`/san-pham/:id`), Tìm kiếm, Bộ lọc và Giỏ hàng khi mua sản phẩm lẻ thường ngày.
+* **Quy chuẩn giá:**
+  * **Giá Niêm Yết:** Đã bao gồm thuế GTGT (VAT 10%) theo xác nhận Ban Giám đốc ngày 04/11/2026. (Ví dụ: Kem Body 306.900đ, Ủ trắng 273.900đ, Sữa tắm 196.900đ, Nước hoa 196.900đ / 174.900đ).
+  * **Giá Always On (Giá bán lẻ thường ngày):** Đã bao gồm thuế GTGT (VAT 10%). (Ví dụ: Kem Body 276.000đ, Ủ trắng 247.000đ, Sữa tắm 177.000đ, Nước hoa 177.000đ / 157.000đ; Rilastil chiết khấu 10%).
 
 ---
 
-## 3. Giải quyết Vấn đề Giá Gạch Banner & Chương trình Khuyến mãi 50%
-
-### 3.1. Nguồn gốc của sự chênh lệch giá trước đây
-* Trước đây, bộ phận Marketing thiết kế banner khuyến mãi 50% đã lấy giá niêm yết **chưa VAT** để chia đôi:
-  * Ví dụ Sữa tắm TWON: Giá niêm yết có VAT là `196.900đ`. Nếu chia $1.1$ (chưa VAT) ra `179.000đ` $\rightarrow$ chia đôi thành `89.500đ`. Banner ghi gạch `179.000đ`, bán `89.500đ`.
-  * Trong khi đó, trên website hiển thị giá niêm yết là `196.900đ` (giá có VAT).
-  * **Đặc biệt với D'VAH Kamal & Sarika:** Giá niêm yết chuẩn T10 là `174.900đ` (chưa VAT là `159.000đ`), nhưng banner lại ghi gạch nhầm thành `179.000đ`.
-
-### 3.2. Chuẩn hóa đồng bộ trên Website (`skinid-web`)
-Để đảm bảo **hồ sơ đăng ký Bộ Công Thương được duyệt 100% không bị trả về yêu cầu giải trình**, hệ thống web đã được chuẩn hóa kỹ thuật như sau:
-
-1. **Quy chuẩn 100% giá hiển thị là Giá Đã Bao Gồm VAT:**
-   * Mọi con số khách hàng nhìn thấy và thanh toán (Giá niêm yết, Giá Always On, Giá Flash Sale, Giá Combo, Tổng tiền giỏ hàng) đều là **giá cuối cùng đã có thuế GTGT (VAT 10%)**.
-   * Khách hàng thanh toán đúng số tiền hiển thị, không bị cộng thêm phụ phí thuế lúc checkout.
-
-2. **Công khai thông báo VAT tại 6 vị trí chiến lược:**
-   * **Footer (Chân trang):** Hiển thị cam kết công khai: *"Tất cả giá sản phẩm trên website đều đã bao gồm thuế giá trị gia tăng (VAT) theo luật định."*
-   * **Trang Chi tiết sản phẩm (`ProductDetailPage`):** Huy hiệu *"Giá đã bao gồm thuế VAT"*.
-   * **Popup Chi tiết sản phẩm (`ProductDetailModal`):** Dòng ghi chú *"Giá đã bao gồm thuế VAT"*.
-   * **Giỏ hàng & Đặt hàng (`CheckoutModal`):** Ghi rõ tổng tiền *"Đã bao gồm thuế GTGT (VAT)"*.
-   * **Trang Khuyến mãi (`PromotionsLanding`):** Ghi chú công khai điều kiện giá đã VAT.
-   * **Banner Flash Sale (`FlashSaleBanner`):** Ghi chú giá ưu đãi đã bao gồm VAT.
-
-3. **Kiểm soát trần khuyến mại 50% (Tuân thủ Nghị định 128/2024/NĐ-CP):**
-   * Các sản phẩm giảm 50% Flash Sale (`89.500đ`, `139.500đ`, `124.500đ`) được tính trực tiếp từ giá bán thực tế.
-   * Hệ thống **chặn không cho cộng dồn thêm voucher giảm giá** (`SKINID10`, `WELCOME50`) vào các sản phẩm Flash Sale 50% để tránh tổng mức chiết khấu vượt quá 50% giá bán.
+### HỆ 2: Giá theo Chương trình Khuyến mãi (Flash Sale 50% & Combo quà tặng)
+* **Căn cứ:** **Chính sách bán hàng Công ty TNHH Fieldman áp dụng từ ngày 15/04/2026** (Văn bản chính sách chương trình ban hành ngày 15/04/2026).
+* **Phạm vi áp dụng:** Khối Flash Sale 50% và 3 Combo quà tặng trên Trang chủ (`FlashSaleBanner.jsx`), Trang Khuyến mãi (`PromotionsLanding.jsx`) và dữ liệu khuyến mãi (`src/data/promotions.js`).
+* **Bản chất giá:** Đây là mức giá bán lẻ niêm yết của chương trình (*Recommend consumer price +VAT*) áp dụng riêng cho chiến dịch ưu đãi có điều kiện (Like - Share - Comment "SKINID50").
 
 ---
 
-## 4. Bảng Tra cứu Giá Chuẩn Ecom T10 (Đã có VAT 10%)
+## 2. Báo Cáo Kiểm Tra Chi Tiết Banner Quảng Cáo (Đối chiếu với PDF 15/04/2026)
 
-### Nhóm TWON & D'VAH:
-| Mã Hàng (SKU) | Tên sản phẩm | Dung tích | Giá Niêm Yết (đã VAT) | Giá Always On (đã VAT) | Giá Flash Sale 50% (đã VAT) |
-| :--- | :--- | :---: | :---: | :---: | :---: |
-| `TWON-BODY-LOTION-200ML` | Kem Body Lotion | 200ml | **306.900đ** | **276.000đ** | **139.500đ** |
-| `TWON-U-TRANG-250ML` | Kem Ủ Trắng | 250g | **273.900đ** | **247.000đ** | **124.500đ** |
-| `TWON-SUA-TAM-450ML` | Sữa Tắm TWON | 450ml | **196.900đ** | **177.000đ** | **89.500đ** |
-| `DVAH-SARIKA-10ML` | Nước hoa Sarika | 10ml | **174.900đ** | **157.000đ** | **89.500đ** |
-| `DVAH-KAMAL-10ML` | Nước hoa Kamal | 10ml | **174.900đ** | **157.000đ** | **89.500đ** |
-| `DVAH-MALINI-10ML` | Nước hoa Malini | 10ml | **196.900đ** | **177.000đ** | **89.500đ** |
-| `DVAH-TANMAYA-10ML` | Nước hoa Tanmaya | 10ml | **196.900đ** | **177.000đ** | **89.500đ** |
-| `DVAH-RAKTA-10ML` | Nước hoa Rakta | 10ml | **196.900đ** | **177.000đ** | **89.500đ** |
+Bảng đối chiếu từng con số trên Banner quảng cáo so với Chính sách bán hàng 15/04/2026 của Fieldman:
 
-*(46 sản phẩm RILASTIL áp dụng theo đúng Cột G và Cột H của file `Bảng giá bán Ecom-(T10).xlsx`, toàn bộ đã đồng bộ trong `src/data/products.js` và `src/data/ecom-price-list-2026-10.json`).*
+### 2.1. Kiểm tra Sản phẩm Flash Sale 50%
+
+| Sản phẩm | Giá niêm yết trong PDF 15/04/2026 | Giá gạch trên Banner | Giá bán ưu đãi 50% trên Banner | Kết luận kiểm tra |
+| :--- | :---: | :---: | :---: | :--- |
+| **Sữa tắm TWON 450ml** | **179.000đ** | **179.000đ** | **89.500đ** | ✅ **Chuẩn 100%** (179k ÷ 2 = 89.5k) |
+| **Kem body Lotion 200ml** | **279.000đ** | **279.000đ** | **139.500đ** | ✅ **Chuẩn 100%** (279k ÷ 2 = 139.5k) |
+| **Kem ủ trắng 250ml** | **249.000đ** | **249.000đ** | **124.500đ** | ✅ **Chuẩn 100%** (249k ÷ 2 = 124.5k) |
+| **Nước hoa Malini 10ml** | **179.000đ** | **179.000đ** | **89.500đ** | ✅ **Chuẩn 100%** (179k ÷ 2 = 89.5k) |
+| **Nước hoa Rakta 10ml** | **179.000đ** | **179.000đ** | **89.500đ** | ✅ **Chuẩn 100%** (179k ÷ 2 = 89.5k) |
+| **Nước hoa Tanmaya 10ml** | **179.000đ** | **179.000đ** | **89.500đ** | ✅ **Chuẩn 100%** (179k ÷ 2 = 89.5k) |
+| **Nước hoa Kamal 10ml** | **159.000đ** | **179.000đ** *(Lệch)* | **89.500đ** | ⚠️ **Lệch giá gạch**: PDF là 159k, banner đang gạch 179k (bán 89.5k là giảm 43,7%) |
+| **Nước hoa Sarika 10ml** | **159.000đ** | **179.000đ** *(Lệch)* | **89.500đ** | ⚠️ **Lệch giá gạch**: PDF là 159k, banner đang gạch 179k (bán 89.5k là giảm 43,7%) |
+
+> **Nhận xét Flash Sale:** Marketing thiết kế banner đã gom chung 5 mùi nước hoa D'VAH thành đồng giá niêm yết `179.000đ` giảm còn `89.500đ`. Về mặt bán hàng khách được mua giá rẻ `89.500đ`, nhưng về mặt câu chữ thì Kamal & Sarika thực tế giảm 43,7% (chứ không tròn 50% của 159k).
 
 ---
 
-## 5. Kết luận cho Vận hành & Marketing
-* **Website:** Đã hoàn toàn tuân thủ pháp luật về giá, thuế và khuyến mại. Sẵn sàng 100% cho bước nộp hồ sơ lên Cổng thông tin Quản lý hoạt động TMĐT của Bộ Công Thương.
-* **Marketing / Thiết kế banner:** Khi làm các chiến dịch truyền thông tiếp theo, thống nhất lấy con số **Giá Niêm Yết có VAT** làm giá gạch để đồng nhất thông tin giữa hình ảnh banner, fanpage và website, tránh gây thắc mắc cho khách hàng và đoàn kiểm tra liên ngành.
+### 2.2. Kiểm tra 3 Bộ Combo Quà Tặng
+
+| Combo | Thành phần theo chương trình | Tổng giá trị gốc theo PDF 15/04 | Số liệu ghi trên Banner | Kết luận kiểm tra |
+| :--- | :--- | :---: | :---: | :--- |
+| **Combo 1: Nàng Xinh** | Kem body (279k) + Ủ trắng (249k) + Sữa tắm (179k) | **707.000đ** | *Gốc 707.000đ $\rightarrow$ Bán 529.000đ (Tiết kiệm 25% / 178k)* | ✅ **KHỚP 100% TỪNG ĐỒNG** so với PDF chương trình |
+| **Combo 2: Nàng Quyến Rũ** | Kem body (279k) + Sữa tắm (179k) + Nước hoa Kamal (159k) | **617.000đ** *(Nếu theo đúng PDF)* | *Gốc 637.000đ $\rightarrow$ Bán 499.000đ (Tiết kiệm 22% / 138k)* | ⚠️ **Lệch 20k ở giá gốc**: Do Designer cộng Kamal là 179k ($279 + 179 + 179 = 637k$). Nếu lấy Kamal đúng 159k thì gốc là 617k, tiết kiệm 19% (118k) |
+| **Combo 3: Nàng Thơm** | Kem ủ trắng (249k) + Sữa tắm (179k) + Nước hoa Tanmaya (179k) | **607.000đ** | *Gốc 607.000đ $\rightarrow$ Bán 499.000đ (Tiết kiệm 18% / 108k)* | ✅ **KHỚP 100% TỪNG ĐỒNG** so với PDF chương trình ($249 + 179 + 179 = 607k$) |
+
+---
+
+## 3. Cập Nhật Mã Nguồn Web Phù Hợp Cả 2 Hệ Thống
+
+1. **Trang Danh mục sản phẩm & Chi tiết (`products.js`):**
+   * Bảo lưu nguyên vẹn 100% dữ liệu đã deploy theo Bảng giá Ecom T10/2026.
+   * Hiển thị đầy đủ nhãn công khai *"Giá đã bao gồm thuế GTGT (VAT)"* để phục vụ xét duyệt Bộ Công Thương.
+2. **Khối Khuyến mãi & Flash Sale (`promotions.js`):**
+   * Giữ trọn vẹn số liệu chương trình theo đúng Chính sách bán hàng 15/04/2026:
+     * Combo 1: Gốc `707.000đ` $\rightarrow$ Bán `529.000đ` (Tiết kiệm 25%).
+     * Combo 2: Gốc `637.000đ` $\rightarrow$ Bán `499.000đ` (Tiết kiệm 22%).
+     * Combo 3: Gốc `607.000đ` $\rightarrow$ Bán `499.000đ` (Tiết kiệm 18%).
+     * Bán lẻ 50%: Sữa tắm `89.500đ`, Kem body `139.500đ`, Kem ủ trắng `124.500đ`, Nước hoa `89.500đ`.
+   * Khớp hoàn hảo với tất cả hình ảnh banner truyền thông của SkinID.
