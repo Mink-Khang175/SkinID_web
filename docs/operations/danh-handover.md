@@ -31,7 +31,7 @@ npm run check:worker
 npm run dev -- --host 127.0.0.1 --port 5175 --strictPort
 ```
 
-CI chỉ test/build/bundle dry-run, không tự deploy. `npm run preview` chỉ là static frontend, không chạy API.
+CI chạy test/build/bundle dry-run trên mọi push và PR; riêng push `main` phát hành `dist/` lên GitHub Pages sau khi test xanh (xem [triển khai CI/CD](deployment-cicd.md)). `npm run preview` chỉ là static frontend, không chạy API.
 
 ## Catalog, mapping và quyền
 

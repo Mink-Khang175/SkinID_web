@@ -50,7 +50,7 @@ scripts/generate-catalog.mjs  Sinh dữ liệu frontend/backend đồng nhất
 firestore.rules, storage.rules, firestore.indexes.json
 firebase.json, .firebaserc    Cấu hình Firebase
 wrangler.jsonc               Entry Worker và static assets
-.github/workflows/           Kiểm thử/build/dry-run; không deploy
+.github/workflows/           Kiểm thử/build; push main phát hành GitHub Pages
 tests/, docs/                Kiểm thử và tài liệu đang duy trì
 ```
 

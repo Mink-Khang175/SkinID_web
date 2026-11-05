@@ -1,10 +1,22 @@
 name: SkinID CI
-on: [push, pull_request]
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
 permissions:
   contents: read
+
+concurrency:
+  group: skinid-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test-build:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -16,3 +28,49 @@ jobs:
       - run: npm run check:worker
         env:
           CLOUDFLARE_SEND_METRICS: "false"
+
+  deploy-pages:
+    needs: test-build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build production assets
+        run: npm run build
+
+      - name: Prepare GitHub Pages bundle
+        run: |
+          cp dist/index.html dist/404.html
+          touch dist/.nojekyll
+          ls -1 dist
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
