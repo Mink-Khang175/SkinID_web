@@ -3,9 +3,10 @@ import { formatPrice } from '../../features/catalog/index.js';
 import { useCampaign } from '../../features/content/index.js';
 import { CURATED_COMBOS, RETAIL_50_DEALS, CAMPAIGN_STEPS } from '../../data/promotions.js';
 import { assetUrl } from '../../assets/index.js';
+import StorePromotionNotice from '../commerce/StorePromotionNotice.jsx';
 
 const PROMO_URL = '/khuyen-mai';
-const TICKER = ['LIKE & SHARE', 'SĂN DEAL GIẢM 50%', 'TWON', "D'VAH", 'SẢN PHẨM CHÍNH HÃNG', 'YÊU THƯƠNG BẢN THÂN'];
+const TICKER = ['LIKE & SHARE', 'GIẢM 50% TẠI CỬA HÀNG', 'TWON', "D'VAH", 'SẢN PHẨM CHÍNH HÃNG', 'YÊU THƯƠNG BẢN THÂN'];
 
 const prefersReducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
@@ -99,7 +100,7 @@ function ComboCard({ combo, index }) {
           ))}
         </span>
         <span className="promo-combo__foot">
-          <span className="promo-price"><b>{formatPrice(combo.price)}</b><del>{formatPrice(combo.originalPrice)}</del></span>
+          <span className="promo-price"><span className="promotion-price-channel">Giá combo tại cửa hàng</span><b>{formatPrice(combo.price)}</b><del>{formatPrice(combo.originalPrice)}</del></span>
           <span className="promo-combo__go" aria-hidden="true">→</span>
         </span>
       </span>
@@ -138,7 +139,7 @@ function ComboFan({ combos = CURATED_COMBOS }) {
               onClick={(event) => { if (pos !== 0) { event.preventDefault(); select(index); } }}
             >
               <img src={assetUrl(combo.image)} alt={`Bộ quà ${combo.title}`} loading="lazy" draggable="false" />
-              <span className="promo-fan__tag"><b>{combo.title}</b><i>{formatPrice(combo.price)}</i></span>
+              <span className="promo-fan__tag"><b>{combo.title}</b><i>{formatPrice(combo.price)} · tại cửa hàng</i></span>
             </a>
           );
         })}
@@ -206,7 +207,7 @@ function ComboStory({ combos = CURATED_COMBOS }) {
                 <h3>{combo.title}</h3>
                 <p>{combo.slogan}</p>
                 <ul>{(combo.items || []).map((item) => <li key={item}>{item}</li>)}</ul>
-                <span className="promo-price"><b>{formatPrice(combo.price)}</b><del>{formatPrice(combo.originalPrice)}</del></span>
+                <span className="promo-price"><span className="promotion-price-channel">Giá combo tại cửa hàng</span><b>{formatPrice(combo.price)}</b><del>{formatPrice(combo.originalPrice)}</del></span>
                 <a className="btn btn--primary promo-cta" href={PROMO_URL} tabIndex={i === active ? 0 : -1}><span>Xem combo này</span><span className="promo-cta__arrow" aria-hidden="true">↗</span></a>
               </div>
             ))}
@@ -235,9 +236,9 @@ export default function FlashSaleBanner() {
       <div className="container">
         <header className="promo-hero">
           <div className="promo-hero__copy">
-            <span className="skinid-editorial-kicker" data-reveal>ĐẶC QUYỀN SKINID · TWON & D'VAH</span>
+            <span className="skinid-editorial-kicker" data-reveal>ƯU ĐÃI TẠI CỬA HÀNG · TWON & D'VAH</span>
             <h2 className="skinid-editorial-title" data-reveal data-reveal-delay="80">Một chút yêu chiều, <em>dành riêng cho bạn.</em></h2>
-            <p data-reveal data-reveal-delay="160">Like &amp; share săn deal giảm đến 50%. Chọn bộ quà tặng TWON – D'VAH hoặc từng sản phẩm yêu thích (giá niêm yết đã bao gồm thuế VAT) để mỗi ngày đều là một dịp yêu thương bản thân.</p>
+            <p data-reveal data-reveal-delay="160">Khám phá combo quà tặng và chương trình giảm 50% tại cửa hàng. Giá trong khu vực này đã gồm VAT, không áp dụng cho đơn đặt hàng online.</p>
             <div className="promo-hero__cta" data-reveal data-reveal-delay="240">
               <MagneticLink className="btn btn--primary promo-cta" href={PROMO_URL}>
                 <span>Xem toàn bộ chương trình</span><span className="promo-cta__arrow" aria-hidden="true">↗</span>
@@ -252,7 +253,7 @@ export default function FlashSaleBanner() {
             <div className="promo-medal" aria-hidden="true">
               <small>ĐẾN</small>
               <b><CountUp to={50} /><sup>%</sup></b>
-              <small>GIẢM</small>
+              <small>TẠI CỬA HÀNG</small>
             </div>
             <span className="promo-spark promo-spark--1" aria-hidden="true">♡</span>
             <span className="promo-spark promo-spark--2" aria-hidden="true">✦</span>
@@ -271,13 +272,14 @@ export default function FlashSaleBanner() {
           <div><span className="skinid-editorial-kicker">THE GIFT EDIT</span><h3>Ba cách gửi trao <em>yêu thương.</em></h3></div>
           <a className="collection-text-link" href={PROMO_URL}>Xem chi tiết từng bộ <span aria-hidden="true">→</span></a>
         </div>
+        <StorePromotionNotice compact />
         <ComboStory combos={listCombos} />
         <div className="promo-combos">
           {listCombos.map((combo, index) => <ComboCard combo={combo} index={index} key={combo.id} />)}
         </div>
 
         <div className="promo-block-head promo-block-head--retail" data-reveal>
-          <div><span className="skinid-editorial-kicker">DAILY LITTLE JOYS</span><h3>Giảm 50% cho điều bạn <em>yêu thích.</em></h3></div>
+          <div><span className="skinid-editorial-kicker">DAILY LITTLE JOYS</span><h3>Giảm 50% tại cửa hàng, <em>cho điều bạn yêu thích.</em></h3></div>
           <a className="collection-text-link" href={PROMO_URL}>Tất cả ưu đãi <span aria-hidden="true">→</span></a>
         </div>
         <ul className="promo-rail" aria-label="Sản phẩm giảm 50%">
@@ -290,7 +292,7 @@ export default function FlashSaleBanner() {
                 </span>
                 <span className="promo-eyebrow">{product.brand}</span>
                 <span className="promo-pick__name">{product.name}</span>
-                <span className="promo-price"><b>{formatPrice(product.price)}</b><del>{formatPrice(product.originalPrice)}</del></span>
+                <span className="promo-price"><span className="promotion-price-channel">Giá tại cửa hàng</span><b>{formatPrice(product.price)}</b><del>{formatPrice(product.originalPrice)}</del></span>
               </a>
             </li>
           ))}
@@ -307,7 +309,7 @@ export default function FlashSaleBanner() {
             ))}
           </ol>
           <MagneticLink className="btn btn--primary promo-cta" href={PROMO_URL}>
-            <span>Nhận ưu đãi ngay</span><span className="promo-cta__arrow" aria-hidden="true">↗</span>
+            <span>Xem ưu đãi tại cửa hàng</span><span className="promo-cta__arrow" aria-hidden="true">↗</span>
           </MagneticLink>
         </div>
       </div>

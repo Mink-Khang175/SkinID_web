@@ -78,6 +78,7 @@ export default function ProductCard({ product, onOpen }) {
               <a
                 href={`/products?detail=${product.id}`}
                 className="product-card__title-link"
+                title={displayName}
                 onClick={(event) => {
                   if (!event.ctrlKey && !event.metaKey && !event.shiftKey) {
                     event.preventDefault();

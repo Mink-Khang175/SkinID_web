@@ -301,3 +301,9 @@ Giá, mã và điều kiện khuyến mãi giữ nguyên dữ liệu hiện tạ
 - Menu (`navigation-drawer.css`): khối tiêu đề “Chăm sóc theo cách của bạn” có chiều rộng cố định để không xuống dòng/nhảy khi mở menu cấp 2.
 - Phần “Sản phẩm tâm điểm” (`FeaturedProducts.jsx`): chỉ đổi sản phẩm/bước khi **click**, không đổi khi hover/focus (tránh vòng lặp nháy khi danh sách vệ tinh sắp xếp lại dưới con trỏ).
 - `components/commerce/PromotionCollection.jsx` đã được thay bằng hai thành phần trên.
+
+## 13. Cập nhật theo ảnh tham chiếu ngày 05/11/2026
+
+Chủ quản yêu cầu khu vực sản phẩm nổi bật chuyển sang vòng cung ngang, nội dung bên trái và ảnh chính lớn bên phải, ba ảnh phụ có thể chọn. Quyết định này thay cho mô tả giữ nguyên carousel sản phẩm ở các mục lịch sử; banner đầu trang và kiểu nút gốc tiếp tục giữ.
+
+Giá combo/giảm 50% là kênh cửa hàng. Dùng nhãn kênh rõ ràng bên cạnh giá và CTA tư vấn; không đưa giá này vào checkout online. Chi tiết tại [giá và ưu đãi](../content/store-promotions.md).

@@ -1047,7 +1047,7 @@ body {
   backdrop-filter: blur(8px);
 }
 #product-detail-modal-content {
-  width: min(840px, 100%);
+  width: min(960px, 100%);
   max-height: 90vh;
   overflow: hidden;
   border-radius: 20px;
@@ -1061,14 +1061,14 @@ body {
   overflow-y: auto;
   overflow-x: hidden !important;
   padding: 34px;
-  word-break: break-word !important;
-  overflow-wrap: anywhere !important;
+  word-break: normal;
+  overflow-wrap: break-word;
 }
 .pmodal-head {
-  display: grid !important;
-  grid-template-columns: minmax(280px, 320px) minmax(0, 1fr) !important;
-  gap: 32px !important;
-  align-items: start !important;
+  display: grid;
+  grid-template-columns: minmax(220px, 320px) minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
 }
 .pmodal-head > * {
   min-width: 0 !important;
@@ -1076,8 +1076,8 @@ body {
 }
 .pmodal-image {
   width: 100% !important;
-  min-width: 260px !important;
-  min-height: 360px !important;
+  min-width: 0;
+  min-height: 360px;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -1098,23 +1098,31 @@ body {
 .pmodal-head h2 {
   font-family: var(--skinid-font-heading);
   margin: 6px 0 10px;
-  padding-right: 44px;
-  font-size: 1.35rem;
+  padding-right: 0;
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
   font-weight: 700;
   line-height: 1.35;
   color: #181517;
-  word-break: break-word !important;
+  word-break: normal;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
 }
+.pmodal-pricing { margin: 18px 0; }
 .pmodal-price {
-  margin: 10px 0;
+  margin: 0;
   color: #181517;
   font-size: 1.35rem;
   font-weight: 800;
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
-  gap: 12px;
+  gap: 8px 14px;
 }
+.pmodal-price > * { flex: 0 0 auto; white-space: nowrap; word-break: normal; overflow-wrap: normal; }
+.pmodal-current-price { font-variant-numeric: tabular-nums; line-height: 1.4; }
+.pmodal-pricing .pmodal-tax-note { margin: 6px 0 0; font-size: .72rem; font-weight: 500; line-height: 1.6; color: var(--muted); }
 #pmodal-original-price {
+  margin-left: 0;
   font-size: 0.92rem;
   color: #868e96;
   text-decoration: line-through;
@@ -2373,6 +2381,7 @@ select:focus-visible {
   .pmodal-scroll { padding: 20px 16px; }
   .pmodal-head { grid-template-columns: 1fr; gap: 16px; }
   .pmodal-image { min-height: 260px; }
+  .pmodal-image img { max-height: 200px !important; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,0 +1,28 @@
+/* Channel labels stay beside the prices they qualify, including in the home teaser. */
+.promotion-price-channel { flex-basis: 100%; display: block; margin-bottom: 3px; font: 600 .65rem/1.6 var(--skinid-font-body); letter-spacing: .01em; color: var(--muted); }
+.catalog-price-channel { display: block; margin-bottom: 6px; font: 600 .68rem/1.6 var(--skinid-font-body); color: var(--muted); }
+.store-promotion-notice { display: grid; grid-template-columns: 38px minmax(0,1fr); gap: 18px; margin-block: 32px 56px; padding: 28px 32px; border-radius: 28px; background: linear-gradient(120deg,var(--skinid-blush),rgba(255,255,255,.94)); box-shadow: 0 14px 42px rgba(70,40,50,.045); scroll-margin-top: 112px; }
+.store-promotion-notice__icon { display: grid; place-items: center; align-self: start; width: 38px; height: 38px; border-radius: 50%; color: var(--skinid-rose-dark); background: white; font-size: 1.1rem; }
+.store-promotion-notice strong { color: var(--skinid-dark); font: 700 1.08rem/1.5 var(--skinid-font-heading); }
+.store-promotion-notice p { max-width: 90ch; margin: 8px 0 0; font-size: .84rem; line-height: 1.85; color: var(--muted); }
+.store-promotion-notice a { color: var(--skinid-rose-dark); font-weight: 650; text-decoration: underline; text-underline-offset: 3px; }
+.store-promotion-notice dl { display: grid; gap: 12px; margin: 20px 0 0; }
+.store-promotion-notice dl > div { display: grid; grid-template-columns: 90px minmax(0,1fr); gap: 16px; }
+.store-promotion-notice dt { color: var(--skinid-rose-dark); font-size: .7rem; font-weight: 700; line-height: 1.9; }
+.store-promotion-notice dd { margin: 0; color: var(--muted); font-size: .8rem; line-height: 1.8; overflow-wrap: break-word; }
+.store-promotion-notice__link { display: inline-flex; align-items: center; min-height: 44px; font-size: .78rem; margin-top: 6px; }
+.store-promotion-notice :focus-visible { outline: 2px solid var(--skinid-rose-dark); outline-offset: 4px; }
+.pl-page .pl-hero .skinid-editorial-title { max-width: 15ch; }
+.pl-page .pl-btn--consult { min-height: 44px; padding: 10px 16px; border-radius: 999px; gap: 12px; font-size: .78rem; line-height: 1.4; box-shadow: 0 8px 20px rgba(224,62,98,.18); }
+.pl-page .pl-btn--consult > span { min-width: 0; white-space: nowrap; }
+.pl-page .pl-btn--consult > i { width: 22px; height: 22px; flex-shrink: 0; }
+.pl-card__cta > span { min-width: 0; }
+.pl-card__cta > i { flex-shrink: 0; }
+.pl-page .pl-card__note { line-height: 1.7; }
+.pl-page .pl-gift-card h3 { font-weight: 750; }
+.online-voucher-note { margin: -12px 0 24px; font-size: .82rem; color: var(--muted); line-height: 1.8; }
+@media (max-width:760px) {
+  .store-promotion-notice { grid-template-columns: 1fr; gap: 12px; padding: 24px; border-radius: 24px; margin-block: 24px 40px; }
+  .store-promotion-notice dl > div { grid-template-columns: 1fr; gap: 2px; }
+  .store-promotion-notice--compact .store-promotion-notice__icon { display: none; }
+}

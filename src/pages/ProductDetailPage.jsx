@@ -166,16 +166,19 @@ export default function ProductDetailPage() {
               </h1>
 
               {/* Price Section */}
-              <div className="flex flex-wrap items-baseline gap-3 pb-4 border-b border-stone-100">
-                <span className="text-3xl font-bold text-[#D04862] tracking-tight">
-                  {formatPrice(product.price)}
-                </span>
-                {hasDiscount && (
-                  <span className="text-lg text-slate-400 line-through">
-                    {formatPrice(product.originalPrice)}
+              <div className="product-detail-pricing pb-4 border-b border-stone-100">
+                <span className="catalog-price-channel">Giá bán online</span>
+                <div className="product-detail-pricing__amounts">
+                  <span className="product-price-value text-3xl font-bold text-[#D04862] tracking-tight">
+                    {formatPrice(product.price)}
                   </span>
-                )}
-                <span className="text-xs text-slate-500 font-medium">(Đã bao gồm thuế VAT)</span>
+                  {hasDiscount && (
+                    <span className="product-price-value text-lg text-slate-400 line-through">
+                      {formatPrice(product.originalPrice)}
+                    </span>
+                  )}
+                </div>
+                <p className="product-detail-pricing__tax">Đã bao gồm thuế VAT</p>
               </div>
 
               {/* Quick Summary */}

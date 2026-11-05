@@ -144,6 +144,14 @@
 .product-detail-art { padding: 48px; background: radial-gradient(ellipse,var(--skinid-blush),rgba(255,255,255,.7) 70%); border-radius: 34px; }
 .product-detail-art > img { mix-blend-mode: multiply; filter: drop-shadow(0 20px 22px rgba(72,40,52,.10)); }
 .product-detail-page h1 { font-size: clamp(2rem,3vw,3rem); line-height: 1.12; font-family: var(--skinid-font-heading); }
+.product-detail-page h1 { word-break: normal; overflow-wrap: break-word; text-wrap: pretty; }
+.product-detail-pricing__amounts { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 14px; }
+.product-detail-pricing .product-detail-pricing__tax { margin: 6px 0 0; font-size: .75rem; line-height: 1.6; color: var(--muted); }
+.product-price-value, .product-card__price, .product-card__original-price,
+.product-card__discount, .pl-price > b, .pl-price > del {
+  flex-shrink: 0; white-space: nowrap; word-break: normal; overflow-wrap: normal;
+}
+.product-card__title-row .product-card__name { word-break: normal; overflow-wrap: break-word; text-wrap: pretty; }
 .product-information-surface { background: rgba(255,255,255,.9); border: 0; border-radius: 30px; box-shadow: var(--skinid-surface-shadow); }
 .product-information-surface > .flex { flex-wrap: wrap; gap: 16px; }
 .skinid-content-page .policy-v2-document { border: 0; border-radius: 30px; background: rgba(255,255,255,.92); box-shadow: var(--skinid-surface-shadow); padding: clamp(24px,4vw,54px); }

@@ -2,7 +2,8 @@
  * Chiến dịch khuyến mãi SkinID: TWON & D'VAH
  * Căn cứ: Chính sách bán hàng chương trình Fieldman (15/04/2026)
  * Gồm: 3 Combo Quà Tặng Độc Quyền & Sản Phẩm Bán Lẻ Flash Sale Giảm 50%
- * Lưu ý: Giá toàn bộ sản phẩm trên website thông thường lấy theo Bảng giá Ecom T10 (products.js).
+ * Phạm vi: các giá combo/giảm 50% dưới đây thuộc kênh cửa hàng, không dùng cho checkout online.
+ * Giá catalog online lấy theo Bảng giá Ecom T10 (products.js).
  */
 
 export const CURATED_COMBOS = [

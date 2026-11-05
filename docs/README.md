@@ -9,6 +9,7 @@
 | [Kiến trúc backend](architecture/backend.md) | Worker, Firebase, POS và ranh giới migration |
 | [Bàn giao anh Danh](operations/danh-handover.md) | Cấu hình, chạy local và vận hành chưa deploy |
 | [Backend](integration/backend-contract.md) | Điểm thay adapter để nối Next.js/PostgreSQL |
+| [Giá và ưu đãi tại cửa hàng](content/store-promotions.md) | Phạm vi áp dụng, CTA tư vấn và giá online |
 | [Chính sách](content/policies-v2.md) | Nguồn V2.0 và những nội dung chưa xác nhận |
 | [Quy chuẩn Giá & VAT](operations/quy-chuan-gia-va-vat.md) | Bản chất bảng giá Ecom T10, thuế GTGT, trần khuyến mại 50% và chuẩn Bộ Công Thương |
 | [Route](reference/routes.json) | Danh sách route và nhóm tương tác |

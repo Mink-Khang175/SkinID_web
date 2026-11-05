@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useCart } from '../../features/cart/index.js';
-import { useCatalog, formatPrice } from '../../features/catalog/index.js';
+import { formatPrice } from '../../features/catalog/index.js';
 import { fetchAdminPromotions } from '../../features/admin/index.js';
 import { useCampaign } from '../../features/content/index.js';
 import { CURATED_COMBOS, RETAIL_50_DEALS } from '../../data/promotions.js';
 import { COMPANY_INFO } from '../../data/companyInfo.js';
 import { assetUrl } from '../../assets/index.js';
+import StorePromotionNotice from './StorePromotionNotice.jsx';
 
 /* Contact channels used to confirm the 50% programme. The website cannot verify the 3 social steps,
    so retail 50% items never go to the cart: customers are sent to an advisor instead. Add a Messenger link here when available. */
@@ -21,7 +21,7 @@ const STEPS = [
   { id: 'like', icon: '👍', title: 'LIKE & FOLLOW', desc: 'Thích và theo dõi Fanpage chính thức SkinID.' },
   { id: 'share', icon: '↗', title: 'SHARE BÀI VIẾT', desc: 'Chia sẻ bài viết ở chế độ CÔNG KHAI trên trang cá nhân.' },
   { id: 'comment', icon: '💬', title: 'COMMENT “SKINID50”', desc: 'Bình luận đúng cú pháp ngay dưới bài viết.' },
-  { id: 'inbox', icon: '✦', title: 'INBOX NHẬN ƯU ĐÃI', desc: 'Nhắn SkinID để được xác nhận và chốt đơn với giá giảm 50%.' }
+  { id: 'inbox', icon: '✦', title: 'TƯ VẤN TẠI CỬA HÀNG', desc: 'Nhắn SkinID để xác nhận điều kiện và mức ưu đãi tại cửa hàng.' }
 ];
 
 const DEFAULT_VOUCHERS = [
@@ -123,7 +123,7 @@ function PriceDrop({ from, to, on }) {
 function AdvisorButtons({ className = '', light = false }) {
   return (
     <div className={`pl-advisor ${light ? 'pl-advisor--light' : ''} ${className}`}>
-      <a className={`btn pl-btn ${light ? 'pl-btn--white' : 'btn--primary'}`} href={CONTACT.zalo} target="_blank" rel="noopener noreferrer"><span>Nhắn Zalo nhận ưu đãi</span><i aria-hidden="true">↗</i></a>
+      <a className={`btn pl-btn pl-btn--consult ${light ? 'pl-btn--white' : 'btn--primary'}`} href={CONTACT.zalo} target="_blank" rel="noopener noreferrer" aria-label="Tư vấn ưu đãi tại cửa hàng qua Zalo"><span>Tư vấn ưu đãi</span><i aria-hidden="true">↗</i></a>
       {CONTACT.messenger && <a className="btn btn--secondary pl-btn" href={CONTACT.messenger} target="_blank" rel="noopener noreferrer">Inbox Messenger</a>}
       <a className="pl-advisor__tel" href={CONTACT.tel}>Hotline {CONTACT.hotline}</a>
     </div>
@@ -138,9 +138,9 @@ function Hero({ campaign, retailDeals = RETAIL_50_DEALS }) {
   return (
     <header className="pl-hero" ref={ref}>
       <div className="pl-hero__copy">
-        <span className="skinid-editorial-kicker">ĐẶC QUYỀN SKINID · TWON &amp; D'VAH</span>
-        <h1 className="skinid-editorial-title">Like &amp; share, <em>săn deal giảm 50%.</em></h1>
-        <p>{campaign?.subtitle || 'Yêu thương bản thân – đẹp hơn mỗi ngày cùng SkinID. Hoàn thành 3 bước đơn giản để nhận mức giá giảm 50% cho sản phẩm bán lẻ TWON và D’VAH, hoặc chọn một bộ quà tặng thật xinh.'}</p>
+        <span className="skinid-editorial-kicker">ƯU ĐÃI TẠI CỬA HÀNG · TWON &amp; D'VAH</span>
+        <h1 className="skinid-editorial-title">Like &amp; share, <em>ưu đãi 50% tại cửa hàng.</em></h1>
+        <p>Chọn sản phẩm TWON, D'VAH và bộ quà tặng yêu thích. Nhắn SkinID để xác nhận điều kiện ưu đãi tại cửa hàng; giá chương trình không áp dụng cho đơn online.</p>
         <div className="pl-hero__cta">
           <a className="btn btn--primary pl-btn" href="#buoc-tham-gia"><span>Xem 3 bước nhận ưu đãi</span><i aria-hidden="true">↓</i></a>
           <a className="collection-text-link" href="#bo-qua-tang">Xem bộ quà tặng <span aria-hidden="true">→</span></a>
@@ -149,7 +149,7 @@ function Hero({ campaign, retailDeals = RETAIL_50_DEALS }) {
       </div>
       <div className="pl-hero__art" aria-hidden="true">
         <span className="pl-ring pl-ring--a" /><span className="pl-ring pl-ring--b" />
-        <div className="pl-medal"><small>GIẢM ĐẾN</small><b>50<sup>%</sup></b><small>SẢN PHẨM LẺ</small></div>
+        <div className="pl-medal"><small>GIẢM ĐẾN</small><b>50<sup>%</sup></b><small>TẠI CỬA HÀNG</small></div>
         {floaters.map((product, i) => (
           <span key={product.id || i} className={`pl-float pl-float--${i + 1}`} style={{ '--depth': [60, -40, 90, -70, 50, -30][i] }}>
             <img src={assetUrl(product.image, product.brandSlug)} alt="" loading="lazy" />
@@ -196,7 +196,7 @@ function StepsStory({ retailDeals = RETAIL_50_DEALS, steps = STEPS }) {
               <span className={`pl-follow ${active >= 0 ? 'is-on' : ''}`}>{active >= 0 ? 'Đang theo dõi' : 'Theo dõi'}</span>
               <span className="pl-fb__more" aria-hidden="true">···</span>
             </div>
-            <p className="pl-fb__text">Like &amp; Share săn deal giảm 50% 💗 Yêu thương bản thân – đẹp hơn mỗi ngày cùng SkinID!</p>
+            <p className="pl-fb__text">Ưu đãi tại cửa hàng · Like &amp; Share giảm 50% 💗 Yêu thương bản thân – đẹp hơn mỗi ngày cùng SkinID!</p>
             <img className="pl-fb__img" src={assetUrl(CURATED_COMBOS[1].image)} alt="" />
             <div className="pl-fb__react">
               <span className="pl-fb__react-icons"><i className="is-like"><Thumb /></i><i className="is-love">❤</i></span>
@@ -219,8 +219,9 @@ function StepsStory({ retailDeals = RETAIL_50_DEALS, steps = STEPS }) {
               <img src={assetUrl(hero.image, hero.brandSlug)} alt="" />
               <div>
                 <small>{hero.name}</small>
-                <div className="pl-deal__price"><PriceDrop from={hero.originalPrice} to={hero.price} on={active >= 3} /><del>{formatPrice(hero.originalPrice)}</del></div>
-                <span className="pl-deal__chip">−50% · Inbox để chốt đơn</span>
+                <span className="promotion-price-channel">Giá ưu đãi tại cửa hàng</span>
+              <div className="pl-deal__price"><PriceDrop from={hero.originalPrice} to={hero.price} on={active >= 3} /><del>{formatPrice(hero.originalPrice)}</del></div>
+                <span className="pl-deal__chip">−50% · Áp dụng tại cửa hàng</span>
               </div>
             </div>
           </div>
@@ -238,24 +239,24 @@ function RetailDeals({ retailDeals = RETAIL_50_DEALS }) {
       <div className="pl-head">
         <div>
           <span className="skinid-editorial-kicker">DAILY LITTLE JOYS</span>
-          <h2>Giảm 50% cho điều <em>bạn yêu thích.</em></h2>
+          <h2>Giảm 50% tại cửa hàng, <em>cho điều bạn yêu thích.</em></h2>
         </div>
-        <p>Hoàn thành 3 bước, sau đó nhắn SkinID để được tư vấn và áp dụng mức giá ưu đãi dưới đây. Toàn bộ giá niêm yết và giá ưu đãi đã bao gồm thuế GTGT (VAT).</p>
+        <p>Mức giá dưới đây dành cho chương trình tại cửa hàng. Hoàn thành các bước và nhắn SkinID để xác nhận điều kiện trước khi đến; không áp dụng cho đơn online. Giá đã gồm VAT.</p>
       </div>
       <ul className="pl-retail__grid">
         {deals.map((product) => (
           <li key={product.id} className="pl-card">
-            <button type="button" className="pl-card__visual" onClick={() => openProduct(product.id)} aria-label={`Xem chi tiết ${product.name}`}>
+            <button type="button" className="pl-card__visual" onClick={() => openProduct(product.id)} aria-label={`Xem thông tin và giá online của ${product.name}`}>
               <img src={assetUrl(product.image, product.brandSlug)} alt="" loading="lazy" />
               <em>−{product.discountPercent}%</em>
-              <span className="pl-card__hint">Xem chi tiết</span>
+              <span className="pl-card__hint">Thông tin & giá online</span>
             </button>
             <span className="pl-eyebrow">{product.brand}</span>
             <h3>{product.name}</h3>
             <ul className="pl-card__tags">{(product.features || []).slice(0, 2).map((f) => <li key={f}>{f}</li>)}</ul>
-            <div className="pl-price"><b>{formatPrice(product.price)}</b><del>{formatPrice(product.originalPrice)}</del></div>
-            <a className="btn btn--primary pl-btn pl-card__cta" href={CONTACT.zalo} target="_blank" rel="noopener noreferrer"><span>Nhận ưu đãi 50%</span><i aria-hidden="true">↗</i></a>
-            <small className="pl-card__note">Cần hoàn thành 3 bước · SkinID xác nhận qua tin nhắn</small>
+            <div className="pl-price"><span className="promotion-price-channel">Giá ưu đãi tại cửa hàng</span><b>{formatPrice(product.price)}</b><del title="Giá trước ưu đãi tại cửa hàng">{formatPrice(product.originalPrice)}</del></div>
+            <a className="btn btn--primary pl-btn pl-btn--consult pl-card__cta" href={CONTACT.zalo} target="_blank" rel="noopener noreferrer" aria-label={`Tư vấn ưu đãi tại cửa hàng cho ${product.name}`}><span>Tư vấn ưu đãi</span><i aria-hidden="true">↗</i></a>
+            <small className="pl-card__note">Áp dụng tại cửa hàng · Nhân viên xác nhận điều kiện</small>
           </li>
         ))}
       </ul>
@@ -265,25 +266,14 @@ function RetailDeals({ retailDeals = RETAIL_50_DEALS }) {
 
 /* ---------- Scrollytelling: gift sets ---------- */
 function GiftStory({ combos = CURATED_COMBOS }) {
-  const { addToCart } = useCart();
-  const { isReady } = useCatalog();
   const list = combos?.length ? combos : CURATED_COMBOS;
   const { ref, active, goTo } = useStickyStages(list.length);
-  const [pending, setPending] = useState('');
-  const [added, setAdded] = useState('');
-  const [message, setMessage] = useState('');
-  const add = async (combo) => {
-    setPending(combo.id); setMessage('');
-    try { for (const productId of combo.productIds) await addToCart(productId); setAdded(combo.id); setMessage('Đã thêm bộ quà vào giỏ hàng.'); }
-    catch { setMessage('Chưa thể thêm vào giỏ. Vui lòng thử lại.'); }
-    finally { setPending(''); }
-  };
   const current = list[active] || list[0] || {};
   return (
     <section className="pl-gifts" id="bo-qua-tang" aria-label="Bộ quà tặng SkinID">
       <div className="pl-head">
         <div><span className="skinid-editorial-kicker">THE GIFT EDIT</span><h2>Ba cách gửi trao <em>yêu thương.</em></h2></div>
-        <p>Combo là giá ưu đãi cố định, đặt ngay trên website không cần thực hiện 3 bước.</p>
+        <p>Giá combo áp dụng tại cửa hàng. Nhắn SkinID để xác nhận bộ quà, giá và tình trạng hàng trước khi đến.</p>
       </div>
       <div className="pl-story" ref={ref}>
         <div className="pl-story__sticky">
@@ -307,10 +297,10 @@ function GiftStory({ combos = CURATED_COMBOS }) {
                     ))}
                   </div>
                   <ul>{(combo.items || []).map((item) => <li key={item}>{item}</li>)}</ul>
-                  <div className="pl-price"><b>{formatPrice(combo.price)}</b><del>{formatPrice(combo.originalPrice)}</del></div>
-                  <button type="button" className="btn btn--primary pl-btn" tabIndex={i === active ? 0 : -1} disabled={!isReady || !!pending} onClick={() => add(combo)}>
-                    <span>{pending === combo.id ? 'Đang thêm…' : added === combo.id ? 'Đã thêm vào giỏ ✓' : 'Thêm bộ quà vào giỏ'}</span><i aria-hidden="true">+</i>
-                  </button>
+                  <div className="pl-price"><span className="promotion-price-channel">Giá combo tại cửa hàng</span><b>{formatPrice(combo.price)}</b><del title="Tổng giá mua lẻ tại cửa hàng">{formatPrice(combo.originalPrice)}</del></div>
+                  <a className="btn btn--primary pl-btn pl-btn--consult" tabIndex={i === active ? 0 : -1} href={CONTACT.zalo} target="_blank" rel="noopener noreferrer" aria-label={`Tư vấn ${combo.title} tại cửa hàng`}>
+                    <span>Tư vấn bộ quà</span><i aria-hidden="true">↗</i>
+                  </a>
                 </div>
               ))}
             </div>
@@ -318,7 +308,6 @@ function GiftStory({ combos = CURATED_COMBOS }) {
               {list.map((combo, i) => <button type="button" key={combo.id} className={i === active ? 'is-active' : ''} onClick={() => goTo(i)} aria-label={`Xem ${combo.title}`}>0{i + 1}</button>)}
               <span className="pl-story__bar"><i /></span>
             </div>
-            <p className="pl-feedback" role="status" aria-live="polite">{message}</p>
           </div>
         </div>
       </div>
@@ -333,10 +322,10 @@ function GiftStory({ combos = CURATED_COMBOS }) {
               <h3>{combo.title}</h3>
               <p>{combo.slogan}</p>
               <ul>{(combo.items || []).map((item) => <li key={item}>{item}</li>)}</ul>
-              <div className="pl-price"><b>{formatPrice(combo.price)}</b><del>{formatPrice(combo.originalPrice)}</del></div>
-              <button type="button" className="btn btn--primary pl-btn" disabled={!isReady || !!pending} onClick={() => add(combo)}>
-                <span>{pending === combo.id ? 'Đang thêm…' : added === combo.id ? 'Đã thêm vào giỏ ✓' : 'Thêm bộ quà vào giỏ'}</span><i aria-hidden="true">+</i>
-              </button>
+              <div className="pl-price"><span className="promotion-price-channel">Giá combo tại cửa hàng</span><b>{formatPrice(combo.price)}</b><del title="Tổng giá mua lẻ tại cửa hàng">{formatPrice(combo.originalPrice)}</del></div>
+              <a className="btn btn--primary pl-btn pl-btn--consult" href={CONTACT.zalo} target="_blank" rel="noopener noreferrer" aria-label={`Tư vấn ${combo.title} tại cửa hàng`}>
+                <span>Tư vấn bộ quà</span><i aria-hidden="true">↗</i>
+              </a>
             </div>
           </article>
         ))}
@@ -356,6 +345,7 @@ function Vouchers({ vouchers }) {
   return (
     <section className="pl-vouchers" id="vouchers" aria-label="Mã ưu đãi">
       <div className="pl-head"><div><span className="skinid-editorial-kicker">MÃ ƯU ĐÃI</span><h2>Thêm một chút <em>quà nhỏ.</em></h2></div></div>
+      <p className="online-voucher-note">Mã ưu đãi dành cho đơn online, áp dụng theo điều kiện của từng mã.</p>
       <div className="pl-vouchers__grid">
         {vouchers.map((voucher) => (
           <div className="pl-voucher" key={voucher.code}>
@@ -375,8 +365,8 @@ function FinalCta() {
       <span className="pl-final__orb" aria-hidden="true" />
       <div className="pl-final__copy">
         <span className="skinid-editorial-kicker">INBOX NGAY</span>
-        <h2>Hoàn thành 3 bước rồi <em>nhắn SkinID.</em></h2>
-        <p>Đội ngũ tư vấn sẽ xác nhận, gợi ý sản phẩm phù hợp và chốt đơn với mức giá giảm 50% cho bạn. Hỗ trợ {CONTACT.hours}.</p>
+        <h2>Ưu đãi tại cửa hàng. <em>SkinID luôn sẵn sàng tư vấn.</em></h2>
+        <p>Đội ngũ tư vấn sẽ xác nhận điều kiện, địa điểm và giá ưu đãi tại cửa hàng. Giá chương trình không áp dụng cho checkout online. Hỗ trợ {CONTACT.hours}.</p>
       </div>
       <AdvisorButtons light />
     </section>
@@ -417,6 +407,7 @@ export default function PromotionsLanding() {
   return (
     <div className="pl-page">
       <Hero campaign={campaign} retailDeals={activeDeals} />
+      <StorePromotionNotice campaign={campaign} />
       <StepsStory retailDeals={activeDeals} steps={activeSteps} />
       <RetailDeals retailDeals={activeDeals} />
       <GiftStory combos={activeCombos} />

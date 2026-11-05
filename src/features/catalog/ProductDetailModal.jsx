@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { assetUrl } from '../../assets/index.js';
 import { useBodyScrollLock } from '../../shared/hooks/useBodyScrollLock.js';
 import { useCart } from '../cart/index.js';
-import { formatPrice, getProductById, productDisplayName } from './index.js';
+import { formatPrice, productDisplayName, useCatalog } from './index.js';
 
 function CloseIcon() {
   return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m6 6 12 12M18 6 6 18" /></svg>;
@@ -61,18 +61,22 @@ function Certification({ product }) {
 
 export default function ProductDetailModal() {
   const { addToCart, openCheckout } = useCart();
-  const [product, setProduct] = useState(null);
+  const { products } = useCatalog();
+  const [productId, setProductId] = useState(null);
   const [open, setOpen] = useState(false);
   const [fallbackImage, setFallbackImage] = useState(false);
   const closeTimer = useRef(null);
-  useBodyScrollLock(open, 'product-detail');
+  // Resolve the selected ID from the same full, refreshed catalog as /products.
+  // Keeping a snapshot from the summary catalog loses originalPrice and details.
+  const product = products.find(item => item.id === productId) || null;
+  useBodyScrollLock(open && Boolean(product), 'product-detail');
 
   const closeModal = useCallback(() => {
     window.closeLicenseModal?.();
     setOpen(false);
     clearTimeout(closeTimer.current);
     closeTimer.current = setTimeout(() => {
-      setProduct(null);
+      setProductId(null);
       try {
         const url = new URL(window.location.href);
         if (url.searchParams.has('detail') || url.searchParams.has('product')) {
@@ -86,11 +90,10 @@ export default function ProductDetailModal() {
   }, []);
 
   const openModal = useCallback((productId, { updateUrl = true } = {}) => {
-    const selected = getProductById(productId);
-    if (!selected) return;
+    if (!productId) return;
     clearTimeout(closeTimer.current);
     setFallbackImage(false);
-    setProduct(selected);
+    setProductId(productId);
     requestAnimationFrame(() => setOpen(true));
     if (updateUrl) {
       try {
@@ -158,11 +161,14 @@ export default function ProductDetailModal() {
             <div>
               <span className="modal-kicker">{product.line || product.brand || 'CHĂM SÓC DA'}</span>
               <h2 id="pmodal-title">{productDisplayName(product)}</h2>
-              <div className="pmodal-price">
-                <span>{formatPrice(product.price)}</span>
-                {discounted && <span id="pmodal-original-price">{formatPrice(product.originalPrice)}</span>}
-                {discounted && <span className="pmodal-discount-tag">-{discount}%</span>}
-                <span className="text-xs text-slate-500 font-medium ml-2">(Đã bao gồm VAT)</span>
+              <div className="pmodal-pricing">
+                <span className="catalog-price-channel">Giá bán online</span>
+                <div className="pmodal-price">
+                  <span className="pmodal-current-price">{formatPrice(product.price)}</span>
+                  {discounted && <del id="pmodal-original-price">{formatPrice(product.originalPrice)}</del>}
+                  {discounted && <span className="pmodal-discount-tag">-{discount}%</span>}
+                </div>
+                <p className="pmodal-tax-note">Đã bao gồm VAT</p>
               </div>
               <p>{uses}</p>
               <div className="spec">

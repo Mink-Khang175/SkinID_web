@@ -32,6 +32,7 @@ export const DEFAULT_SYSTEM_SETTINGS = {
 
 export const DEFAULT_CAMPAIGN = {
   id: 'twon_dvah_flashsale_2026',
+  salesChannel: 'store',
   title: "Đại Tiệc Dưỡng Trắng & Hương Thơm — TWON x D'VAH",
   subtitle: 'Ưu Đãi Độc Quyền Đến 50% & Quà Tặng Nàng Thơ',
   badge: 'SIÊU SALE ĐẶC BIỆT',
