@@ -61,7 +61,7 @@ jobs:
 
       - name: Prepare GitHub Pages bundle
         run: |
-          cp favicon.png favicon-32.png dist/
+          cp favicon.png favicon-32.png favicon.ico dist/
           cp dist/index.html dist/404.html
           touch dist/.nojekyll
           ls -1 dist
