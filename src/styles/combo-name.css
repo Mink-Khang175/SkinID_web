@@ -1,0 +1,46 @@
+/* Combo names (Nàng Xinh, Nàng Quyến Rũ, Nàng Thơm): soft script lettering that echoes the campaign banner.
+   Scripts are an intentional accent here only; headings elsewhere stay Outfit. */
+:root { --skinid-font-script: "Dancing Script", "Segoe Script", "Brush Script MT", cursive; }
+
+.combo-name { --c1: #d4546d; --c2: #f08aa3; position: relative; display: inline-flex; align-items: flex-start; gap: .12em; padding: .04em .1em .22em 0; }
+.combo-name[data-tone="berry"] { --c1: #a8467a; --c2: #e07fa8; }
+.combo-name[data-tone="amber"] { --c1: #bf5e55; --c2: #eaa07e; }
+
+.combo-name__text { font-family: var(--skinid-font-script); font-weight: 700; font-size: 1.38em; line-height: 1.08; letter-spacing: 0; padding-right: .06em; color: var(--c1); text-shadow: 0 .05em .18em rgba(224, 109, 129, .16); }
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .combo-name__text { background: linear-gradient(100deg, var(--c1) 0%, var(--c2) 55%, var(--c1) 100%) 0 0 / 220% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; text-shadow: none; filter: drop-shadow(0 .05em .12em rgba(224, 109, 129, .2)); transition: background-position 1.2s cubic-bezier(.16, 1, .3, 1); }
+}
+.combo-name:hover .combo-name__text { background-position: 100% 0; }
+
+.combo-name__heart { flex: none; width: .34em; height: .31em; margin-top: .26em; fill: var(--c2); filter: drop-shadow(0 .05em .08em rgba(224, 109, 129, .3)); transform-origin: 50% 70%; animation: combo-heart 3.2s ease-in-out infinite; }
+
+/* thin hand-drawn style underline that fades out */
+.combo-name::after { content: ""; position: absolute; left: .08em; bottom: 0; width: 70%; height: max(2px, .05em); border-radius: 99px; background: linear-gradient(90deg, var(--c1), var(--c2) 60%, transparent); opacity: .6; transform-origin: left center; transition: transform .9s cubic-bezier(.16, 1, .3, 1) .25s; }
+
+/* in the scrollytelling slides the name is written in when the slide becomes active */
+.pl-story__slide .combo-name__text,
+.promo-story__slide .combo-name__text { clip-path: inset(-.3em -.2em -.4em -.1em); transition: clip-path 1s cubic-bezier(.16, 1, .3, 1) .15s, background-position 1.2s cubic-bezier(.16, 1, .3, 1); }
+.pl-story__slide:not(.is-active) .combo-name__text,
+.promo-story__slide:not(.is-active) .combo-name__text { clip-path: inset(-.3em 100% -.4em -.1em); }
+.pl-story__slide:not(.is-active) .combo-name::after,
+.promo-story__slide:not(.is-active) .combo-name::after { transform: scaleX(0); }
+.pl-story__slide:not(.is-active) .combo-name__heart,
+.promo-story__slide:not(.is-active) .combo-name__heart { opacity: 0; transform: scale(.4); }
+.pl-story__slide .combo-name__heart,
+.promo-story__slide .combo-name__heart { transition: opacity .5s ease .7s, transform .6s cubic-bezier(.34, 1.56, .64, 1) .7s; }
+
+/* sizes: the parent heading sets the base size, scripts read smaller so give them a little more room */
+.pl-page .pl-story__slide h3,
+.promo-stage .promo-story__slide h3 { line-height: 1.1; }
+.pl-page .pl-gift-card h3 { font-size: 1.9rem; }
+.promo-combo__title { font-size: clamp(1.7rem, 2.2vw, 2.1rem); }
+
+@keyframes combo-heart { 0%, 100% { transform: scale(1); } 12% { transform: scale(1.18); } 24% { transform: scale(1); } 36% { transform: scale(1.1); } 48% { transform: scale(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .combo-name__heart { animation: none; }
+  .combo-name__text, .combo-name::after, .combo-name__heart { transition: none !important; }
+  .pl-story__slide:not(.is-active) .combo-name__text, .promo-story__slide:not(.is-active) .combo-name__text { clip-path: none; }
+  .pl-story__slide:not(.is-active) .combo-name::after, .promo-story__slide:not(.is-active) .combo-name::after { transform: none; }
+  .pl-story__slide:not(.is-active) .combo-name__heart, .promo-story__slide:not(.is-active) .combo-name__heart { opacity: 1; transform: none; }
+}

@@ -6,6 +6,7 @@ import { CURATED_COMBOS, RETAIL_50_DEALS } from '../../data/promotions.js';
 import { COMPANY_INFO } from '../../data/companyInfo.js';
 import { assetUrl } from '../../assets/index.js';
 import StorePromotionNotice from './StorePromotionNotice.jsx';
+import ComboName from './ComboName.jsx';
 
 /* Contact channels used to confirm the 50% programme. The website cannot verify the 3 social steps,
    so retail 50% items never go to the cart: customers are sent to an advisor instead. Add a Messenger link here when available. */
@@ -287,7 +288,7 @@ function GiftStory({ combos = CURATED_COMBOS }) {
               {list.map((combo, i) => (
                 <div key={combo.id} className={`pl-story__slide${i === active ? ' is-active' : ''}`} aria-hidden={i !== active}>
                   <span className="pl-eyebrow">{combo.subtitle}</span>
-                  <h3>{combo.title}</h3>
+                  <h3><ComboName combo={combo} /></h3>
                   <p>{combo.slogan}</p>
                   <div className="pl-story__items">
                     {(combo.products || []).map((product) => (
@@ -319,7 +320,7 @@ function GiftStory({ combos = CURATED_COMBOS }) {
             <div className="pl-gift-card__img"><img src={assetUrl(combo.image)} alt={`Bộ quà ${combo.title}`} loading="lazy" /><span>0{index + 1}</span><em>Tiết kiệm {combo.discountPercent}%</em></div>
             <div className="pl-gift-card__body">
               <span className="pl-eyebrow">{combo.subtitle}</span>
-              <h3>{combo.title}</h3>
+              <h3><ComboName combo={combo} /></h3>
               <p>{combo.slogan}</p>
               <ul>{(combo.items || []).map((item) => <li key={item}>{item}</li>)}</ul>
               <div className="pl-price"><span className="promotion-price-channel">Giá combo tại cửa hàng</span><b>{formatPrice(combo.price)}</b><del title="Tổng giá mua lẻ tại cửa hàng">{formatPrice(combo.originalPrice)}</del></div>

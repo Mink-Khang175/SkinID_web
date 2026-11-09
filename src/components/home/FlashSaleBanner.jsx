@@ -4,6 +4,7 @@ import { useCampaign } from '../../features/content/index.js';
 import { CURATED_COMBOS, RETAIL_50_DEALS, CAMPAIGN_STEPS } from '../../data/promotions.js';
 import { assetUrl } from '../../assets/index.js';
 import StorePromotionNotice from '../commerce/StorePromotionNotice.jsx';
+import ComboName from '../commerce/ComboName.jsx';
 
 const PROMO_URL = '/khuyen-mai';
 const TICKER = ['LIKE & SHARE', 'GIẢM 50% TẠI CỬA HÀNG', 'TWON', "D'VAH", 'SẢN PHẨM CHÍNH HÃNG', 'YÊU THƯƠNG BẢN THÂN'];
@@ -92,7 +93,7 @@ function ComboCard({ combo, index }) {
       </span>
       <span className="promo-combo__body">
         <span className="promo-eyebrow">{combo.subtitle}</span>
-        <strong className="promo-combo__title">{combo.title}</strong>
+        <strong className="promo-combo__title"><ComboName combo={combo} /></strong>
         <span className="promo-combo__slogan">{combo.slogan}</span>
         <span className="promo-combo__thumbs" aria-hidden="true">
           {combo.products.map((product) => (
@@ -204,7 +205,7 @@ function ComboStory({ combos = CURATED_COMBOS }) {
             {combos.map((combo, i) => (
               <div key={combo.id} className={`promo-story__slide${i === active ? ' is-active' : ''}`} aria-hidden={i !== active}>
                 <span className="promo-eyebrow">{combo.subtitle}</span>
-                <h3>{combo.title}</h3>
+                <h3><ComboName combo={combo} /></h3>
                 <p>{combo.slogan}</p>
                 <ul>{(combo.items || []).map((item) => <li key={item}>{item}</li>)}</ul>
                 <span className="promo-price"><span className="promotion-price-channel">Giá combo tại cửa hàng</span><b>{formatPrice(combo.price)}</b><del>{formatPrice(combo.originalPrice)}</del></span>

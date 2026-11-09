@@ -307,3 +307,4 @@ Giá, mã và điều kiện khuyến mãi giữ nguyên dữ liệu hiện tạ
 Chủ quản yêu cầu khu vực sản phẩm nổi bật chuyển sang vòng cung ngang, nội dung bên trái và ảnh chính lớn bên phải, ba ảnh phụ có thể chọn. Quyết định này thay cho mô tả giữ nguyên carousel sản phẩm ở các mục lịch sử; banner đầu trang và kiểu nút gốc tiếp tục giữ.
 
 Giá combo/giảm 50% là kênh cửa hàng. Dùng nhãn kênh rõ ràng bên cạnh giá và CTA tư vấn; không đưa giá này vào checkout online. Chi tiết tại [giá và ưu đãi](../content/store-promotions.md).
+- Tên combo (Nàng Xinh, Nàng Quyến Rũ, Nàng Thơm): `components/commerce/ComboName.jsx` + `styles/combo-name.css`. Chữ script Dancing Script (token `--skinid-font-script`, tải ở `index.html`) là ngoại lệ có chủ đích, chỉ dùng cho tên combo để gần với banner chiến dịch; mỗi combo một tông pastel (hồng, mận, hồng-vàng), có trái tim nhịp nhẹ và gạch chân mảnh; trong scrollytelling tên được "viết ra" khi slide active. Không dùng script cho tiêu đề khác.
