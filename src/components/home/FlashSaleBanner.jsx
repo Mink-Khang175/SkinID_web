@@ -200,7 +200,7 @@ function ComboStory({ combos = CURATED_COMBOS }) {
           <span className="promo-story__saving"><small>TIẾT KIỆM</small><b>{current.discountPercent}%</b></span>
         </div>
         <div className="promo-story__panel">
-          <span className="skinid-editorial-kicker">THE GIFT EDIT · {current.code}</span>
+          <span className="skinid-editorial-kicker">{current.code}</span>
           <div className="promo-story__slides">
             {combos.map((combo, i) => (
               <div key={combo.id} className={`promo-story__slide${i === active ? ' is-active' : ''}`} aria-hidden={i !== active}>

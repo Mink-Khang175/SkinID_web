@@ -22,6 +22,7 @@ import './styles/promo-landing.css';
 import './styles/combo-name.css';
 import './styles/routine-orbit.css';
 import './styles/promotion-scope.css';
+import './styles/hero-typography.css';
 import { initializeAnalytics, installLegacyFirebaseBridge } from './infrastructure/firebase/index.js';
 import { installLegacyRuntimeConfig } from './shared/config/runtime.js';
 

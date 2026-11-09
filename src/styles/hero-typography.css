@@ -1,0 +1,60 @@
+/* Hero headings: lighter weight, looser leading so Vietnamese diacritics never touch,
+   a gradient accent phrase with a hairline underline, and a short rule before the lead copy. */
+.home-refresh .hero-slide-copy {
+  --hero-accent-soft: #ef7f97;
+  --hero-ink: #33262b;
+}
+.home-refresh .hero-slide--products .hero-slide-copy { --hero-accent-soft: #4f74c9; --hero-ink: #1c2447; }
+.home-refresh .hero-slide--body .hero-slide-copy { --hero-accent-soft: #f77eae; }
+.home-refresh .hero-slide--fragrance .hero-slide-copy { --hero-accent-soft: #c99c74; --hero-ink: #3a2a20; }
+
+.home-refresh .hero-carousel .hero-slide .hero-slide-copy :is(h1, h2) {
+  color: var(--hero-ink);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -.032em;
+  text-wrap: balance;
+}
+
+.home-refresh .hero-carousel .hero-slide .hero-slide-copy .hero-copy-accent {
+  font-weight: 700;
+  color: var(--hero-accent);
+  background: none;
+  text-decoration: underline;
+  text-decoration-color: var(--hero-line);
+  text-decoration-thickness: 3px;
+  text-decoration-skip-ink: none;
+  text-underline-offset: .14em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .home-refresh .hero-carousel .hero-slide .hero-slide-copy .hero-copy-accent {
+    background-image: linear-gradient(100deg, var(--hero-accent) 8%, var(--hero-accent-soft) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+}
+
+/* short rule between heading and lead copy */
+.home-refresh .hero-carousel .hero-slide .hero-slide-copy > p { color: #5b5256; }
+.home-refresh .hero-carousel .hero-slide .hero-slide-copy > p::before {
+  content: "";
+  display: block;
+  width: 44px;
+  height: 3px;
+  margin-bottom: 14px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--hero-accent), transparent);
+  opacity: .7;
+}
+@media (min-width: 1101px) {
+  .home-refresh .hero-carousel .hero-slide[data-brand-banner] .hero-slide-copy > p::before { width: 3.2vw; height: max(3px, .22vw); margin-bottom: .9vw; }
+}
+
+@media (max-width: 760px) {
+  .home-refresh .hero-carousel .hero-slide .hero-actions { flex-wrap: wrap; }
+  .home-refresh .hero-carousel .hero-slide .hero-actions .btn { white-space: nowrap; }
+}
