@@ -1,6 +1,14 @@
 import { assetUrl } from '../../assets/index.js';
 import { openConsultationDialog } from '../../shared/events/storefrontDialogs.js';
 
+function HeroSparkles() {
+  return (
+    <span className="hero-sparkles" aria-hidden="true">
+      <i /><i /><i /><i /><i />
+    </span>
+  );
+}
+
 export default function HeroBanner() {
   return (
     <section className="hero-carousel-section">
@@ -16,6 +24,7 @@ export default function HeroBanner() {
                 <button className="btn btn--secondary" type="button" onClick={openConsultationDialog}>Tư vấn nhanh</button>
               </div>
               <small>Kết quả mang tính tham khảo, không thay thế chẩn đoán y khoa.</small>
+              <HeroSparkles />
             </div>
             <div className="scan-banner-media"><img src={assetUrl('/images/banners/hero-scan-ai.jpg')} alt="Minh họa tính năng soi da AI SkinID" /></div>
           </div>
@@ -25,12 +34,13 @@ export default function HeroBanner() {
           <div className="hero-slide-inner">
             <div className="hero-slide-copy">
               <span className="hero-label">RILASTIL · DƯỢC MỸ PHẨM TỪ Ý</span>
-              <h1 className="leading-[1.05]">Dịu dàng<br />với da.<br /><span className="hero-copy-accent">Yêu thương<br />chính mình.</span></h1>
+              <h1 className="leading-[1.05]">Dịu dàng với da.<br /><span className="hero-copy-accent">Yêu thương<br />chính mình.</span></h1>
               <p>Sản phẩm rõ nguồn gốc, thông tin đầy đủ và phân loại dễ tìm theo từng nhu cầu.</p>
               <div className="hero-actions">
                 <a className="btn btn--primary" href="/products">Mua sắm ngay</a>
                 <a className="btn btn--secondary" href="/products">Xem danh mục</a>
               </div>
+              <HeroSparkles />
             </div>
             <div className="hero-brand-banner">
               <img src={assetUrl('/images/banners/Rilastil_banner.png')} alt="Bộ sản phẩm Rilastil trên bục kính giữa nền xanh dịu" />
@@ -43,11 +53,12 @@ export default function HeroBanner() {
           <div className="hero-slide-inner">
             <div className="hero-slide-copy">
               <span className="hero-label">TWON · BODY RITUAL</span>
-              <h2 className="leading-[1.05]">Chăm sóc<br />cơ thể.<br /><span className="hero-copy-accent">Nâng niu mỗi<br />ngày</span></h2>
+              <h2 className="leading-[1.05]">Chăm sóc cơ thể.<br /><span className="hero-copy-accent">Nâng niu<br />mỗi ngày</span></h2>
               <p>Routine dưỡng thể mềm mịn và lưu hương nhẹ nhàng cho trải nghiệm chăm sóc trọn vẹn.</p>
               <div className="hero-actions">
                 <button className="btn btn--primary" type="button" data-hero-brand="TWON">Mua TWON <span aria-hidden="true">→</span></button>
               </div>
+              <HeroSparkles />
             </div>
             <div className="hero-brand-banner">
               <img src={assetUrl('/images/banners/Bộ mỹ phẩm TWON giữa sắc hoa anh đào.png')} alt="Bộ sản phẩm TWON giữa hoa anh đào và nền hồng" />
@@ -60,11 +71,12 @@ export default function HeroBanner() {
           <div className="hero-slide-inner">
             <div className="hero-slide-copy">
               <span className="hero-label">D'VAH · SIGNATURE SCENT</span>
-              <h2 className="leading-[1.05]">Chạm vào<br />hương.<br /><span className="hero-copy-accent">Lưu lại dấu ấn</span></h2>
+              <h2 className="leading-[1.05]">Chạm vào hương.<br /><span className="hero-copy-accent">Lưu lại dấu ấn</span></h2>
               <p>Năm cá tính hương thơm nhỏ gọn, dễ mang theo và đủ khác biệt để kể câu chuyện riêng.</p>
               <div className="hero-actions">
                 <button className="btn btn--primary" type="button" data-hero-brand="DVAH">Khám phá D'VAH</button>
               </div>
+              <HeroSparkles />
             </div>
             <div className="hero-brand-banner">
               <img src={assetUrl('/images/banners/Dvah_banner.png')} alt="Bộ nước hoa D’VAH cùng hoa hồng, hoa sen và hoa anh đào" />
