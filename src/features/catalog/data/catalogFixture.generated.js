@@ -54,7 +54,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Chai",
     "sourceName": "CHAI XỊT LÀM SẠCH, GIẢM MỤN",
-    "productCode": "I38V00260"
+    "productCode": "I38V00260",
+    "s3ProductId": 1808964
   },
   {
     "id": "rilastil-2101",
@@ -111,7 +112,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Lọ",
     "sourceName": "SERUM RETINOL TÁI TẠO VÀ CHỐNG LÃO HÓA",
-    "productCode": "I22V02110"
+    "productCode": "I22V02110",
+    "s3ProductId": 1808965
   },
   {
     "id": "rilastil-2098",
@@ -161,7 +163,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Chai",
     "sourceName": "SỮA RỬA MẶT TẨY TRANG",
-    "productCode": "I14V01770"
+    "productCode": "I14V01770",
+    "s3ProductId": 1808970
   },
   {
     "id": "rilastil-2097",
@@ -211,7 +214,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Chai",
     "sourceName": "NƯỚC HOA HỒNG",
-    "productCode": "I14V01780"
+    "productCode": "I14V01780",
+    "s3ProductId": 1808971
   },
   {
     "id": "rilastil-2096",
@@ -261,7 +265,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Chai",
     "sourceName": "NƯỚC CÂN BẰNG ĐỘ ẨM",
-    "productCode": "I14V01720"
+    "productCode": "I14V01720",
+    "s3ProductId": 1808973
   },
   {
     "id": "rilastil-2095",
@@ -319,7 +324,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Hộp",
     "sourceName": "KEM CẤP ẨM DÀNH CHO DA MỤN",
-    "productCode": "I38V00220"
+    "productCode": "I38V00220",
+    "s3ProductId": 1808981
   },
   {
     "id": "rilastil-2093",
@@ -375,7 +381,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Tuýp",
     "sourceName": "KEM TRỊ NÁM VÀ LÀM ĐỀU MÀU DA",
-    "productCode": "I36V00090"
+    "productCode": "I36V00090",
+    "s3ProductId": 1808983
   },
   {
     "id": "rilastil-2092",
@@ -431,7 +438,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Tuýp",
     "sourceName": "KEM CẤP ẨM CHỐNG MẨN NGỨA",
-    "productCode": "I29C01480"
+    "productCode": "I29C01480",
+    "s3ProductId": 1808995
   },
   {
     "id": "rilastil-2089",
@@ -481,7 +489,8 @@ export const CATALOG_FIXTURE = [
     "barcode": "NA",
     "unit": "Chai",
     "sourceName": "DUNG DỊCH TẨY TRANG",
-    "productCode": "I14V01570"
+    "productCode": "I14V01570",
+    "s3ProductId": 1808967
   },
   {
     "id": "rilastil-2087",
@@ -531,7 +540,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Chai",
     "sourceName": "DUNG DỊCH TẨY TRANG",
-    "productCode": "I14V03030"
+    "productCode": "I14V03030",
+    "s3ProductId": 1808968
   },
   {
     "id": "rilastil-2085",
@@ -588,7 +598,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Hộp",
     "sourceName": "MẶT NẠ DƯỠNG ẨM",
-    "productCode": "I13V01940"
+    "productCode": "I13V01940",
+    "s3ProductId": 1808988
   },
   {
     "id": "rilastil-2070",
@@ -644,7 +655,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Tuýp",
     "sourceName": "KEM CẤP ẨM CHUYÊN SÂU 72H",
-    "productCode": "I29C01560"
+    "productCode": "I29C01560",
+    "s3ProductId": 1808994
   },
   {
     "id": "rilastil-2067",
@@ -700,7 +712,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Hộp",
     "sourceName": "KEM CẤP ẨM CHUYÊN SÂU 72H",
-    "productCode": "I13V02560"
+    "productCode": "I13V02560",
+    "s3ProductId": 1808993
   },
   {
     "id": "rilastil-1942",
@@ -756,7 +769,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Hộp",
     "sourceName": "KEM DƯỠNG ẨM, CHỐNG NHĂN, THÂM VÙNG MẮT",
-    "productCode": "I13V02530"
+    "productCode": "I13V02530",
+    "s3ProductId": 1808992
   },
   {
     "id": "rilastil-1939",
@@ -806,7 +820,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Hộp",
     "sourceName": "KEM CHỐNG RẠN TRONG THỜI GIAN MANG THAI HOẶC THAY ĐỔI CÂN NẶNG, CHIỀU CAO ĐỘT NGỘT",
-    "productCode": "I27V03510"
+    "productCode": "I27V03510",
+    "s3ProductId": 1809002
   },
   {
     "id": "rilastil-1876",
@@ -862,7 +877,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Chai",
     "sourceName": "KEM CẤP ẨM CHỐNG MẨN NGỨA",
-    "productCode": "I34V10180"
+    "productCode": "I34V10180",
+    "s3ProductId": 1808997
   },
   {
     "id": "rilastil-1872",
@@ -917,7 +933,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Chai",
     "sourceName": "GEL RỬA MẶT TẮM TOÀN THÂN",
-    "productCode": "I34V10300"
+    "productCode": "I34V10300",
+    "s3ProductId": 1809000
   },
   {
     "id": "rilastil-1871",
@@ -972,7 +989,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Chai",
     "sourceName": "GEL RỬA MẶT TẮM TOÀN THÂN",
-    "productCode": "I34V10110"
+    "productCode": "I34V10110",
+    "s3ProductId": 1808998
   },
   {
     "id": "rilastil-1868",
@@ -1028,7 +1046,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Tuýp",
     "sourceName": "KEM CẤP ẨM CHỐNG MẨN NGỨA",
-    "productCode": "I34V10170"
+    "productCode": "I34V10170",
+    "s3ProductId": 1808996
   },
   {
     "id": "rilastil-1867",
@@ -1083,7 +1102,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Tuýp",
     "sourceName": "GEL RỬA MẶT TẮM TOÀN THÂN",
-    "productCode": "I34V10260"
+    "productCode": "I34V10260",
+    "s3ProductId": 1808999
   },
   {
     "id": "rilastil-1864",
@@ -1136,7 +1156,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Hộp",
     "sourceName": "KEM CHỐNG NẮNG DÀNH CHO DA NHẠY CẢM",
-    "productCode": "I28V07320"
+    "productCode": "I28V07320",
+    "s3ProductId": 1809008
   },
   {
     "id": "rilastil-1860",
@@ -1191,7 +1212,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Hộp",
     "sourceName": "KEM CHỐNG NẮNG GIỮ ẨM, CHỐNG NƯỚC",
-    "productCode": "I28V07280"
+    "productCode": "I28V07280",
+    "s3ProductId": 1809007
   },
   {
     "id": "rilastil-1857",
@@ -1246,7 +1268,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Hộp",
     "sourceName": "KEM CHỐNG NẮNG CẤP ẨM DẠNG SỮA",
-    "productCode": "I28V06900"
+    "productCode": "I28V06900",
+    "s3ProductId": 1809004
   },
   {
     "id": "rilastil-1856",
@@ -1302,7 +1325,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Hộp",
     "sourceName": "KEM CHỐNG NẮNG DÀNH CHO DA MỤN",
-    "productCode": "I28V07010"
+    "productCode": "I28V07010",
+    "s3ProductId": 1809005
   },
   {
     "id": "rilastil-1853",
@@ -1356,7 +1380,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Hộp",
     "sourceName": "DUNG DỊCH TẨY TẾ BÀO CHẾT DÀNH CHO DA MỤN",
-    "productCode": "I38V00140"
+    "productCode": "I38V00140",
+    "s3ProductId": 1808975
   },
   {
     "id": "rilastil-1844",
@@ -1410,7 +1435,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Hộp",
     "sourceName": "DUNG DỊCH TẨY TẾ BÀO CHẾT DÀNH CHO DA MỤN",
-    "productCode": "I29C14530"
+    "productCode": "I29C14530",
+    "s3ProductId": 1808974
   },
   {
     "id": "rilastil-1831",
@@ -1464,7 +1490,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Hộp",
     "sourceName": "GEL DƯỠNG ẨM DÀNH CHO DA MỤN",
-    "productCode": "I38V00150"
+    "productCode": "I38V00150",
+    "s3ProductId": 1808980
   },
   {
     "id": "rilastil-1810",
@@ -1521,7 +1548,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Chai",
     "sourceName": "SỬA RỬA MẶT DẠNG GEL CHO DA MỤN",
-    "productCode": "I38V00050"
+    "productCode": "I38V00050",
+    "s3ProductId": 1808978
   },
   {
     "id": "rilastil-1805",
@@ -1578,7 +1606,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Tuýp",
     "sourceName": "SỬA RỬA MẶT DẠNG GEL CHO DA MỤN",
-    "productCode": "I38V00090"
+    "productCode": "I38V00090",
+    "s3ProductId": 1808979
   },
   {
     "id": "rilastil-1774",
@@ -1634,7 +1663,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Tuýp",
     "sourceName": "SỮA RỬA MẶT",
-    "productCode": "I13V02430"
+    "productCode": "I13V02430",
+    "s3ProductId": 1808991
   },
   {
     "id": "rilastil-1566",
@@ -1688,7 +1718,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Chai",
     "sourceName": "SERUM TÁI TẠO VÀ CHỐNG LÃO HÓA",
-    "productCode": "I16V05000"
+    "productCode": "I16V05000",
+    "s3ProductId": 1808986
   },
   {
     "id": "rilastil-1564",
@@ -1747,7 +1778,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Hộp",
     "sourceName": "KEM TÁI TẠO VÀ CHỐNG LÃO HÓA",
-    "productCode": "I16V05010"
+    "productCode": "I16V05010",
+    "s3ProductId": 1808987
   },
   {
     "id": "rilastil-1562",
@@ -1801,7 +1833,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Hộp",
     "sourceName": "KEM CHỐNG NẮNG NGĂN NGỪA LÃO HOÁ",
-    "productCode": "I28V07130"
+    "productCode": "I28V07130",
+    "s3ProductId": 1809006
   },
   {
     "id": "rilastil-1122",
@@ -1851,7 +1884,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Chai",
     "sourceName": "DUNG DỊCH TẨY TRANG",
-    "productCode": "I14V03060"
+    "productCode": "I14V03060",
+    "s3ProductId": 1808969
   },
   {
     "id": "rilastil-1528",
@@ -1907,7 +1941,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Hộp",
     "sourceName": "KEM GIẢM MỤN 8H & GIẢM THÂM MỤN",
-    "productCode": "I38V00210"
+    "productCode": "I38V00210",
+    "s3ProductId": 1808976
   },
   {
     "id": "rilastil-1524",
@@ -1964,7 +1999,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Chai",
     "sourceName": "BỌT RỬA MẶT DÀNH CHO DA MỤN",
-    "productCode": "I38V00010"
+    "productCode": "I38V00010",
+    "s3ProductId": 1808977
   },
   {
     "id": "rilastil-1128",
@@ -2014,7 +2050,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Hộp",
     "sourceName": "KEM CẤP ẨM, TĂNG ĐỘ ĐÀN HỒI DA, GIẢM VIÊM GIẢM SẸO",
-    "productCode": "I15V03570"
+    "productCode": "I15V03570",
+    "s3ProductId": 1809001
   },
   {
     "id": "rilastil-1125",
@@ -2071,7 +2108,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Hộp",
     "sourceName": "MẶT NẠ DƯỠNG ẨM",
-    "productCode": "I13V02070"
+    "productCode": "I13V02070",
+    "s3ProductId": 1808989
   },
   {
     "id": "rilastil-1120",
@@ -2121,7 +2159,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Hộp",
     "sourceName": "KEM TẨY DA CHẾT",
-    "productCode": "I14V01560"
+    "productCode": "I14V01560",
+    "s3ProductId": 1808966
   },
   {
     "id": "rilastil-537",
@@ -2176,7 +2215,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Chai",
     "sourceName": "GEL RỬA MẶT DÀNH CHO DA NHẠY CẢM, DA DẦU MỤN VÀ DA HỖN HỢP",
-    "productCode": "I14V01710"
+    "productCode": "I14V01710",
+    "s3ProductId": 1808972
   },
   {
     "id": "rilastil-525",
@@ -2232,7 +2272,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Lọ",
     "sourceName": "TINH CHẤT DƯỠNG ẨM CHUYÊN SÂU",
-    "productCode": "I13V02120"
+    "productCode": "I13V02120",
+    "s3ProductId": 1808990
   },
   {
     "id": "rilastil-520",
@@ -2284,7 +2325,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Lọ",
     "sourceName": "TINH CHẤT VITAMIN C",
-    "productCode": "I59V00000"
+    "productCode": "I59V00000",
+    "s3ProductId": 1808985
   },
   {
     "id": "rilastil-499",
@@ -2339,7 +2381,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Lọ",
     "sourceName": "TINH CHẤT TRỊ NÁM VÀ LÀM ĐỀU MÀU DA",
-    "productCode": "I36V00100"
+    "productCode": "I36V00100",
+    "s3ProductId": 1808984
   },
   {
     "id": "rilastil-486",
@@ -2394,7 +2437,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Lọ",
     "sourceName": "DUNG DỊCH TẨY TẾ BÀO CHẾT CHUYÊN SÂU",
-    "productCode": "I36V00080"
+    "productCode": "I36V00080",
+    "s3ProductId": 1808982
   },
   {
     "id": "twon-body-lotion",
@@ -2449,7 +2493,8 @@ export const CATALOG_FIXTURE = [
     "licenseUrl": "https://drive.google.com/file/d/1Dwfry5VcSvbXewMwbVhRWmK6yJLJuInx/view?usp=drivesdk",
     "unit": "Tuýp",
     "sourceName": "Kem body Lotion",
-    "productCode": "TWON-BODY-LOTION-200ML"
+    "productCode": "TWON-BODY-LOTION-200ML",
+    "s3ProductId": 1800406
   },
   {
     "id": "twon-kem-u-trang",
@@ -2503,7 +2548,8 @@ export const CATALOG_FIXTURE = [
     "licenseUrl": "https://drive.google.com/file/d/1cicNb4LL_FhSX1NccsU4sq7CcU1b7y_5/view?usp=drivesdk",
     "unit": "Tuýp",
     "sourceName": "Kem ủ trắng",
-    "productCode": "TWON-U-TRANG-250ML"
+    "productCode": "TWON-U-TRANG-250ML",
+    "s3ProductId": 1800407
   },
   {
     "id": "twon-sua-tam",
@@ -2556,7 +2602,8 @@ export const CATALOG_FIXTURE = [
     "licenseUrl": "https://drive.google.com/file/d/1x0F1I4igJtpi3bdm_cQ4hvoxWW_PLvlA/view?usp=drivesdk",
     "unit": "Tuýp",
     "sourceName": "Sữa tắm TWON",
-    "productCode": "TWON-SUA-TAM-450ML"
+    "productCode": "TWON-SUA-TAM-450ML",
+    "s3ProductId": 1800408
   },
   {
     "id": "dvah-sarika",
@@ -2608,7 +2655,8 @@ export const CATALOG_FIXTURE = [
     "licenseUrl": "https://drive.google.com/file/d/1u8JJBCPHyVbAo-oDYcesWuEl0ychbKvS/view?usp=drivesdk",
     "unit": "Hộp",
     "sourceName": "Nước hoa Sarika",
-    "productCode": "DVAH-SARIKA-10ML"
+    "productCode": "DVAH-SARIKA-10ML",
+    "s3ProductId": 1800411
   },
   {
     "id": "dvah-kamal",
@@ -2660,7 +2708,8 @@ export const CATALOG_FIXTURE = [
     "licenseUrl": "https://drive.google.com/file/d/1GmX2S0moCZvVPHIo7V0guMH5HvfSGvlb/view?usp=drivesdk",
     "unit": "Hộp",
     "sourceName": "Nước hoa Kamal",
-    "productCode": "DVAH-KAMAL-10ML"
+    "productCode": "DVAH-KAMAL-10ML",
+    "s3ProductId": 1800409
   },
   {
     "id": "dvah-rakta",
@@ -2712,7 +2761,8 @@ export const CATALOG_FIXTURE = [
     "licenseUrl": "https://drive.google.com/file/d/1ki3o5W7Hu9k56TzdJZ06E0qfsllUtvTO/view?usp=drivesdk",
     "unit": "Hộp",
     "sourceName": "Nước hoa Rakta",
-    "productCode": "DVAH-RAKTA-10ML"
+    "productCode": "DVAH-RAKTA-10ML",
+    "s3ProductId": 1800413
   },
   {
     "id": "dvah-tanmaya",
@@ -2764,7 +2814,8 @@ export const CATALOG_FIXTURE = [
     "licenseUrl": "https://drive.google.com/file/d/17O4dFEZNuZV7YJvUi72JawqmGt-7-MpY/view?usp=drivesdk",
     "unit": "Hộp",
     "sourceName": "Nước hoa Tamaya",
-    "productCode": "DVAH-TANMAYA-10ML"
+    "productCode": "DVAH-TANMAYA-10ML",
+    "s3ProductId": 1800412
   },
   {
     "id": "dvah-malini",
@@ -2816,7 +2867,8 @@ export const CATALOG_FIXTURE = [
     "licenseUrl": "https://drive.google.com/file/d/1RT-yO75h1yizNDlpSN444uMOjshpbSYr/view?usp=drivesdk",
     "unit": "Hộp",
     "sourceName": "Nước hoa Malani",
-    "productCode": "DVAH-MALINI-10ML"
+    "productCode": "DVAH-MALINI-10ML",
+    "s3ProductId": 1800410
   },
   {
     "id": "rilastil-2110",
@@ -2875,7 +2927,8 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Tuýp",
     "sourceName": "KEM PHỤC HỒI, LÀM DỊU VÀ BẢO VỆ DA",
-    "productCode": "I59V00050"
+    "productCode": "I59V00050",
+    "s3ProductId": 1808963
   },
   {
     "id": "rilastil-stretch-marks-75ml",
@@ -2919,6 +2972,7 @@ export const CATALOG_FIXTURE = [
     "expiry": "36 tháng kể từ NSX và 8-12 tháng sau khi mở nắp",
     "unit": "Hộp",
     "sourceName": "KEM CHỐNG RẠN TRONG THỜI GIAN MANG THAI HOẶC THAY ĐỔI CÂN NẶNG, CHIỀU CAO ĐỘT NGỘT",
-    "productCode": "I27V31950"
+    "productCode": "I27V31950",
+    "s3ProductId": 1809003
   }
 ];

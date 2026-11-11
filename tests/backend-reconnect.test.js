@@ -26,9 +26,10 @@ test('POS mapping rejects placeholder row IDs and does not treat a pending trans
   const order = { id: 'order-1', paymentMethod: 'bank_transfer', paymentStatus: 'pending_transfer', total: 500000, items: [{ productId: 'p1', price: 500000, quantity: 1 }] };
   assert.throws(() => mapOrderToS3Payload(order, {}), /ánh xạ mã S3/);
   order.items[0].s3ProductId = 123;
-  assert.equal(mapOrderToS3Payload(order, {}).PreOrder.CustomerReceived, 0);
+  assert.throws(() => mapOrderToS3Payload(order, {}), /mã khách hàng S3/);
+  assert.equal(mapOrderToS3Payload(order, {}, 922848).PreOrder.CustomerReceived, 0);
   order.paymentStatus = 'paid';
-  assert.equal(mapOrderToS3Payload(order, {}).PreOrder.CustomerReceived, 500000);
+  assert.equal(mapOrderToS3Payload(order, {}, 922848).PreOrder.CustomerReceived, 500000);
 });
 
 function memoryOutbox() {

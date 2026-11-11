@@ -46,6 +46,8 @@ export function getS3Config(env = {}) {
     password: env.S3_PASSWORD || '',
     branchId: Number(env.S3_BRANCH_ID || 9099),
     cashierId: Number(env.S3_CASHIER_ID || 16614),
+    paymentOptionCash: Number(env.S3_PAYMENT_OPTION_CASH || 48796),
+    paymentOptionTransfer: Number(env.S3_PAYMENT_OPTION_TRANSFER || 48797),
     enabled: Boolean(env.S3_SYNC_ENABLED !== 'false' && env.S3_SYNC_ENABLED !== false && env.S3_USERNAME && env.S3_PASSWORD)
   };
 }

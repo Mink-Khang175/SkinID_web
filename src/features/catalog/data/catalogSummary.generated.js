@@ -8,7 +8,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-xit-co-the-danh-cho-da-mun-150ml-rilastil-acnestil-body-spray-150ml.avif",
     "volume": "150 ml",
     "productCode": "I38V00260",
-    "s3ProductId": 0,
+    "s3ProductId": 1808964,
     "price": 851400
   },
   {
@@ -19,7 +19,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-serum-tai-tao-va-chong-lao-hoa-30ml-rilastil-multirepair-retinol-tech.avif",
     "volume": "30 ml",
     "productCode": "I22V02110",
-    "s3ProductId": 0,
+    "s3ProductId": 1808965,
     "price": 1485000
   },
   {
@@ -30,7 +30,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-sua-rua-mat-tay-trang-2-trong-1-danh-cho-moi-loai-da-200ml-rilastil-daily-care-make-up-removing-cleasing-milk-200ml.avif",
     "volume": "200 ml",
     "productCode": "I14V01770",
-    "s3ProductId": 0,
+    "s3ProductId": 1808970,
     "price": 435600
   },
   {
@@ -41,7 +41,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-nuoc-hoa-hong-danh-cho-moi-loai-da-200ml-rilastil-daily-care-rebalancing-soothing-toner-200ml.avif",
     "volume": "200 ml",
     "productCode": "I14V01780",
-    "s3ProductId": 0,
+    "s3ProductId": 1808971,
     "price": 435600
   },
   {
@@ -52,7 +52,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-nuoc-hoa-hong-danh-cho-da-dau-rilastil-daily-care-rebalancing-astringent-toner-200ml.avif",
     "volume": "200 ml",
     "productCode": "I14V01720",
-    "s3ProductId": 0,
+    "s3ProductId": 1808973,
     "price": 435600
   },
   {
@@ -63,7 +63,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-kem-duong-am-giup-can-bang-vi-sinh-ho-tro-phuc-hoi-da-mun-rilastil-acnestil-h-biome-cream.png",
     "volume": "40 ml",
     "productCode": "I38V00220",
-    "s3ProductId": 0,
+    "s3ProductId": 1808981,
     "price": 673200
   },
   {
@@ -74,7 +74,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-kem-duong-am-va-ho-tro-lam-mo-cac-vung-da-bi-sam-mau-rilastil-d-clar-daily-depigmenting-cream.avif",
     "volume": "40 ml",
     "productCode": "I36V00090",
-    "s3ProductId": 0,
+    "s3ProductId": 1808983,
     "price": 1381050
   },
   {
@@ -85,7 +85,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-kem-cap-am-chong-man-ngua-rilastil-xerolact-pb-balm-lipid-replenishing-anti-irritation-50ml.avif",
     "volume": "50 ml",
     "productCode": "I29C01480",
-    "s3ProductId": 0,
+    "s3ProductId": 1808995,
     "price": 227700
   },
   {
@@ -96,7 +96,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-tay-trang-rilastil-daily-care-micellar-solution-100ml-sao-chep.avif",
     "volume": "100 ml",
     "productCode": "I14V01570",
-    "s3ProductId": 0,
+    "s3ProductId": 1808967,
     "price": 198000
   },
   {
@@ -107,7 +107,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-tay-trang-rilastil-daily-care-micellar-solution-250ml.avif",
     "volume": "250 ml",
     "productCode": "I14V03030",
-    "s3ProductId": 0,
+    "s3ProductId": 1808968,
     "price": 405900
   },
   {
@@ -118,7 +118,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-mat-na-cap-am-rilastil-aqua-moisturizing-mask-30ml-sao-chep.avif",
     "volume": "75 ml",
     "productCode": "I13V01940",
-    "s3ProductId": 0,
+    "s3ProductId": 1808988,
     "price": 782100
   },
   {
@@ -129,7 +129,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-kem-cap-am-chuyen-sau-72h-rilastil-aqua-intense-gel-72h-15ml.avif",
     "volume": "15 ml",
     "productCode": "I29C01560",
-    "s3ProductId": 0,
+    "s3ProductId": 1808994,
     "price": 297000
   },
   {
@@ -140,7 +140,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-kem-cap-am-chuyen-sau-72h-rilastil-aqua-intense-gel-72h-40ml.avif",
     "volume": "40 ml",
     "productCode": "I13V02560",
-    "s3ProductId": 0,
+    "s3ProductId": 1808993,
     "price": 772200
   },
   {
@@ -151,7 +151,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-kem-duong-am-cho-vung-mat-rilastil-aqua-eye-contour-cream-15ml.png",
     "volume": "15 ml",
     "productCode": "I13V02530",
-    "s3ProductId": 0,
+    "s3ProductId": 1808992,
     "price": 742500
   },
   {
@@ -162,7 +162,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-kem-ngan-ngua-ran-da-rilastil-stretch-marks-cream-200ml.png",
     "volume": "200 ml",
     "productCode": "I27V03510",
-    "s3ProductId": 0,
+    "s3ProductId": 1809002,
     "price": 1247400
   },
   {
@@ -173,7 +173,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-kem-cap-am-chong-man-ngua-rilastil-xerolact-pb-balm-lipid-replenishing-anti-irritation-400ml.png",
     "volume": "400 ml",
     "productCode": "I34V10180",
-    "s3ProductId": 0,
+    "s3ProductId": 1808997,
     "price": 742500
   },
   {
@@ -184,7 +184,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-gel-rua-mat-tam-toan-than-rilastil-xerolact-cleansing-gel-750ml.png",
     "volume": "750 ml",
     "productCode": "I34V10300",
-    "s3ProductId": 0,
+    "s3ProductId": 1809000,
     "price": 841500
   },
   {
@@ -195,7 +195,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-gel-rua-mat-tam-toan-than-rilastil-xerolact-cleansing-gel-400ml.png",
     "volume": "400 ml",
     "productCode": "I34V10110",
-    "s3ProductId": 0,
+    "s3ProductId": 1808998,
     "price": 544500
   },
   {
@@ -206,7 +206,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-kem-cap-am-chong-man-ngua-rilastil-xerolact-pb-balm-lipid-replenishing-anti-irritation-200ml.png",
     "volume": "200 ml",
     "productCode": "I34V10170",
-    "s3ProductId": 0,
+    "s3ProductId": 1808996,
     "price": 514800
   },
   {
@@ -217,7 +217,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-gel-rua-mat-tam-toan-than-rilastil-xerolact-cleansing-gel-200ml.png",
     "volume": "200 ml",
     "productCode": "I34V10260",
-    "s3ProductId": 0,
+    "s3ProductId": 1808999,
     "price": 425700
   },
   {
@@ -228,7 +228,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-kem-chong-nang-danh-cho-da-nhay-cam-rilastil-allergy-protective-fluid-spf-50-50ml.png",
     "volume": "50 ml",
     "productCode": "I28V07320",
-    "s3ProductId": 0,
+    "s3ProductId": 1809008,
     "price": 589050
   },
   {
@@ -239,7 +239,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-kem-chong-nang-cap-am-velvet-rilastil-sun-system-velvet-touch-moisturizing-velvet-cream-spf-50-50ml.png",
     "volume": "50 ml",
     "productCode": "I28V07280",
-    "s3ProductId": 0,
+    "s3ProductId": 1809007,
     "price": 589050
   },
   {
@@ -250,7 +250,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-kem-chong-nang-cap-am-water-touch-rilastil-sun-system-water-touch-moisturizing-fluid-spf-50-50ml.png",
     "volume": "50 ml",
     "productCode": "I28V06900",
-    "s3ProductId": 0,
+    "s3ProductId": 1809004,
     "price": 643500
   },
   {
@@ -261,7 +261,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-kem-chong-nang-danh-cho-da-dau-mun-rilastil-acnestil-sebum-normalizing-cream-spf-50-40ml.png",
     "volume": "40 ml",
     "productCode": "I28V07010",
-    "s3ProductId": 0,
+    "s3ProductId": 1809005,
     "price": 574200
   },
   {
@@ -272,7 +272,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-dung-dich-tay-da-chet-ngua-mun-mo-tham-nam-rilastil-acnestil-micropeeling-100ml.png",
     "volume": "100 ml",
     "productCode": "I38V00140",
-    "s3ProductId": 0,
+    "s3ProductId": 1808975,
     "price": 891000
   },
   {
@@ -283,7 +283,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-dung-dich-tay-da-chet-ngua-mun-mo-tham-nam-rilastil-acnestil-micropeeling-30ml.png",
     "volume": "30 ml",
     "productCode": "I29C14530",
-    "s3ProductId": 0,
+    "s3ProductId": 1808974,
     "price": 376200
   },
   {
@@ -294,7 +294,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-serum-cap-am-danh-cho-da-mun-rilastil-acnestil-pb-soothing-sebum-normalising-gel-30ml.png",
     "volume": "30 ml",
     "productCode": "I38V00150",
-    "s3ProductId": 0,
+    "s3ProductId": 1808980,
     "price": 742500
   },
   {
@@ -305,7 +305,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-gel-rua-mat-danh-cho-da-mun-rilastil-acnestil-cleansing-gel-400ml.png",
     "volume": "400 ml",
     "productCode": "I38V00050",
-    "s3ProductId": 0,
+    "s3ProductId": 1808978,
     "price": 712800
   },
   {
@@ -316,7 +316,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-gel-rua-mat-danh-cho-da-mun-rilastil-acnestil-cleansing-gel-200ml.png",
     "volume": "200 ml",
     "productCode": "I38V00090",
-    "s3ProductId": 0,
+    "s3ProductId": 1808979,
     "price": 524700
   },
   {
@@ -327,7 +327,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-sua-rua-mat-duong-am-rilastil-aqua-face-cleanser.png",
     "volume": "200 ml",
     "productCode": "I13V02430",
-    "s3ProductId": 0,
+    "s3ProductId": 1808991,
     "price": 544500
   },
   {
@@ -338,7 +338,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-rilastil-hydrotenseur-restructuring-anti-wrinkle-serum.png",
     "volume": "30 ml",
     "productCode": "I16V05000",
-    "s3ProductId": 0,
+    "s3ProductId": 1808986,
     "price": 1381050
   },
   {
@@ -349,7 +349,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-rilastil-hydrotenseur-restructuring-anti-wrinkle-cream.png",
     "volume": "40 ml",
     "productCode": "I16V05010",
-    "s3ProductId": 0,
+    "s3ProductId": 1808987,
     "price": 1381050
   },
   {
@@ -360,7 +360,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-rilastil-age-repair-anti-age-protective-cream-spf-50.png",
     "volume": "40 ml",
     "productCode": "I28V07130",
-    "s3ProductId": 0,
+    "s3ProductId": 1809006,
     "price": 574200
   },
   {
@@ -371,7 +371,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-rilastil-daily-care-micellar-solution.png",
     "volume": "400 ml",
     "productCode": "I14V03060",
-    "s3ProductId": 0,
+    "s3ProductId": 1808969,
     "price": 574200
   },
   {
@@ -382,7 +382,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-rilastil-acnestil-attiva-cream.png",
     "volume": "40 ml",
     "productCode": "I38V00210",
-    "s3ProductId": 0,
+    "s3ProductId": 1808976,
     "price": 673200
   },
   {
@@ -393,7 +393,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-rilastil-acnestil-cleansing-mousse.png",
     "volume": "165 ml",
     "productCode": "I38V00010",
-    "s3ProductId": 0,
+    "s3ProductId": 1808977,
     "price": 544500
   },
   {
@@ -404,7 +404,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-elasticizing-cream-dry-and-inelastic-skin-export.png",
     "volume": "200 ml",
     "productCode": "I15V03570",
-    "s3ProductId": 0,
+    "s3ProductId": 1809001,
     "price": 1247400
   },
   {
@@ -415,7 +415,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-aqua-moisturizing-mask.png",
     "volume": "30 ml",
     "productCode": "I13V02070",
-    "s3ProductId": 0,
+    "s3ProductId": 1808989,
     "price": 326700
   },
   {
@@ -426,7 +426,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-daily-care-expoliating-face-cream.png",
     "volume": "75 ml",
     "productCode": "I14V01560",
-    "s3ProductId": 0,
+    "s3ProductId": 1808966,
     "price": 594000
   },
   {
@@ -437,7 +437,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-gel-rua-mat-danh-cho-da-nhay-cam-daily-care-purifying-cleasing-gel-200ml.png",
     "volume": "200 ml",
     "productCode": "I14V01710",
-    "s3ProductId": 0,
+    "s3ProductId": 1808972,
     "price": 435600
   },
   {
@@ -448,7 +448,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-serum-cap-cam-aqua-intense-gel-serum.png",
     "volume": "30 ml",
     "productCode": "I13V02120",
-    "s3ProductId": 0,
+    "s3ProductId": 1808990,
     "price": 871200
   },
   {
@@ -459,7 +459,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-gel-serum.png",
     "volume": "30 ml",
     "productCode": "I59V00000",
-    "s3ProductId": 0,
+    "s3ProductId": 1808985,
     "price": 1381050
   },
   {
@@ -470,7 +470,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-rilastil-d-clar-depigmenting-concentrate-drops-30ml.png",
     "volume": "30 ml",
     "productCode": "I36V00100",
-    "s3ProductId": 0,
+    "s3ProductId": 1808984,
     "price": 1381050
   },
   {
@@ -481,7 +481,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil-d-clar-concentrated-micropeeling.png",
     "volume": "100 ml",
     "productCode": "I36V00080",
-    "s3ProductId": 0,
+    "s3ProductId": 1808982,
     "price": 1089000
   },
   {
@@ -492,7 +492,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/twon-body-lotion.png",
     "volume": "200 ml",
     "productCode": "TWON-BODY-LOTION-200ML",
-    "s3ProductId": 0,
+    "s3ProductId": 1800406,
     "price": 276000
   },
   {
@@ -503,7 +503,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/twon-kem-u-trang.png",
     "volume": "250 ml",
     "productCode": "TWON-U-TRANG-250ML",
-    "s3ProductId": 0,
+    "s3ProductId": 1800407,
     "price": 247000
   },
   {
@@ -514,7 +514,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/twon-sua-tam.png",
     "volume": "450 ml",
     "productCode": "TWON-SUA-TAM-450ML",
-    "s3ProductId": 0,
+    "s3ProductId": 1800408,
     "price": 177000
   },
   {
@@ -525,7 +525,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/dvah-sarika.png",
     "volume": "10 ml",
     "productCode": "DVAH-SARIKA-10ML",
-    "s3ProductId": 0,
+    "s3ProductId": 1800411,
     "price": 157000
   },
   {
@@ -536,7 +536,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/dvah-kamal.png",
     "volume": "10 ml",
     "productCode": "DVAH-KAMAL-10ML",
-    "s3ProductId": 0,
+    "s3ProductId": 1800409,
     "price": 157000
   },
   {
@@ -547,7 +547,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/dvah-rakta.png",
     "volume": "10 ml",
     "productCode": "DVAH-RAKTA-10ML",
-    "s3ProductId": 0,
+    "s3ProductId": 1800413,
     "price": 177000
   },
   {
@@ -558,7 +558,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/dvah-tanmaya.png",
     "volume": "10 ml",
     "productCode": "DVAH-TANMAYA-10ML",
-    "s3ProductId": 0,
+    "s3ProductId": 1800412,
     "price": 177000
   },
   {
@@ -569,7 +569,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/dvah-malini.png",
     "volume": "10 ml",
     "productCode": "DVAH-MALINI-10ML",
-    "s3ProductId": 0,
+    "s3ProductId": 1800410,
     "price": 177000
   },
   {
@@ -580,7 +580,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil/rilastil-kem-phuc-hoi-lam-diu-va-bao-ve-da-rilastil-cicastil-balm-40ml.jpg",
     "volume": "40 ml",
     "productCode": "I59V00050",
-    "s3ProductId": 0,
+    "s3ProductId": 1808963,
     "price": 445500
   },
   {
@@ -591,7 +591,7 @@ export const CATALOG_SUMMARY = [
     "image": "/images/products/rilastil/rilastil-kem-ngan-ngua-ran-da-rilastil-stretch-marks-cream-75ml.png",
     "volume": "75 ml",
     "productCode": "I27V31950",
-    "s3ProductId": 0,
+    "s3ProductId": 1809003,
     "price": 787050
   }
 ];

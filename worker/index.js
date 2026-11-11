@@ -18,7 +18,7 @@ import { authenticate } from './infrastructure/firebase/auth.js';
 import { syncOrderToS3 } from './services/s3Dispatch.js';
 import { sendTelegramOrderNotification } from './services/telegramService.js';
 import { integrationStatus } from './app/integrations.js';
-import { getOrRefreshToken } from './services/s3Service.js';
+import { getOrRefreshToken, issueInvoiceToS3 } from './services/s3Service.js';
 import { getS3Config } from './app/env.js';
 
 const bundledProducts = new Map(SERVER_CATALOG.map(product => [product.id, product]));
@@ -288,7 +288,7 @@ async function createOrder(request, env, user) {
   let s3SyncStatus = 'pending';
   if (typeof syncOrderToS3 === 'function') {
     try {
-      const s3Result = await syncOrderToS3({ orderId, order, env, timeoutMs: 4000 });
+      const s3Result = await syncOrderToS3({ orderId, order, env, timeoutMs: 20000 });
       s3SyncStatus = s3Result.s3SyncStatus || 'pending';
       const s3Fields = {
         s3SyncStatus,
@@ -474,6 +474,27 @@ async function transitionOrderStatus(request, env, user, orderId) {
     updatedAt: now
   };
 
+  // Delivered: raise the sales invoice so S3 deducts stock exactly once.
+  let s3InvoiceResult = null;
+  if (targetStatus === 'completed' && order.s3InvoiceStatus !== 'issued') {
+    try {
+      const res = await issueInvoiceToS3({ orderId, order: { ...order, status: targetStatus }, env, timeoutMs: 20000 });
+      if (res.success) {
+        updateFields.s3InvoiceStatus = 'issued';
+        updateFields.s3InvoiceRequestId = res.s3InvoiceRequestId;
+        updateFields.s3InvoicedAt = res.issuedAt;
+      } else {
+        updateFields.s3InvoiceStatus = res.s3InvoiceStatus || 'needs_review';
+        updateFields.s3InvoiceError = res.error || res.reason || 'Không rõ kết quả S3';
+      }
+      s3InvoiceResult = res;
+    } catch (invoiceErr) {
+      updateFields.s3InvoiceStatus = 'needs_review';
+      updateFields.s3InvoiceError = invoiceErr.message;
+      console.warn('[Worker Transition S3 Invoice Warning]', invoiceErr.message);
+    }
+  }
+
   // If transition to confirmed and S3 POS is not synced yet, trigger S3 sync
   let s3SyncResult = null;
   if (targetStatus === 'confirmed' && order.s3SyncStatus !== 'synced') {
@@ -515,7 +536,8 @@ async function transitionOrderStatus(request, env, user, orderId) {
     previousStatus: currentStatus,
     status: targetStatus,
     statusHistory,
-    s3SyncResult
+    s3SyncResult,
+    s3InvoiceResult
   });
 }
 

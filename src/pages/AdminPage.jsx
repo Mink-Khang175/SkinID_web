@@ -3706,6 +3706,22 @@ export default function AdminPage() {
                                   Chờ đồng bộ
                                 </span>
                               )}
+                              {order.s3InvoiceStatus === 'issued' ? (
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200/80 font-bold text-[10px] shadow-2xs">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+                                  Hoá đơn: đã xuất
+                                </span>
+                              ) : order.s3InvoiceStatus === 'needs_review' ? (
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200/80 font-bold text-[10px] shadow-2xs" title={order.s3InvoiceError}>
+                                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                                  Hoá đơn: cần đối soát
+                                </span>
+                              ) : order.status === 'completed' ? (
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 border border-slate-200/80 font-bold text-[10px] shadow-2xs">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                                  Hoá đơn: chưa xuất
+                                </span>
+                              ) : null}
                               {effectiveIsAdmin && (
                                 <button
                                   type="button"

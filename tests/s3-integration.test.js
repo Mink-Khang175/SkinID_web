@@ -79,7 +79,7 @@ test('S3 Retail Software Integration - Config, Mapping, Token & Fail-Safe', asyn
     total: 450000,
     paymentMethod: 'cod'
   };
-  const codPayload = mapOrderToS3Payload(mockCodOrder, defaultConfig);
+  const codPayload = mapOrderToS3Payload(mockCodOrder, defaultConfig, 922848);
   assert.equal(codPayload.PreOrderPayments.length, 0); // COD has no upfront payment in PreOrder
   assert.equal(codPayload.PreOrder.CustomerReceived, 0);
   assert.match(codPayload.PreOrder.Notes, /COD/);
@@ -171,6 +171,93 @@ test('S3 Retail Software Integration - Config, Mapping, Token & Fail-Safe', asyn
   assert.equal(successResult.s3SyncStatus, 'synced');
   assert.equal(successResult.s3CustomerId, 919519);
   assert.match(successResult.s3OrderId, /SKINID-/);
+
+  // 7. Invoice Mapping - deducted stock stops at the sales invoice, not the preorder
+  const { mapOrderToS3InvoicePayload, issueInvoiceToS3 } = await import('../worker/services/s3Service.js');
+
+  const invoicePayload = mapOrderToS3InvoicePayload(mockBankOrder, defaultConfig, 841894);
+  assert.equal(invoicePayload.BranchId, 9099);
+  assert.equal(invoicePayload.Cashier, 16614);
+  assert.equal(invoicePayload.CustomerId, 841894);
+  assert.equal(invoicePayload.InvoiceAmount, 2150000);
+  assert.equal(invoicePayload.TotalAmount, 2300000);
+  assert.equal(invoicePayload.InvoiceDiscount, '150000');
+  assert.equal(invoicePayload.CompleteWithCOD, false);
+  assert.equal(invoicePayload.Articles, undefined);
+  assert.equal(invoicePayload.Items.length, 1);
+  assert.equal(invoicePayload.Items[0].YS_ProductID, 101);
+  assert.equal(invoicePayload.Items[0].QuantitySold, 2);
+  assert.equal(invoicePayload.Payments.length, 1);
+  assert.equal(invoicePayload.Payments[0].PaymentOption, 48797);
+  assert.match(invoicePayload.RequestId, /^SKINID-INV-/);
+
+  // COD invoices carry no upfront payment record.
+  const codInvoice = mapOrderToS3InvoicePayload(mockCodOrder, defaultConfig, 922848);
+  assert.equal(codInvoice.CompleteWithCOD, true);
+  assert.equal(codInvoice.Payments, null);
+  assert.equal(codInvoice.InvoiceAmount, 450000);
+
+  // S3 rejects the whole invoice with code 01 when CustomerId is 0.
+  assert.throws(
+    () => mapOrderToS3InvoicePayload(mockCodOrder, defaultConfig, 0),
+    /mã khách hàng S3/
+  );
+  assert.throws(
+    () => mapOrderToS3InvoicePayload({ ...mockCodOrder, items: [] }, defaultConfig, 922848),
+    /không có sản phẩm/
+  );
+
+  // Unmapped products must fail loudly instead of invoicing the wrong item.
+  assert.throws(
+    () => mapOrderToS3InvoicePayload({ ...mockCodOrder, items: [{ name: 'X', quantity: 1, price: 1 }] }, defaultConfig, 922848),
+    /Chưa ánh xạ mã S3/
+  );
+
+  // 8. Invoice Issuance
+  resetS3TokenCache();
+  const invoiceFetch = async (url) => {
+    if (url.includes('/Vision/Accounts/Login/v3')) {
+      return { ok: true, status: 200, json: async () => ({ AuthenticationData: { AccessToken: 'valid_token' } }) };
+    }
+    if (url.includes('/Vision/Customers')) {
+      return { ok: true, status: 200, json: async () => ({ Success: true, SingleData: 919519 }) };
+    }
+    if (url.includes('/Vision/Invoices/Save/v2')) {
+      return { ok: true, status: 200, json: async () => ({ code: '00', message: 'success' }) };
+    }
+    return { ok: false, status: 404, json: async () => ({}) };
+  };
+
+  const issued = await issueInvoiceToS3({ orderId: 'ord_invoice_ok', order: mockBankOrder, env: testEnv, fetchFn: invoiceFetch });
+  assert.equal(issued.success, true);
+  assert.equal(issued.s3InvoiceStatus, 'issued');
+  assert.match(issued.s3InvoiceRequestId, /^SKINID-INV-/);
+
+  // A rejected invoice must surface for reconciliation rather than silently succeeding.
+  resetS3TokenCache();
+  const rejectedFetch = async (url) => {
+    if (url.includes('/Vision/Accounts/Login/v3')) {
+      return { ok: true, status: 200, json: async () => ({ AuthenticationData: { AccessToken: 'valid_token' } }) };
+    }
+    if (url.includes('/Vision/Customers')) {
+      return { ok: true, status: 200, json: async () => ({ Success: true, SingleData: 919519 }) };
+    }
+    if (url.includes('/Vision/Invoices/Save/v2')) {
+      return { ok: true, status: 200, json: async () => ({ code: '99', message: 'Sai ma hang' }) };
+    }
+    return { ok: false, status: 404, json: async () => ({}) };
+  };
+
+  const rejected = await issueInvoiceToS3({ orderId: 'ord_invoice_bad', order: mockBankOrder, env: testEnv, fetchFn: rejectedFetch });
+  assert.equal(rejected.success, false);
+  assert.equal(rejected.s3InvoiceStatus, 'needs_review');
+  assert.match(rejected.error, /Sai ma hang/);
+
+  // Disabled POS must skip cleanly, never claim an invoice was issued.
+  const skipped = await issueInvoiceToS3({ orderId: 'ord_invoice_off', order: mockBankOrder, env: {}, fetchFn: invoiceFetch });
+  assert.equal(skipped.success, false);
+  assert.equal(skipped.skipped, true);
+  assert.equal(skipped.s3InvoiceStatus, 'disabled');
 
   console.log('PASS: S3 Integration (Config, Token, Mapping, Fail-Safe, mocked API flows) passed.');
 });
