@@ -3,11 +3,11 @@ import { auth } from '../../../infrastructure/firebase/index.js';
 
 import { saveCachedOrder } from './orderCacheService.js';
 
-export const FREE_SHIPPING_THRESHOLD = 500000;
-export const STANDARD_SHIPPING_FEE = 30000;
+export const FREE_SHIPPING_THRESHOLD = 0;
+export const STANDARD_SHIPPING_FEE = 0;
 
-export function calculateShippingFee(subtotal) {
-  return Number(subtotal) >= FREE_SHIPPING_THRESHOLD ? 0 : STANDARD_SHIPPING_FEE;
+export function calculateShippingFee() {
+  return 0;
 }
 
 export async function createOrder({ items, customer, note = '', paymentMethod = 'cod', couponCode = '', idempotencyKey }) {

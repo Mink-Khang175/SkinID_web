@@ -7,8 +7,6 @@ const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
 
 const cartContext = read('src/features/cart/context/CartContext.jsx');
 const cartDrawer = read('src/features/cart/components/CartDrawer.jsx');
-const freeShippingBar = read('src/features/cart/components/FreeShippingBar.jsx');
-const freeShippingBarCss = read('src/features/cart/components/FreeShippingBar.css');
 const cartToast = read('src/features/cart/components/CartToast.jsx');
 const cartToastCss = read('src/features/cart/components/CartToast.css');
 const orderSuccessModal = read('src/features/cart/components/OrderSuccessModal.jsx');
@@ -24,11 +22,8 @@ assert.match(cartContext, /showToast !== false/);
 assert.match(cartToast, /Đã thêm vào giỏ/);
 assert.match(cartToastCss, /\.cart-toast-layer/);
 
-// 2. Free Shipping Bar (500k Threshold)
-assert.match(freeShippingBar, /FREE_SHIPPING_THRESHOLD/);
-assert.match(freeShippingBar, /Miễn phí vận chuyển/);
-assert.match(freeShippingBarCss, /\.free-shipping-track/);
-assert.match(cartDrawer, /<FreeShippingBar/);
+// 2. Free shipping is unconditional, so no threshold progress bar is rendered.
+assert.doesNotMatch(cartDrawer, /<FreeShippingBar/);
 
 // 3. 2-Column Checkout Layout
 assert.match(checkoutModalCss, /\.react-checkout-content-grid/);

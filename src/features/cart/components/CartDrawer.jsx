@@ -3,7 +3,6 @@ import { assetUrl } from '../../../assets/index.js';
 import { getProductById } from '../../catalog/index.js';
 import { useBodyScrollLock } from '../../../shared/hooks/useBodyScrollLock.js';
 import { useCart } from '../context/CartContext.jsx';
-import FreeShippingBar from './FreeShippingBar.jsx';
 import './CartDrawer.css';
 
 const formatPrice = (value) => new Intl.NumberFormat('vi-VN', {
@@ -55,10 +54,6 @@ export default function CartDrawer() {
           </div>
           <button ref={closeButtonRef} type="button" className="react-cart-close" onClick={closeCart} aria-label="Đóng giỏ hàng">×</button>
         </header>
-
-        {isHydrated && !!items.length && (
-          <FreeShippingBar subtotal={subtotal} />
-        )}
 
         <div className="react-cart-items">
           {!isHydrated && <p className="react-cart-status">Đang đồng bộ giỏ hàng…</p>}

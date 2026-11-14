@@ -34,8 +34,8 @@ test('shipping voucher removes delivery cost without subtracting another 30K fro
 test('connected checkout does not reactivate a deleted promotion using static demo coupons', async () => {
   await assert.rejects(setup()('WELCOME50'), error => error.code === 'invalid_coupon');
 });
-test('standard shipping matches the storefront and policy fee', async () => {
+test('standard shipping is free for every storefront order', async () => {
   const order = await setup()('');
-  assert.equal(order.body.shippingFee, 30000);
-  assert.equal(order.body.total, 130000);
+  assert.equal(order.body.shippingFee, 0);
+  assert.equal(order.body.total, 100000);
 });

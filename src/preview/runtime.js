@@ -51,7 +51,7 @@ export async function previewApiRequest(path, options = {}) {
     });
     if (!items.length) throw new Error('Giỏ hàng mẫu đang trống.');
     const subtotal = items.reduce((sum, item) => sum + item.lineTotal, 0);
-    const shippingFee = subtotal >= 500000 ? 0 : 30000;
+    const shippingFee = 0;
     const coupon = AVAILABLE_COUPONS[String(body.couponCode || '').toUpperCase()];
     if (body.couponCode && !coupon) throw new Error('Mã ưu đãi không tồn tại trong dữ liệu mẫu.');
     if (coupon && subtotal < (coupon.minOrder || 0)) throw new Error('Đơn mẫu chưa đủ điều kiện áp dụng mã.');

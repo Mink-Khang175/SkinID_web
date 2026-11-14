@@ -3,11 +3,6 @@ import { useSystemSettings } from '../../features/system/index.js';
 
 export default function OfferBar({ revealOnUpScroll = false }) {
   const settings = useSystemSettings();
-  const freeshipFormatted = new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND',
-    maximumFractionDigits: 0
-  }).format(settings.freeshipThreshold || 500000);
   const hotline = settings.hotline || '0704.136.862';
 
   const [isVisible, setIsVisible] = useState(!revealOnUpScroll);
@@ -83,7 +78,7 @@ export default function OfferBar({ revealOnUpScroll = false }) {
 
   return (
     <div className={`offer-bar ${revealOnUpScroll ? 'offer-bar--scroll' : ''} ${isVisible ? 'is-visible' : ''}`.trim()} aria-hidden={revealOnUpScroll && !isVisible}>
-      <a href="/khuyen-mai" className="offer-bar__promo-link font-bold hover:underline inline-flex items-center gap-1">Ưu đãi &amp; Voucher hôm nay</a> <span>·</span> Miễn phí giao hàng cho đơn từ {freeshipFormatted} <span>·</span> Hotline {hotline}
+      <a href="/khuyen-mai" className="offer-bar__promo-link font-bold hover:underline inline-flex items-center gap-1">Ưu đãi &amp; Voucher hôm nay</a> <span>·</span> Miễn phí giao hàng toàn quốc <span>·</span> Hotline {hotline}
     </div>
   );
 }

@@ -15,8 +15,8 @@ export const DEFAULT_SYSTEM_SETTINGS = {
   hotline: COMPANY_INFO.hotlineDisplay,
   supportEmail: COMPANY_INFO.email,
   showroomAddress: COMPANY_INFO.address,
-  freeshipThreshold: 500000,
-  shippingFee: 30000,
+  freeshipThreshold: 0,
+  shippingFee: 0,
   allowInspection: true,
   s3ApiEndpoint: 'https://m.es3.vn',
   s3BranchId: '9099',
@@ -103,7 +103,7 @@ export const DEFAULT_HOME_BLOCKS = {
     }
   ],
   announcement: {
-    text: 'Ưu đãi độc quyền SkinID: Freeship toàn quốc từ 500k · Phân tích da AI miễn phí',
+    text: 'Ưu đãi độc quyền SkinID: Miễn phí giao hàng toàn quốc · Phân tích da AI miễn phí',
     link: '/khuyen-mai',
     active: true
   },

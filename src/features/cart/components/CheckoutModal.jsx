@@ -7,7 +7,7 @@ import {
 } from '../../../shared/services/vietnamAddressService.js';
 import { useBodyScrollLock } from '../../../shared/hooks/useBodyScrollLock.js';
 import { useCart } from '../context/CartContext.jsx';
-import { calculateShippingFee, createOrder, FREE_SHIPPING_THRESHOLD } from '../services/checkoutService.js';
+import { calculateShippingFee, createOrder } from '../services/checkoutService.js';
 import { validateCoupon } from '../services/couponService.js';
 import { BANK_CONFIG } from '../../../config/bankConfig.js';
 import { getProductById } from '../../catalog/index.js';
@@ -430,20 +430,9 @@ export default function CheckoutModal() {
                   <div className="react-checkout-fee-row">
                     <span>Phí vận chuyển</span>
                     <b>
-                      {effectiveShippingFee === 0 ? (
-                        <span className="text-emerald-700 font-bold">
-                          {isCouponFreeship ? 'Miễn phí (Voucher)' : 'Miễn phí (Freeship)'}
-                        </span>
-                      ) : (
-                        formatPrice(effectiveShippingFee)
-                      )}
+                      <span className="text-emerald-700 font-bold">Miễn phí</span>
                     </b>
                   </div>
-                  {subtotal < FREE_SHIPPING_THRESHOLD && !isCouponFreeship && (
-                    <small className="text-[11px] text-amber-700">
-                      Mua thêm {formatPrice(FREE_SHIPPING_THRESHOLD - subtotal)} để được Freeship.
-                    </small>
-                  )}
                   <div className="react-checkout-fee-row total">
                     <div>
                       <span>Tổng thanh toán</span>

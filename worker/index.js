@@ -188,13 +188,9 @@ async function createOrder(request, env, user) {
     }
   }
 
-  // Shipping Fee calculation (standard BCT rules)
-  function resolveShippingFee(provinceName, orderSubtotal, isFreeShip) {
-    if (isFreeShip || orderSubtotal >= 500000) return 0;
-    const name = String(provinceName || '').toLowerCase();
-    if (name.includes('hồ chí minh') || name.includes('hcm')) return 30000;
-    if (name.includes('hà nội') || name.includes('đà nẵng') || name.includes('bình dương') || name.includes('đồng nai')) return 30000;
-    return 30000;
+  // Shipping is free on all storefront orders.
+  function resolveShippingFee() {
+    return 0;
   }
   const shippingFee = resolveShippingFee(shippingAddress.provinceName, subtotal, isFreeshipCoupon);
   // A shipping voucher removes shipping, never discounts merchandise again.
