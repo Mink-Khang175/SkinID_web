@@ -68,7 +68,12 @@
       "volume": "10 ml",
       "unit": "Hộp",
       "originalPrice": 196900,
-      "price": 177000
+      "price": 177000,
+      "campaign": {
+        "id": "flashsale-50",
+        "originalPrice": 179000,
+        "price": 89500
+      }
     },
     {
       "id": "dvah-tanmaya",
@@ -79,7 +84,12 @@
       "volume": "10 ml",
       "unit": "Hộp",
       "originalPrice": 196900,
-      "price": 177000
+      "price": 177000,
+      "campaign": {
+        "id": "flashsale-50",
+        "originalPrice": 179000,
+        "price": 89500
+      }
     },
     {
       "id": "dvah-malini",

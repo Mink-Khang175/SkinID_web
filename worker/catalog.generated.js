@@ -548,7 +548,7 @@ export const SERVER_CATALOG = [
     "volume": "10 ml",
     "productCode": "DVAH-RAKTA-10ML",
     "s3ProductId": 1800413,
-    "price": 177000
+    "price": 89500
   },
   {
     "id": "dvah-tanmaya",
@@ -559,7 +559,7 @@ export const SERVER_CATALOG = [
     "volume": "10 ml",
     "productCode": "DVAH-TANMAYA-10ML",
     "s3ProductId": 1800412,
-    "price": 177000
+    "price": 89500
   },
   {
     "id": "dvah-malini",
