@@ -189,10 +189,7 @@ async function createOrder(request, env, user) {
   }
 
   // Shipping is free on all storefront orders.
-  function resolveShippingFee() {
-    return 0;
-  }
-  const shippingFee = resolveShippingFee(shippingAddress.provinceName, subtotal, isFreeshipCoupon);
+  const shippingFee = 0;
   // A shipping voucher removes shipping, never discounts merchandise again.
   const finalTotal = Math.max(0, subtotal - discountAmount) + shippingFee;
 

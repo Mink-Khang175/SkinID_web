@@ -45,7 +45,7 @@ assert.match(worker, /coupon_min_order/);
 assert.match(worker, /coupon_expired/);
 assert.match(worker, /coupon_inactive/);
 assert.match(worker, /coupon_limit_exceeded/);
-assert.match(worker, /resolveShippingFee/);
+assert.match(worker, /const shippingFee = 0;/);
 assert.match(worker, /duplicate: true/);
 assert.match(worker, /statusHistory/);
 
