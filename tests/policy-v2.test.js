@@ -46,7 +46,8 @@ test('consumer protections, separate AI consent and financial details survive PD
   assert.match(source,/Sự đồng ý riêng, mặc định TẮT/);
   assert.match(source,/1063583549/);
   assert.match(source,/operation@fieldman.vn/);
-  assert.match(source,/30.000đ cho đơn dưới 500.000đ/);
+  assert.match(source,/Phí vận chuyển/);
+  assert.doesNotMatch(source,/30\.000đ cho đơn dưới 500\.000đ/);
 });
 
 test('only unresolved PDF fields are flagged and equipment terms retain planned status', () => {

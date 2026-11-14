@@ -531,22 +531,22 @@ export const LEGAL_POLICIES = {
               [
                 "Nội thành TP. Hồ Chí Minh",
                 "1–2 ngày làm việc",
-                "30.000đ cho đơn dưới 500.000đ; miễn phí từ 500.000đ"
+                "Miễn phí"
               ],
               [
                 "Ngoại thành TP. Hồ Chí Minh",
                 "2–3 ngày làm việc",
-                "30.000đ cho đơn dưới 500.000đ; miễn phí từ 500.000đ"
+                "Miễn phí"
               ],
               [
                 "Tỉnh/thành khác (khu vực trung tâm)",
                 "3–5 ngày làm việc",
-                "30.000đ cho đơn dưới 500.000đ; miễn phí từ 500.000đ"
+                "Miễn phí"
               ],
               [
                 "Vùng sâu, vùng xa, hải đảo",
                 "5–7 ngày làm việc",
-                "Theo phí hiển thị và xác nhận trước khi đặt hàng"
+                "Miễn phí"
               ],
               [
                 "Giao hỏa tốc (nếu có)",

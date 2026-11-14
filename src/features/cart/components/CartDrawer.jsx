@@ -106,7 +106,7 @@ export default function CartDrawer() {
             <button type="button" className="react-cart-checkout" disabled={isPreparing || !isHydrated} onClick={startCheckout}>
               {isPreparing ? 'Đang chuẩn bị…' : `Tiến hành thanh toán · ${formatPrice(subtotal)}`}
             </button>
-            <small>Miễn phí giao hàng cho đơn từ 500.000đ. Đảm bảo 100% chính hãng.</small>
+            <small>Miễn phí giao hàng toàn quốc. Đảm bảo 100% chính hãng.</small>
           </footer>
         )}
       </aside>
